@@ -1,4 +1,4 @@
-FROM python:3.11.12-slim
+FROM default-route-openshift-image-registry.apps.ocptest.gp.inet/nirvana-qa/python311-bi-opd:1.0.0
  
 RUN mkdir /app
 WORKDIR /app
