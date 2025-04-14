@@ -1,0 +1,227 @@
+/* Barra superior */
+.topbar {
+    width: 100%;
+    height: 60px;
+    background-color: #2c3e50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.logo {
+    height: 40px;
+}
+
+.topbar-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+}
+
+/* Contenedor principal */
+.main-container {
+    display: flex;
+    margin-top: 60px;
+}
+
+/* Barra lateral */
+.sidebar {
+    width: 240px;
+    height: 100vh;
+    background-color: #2c3e50;
+    padding: 20px;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    color: white;
+    transition: transform 0.3s ease-in-out;
+    box-shadow: 4px 0px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 0 12px 12px 0;
+    overflow-y: auto; /* Permite desplazamiento si el contenido excede la altura */
+}
+
+/* Ocultar la barra lateral */
+.sidebar.hidden {
+    transform: translateX(-100%);
+}
+
+/* Botón ☰ para mostrar el menú */
+.menu-toggle {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    background: #2c3e50;
+    color: white;
+    padding: 10px 15px;
+    font-size: 24px;
+    cursor: pointer;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    display: none; /* Se oculta inicialmente */
+    transition: background 0.3s ease;
+}
+
+.menu-toggle:hover {
+    background: #1a252f;
+}
+
+/* Cuando la barra lateral está oculta, el botón se muestra */
+.sidebar.hidden + .menu-toggle {
+    display: block !important;
+}
+
+/* Área invisible a la izquierda para detectar el mouse */
+.sidebar-trigger {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 20px;
+    height: 100vh;
+    background: transparent;
+}
+
+/* Contenido principal */
+.content {
+    transition: margin-left 0.3s ease-in-out;
+    margin-left: 260px;
+    padding: 20px;
+    flex-grow: 1;
+}
+
+/* Si la barra lateral está oculta, mover el contenido al centro */
+.sidebar.hidden ~ .content {
+    margin-left: 0;
+    text-align: center;
+}
+
+/* Estilos de los enlaces del menú */
+.sidebar-menu li {
+    list-style: none;
+    margin: 10px 0;
+}
+
+.sidebar-menu li a {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 600;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 12px 15px;
+    border-radius: 8px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.sidebar-menu li a:hover {
+    background: #3498db;
+    transform: translateX(5px);
+    box-shadow: 2px 2px 8px rgba(52, 152, 219, 0.5);
+}
+
+/* Estilo para el submenú */
+.submenu {
+    list-style: none;
+    padding-left: 0;
+}
+
+.submenu .submenu-content {
+    display: none;
+    list-style: none;
+    padding-left: 20px;
+    margin-top: 10px;
+}
+
+.submenu .submenu-content li {
+    margin: 8px 0;
+}
+
+.submenu .submenu-toggle {
+    cursor: pointer;
+    display: block;
+    font-weight: 600;
+    padding: 12px 20px;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background 0.3s ease;
+}
+
+.submenu .submenu-toggle:hover {
+    background: #3498db;
+}
+
+.submenu.open .submenu-content {
+    display: block;
+}
+
+/* Ajuste de la visualización del submenú */
+.submenu-content {
+    display: none;
+    list-style: none;
+    padding-left: 15px;
+}
+
+/* Ajustes para una mejor responsividad */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+    }
+
+    .content {
+        margin-left: 220px;
+    }
+
+    .sidebar.hidden ~ .content {
+        margin-left: 0;
+    }
+
+    .sidebar-menu li a {
+        font-size: 14px;
+    }
+    
+    .submenu .submenu-content {
+        padding-left: 10px;
+    }
+}
+
+/* Barra lateral con desplazamiento */
+.sidebar {
+    height: 100vh;
+    overflow-y: auto; /* Permite el desplazamiento vertical */
+}
+
+/* Agregar un borde de separación para las secciones del submenú */
+.submenu .submenu-content li {
+    border-bottom: 1px solid #3e4e59; /* Añadir una línea de separación entre los elementos del submenú */
+    padding: 10px 0;
+}
+
+.sidebar-header h2 a {
+    display: block;
+    padding: 15px;
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.sidebar-header h2 a:hover {
+    background-color: #444; /* Color al pasar el mouse */
+    border-radius: 5px;
+}
+
+.rojo-alerta {
+    background-color: #dc3545 !important;
+    color: white !important;
+}
+
+

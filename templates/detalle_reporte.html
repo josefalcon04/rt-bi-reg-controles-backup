@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle del Reporte</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .info {
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">{{ reporte.nombre }}</div>
+        <div class="info">
+            <p><strong>Frecuencia:</strong> {{ reporte.frecuencia }}</p>
+            <p><strong>Última ejecución:</strong> {{ reporte.ultima_ejecucion }}</p>
+            <p><strong>Estado:</strong> {{ reporte.estado }}</p>
+            <p><strong>Descripción:</strong> {{ reporte.descripcion }}</p>
+        </div>
+    </div>
+</body>
+</html>

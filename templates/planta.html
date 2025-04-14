@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Planta de Control</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #eef1f7;
+            color: #333;
+            margin: 0;
+            padding: 10px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #004085;
+            font-size: 24px; /* Tamaño de fuente reducido */
+            margin: 5px 0 15px 0; /* Menos margen debajo del título */
+        }
+
+        .contenedor {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 95%;
+            margin: auto;
+            padding: 10px;
+        }
+
+        .fila {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            align-items: flex-start;
+        }
+
+        .seccion {
+            flex: 1;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            padding: 10px;
+            margin: 5px;
+        }
+
+        .grafico {
+            width: 100%;
+            max-width: 450px; /* Se hace más pequeño */
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            display: none; /* Ocultamos por defecto */
+        }
+
+        select, input {
+            margin: 5px 0;
+            padding: 5px;
+            width: 90%;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+    </style>
+    <script>      
+        
+        // Los valores pasados desde Python a Jinja2
+        var tecnologias1 = {{ tecnologias1 | tojson }};
+        var tecnologias2 = {{ tecnologias2 | tojson }};
+        var estados1 = {{ estados1 | tojson }};
+        var estados2 = {{ estados2 | tojson }};
+        var periodo1 = {{ periodo1 | tojson }};
+        var periodo2 = {{ periodo2 | tojson }};
+
+        console.log("Valores recibidos desde Python:", tecnologias1, tecnologias2, estados1, estados2, periodo1, periodo2);
+
+        document.addEventListener("DOMContentLoaded", function() {
+            // Inicializar gráficos con los valores pasados desde Python
+            actualizarGrafico(1);
+            actualizarGrafico(2);
+        });
+
+        function actualizarGrafico(graficoId) {
+            console.log(`\n=== Ejecutando actualizarGrafico(${graficoId}) ===`);
+            
+            var tecnologiaElem = document.getElementById("tecnologia_" + graficoId);
+            var estadoElem = document.getElementById("estado_" + graficoId);
+            var inputPeriodoElem = document.getElementById("periodo_" + graficoId);
+    
+            if (!tecnologiaElem || !estadoElem || !inputPeriodoElem) {
+                console.warn(`Elementos no encontrados para graficoId: ${graficoId}`);
+                return;
+            }
+    
+            var tecnologia = tecnologiaElem.value;
+            var estado = estadoElem.value;
+            var inputPeriodo = inputPeriodoElem.value.trim();
+    
+            console.log("tecnologia:", tecnologia);
+            console.log("estado:", estado);
+            console.log("inputPeriodo:", inputPeriodo);
+    
+            var todosPeriodos = document.querySelectorAll("input[name='periodo_hidden_" + graficoId + "']");
+            console.log(`Períodos ocultos encontrados para grafico${graficoId}: ${todosPeriodos.length}`);
+    
+            var periodosSeleccionados = [];
+    
+            if (inputPeriodo === "") {
+                todosPeriodos.forEach(function (element) {
+                    periodosSeleccionados.push(element.value);
+                });
+            } else {
+                var filtrosPeriodo = inputPeriodo.split(",").map(p => p.trim()).filter(p => p !== "");
+                todosPeriodos.forEach(function (element) {
+                    var periodo = element.value;
+                    if (filtrosPeriodo.some(filtro => periodo.startsWith(filtro))) {
+                        periodosSeleccionados.push(periodo);
+                    }
+                });
+            }
+    
+            console.log("periodosSeleccionados:", periodosSeleccionados);
+    
+            var img = document.getElementById("grafico" + graficoId);
+            if (!img) {
+                console.warn(`No se encontró la imagen con id: grafico${graficoId}`);
+                return;
+            }
+    
+            if (periodosSeleccionados.length === 0) {
+                img.style.display = "none";
+                img.src = "";
+                console.log("Sin períodos válidos, ocultando imagen");
+            } else {
+                img.style.display = "block";
+                var timestamp = new Date().getTime();
+                img.src = `/grafico${graficoId}?tecnologia=${encodeURIComponent(tecnologia)}&estado=${encodeURIComponent(estado)}&periodo=${encodeURIComponent(periodosSeleccionados.join(","))}&t=${timestamp}`;
+                console.log("Imagen actualizada:", img.src);
+            }
+        }
+    
+        console.log("Script insertado correctamente");
+    
+        // Intentemos invocar la función directamente fuera de DOMContentLoaded
+        window.onload = function() {
+            console.log("Página cargada, ejecutando actualizarGrafico");
+            actualizarGrafico(1); // Forzamos la invocación para probar
+            actualizarGrafico(2);
+        };
+    </script>         
+</head>
+<body>
+    <div class="contenedor">
+        <h1>Planta de Control por Tecnologías</h1>
+        <div class="fila">
+            <div class="seccion">
+                <h2>Planta Comercial</h2>
+                <label><strong>Tecnología:</strong></label>
+                <select id="tecnologia_1" onchange="actualizarGrafico(1)">
+                    {% for tech in tecnologias1 %}
+                        <option value="{{ tech }}">{{ tech }}</option>
+                    {% endfor %}
+                </select>
+
+                <label><strong>Estado:</strong></label>
+                <select id="estado_1" onchange="actualizarGrafico(1)">
+                    {% for estado in estados1 %}
+                        <option value="{{ estado }}">{{ estado }}</option>
+                    {% endfor %}
+                </select>
+
+                <label><strong>Períodos:</strong></label>
+                <input type="text" id="periodo_1" placeholder="Ej: 2024 o 202401,202402" oninput="actualizarGrafico(1)">
+
+                {% for periodo in periodo1 %}
+                    <input type="hidden" name="periodo_hidden_1" value="{{ periodo }}">
+                {% endfor %}
+
+                <img id="grafico1" class="grafico" alt="Gráfico de Tecnología 1">
+            </div>
+
+            <div class="seccion">
+                <h2>Planta Control BI</h2>
+                <label><strong>Tecnología:</strong></label>
+                <select id="tecnologia_2" onchange="actualizarGrafico(2)">
+                    {% for tech in tecnologias2 %}
+                        <option value="{{ tech }}" {% if tech == 'TODAS' %}selected{% endif %}>{{ tech }}</option>
+                    {% endfor %}
+                </select>
+
+                <label><strong>Estado:</strong></label>
+                <select id="estado_2" onchange="actualizarGrafico(2)">
+                    {% for estado in estados2 %}
+                        <option value="{{ estado }}">{{ estado }}</option>
+                    {% endfor %}
+                </select>
+
+                <label><strong>Períodos:</strong></label>
+                <input type="text" id="periodo_2" placeholder="Ej: 2024 o 202401,202402" oninput="actualizarGrafico(2)">
+
+                {% for periodo in periodo1 %}
+                    <input type="hidden" name="periodo_hidden_2" value="{{ periodo }}">
+                {% endfor %}
+
+                <img id="grafico2" class="grafico" alt="Gráfico de Tecnología 2" >
+            </div>
+        </div>
+    </div>    
+</body>
+</html>

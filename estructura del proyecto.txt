@@ -1,0 +1,27 @@
+mi_proyecto/
+¦
++-- app/                        # Carpeta principal del backend
+¦   +-- __init__.py             # Inicialización del módulo Flask/Django/FastAPI
+¦   +-- routes/                 # Carpeta para manejar las rutas y controladores
+¦   ¦   +-- __init__.py         # Inicialización de las rutas
+¦   ¦   +-- auth.py             # Controlador de autenticación
+¦   +-- models/                 # Carpeta para los modelos de la base de datos
+¦   ¦   +-- __init__.py         # Inicialización de modelos
+¦   ¦   +-- user.py             # Modelo de usuario (con SQLAlchemy o Django ORM)
+¦   +-- templates/              # Carpeta para los archivos de frontend (HTML)
+¦   ¦   +-- login.html          # Plantilla HTML de login
+¦   +-- static/                 # Archivos estáticos (CSS, JS, imágenes)
+¦   ¦   +-- css/                # Archivos CSS
+¦   ¦   ¦   +-- styles.css      # Estilos de la aplicación
+¦   ¦   +-- js/                 # Archivos JavaScript
+¦   ¦   ¦   +-- script.js       # Lógica de frontend
+¦   ¦   +-- images/             # Imágenes estáticas
+¦   +-- config.py               # Archivo de configuración (claves secretas, DB, etc.)
+¦   +-- __init__.py             # Inicialización de la aplicación (Flask, Django, etc.)
+¦
++-- venv/                       # Entorno virtual para la instalación de dependencias
++-- migrations/                 # Carpeta para migraciones (si usas Flask-Migrate o similar)
+¦
++-- .gitignore                  # Ignorar archivos innecesarios en git (ej. venv, __pycache__)
++-- requirements.txt            # Dependencias del proyecto (pip freeze)
++-- run.py                      # Script principal para iniciar la aplicación
