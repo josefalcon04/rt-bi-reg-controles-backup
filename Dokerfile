@@ -1,0 +1,12 @@
+FROM default-route-openshift-image-registry.apps.ocptest.gp.inet/nirvana-qa/python311-bi-opd:1.0.0
+ 
+RUN mkdir /app
+WORKDIR /app
+ 
+COPY . .
+ 
+RUN pip install --no-cache-dir -r requirements.txt
+ 
+EXPOSE 8082
+ 
+CMD [ "python","run.py" ]
