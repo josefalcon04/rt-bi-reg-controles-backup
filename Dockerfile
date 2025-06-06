@@ -1,0 +1,19 @@
+#FROM default-route-openshift-image-registry.apps.ocptest.gp.inet/nirvana-qa/python311-bi-opd:1.0.0
+FROM telefonicaavillacortal/python311-bi-reg:1.0.0
+
+
+RUN mkdir /app
+WORKDIR /app
+ 
+COPY . .
+ 
+#RUN pip install --no-cache-dir -r requirements.txt
+
+ # Establecer variable de entorno
+ENV PYTHONUNBUFFERED 1
+
+EXPOSE 8080
+ 
+# Comando de inicio
+ENTRYPOINT ["python"]
+CMD ["run.py"]
