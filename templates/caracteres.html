@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Caracteres Extraños</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .filtros {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+            justify-content: center;
+        }
+
+        .filtros label {
+            font-weight: bold;
+        }
+
+        .filtros input, .filtros select {
+            padding: 6px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .tabla-contenedor {
+            max-height: 500px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+        .tabla-contenedor table th:nth-child(1),
+        .tabla-contenedor table td:nth-child(1) {
+            width: 180px;
+        }
+
+        .tabla-contenedor table th:nth-child(2),
+        .tabla-contenedor table td:nth-child(2) {
+            width: 180px;
+        }
+        .tabla-contenedor table th:nth-child(3),
+        .tabla-contenedor table td:nth-child(3) {
+            width: 180px;
+        }
+        .tabla-contenedor table th:nth-child(4),
+        .tabla-contenedor table td:nth-child(4) {
+            width: 140px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            word-wrap: break-word;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007BFF;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .checkboxes {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkboxes label {
+            font-weight: normal;
+        }
+    </style>
+</head>
+<body>
+    <h1>📍 Caracteres Extraños en Tablas de la Norma</h1>
+
+    <div class="filtros">
+        <div>
+            <label for="esquema">Esquema:</label>
+            <select id="esquema" onchange="filtrarTabla()">
+                <option value="">Todos</option>
+                {% for esquema in datos | map(attribute='T_SCHEMA') | unique %}
+                    <option value="{{ esquema }}">{{ esquema }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="nombreTabla">Nombre de Tabla:</label>
+            <input type="text" id="nombreTabla" onkeyup="filtrarTabla()" placeholder="Buscar tabla...">
+        </div>
+        <div class="checkboxes">
+            <input type="checkbox" id="flagNulos" onchange="filtrarTabla()"> 
+            <label for="flagNulos">Solo FLAG_NULOS = 'SI'</label>
+        </div>
+        <div class="checkboxes">
+            <input type="checkbox" id="flagExtr" onchange="filtrarTabla()">
+            <label for="flagExtr">Solo FLAG_EXTR = 'SI'</label>
+        </div>
+    </div>
+
+    <div class="tabla-contenedor">
+        <table id="tablaDatos">
+            <thead>
+                <tr>
+                    {% for col in datos[0].keys() %}
+                        <th>{{ col }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for fila in datos %}
+                    <tr>
+                        {% for val in fila.values() %}
+                            <td>{{ val }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function filtrarTabla() {
+            const esquemaFiltro = document.getElementById("esquema").value.toLowerCase();
+            const nombreTablaFiltro = document.getElementById("nombreTabla").value.toLowerCase();
+            const flagNulosCheck = document.getElementById("flagNulos").checked;
+            const flagExtrCheck = document.getElementById("flagExtr").checked;
+
+            const filas = document.querySelectorAll("#tablaDatos tbody tr");
+
+            filas.forEach(fila => {
+                const celdas = fila.getElementsByTagName("td");
+                const esquema = celdas[1].textContent.toLowerCase();
+                const nombreTabla = celdas[2].textContent.toLowerCase();
+                const flagNulos = celdas[5].textContent.trim().toLowerCase();
+                const flagExtr = celdas[8].textContent.trim().toLowerCase();
+
+                let mostrar = true;
+
+                if (esquemaFiltro && !esquema.includes(esquemaFiltro)) mostrar = false;
+                if (nombreTablaFiltro && !nombreTabla.includes(nombreTablaFiltro)) mostrar = false;
+                if (flagNulosCheck && flagNulos !== 'si') mostrar = false;
+                if (flagExtrCheck && flagExtr !== 'si') mostrar = false;
+
+                fila.style.display = mostrar ? '' : 'none';
+            });
+        }
+    </script>
+</body>
+</html>

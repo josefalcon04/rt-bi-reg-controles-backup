@@ -3,6 +3,8 @@ from app.calendario import calendario_bp  # Importa el blueprint de calendario
 from app.monitoreo import monitoreo_norma_bp  # Importa el blueprint de monitoreo
 from app.monitoreo import monitoreo_input_bp  # Importa el blueprint de monitoreo
 from app.planta import planta_bp  # Importa el blueprint de planta de control
+from app.caracteres import caracteres_bp  # Importa el blueprint de caracteres
+from app.chatbox import chatbox_bp  # Importa el blueprint de chatbox
 
 app = Flask(__name__)
 
@@ -11,6 +13,8 @@ app.register_blueprint(calendario_bp)
 app.register_blueprint(monitoreo_norma_bp)
 app.register_blueprint(monitoreo_input_bp)
 app.register_blueprint(planta_bp)
+app.register_blueprint(caracteres_bp)
+app.register_blueprint(chatbox_bp)
 
 @app.route('/')
 def menu():
@@ -18,4 +22,4 @@ def menu():
     return render_template('menu.html')  # Renderiza la página 'menu.html'
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0',port=8082)  # Cambia el puerto si es necesario
