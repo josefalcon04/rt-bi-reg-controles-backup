@@ -22,4 +22,4 @@ def menu():
     return render_template('menu.html')  # Renderiza la página 'menu.html'
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0',port=8082)  # Cambia el puerto si es necesario
+    app.run(debug=True, host='0.0.0.0',port=8080)
