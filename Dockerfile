@@ -12,7 +12,7 @@ COPY . .
  # Establecer variable de entorno
 ENV PYTHONUNBUFFERED 1
 
-EXPOSE 8080
+EXPOSE 8082
  
 # Comando de inicio
 ENTRYPOINT ["python"]
