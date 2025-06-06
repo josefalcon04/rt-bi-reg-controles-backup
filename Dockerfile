@@ -6,6 +6,7 @@ RUN mkdir /app
 WORKDIR /app
  
 COPY . .
+RUN mkdir -p /app/static/img && chmod -R 777 /app/static/img
  
 #RUN pip install --no-cache-dir -r requirements.txt
 
