@@ -1,5 +1,5 @@
 #FROM default-route-openshift-image-registry.apps.ocptest.gp.inet/nirvana-qa/python311-bi-opd:1.0.0
-FROM telefonicaavillacortal/python311-bi-reg:1.0.0
+FROM telefonicaavillacortal/python311-bi-reg
 
 
 RUN mkdir /app
