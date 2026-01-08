@@ -15,7 +15,7 @@
 }
 
 .logo {
-    height: 40px;
+    height: 40px;     
 }
 
 .topbar-title {
@@ -31,6 +31,7 @@
 .main-container {
     display: flex;
     margin-top: 60px;
+    min-height: calc(100vh - 60px);
 }
 
 /* Barra lateral */
@@ -46,15 +47,14 @@
     transition: transform 0.3s ease-in-out;
     box-shadow: 4px 0px 10px rgba(0, 0, 0, 0.2);
     border-radius: 0 12px 12px 0;
-    overflow-y: auto; /* Permite desplazamiento si el contenido excede la altura */
+    overflow-y: auto;
+    z-index: 999;
 }
 
-/* Ocultar la barra lateral */
 .sidebar.hidden {
     transform: translateX(-100%);
 }
 
-/* Botón ☰ para mostrar el menú */
 .menu-toggle {
     position: fixed;
     top: 15px;
@@ -66,20 +66,19 @@
     cursor: pointer;
     border-radius: 8px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    display: none; /* Se oculta inicialmente */
+    display: none;
     transition: background 0.3s ease;
+    z-index: 1001;
 }
 
 .menu-toggle:hover {
     background: #1a252f;
 }
 
-/* Cuando la barra lateral está oculta, el botón se muestra */
 .sidebar.hidden + .menu-toggle {
     display: block !important;
 }
 
-/* Área invisible a la izquierda para detectar el mouse */
 .sidebar-trigger {
     position: fixed;
     top: 60px;
@@ -87,23 +86,60 @@
     width: 20px;
     height: 100vh;
     background: transparent;
+    z-index: 998;
 }
 
-/* Contenido principal */
 .content {
     transition: margin-left 0.3s ease-in-out;
     margin-left: 260px;
-    padding: 20px;
+    padding: 40px 20px;
     flex-grow: 1;
-}
-
-/* Si la barra lateral está oculta, mover el contenido al centro */
-.sidebar.hidden ~ .content {
-    margin-left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
     text-align: center;
 }
 
-/* Estilos de los enlaces del menú */
+.sidebar.hidden ~ .content {
+    margin-left: 0;
+}
+
+.cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 30px;
+    max-width: 1000px;
+    width: 100%;
+}
+
+.card {
+    background-color: #ecf0f1;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 280px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.card h3 {
+    margin-top: 0;
+    font-size: 20px;
+    color: #2c3e50;
+}
+
+.card p {
+    color: #555;
+}
+
 .sidebar-menu li {
     list-style: none;
     margin: 10px 0;
@@ -127,28 +163,17 @@
     box-shadow: 2px 2px 8px rgba(52, 152, 219, 0.5);
 }
 
-/* Estilo para el submenú */
 .submenu {
     list-style: none;
     padding-left: 0;
-}
-
-.submenu .submenu-content {
-    display: none;
-    list-style: none;
-    padding-left: 20px;
-    margin-top: 10px;
-}
-
-.submenu .submenu-content li {
-    margin: 8px 0;
+    position: relative;
 }
 
 .submenu .submenu-toggle {
     cursor: pointer;
     display: block;
     font-weight: 600;
-    padding: 12px 20px;
+    padding: 12px 15px;
     color: white;
     text-decoration: none;
     border-radius: 8px;
@@ -159,18 +184,49 @@
     background: #3498db;
 }
 
+.submenu .submenu-content {
+    display: none;
+    list-style: none;
+    padding-left: 20px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
 .submenu.open .submenu-content {
     display: block;
 }
 
-/* Ajuste de la visualización del submenú */
-.submenu-content {
-    display: none;
-    list-style: none;
-    padding-left: 15px;
+.submenu .submenu-content li {
+    border-bottom: 1px solid #3e4e59;
+    padding: 10px 0;
 }
 
-/* Ajustes para una mejor responsividad */
+.submenu-toggle::after {
+    content: "▾";
+    float: right;
+    transition: transform 0.3s ease;
+}
+
+.submenu.open > .submenu-toggle::after {
+    content: "▴";
+    transform: rotate(180deg);
+}
+
+.sidebar-header h2 a {
+    display: block;
+    padding: 15px;
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.sidebar-header h2 a:hover {
+    background-color: #444;
+    border-radius: 5px;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
     .sidebar {
         width: 200px;
@@ -187,41 +243,131 @@
     .sidebar-menu li a {
         font-size: 14px;
     }
-    
+
     .submenu .submenu-content {
         padding-left: 10px;
     }
+
+    .cards-container {
+        flex-direction: column;
+        align-items: center;
+    }
 }
 
-/* Barra lateral con desplazamiento */
-.sidebar {
-    height: 100vh;
-    overflow-y: auto; /* Permite el desplazamiento vertical */
-}
-
-/* Agregar un borde de separación para las secciones del submenú */
-.submenu .submenu-content li {
-    border-bottom: 1px solid #3e4e59; /* Añadir una línea de separación entre los elementos del submenú */
-    padding: 10px 0;
-}
-
-.sidebar-header h2 a {
-    display: block;
-    padding: 15px;
-    color: white;
-    text-decoration: none;
-    font-size: 18px;
-    font-weight: bold;
-}
-
-.sidebar-header h2 a:hover {
-    background-color: #444; /* Color al pasar el mouse */
-    border-radius: 5px;
-}
-
+/* Estado alerta */
 .rojo-alerta {
     background-color: #dc3545 !important;
     color: white !important;
 }
+/* =============================== */
+/* 🔔 Notificaciones */
+.notification-container {
+    position: absolute;
+    right: 80px; /* ← mueve la campana más a la izquierda (ajusta el valor a gusto) */
+    top: 10px;
+    z-index: 1200;
+}
 
+.notification-bell {
+    position: relative;
+    font-size: 26px;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
 
+/* Efecto hover suave */
+.notification-bell:hover {
+    transform: scale(1.1);
+}
+
+/* 🔢 Contador rojo */
+.notification-count {
+    position: absolute;
+    top: -6px;
+    right: -10px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* 📜 Panel de notificaciones */
+.notification-panel {
+    position: absolute;
+    right: 0;
+    top: 40px;
+    width: 300px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    color: #333;
+    display: none;
+    transition: all 0.3s ease-in-out;
+}
+
+.notification-panel h4 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+    color: #2c3e50;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+}
+
+.notification-panel ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.notification-panel ul li {
+    background: #ffffff;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+}
+
+.notification-panel ul li:hover {
+    background-color: #e9f5ff;
+}
+
+/* Mostrar panel */
+.notification-panel.show {
+    display: block;
+}
+
+/* ✨ Efecto de parpadeo */
+@keyframes parpadeo {
+    0% { opacity: 1; }
+    50% { opacity: 0.2; }
+    100% { opacity: 1; }
+}
+
+.parpadeando {
+    animation: parpadeo 1s infinite;
+}
+
+/* 🔔 Parpadeo de la campanita */
+@keyframes blink {
+    0%, 100% { color: #f1c40f; } /* Amarillo brillante */
+    50% { color: #ffffff; } /* Blanco */
+}
+
+.notification-bell.blink {
+    animation: blink 1s infinite;
+}
+
+.grid-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra los gráficos horizontalmente */
+    gap: 20px; /* Espacio entre gráficos */
+}

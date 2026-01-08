@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>📄 Lista de Procesos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .content {
+            flex-grow: 1;
+            margin-left: 220px;
+            padding: 100px 50px;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            text-align: center;  /* Centra el texto horizontalmente */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 14px 20px;
+            text-align: left;
+        }
+
+        th {
+            background: #34495e;
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85em;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        tr:hover {
+            background-color: #ecf0f1;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 6px 12px;
+            font-size: 0.9em;
+            border-radius: 6px;
+            text-decoration: none;
+            color: white;
+            transition: background 0.2s;
+        }
+
+        .btn-edit {
+            background: #3498db;
+        }
+
+        .btn-edit:hover {
+            background: #2d86c5;
+        }
+
+        .btn-delete {
+            background: #e74c3c;
+        }
+
+        .btn-delete:hover {
+            background: #c0392b;
+        }
+
+        /* ---- Paginación ---- */
+        .pagination {
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .pagination button {
+            background: #34495e;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            margin: 0 5px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .pagination button:hover {
+            background: #2c3e50;
+        }
+
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: default;
+        }
+
+    </style>
+</head>
+<body>
+    {% include 'sidebar.html' %}
+
+    <div class="content">
+        <h2>📘 Procesos Documentados</h2>
+
+        <table id="tablaProcesos">
+            <thead>
+                <tr>
+                    <th>Nombre del Proceso</th>
+                    <th>Descripción</th>
+                    <th>Última Modificación</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for doc in documentos %}
+                <tr ondblclick="abrirDocumento('{{ doc.nombre }}')">
+                    <td>{{ doc.nombre }}</td>
+                    <td>{{ doc.descripcion or 'Sin descripción' }}</td>
+                    <td>{{ doc.fecha_modificacion }}</td>
+                    <td>
+                        <div class="actions">
+                            <a href="{{ url_for('documentacion.editar', nombre=doc.nombre) }}" class="btn btn-edit">✏️ Editar</a>
+                            <form action="{{ url_for('documentacion.eliminar', nombre=doc.nombre) }}" method="POST" style="display:inline;" onsubmit="return confirm('¿Eliminar este documento?');">
+                                <button type="submit" class="btn btn-delete">🗑️ Eliminar</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="pagination">
+            <button id="prevBtn">⬅️ Anterior</button>
+            <button id="nextBtn">Siguiente ➡️</button>
+        </div>
+    </div>
+
+    <script>
+        // --- Abrir documento al hacer doble clic ---
+        function abrirDocumento(nombre) {
+            window.location.href = "{{ url_for('documentacion.ver', nombre='__NOMBRE__') }}".replace("__NOMBRE__", nombre);
+        }
+
+        // --- Paginación de la tabla ---
+        const rowsPerPage = 10;
+        const rows = document.querySelectorAll("#tablaProcesos tbody tr");
+        const totalPages = Math.ceil(rows.length / rowsPerPage);
+        let currentPage = 1;
+
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+
+        function mostrarPagina(page) {
+            rows.forEach((row, index) => {
+                row.style.display = (index >= (page - 1) * rowsPerPage && index < page * rowsPerPage) ? "" : "none";
+            });
+            prevBtn.disabled = page === 1;
+            nextBtn.disabled = page === totalPages;
+        }
+
+        prevBtn.addEventListener("click", () => {
+            if (currentPage > 1) {
+                currentPage--;
+                mostrarPagina(currentPage);
+            }
+        });
+
+        nextBtn.addEventListener("click", () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                mostrarPagina(currentPage);
+            }
+        });
+
+        mostrarPagina(currentPage);
+    </script>
+</body>
+</html>

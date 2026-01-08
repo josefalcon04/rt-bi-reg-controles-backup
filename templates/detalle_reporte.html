@@ -1,39 +1,623 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalle del Reporte</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
-        .container {
-            max-width: 800px;
-            margin: auto;
-        }
-        .title {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        .info {
-            background-color: #f0f0f0;
-            padding: 15px;
-            border-radius: 5px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalle del Reporte</title>
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.4/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_detalle.css') }}">
+  
+  <!-- JavaScript Libraries -->
+  <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    window.mermaid = mermaid;
+  </script>
 </head>
+
 <body>
-    <div class="container">
-        <div class="title">{{ reporte.nombre }}</div>
-        <div class="info">
-            <p><strong>Frecuencia:</strong> {{ reporte.frecuencia }}</p>
-            <p><strong>Última ejecución:</strong> {{ reporte.ultima_ejecucion }}</p>
-            <p><strong>Estado:</strong> {{ reporte.estado }}</p>
-            <p><strong>Descripción:</strong> {{ reporte.descripcion }}</p>
+  <div class="container">
+    <!-- ========================================
+         MODAL PARA DIAGRAMA DE PROCESO
+         ======================================== -->
+    <div id="modalProceso" class="modal-proceso">
+      <div class="modal-proceso-content">
+        <div class="modal-proceso-header">
+          <h4>Diagrama de Proceso</h4>
+          <button class="close-modal" onclick="cerrarModalProceso()">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
         </div>
+        <div class="modal-proceso-body">
+          <div class="spinner" id="mermaid-spinner"></div>
+          <div id="mermaid-proceso-container">
+            <!-- El diagrama se renderizará aquí -->
+          </div>
+        </div>
+        <div class="modal-proceso-footer">
+          <button class="btn btn-secondary btn-sm" onclick="descargarDiagrama()">
+            <i class="fa-solid fa-download"></i> Descargar SVG
+          </button>
+          <button class="btn btn-danger btn-sm" onclick="cerrarModalProceso()">
+            <i class="fa-solid fa-times"></i> Cerrar
+          </button>
+        </div>
+      </div>
     </div>
+
+    <!-- ========================================
+         HEADER PRINCIPAL
+         ======================================== -->
+    <div class="header">
+      <span>Detalle del Reporte {{reporte.nombre}}</span>
+    </div>
+
+    <!-- ========================================
+         CONTENIDO PRINCIPAL
+         ======================================== -->
+    <div class="main-section">
+      <!-- PANEL IZQUIERDO: Tarjetas de información y gráfico -->
+      <div class="left-panel">
+        <!-- Tarjetas de información -->
+        <div class="info-cards">
+          <div class="info-card card-frecuencia">
+            <div class="info-label">Frecuencia</div>
+            <div class="info-value">
+              <i class="fa fa-clock"></i> {{ reporte.frecuencia }}
+            </div>
+          </div>
+          <div class="info-card card-fecha">
+            <div class="info-label">Ejecución</div>
+            <div class="info-value">
+              <i class="fa fa-calendar"></i> {{ reporte.proxima_ejecucion }}
+            </div>
+          </div>
+          <div class="info-card card-estado">
+            <div class="info-label">Estado</div>
+            <div class="info-value">
+              <span class="estado-circulo {% if reporte.estado in ['EXITO', 'EXITOSO'] %}estado-verde{% elif reporte.estado == 'ERROR' %}estado-rojo{% else %}estado-amarillo{% endif %}"></span>
+              {{ reporte.estado }}
+            </div>
+          </div>
+          <div class="info-card card-estado">
+            <div class="info-label">Estado Input</div>
+            <div class="info-value">
+              <span class="estado-circulo {% if reporte.estado_input in ['EXITO', 'EXITOSO'] %}estado-verde{% elif reporte.estado_input == 'ERROR' %}estado-rojo{% else %}estado-amarillo{% endif %}"></span>
+              {{ reporte.estado_input }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Gráficos de evolución -->
+        <div class="graph-container"> 
+          <div id="grafico1" class="graph-box"></div>
+        </div>
+        
+        <div class="graph-container graph-container2"> 
+          <div id="grafico2" class="graph-box2"></div>
+        </div>
+        
+      </div>
+
+      <!-- PANEL DERECHO: Pestañas de contenido -->
+      <div class="right-panel">
+        <!-- Botones de pestañas -->
+        <div class="tab-buttons">
+          <button onclick="mostrarSeccion('principal')" class="active">Principal</button>
+          <button onclick="mostrarSeccion('input')">Input</button>
+          <button onclick="mostrarSeccion('ejecucion')">Ejecución</button>
+        </div>
+
+        <!-- ========================================
+             PESTAÑA PRINCIPAL
+             ======================================== -->
+        <div class="tab-content" id="principal">
+          <!-- Descripción Funcional -->
+          <div class="section detalle-section">
+            <h3>Descripción Funcional</h3>
+            <p>{{ reporte.funcional }}</p>
+          </div>
+
+          <!-- Descripción Técnica -->
+          <div class="section detalle-section">
+            <h3>
+              Descripción Técnica
+              <button class="btn-ver-proceso" onclick="mostrarModalProceso()" title="Ver diagrama de proceso">
+                <i class="fa fa-diagram-project"></i> Ver Proceso
+              </button>
+            </h3>
+            <p>{{ reporte.tecnico }}</p>
+          </div>
+
+          <!-- Tabla de últimas ejecuciones -->
+          <div class="section tabla-section">
+            <h3>Últimas ejecuciones</h3>
+            <div class="tabla-scroll">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Periodo</th>
+                    <th>Fecha Inicio</th>
+                    <th>Fecha Fin</th>
+                    <th>Estado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for metrica in metricas_relevantes %}
+                  <tr>
+                    <td>{{ metrica.periodo }}</td>
+                    <td>{{ metrica.fecha_inicio }}</td>
+                    <td>{{ metrica.fecha_fin }}</td>
+                    <td>
+                      <span class="estado-circulo {% if metrica.estado in ['EXITO', 'EXITOSO'] %}estado-verde{% elif metrica.estado == 'ERROR' %}estado-rojo{% else %}estado-amarillo{% endif %}"></span>
+                      {{ metrica.estado }}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================
+             PESTAÑA INPUT
+             ======================================== -->
+        <div class="tab-content" id="input" style="display:none;">
+          {% set total_verde = metricas_input | selectattr('Estado', 'in', ['EXITO', 'EXITOSO']) | list | length %}
+          {% set total_amarillo = metricas_input | selectattr('Estado', 'equalto', 'PENDIENTE') | list | length %}
+          {% set total_rojo = metricas_input | selectattr('Estado', 'equalto', 'ERROR') | list | length %}
+          
+          <h3 style="display: flex; align-items: center; justify-content: space-between;">
+            <span>Input</span>
+            <span style="font-size:0.95em; font-weight:normal;">
+              <span class="estado-circulo estado-verde"></span> ({{ total_verde }})
+              <span class="estado-circulo estado-amarillo"></span> ({{ total_amarillo }})
+              <span class="estado-circulo estado-rojo"></span> ({{ total_rojo }})
+            </span>
+          </h3>
+          
+          <div class="tabla-scroll">
+            <table class="data-table" id="input-table">
+              <thead>
+                <tr>
+                  <th>Periodo</th>
+                  <th>Input Fin</th>
+                  <th>Frecuencia</th>
+                  <th>Proxima</th>
+                  <th>Ultima</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for metrica_i in metricas_input %}
+                <tr>
+                  <td>{{ metrica_i.periodo }}</td>
+                  <td>{{ metrica_i.Input }}</td>
+                  <td>{{ metrica_i.Frecuencia }}</td>
+                  <td>{{ metrica_i.fecha }}</td>
+                  <td>{{ metrica_i.fecha_ejecucion }}</td>
+                  <td>
+                    <span class="estado-circulo {% if metrica_i.Estado in ['EXITO', 'EXITOSO'] %}estado-verde{% elif metrica_i.Estado == 'ERROR' %}estado-rojo{% else %}estado-amarillo{% endif %}"></span>
+                    {{ metrica_i.Estado }}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <div id="input-pagination" class="pagination-controls"></div>
+          </div>
+        </div>
+
+        <!-- ========================================
+             PESTAÑA EJECUCIÓN
+             ======================================== -->
+        <div class="tab-content" id="ejecucion" style="display:none;">
+          <h3>Log de Ejecución</h3>
+          <pre>{{ reporte.log_ejecucion | default('No hay logs disponibles.') }}</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================
+       JAVASCRIPT
+       ======================================== -->
+  <script>
+    // ========================================
+    // FUNCIONES DEL MODAL DE PROCESO
+    // ========================================
+    
+    /**
+     * Muestra el modal con el diagrama de proceso
+     */
+    function mostrarModalProceso() {
+      console.log("mostrarModalProceso ejecutado");
+      const modal = document.getElementById('modalProceso');
+      const spinner = document.getElementById('mermaid-spinner');
+      const container = document.getElementById('mermaid-proceso-container');
+      
+      // Mostrar modal
+      modal.style.display = 'flex';
+      setTimeout(() => modal.classList.add('show'), 10);
+      
+      // Configurar spinner y contenedor
+      spinner.style.display = 'block';
+      container.innerHTML = '';
+
+      // Renderizar diagrama Mermaid
+      const codigoMermaid = `{{ proceso_mermaid | safe }}`;
+      container.innerHTML = `<div class="mermaid">${codigoMermaid}</div>`;
+      
+      if (window.mermaid) {
+        mermaid.init(undefined, container.querySelectorAll('.mermaid')).then(() => {
+          setTimeout(() => spinner.style.display = 'none', 200);
+        });
+      }
+    }
+
+    /**
+     * Cierra el modal de proceso
+     */
+    function cerrarModalProceso() {
+      const modal = document.getElementById('modalProceso');
+      modal.classList.remove('show');
+      setTimeout(() => modal.style.display = 'none', 250);
+    }
+
+    /**
+     * Descarga el diagrama como archivo SVG
+     */
+    function descargarDiagrama() {
+      const svgElement = document.querySelector('#mermaid-proceso-container .mermaid svg');
+      if (!svgElement) {
+        alert("No se pudo encontrar el diagrama para descargar.");
+        return;
+      }
+      
+      const svgData = new XMLSerializer().serializeToString(svgElement);
+      const blob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'diagrama_proceso.svg';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // ========================================
+    // FUNCIONES DE NAVEGACIÓN DE PESTAÑAS
+    // ========================================
+    
+    /**
+     * Cambia entre las diferentes pestañas de contenido
+     * @param {string} id - ID de la pestaña a mostrar
+     */
+    function mostrarSeccion(id) {
+      // Ocultar todas las pestañas
+      ['principal', 'input', 'ejecucion'].forEach(s => {
+        const el = document.getElementById(s);
+        if (el) el.style.display = s === id ? 'block' : 'none';
+      });
+      
+      // Actualizar botones activos
+      document.querySelectorAll('.tab-buttons button').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.getAttribute('onclick') === `mostrarSeccion('${id}')`) {
+          btn.classList.add('active');
+        }
+      });
+    }
+
+    // ========================================
+    // FUNCIONES DE PAGINACIÓN
+    // ========================================
+    
+    /**
+     * Implementa paginación para una tabla
+     * @param {string} tablaId - ID de la tabla a paginar
+     * @param {string} paginacionId - ID del contenedor de paginación
+     * @param {number} filasPorPagina - Número de filas por página
+     */
+    function paginarTabla(tablaId, paginacionId, filasPorPagina = 5) {
+      const tabla = document.getElementById(tablaId);
+      const paginacion = document.getElementById(paginacionId);
+      
+      if (!tabla || !paginacion) return;
+      
+      const filas = Array.from(tabla.querySelectorAll('tbody tr'));
+      if (filas.length === 0) return;
+      
+      let paginaActual = 1;
+      const totalPaginas = Math.ceil(filas.length / filasPorPagina);
+      
+      function mostrarPagina(pagina) {
+        // Mostrar/ocultar filas según la página
+        filas.forEach((fila, i) => {
+          fila.style.display = (i >= (pagina - 1) * filasPorPagina && i < pagina * filasPorPagina) ? '' : 'none';
+        });
+        
+        // Generar botones de paginación
+        paginacion.innerHTML = '';
+        for (let i = 1; i <= totalPaginas; i++) {
+          const btn = document.createElement('button');
+          btn.textContent = i;
+          btn.className = (i === pagina) ? 'active' : '';
+          btn.onclick = () => { 
+            paginaActual = i; 
+            mostrarPagina(i); 
+          };
+          paginacion.appendChild(btn);
+        }
+      }
+      
+      mostrarPagina(paginaActual);
+    }
+
+    // ========================================
+    // INICIALIZACIÓN AL CARGAR LA PÁGINA
+    // ========================================
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      // Función para crear configuración de título
+      function crearConfiguracionTitulo(texto) {
+        return {
+          text: texto,
+          font: { size: 16, color: '#000000', weight: 'bold' },
+          x: 0.5,
+          xanchor: 'center'
+        };
+      }
+      
+      // Función para crear configuración del eje X
+      function crearConfiguracionEjeX(valores) {
+        return {
+          title: 'Mes',
+          tickmode: 'array',
+          tickvals: valores,
+          ticktext: valores
+        };
+      }
+      
+      // Configurar gráficos
+      let dataActual;
+      try {
+        dataActual = JSON.parse(`{{ data_actual | safe }}`);
+      } catch {
+        dataActual = [];
+      }
+      
+      // Configuración común para ambos gráficos
+      const configComun = {
+        responsive: true,
+        modeBarButtonsToRemove: [
+          'select2d', 'lasso2d', 
+          'hoverClosestCartesian', 'hoverCompareCartesian', 
+          'toggleSpikelines', 'sendDataToCloud', 'toggleHover', 
+          'resetViewMapbox'
+        ],
+        displaylogo: false,
+        toImageButtonOptions: {
+          format: 'png',
+          filename: 'grafico_evolucion',
+          height: 600,
+          width: 800,
+          scale: 2
+        }
+      };
+      
+      const layoutComun = {
+        autosize: true, 
+        height: Math.floor(window.innerHeight * 0.3), // 30% de la altura de la página
+        margin: { t: 80, b: 40, l: 50, r: 20 },
+        hovermode: 'x unified',
+        hoverlabel: {
+          bgcolor: 'white',
+          bordercolor: '#007bff',
+          font: { size: 12 }
+        },
+        hoverdistance: 100
+      };
+      
+      const layoutComun2 = {
+        autosize: true, 
+        height: Math.floor(window.innerHeight * 0.48), // 40% de la altura de la página para gráfico 2
+        margin: { t: 80, b: 40, l: 50, r: 20 },
+        hovermode: 'x unified',
+        hoverlabel: {
+          bgcolor: 'white',
+          bordercolor: '#007bff',
+          font: { size: 12 }
+        },
+        hoverdistance: 100
+      };
+      
+      // Obtener datos para el gráfico 2
+      let dataTabla2;
+      try {
+        dataTabla2 = JSON.parse(`{{ data_tabla2 | safe }}`);
+      } catch {
+        dataTabla2 = [];
+      }
+      
+      if (typeof dataActual === "string") {
+        document.getElementById('grafico1').innerHTML = dataActual;
+        document.getElementById('grafico2').innerHTML = dataActual;
+      } else if (dataActual.length > 0) {
+        const x = dataActual.map(d => d.Mes_nombre);
+        const y = dataActual.map(d => d.Cantidad);
+        
+        const traceActual = {
+          x: x, 
+          y: y,
+          name: dataActual[0].Año ? dataActual[0].Año.toString() : 'Últimos 12 meses',
+          type: 'scatter', 
+          mode: 'lines+markers', 
+          line: { color: 'blue' }
+        };
+        
+        // Gráfico 1
+        const layout1 = {
+          ...layoutComun,
+          title: crearConfiguracionTitulo('Evolución de registros por mes'),
+          xaxis: crearConfiguracionEjeX(x),
+          yaxis: { title: 'Cantidad' },
+          legend: { title: { text: 'Periodo' } }
+        };
+        
+        Plotly.newPlot('grafico1', [traceActual], layout1, configComun);
+        
+        // Gráfico 2 con data_tabla2
+        if (typeof dataTabla2 === "string") {
+          document.getElementById('grafico2').innerHTML = dataTabla2;
+        } else if (dataTabla2.length > 0) {
+          // Verificar si hay categorías en los datos
+          const tieneCategorias = dataTabla2[0].hasOwnProperty('Categoría') && dataTabla2[0].Categoría;
+          
+          if (tieneCategorias) {
+            // Paleta de colores profesional y accesible
+            const colores = [
+              '#1f77b4', // Azul
+              '#ff7f0e', // Naranja
+              '#2ca02c', // Verde
+              '#d62728', // Rojo
+              '#9467bd', // Púrpura
+              '#8c564b', // Marrón
+              '#e377c2', // Rosa
+              '#7f7f7f', // Gris
+              '#bcbd22', // Verde oliva
+              '#17becf', // Cian
+              '#a6cee3', // Azul claro
+              '#fb9a99', // Rosa claro
+              '#fdbf6f', // Naranja claro
+              '#cab2d6', // Púrpura claro
+              '#ff9896', // Rojo claro
+              '#f7b6d2'  // Rosa suave
+            ];
+            
+            // Calcular total por categoría y aplicar estrategia profesional
+            const totalPorCategoria = {};
+            dataTabla2.forEach(d => {
+              if (!totalPorCategoria[d.Categoría]) {
+                totalPorCategoria[d.Categoría] = 0;
+              }
+              totalPorCategoria[d.Categoría] += d.Cantidad;
+            });
+            
+            // Ordenar categorías por total
+            const categoriasOrdenadas = Object.entries(totalPorCategoria)
+              .sort(([,a], [,b]) => b - a)
+              .map(([categoria]) => categoria);
+            
+            // Estrategia de agrupación inteligente
+            const totalCategorias = categoriasOrdenadas.length;
+            let categoriasAMostrar, otrasCategorias;
+            
+            if (totalCategorias <= 8) {
+              categoriasAMostrar = categoriasOrdenadas;
+              otrasCategorias = [];
+            } else if (totalCategorias <= 15) {
+              categoriasAMostrar = categoriasOrdenadas.slice(0, 6);
+              otrasCategorias = categoriasOrdenadas.slice(6);
+            } else {
+              categoriasAMostrar = categoriasOrdenadas.slice(0, 10);
+              otrasCategorias = categoriasOrdenadas.slice(10);
+            }
+            
+            const traces = [];
+            
+            // Crear trazas para las categorías principales
+            categoriasAMostrar.forEach((categoria, index) => {
+              const datosCategoria = dataTabla2.filter(d => d.Categoría === categoria);
+              traces.push({
+                x: datosCategoria.map(d => d.Mes_nombre),
+                y: datosCategoria.map(d => d.Cantidad),
+                name: categoria,
+                type: 'scatter',
+                mode: 'lines+markers',
+                line: { color: colores[index] }
+              });
+            });
+            
+            // Crear traza para "Otros" con información  
+            if (otrasCategorias.length > 0) {
+              // Agrupar datos de las categorías restantes por mes
+              const mesesUnicos = [...new Set(dataTabla2.map(d => d.Mes_nombre))];
+              const datosOtros = mesesUnicos.map(mes => {
+                const totalOtros = dataTabla2
+                  .filter(d => d.Mes_nombre === mes && otrasCategorias.includes(d.Categoría))
+                  .reduce((sum, d) => sum + d.Cantidad, 0);
+                return { mes, total: totalOtros };
+              });
+              
+              // Nombre  para el grupo "Otros"
+              const nombreOtros = otrasCategorias.length === 1 
+                ? `Otra categoría (${otrasCategorias[0]})`
+                : `Otros (${otrasCategorias.length} categorías)`;
+              
+              traces.push({
+                x: datosOtros.map(d => d.mes),
+                y: datosOtros.map(d => d.total),
+                name: nombreOtros,
+                type: 'scatter',
+                mode: 'lines+markers',
+                line: { color: 'gray', dash: 'dash' },
+                opacity: 0.7
+              });
+            }
+            
+            const layout2 = {
+              ...layoutComun2,
+              title: crearConfiguracionTitulo('Evolución de registros por mes'),
+              xaxis: crearConfiguracionEjeX([...new Set(dataTabla2.map(d => d.Mes_nombre))]),
+              yaxis: { title: 'Cantidad' },
+              legend: { title: { text: 'Categorías' } }
+            };
+            
+            Plotly.newPlot('grafico2', traces, layout2, configComun);
+          } else {
+            // Sin categorías, mostrar como antes
+            const x2 = dataTabla2.map(d => d.Mes_nombre);
+            const y2 = dataTabla2.map(d => d.Cantidad);
+            
+            const traceTabla2 = {
+              x: x2, 
+              y: y2,
+              name: dataTabla2[0].Año ? dataTabla2[0].Año.toString() : 'Últimos 12 meses',
+              type: 'scatter', 
+              mode: 'lines+markers', 
+              line: { color: 'red' }
+            };
+            
+            const layout2 = {
+              ...layoutComun2,
+              title: crearConfiguracionTitulo('Evolución de registros por mes'),
+              xaxis: crearConfiguracionEjeX(x2),
+              yaxis: { title: 'Cantidad' },
+              legend: { title: { text: 'Periodo' } }
+            };
+            
+            Plotly.newPlot('grafico2', [traceTabla2], layout2, configComun);
+          }
+        } else {
+          document.getElementById('grafico2').innerHTML = "<p>No hay datos para graficar.</p>";
+        }
+      } else {
+        document.getElementById('grafico1').innerHTML = "<p>No hay datos para graficar.</p>";
+        document.getElementById('grafico2').innerHTML = "<p>No hay datos para graficar.</p>";
+      }
+
+      // Configurar paginación
+      paginarTabla('input-table', 'input-pagination', 5);
+      
+      // Mostrar pestaña principal por defecto
+      mostrarSeccion('principal');
+    });
+  </script>
 </body>
-</html>
+</html>  

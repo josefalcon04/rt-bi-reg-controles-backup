@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gráficos Reporte NRIPO_035</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f9f9f9;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        /* 🔹 Contenedor principal: dos filas */
+        .grid-container {
+            display: grid;
+            grid-template-rows: auto auto;
+            gap: 20px;
+            width: 100%;
+        }
+
+        /* 🔹 Contenedor fila inferior con 2 columnas */
+        .bottom-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .grafico-container img {
+            width: 100%;
+            max-height: 400px;
+            height: auto;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>REPORTE NRIPO_035</h1>
+
+    <div class="grid-container">        
+        <!-- 🔹 Imagen 1 (arriba) -->
+        <div class="grafico-container">
+            <img src="{{ url_for('NRIPO_035.imagenes', filename=img1) }}" alt="Gráfico 1">
+        </div>
+
+        <!-- 🔹 Imágenes 2 y 3 (abajo, lado a lado) -->
+        <div class="bottom-row">
+            <div class="grafico-container">
+                <img src="{{ url_for('NRIPO_035.imagenes', filename=img2) }}" alt="Gráfico 2">            
+            </div>
+            <div class="grafico-container">
+                <img src="{{ url_for('NRIPO_035.imagenes', filename=img3) }}" alt="Gráfico 3">
+            </div>
+        </div>
+    </div>
+</body>
+</html>

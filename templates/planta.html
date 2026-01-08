@@ -141,6 +141,8 @@
         }
     
         console.log("Script insertado correctamente");
+        actualizarGrafico(1); // Forzamos la invocación para probar
+        actualizarGrafico(2);
     
         // Intentemos invocar la función directamente fuera de DOMContentLoaded
         window.onload = function() {

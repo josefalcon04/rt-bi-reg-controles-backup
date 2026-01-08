@@ -26,6 +26,8 @@ def Query_Netezza():
     SELECT PERIODO,ESTADO,TECNOLOGIA,sum(CANTIDAD) AS CANTIDAD 
     FROM control_mako..T_AGR_VAL_PLT
     WHERE FUENTE = 'JRR_BA_PLANTA'
+    and TECNOLOGIA <> 'None'
+    and PERIODO >= '202501'
     GROUP BY 1,2,3;
     """
 
@@ -52,6 +54,8 @@ def Query_Netezza2():
     SELECT PERIODO,ESTADO,TECNOLOGIA,sum(CANTIDAD) AS CANTIDAD 
     FROM control_mako..T_AGR_VAL_PLT
     WHERE FUENTE = 'T_INH_PLT_CHU'
+    and TECNOLOGIA <> 'None'
+    and PERIODO >= '202501'
     GROUP BY 1,2,3;    
     """
 
@@ -109,82 +113,142 @@ def index():
                             periodo1=periodo1,
                             periodo2=periodo2)
 
-def generar_grafico(df, img_name): 
+def generar_grafico(df, img_name):
     global max_y_global
 
-    # Verificar que las columnas necesarias existen
+    # --- Validar columnas ---
     required_columns = {"ESTADO", "TECNOLOGIA", "PERIODO", "CANTIDAD"}
     if not required_columns.issubset(df.columns):
-        return "Error: Los datos no contienen las columnas necesarias", 500
+        logging.error("❌ Faltan columnas requeridas en el DataFrame")
+        return "Error: Datos incompletos", 500
 
-    # Obtener parámetros de la URL
+    # --- Obtener parámetros de URL ---
     tecnologia = request.args.get("tecnologia", "TODAS")
     estado = request.args.get("estado", "ACTIVO")
-    periodos_param = request.args.get("periodo", "")    
-    periodos = request.args.get("periodo", "").split(",") if request.args.get("periodo") else []
+    periodos_param = request.args.get("periodo", "")
+    periodos = periodos_param.split(",") if periodos_param else []
 
-    print("Tecnología:", tecnologia)
-    print("Estado:", estado)
-    print("Periodos recibidos:", periodos if periodos else "TODOS")
+    logging.info(f"Tecnología seleccionada: {tecnologia}")
+    logging.info(f"Estado seleccionado: {estado}")
+    logging.info(f"Períodos seleccionados: {periodos if periodos else 'TODOS'}")
 
-    # Filtrar datos por estado seleccionado
+    # --- Filtrar por estado ---
     df = df[df["ESTADO"] == estado]
-
-    # Convertir PERIODO a string y ordenar
-    df["PERIODO"] = df["PERIODO"].astype(str)
-    df = df.sort_values("PERIODO")
-
-    # Asegurar que CANTIDAD es numérico
-    df["CANTIDAD"] = pd.to_numeric(df["CANTIDAD"], errors="coerce")
-
-    # Filtrar por periodos si se proporcionaron
-    if periodos:
-        df = df[df["PERIODO"].isin(periodos)]
-
     if df.empty:
-        return "No hay datos disponibles para la selección", 404
+        logging.warning("⚠️ No hay datos para el estado seleccionado")
+        return "No hay datos disponibles", 404
 
-    # Si no se ha calculado `max_y_global`, hacerlo ahora
+    # --- Normalizar columnas ---
+    df["TECNOLOGIA"] = df["TECNOLOGIA"].astype(str).str.strip().str.upper()
+    df["PERIODO"] = pd.to_datetime(df["PERIODO"].astype(str) + "01", format="%Y%m%d", errors="coerce")
+    df = df.dropna(subset=["PERIODO"]).sort_values("PERIODO")
+    df["CANTIDAD"] = pd.to_numeric(df["CANTIDAD"], errors="coerce").fillna(0)
+
+    # --- Filtrar por períodos específicos ---
+    if periodos:
+        periodos_dt = [pd.to_datetime(p + "01", format="%Y%m%d", errors="coerce") for p in periodos]
+        df = df[df["PERIODO"].isin(periodos_dt)]
+        if df.empty:
+            logging.warning("⚠️ No hay datos para los períodos seleccionados")
+            return "No hay datos disponibles", 404
+
+    # --- Escalar valores ---
+    df["CANTIDAD"] = df["CANTIDAD"] / 1_000_000  # millones
+
+    # --- Crear gráfico ---
+    fig, ax = plt.subplots(figsize=(14, 5))
+    plt.style.use("seaborn-v0_8-whitegrid")
+
+    # --- Calcular escala Y dinámica ---
+    max_y = df["CANTIDAD"].max() * 1.1
+    min_y = max(0, df["CANTIDAD"].min() * 0.9)
+
     if max_y_global == 0:
-        max_y_global = float(df["CANTIDAD"].max())
+        max_y_global = max_y
 
-    # Ajustar tamaño del gráfico
-    plt.figure(figsize=(14, 5))
-
-    tecnologias_unicas = df["TECNOLOGIA"].unique()
+    # --- Dibujar líneas ---
+    tecnologias = df["TECNOLOGIA"].unique()
+    colores = plt.cm.tab10.colors
 
     if tecnologia == "TODAS":
-        for tech in tecnologias_unicas:
+        for i, tech in enumerate(tecnologias):
             df_tech = df[df["TECNOLOGIA"] == tech]
-            color = COLORES_TECNOLOGIA.get(tech, "#000000")  # Color negro si no hay color asignado
-            plt.plot(df_tech["PERIODO"], df_tech["CANTIDAD"], marker="o", linestyle="-", label=tech, color=color)
+
+            if df_tech.empty:
+                logging.warning(f"⚠️ Sin datos para la tecnología: {tech}")
+                continue  # Evita el error IndexError
+
+            ax.plot(
+                df_tech["PERIODO"].dt.strftime("%Y-%m"),
+                df_tech["CANTIDAD"],
+                marker="o", linewidth=2, linestyle="-",
+                color=colores[i % len(colores)],
+                label=tech
+            )
+
+            # Etiqueta solo en el último punto si hay datos
+            last_row = df_tech.iloc[-1]
+            ax.text(
+                last_row["PERIODO"].strftime("%Y-%m"),
+                last_row["CANTIDAD"] + (max_y * 0.02),
+                f"{last_row['CANTIDAD']:.2f}",
+                ha="center", va="bottom", fontsize=8, fontweight="bold"
+            )
+
     else:
-        df = df[df["TECNOLOGIA"] == tecnologia]
+        df = df[df["TECNOLOGIA"] == tecnologia.strip().upper()]
         if df.empty:
-            return "No hay datos disponibles para la selección", 404
-        color = COLORES_TECNOLOGIA.get(tecnologia, "#000000")
-        plt.plot(df["PERIODO"], df["CANTIDAD"], marker="o", linestyle="-", label=tecnologia, color=color)
+            logging.warning("⚠️ No hay datos disponibles para la tecnología seleccionada")
+            return "No hay datos disponibles para la tecnología seleccionada", 404
 
-    plt.xlabel("Período")
-    plt.ylabel("Cantidad")
-    if not df["PERIODO"].empty:
-        plt.xticks(df["PERIODO"].unique(), rotation=0)
+        color = COLORES_TECNOLOGIA.get(tecnologia, "#1f77b4")
+        ax.plot(
+            df["PERIODO"].dt.strftime("%Y-%m"),
+            df["CANTIDAD"],
+            marker="o", linewidth=2, linestyle="-",
+            color=color, label=tecnologia
+        )
 
-    plt.ylim(0, max_y_global * 1.1)
-    plt.grid(True)
-    plt.legend(loc="lower center", bbox_to_anchor=(0.5, -0.2), ncol=len(tecnologias_unicas))
+        # Etiqueta solo si hay datos
+        last_row = df.iloc[-1]
+        ax.text(
+            last_row["PERIODO"].strftime("%Y-%m"),
+            last_row["CANTIDAD"] + (max_y * 0.02),
+            f"{last_row['CANTIDAD']:.2f}",
+            ha="center", va="bottom", fontsize=8, fontweight="bold"
+        )
 
-    # Guardar imagen
+    # --- Configuración de ejes ---
+    ax.set_xlabel("Período", fontweight="bold")
+    ax.set_ylabel("Cantidad (Millones)", fontweight="bold")
+    ax.set_ylim(min_y, max_y)
+    ax.tick_params(axis="x", rotation=0, labelsize=9)
+    ax.tick_params(axis="y", labelsize=9)
+
+    # --- Bordes elegantes ---
+    for spine in ax.spines.values():
+        spine.set_visible(True)
+        spine.set_color("black")
+        spine.set_linewidth(0.8)
+
+    # --- Título y leyenda ---
+    plt.title(f"Cantidad total de activos ({estado}) por tecnología", fontweight="bold", pad=15)
+    ax.legend(loc="best", fontsize=9, frameon=True)
+
+    plt.tight_layout()
+
+    # --- Guardar imagen ---
     img_dir = os.path.join(os.getcwd(), "static/img")
     os.makedirs(img_dir, exist_ok=True)
     img_path = os.path.join(img_dir, img_name)
 
     try:
-        plt.savefig(img_path, bbox_inches='tight')
+        plt.savefig(img_path, bbox_inches="tight", dpi=200)
         plt.close()
+        logging.info(f"✅ Gráfico generado correctamente: {img_path}")
         return send_from_directory(img_dir, img_name)
     except Exception as e:
-        print(f"Error en generar_grafico: {str(e)}")
+        logging.error(f"❌ Error al guardar el gráfico: {e}")
         return "Error interno del servidor", 500
 
 

@@ -1,0 +1,151 @@
+# Generación de reporte NRIPO100
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Este proceso es a pedido por el usuario Bryan R. es mensual y se ejecuta siempre cada semana del inicio de un mes.
+
+
+
+
+
+
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PROCESAMIENTO DEL NRIPO_100
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 1. Etapa de matricula: 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+python Frame_LoadSP.py SPTdt_F_SPSARNRIP100.xlsx
+
+
+
+
+
+
+
+python Frame_Load_Extract.py ExTdt_F_EXSARNRIP100.xlsx
+
+
+
+
+
+
+
+python Frame_Load_Excel_to_TDT.py NzLoad_I_SARNRIPO100.xlsx
+
+
+
+
+
+
+
+python Frame_Load_Reporte_NZ.py GRNZNRIPO_100.xlsx
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##  2. Etapa de ejecución:
+
+nohup python Frame_EjecutaSP.py SPSARNRIP100 202511 &
+nohup python Frame_Extractor.py EXSARNRIP100 &
+python Frame_FtpGet.py LOSARNRIP100
+python Frame_NZLoad.py LOSARNRIP100
+python Frame_Genera_Reporte.py NORMA_NRIPO_100
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##  3. Resultado en Netezza:
+
+
+
+
+
+
+
+/datos5/FG_REG_DESA/OutputFiles
+
+
+
+
+
+
+
+100 - MINORISTA - COMUNICACIONES MOVILES.xlsx
