@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pase</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- CSS propio -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pases_from.css') }}">
+</head>
+
+<body>
+
+<div class="page">
+
+    <div class="form-container">
+
+        <div class="form-header">
+            <h2>{{ '✏️ Editar Pase' if pase else '➕ Nuevo Pase' }}</h2>
+            <p>Complete la información del pase</p>
+        </div>
+
+        <form id="pasesForm" class="form-card">
+
+            <input type="hidden" name="index" value="{{ index }}">
+            <input type="hidden" name="id" value="{{ pase.id if pase else '' }}">
+
+            <div class="grid">
+
+                <!-- COLUMNA 1 -->
+                <div class="col">
+
+                    <div class="field">
+                        <label>Fecha</label>
+                        <input type="date" name="fecha" value="{{ pase.fecha if pase else '' }}" required>
+                    </div>
+
+                    <div class="field">
+                        <label>Proceso</label>
+                        <select name="proceso" required>
+                            {% for dev in ['RTSRA','RTSVN','TRAFICO'] %}
+                            <option value="{{ dev }}" {% if pase and pase.proceso == dev %}selected{% endif %}>{{ dev }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label>Nombre Proceso</label>
+                        <input type="text" name="name_proceso" value="{{ pase.name_proceso if pase else '' }}" required>
+                    </div>
+
+                    <div class="field">
+                        <label>CTI</label>
+                        <input type="text" name="cti" value="{{ pase.cti if pase else '' }}" required>
+                    </div>
+
+                </div>
+
+                <!-- COLUMNA 2 -->
+                <div class="col">
+
+                    <div class="field">
+                        <label>Tinkuy</label>
+                        <input type="text" name="tinkuy" value="{{ pase.tinkuy if pase else '' }}" required>
+                    </div>
+
+                    <div class="field">
+                        <label>Documentación</label>
+                        <input type="text" name="documentacion" value="{{ pase.documentacion if pase else '' }}">
+                    </div>
+
+                    <div class="field">
+                        <label>Link SharePoint</label>
+                        <input type="url" name="link_sharepoint" value="{{ pase.link_sharepoint if pase else '' }}">
+                    </div>
+
+                    <div class="field">
+                        <label>Tipo</label>
+                        <select name="tipo" required>
+                            {% for dev in ['DEFAULT','REGULAR','OPTIMIZADO','INCIDENCIA'] %}
+                            <option value="{{ dev }}" {% if pase and pase.tipo == dev %}selected{% endif %}>{{ dev }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                </div>
+
+                <!-- COLUMNA 3 -->
+                <div class="col">
+
+                    <div class="field">
+                        <label>Desarrollador BI</label>
+                        <select name="desarrolladorbi" required>
+                            {% for dev in ['DEFAULT','OSCAR CAPARO','JOSE FALCON'] %}
+                            <option value="{{ dev }}" {% if pase and pase.desarrolladorbi == dev %}selected{% endif %}>{{ dev }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label>Líder Integratel</label>
+                        <select name="liderintegratel" required>
+                            {% for dev in ['DEFAULT','PEDRO MORENO','JOSE FALCON'] %}
+                            <option value="{{ dev }}" {% if pase and pase.liderintegratel == dev %}selected{% endif %}>{{ dev }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label>Responsable PAP</label>
+                        <select name="responsablepap" required>
+                            {% for dev in ['DEFAULT','PEDRO MORENO','ANTHONY VILLACORTA'] %}
+                            <option value="{{ dev }}" {% if pase and pase.responsablepap == dev %}selected{% endif %}>{{ dev }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="actions">
+                <button type="button" class="btn-save" onclick="guardarPase()">
+                    💾 Guardar
+                </button>
+
+                <button type="button" class="btn-cancel" id="btnCancelar" onclick="cargarContenido('/pases')" >
+                    ❌ Cancelar
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+const form = document.getElementById("pasesForm");
+
+form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    try {
+
+        const res = await fetch("/pases/guardar", {
+            method: "POST",
+            body: new FormData(form)
+        });
+
+        const data = await res.json();
+
+        console.log(data);
+
+        if (data.ok) {
+            paginaActual = null;
+            setTimeout(() => {
+                cargarContenido('/pases', true);
+            }, 50);} 
+        else {
+            alert(data.message || "Error al guardar");
+        }
+
+    } catch (err) {
+
+        console.error(err);
+        alert("Error al guardar");
+
+    }
+});
+function guardarPase() {
+
+    const form = document.getElementById("pasesForm");
+
+    fetch("/pases/guardar", {
+        method: "POST",
+        body: new FormData(form)
+    })
+    .then(r => r.json())
+    .then(data => {
+
+        if (data.ok) {
+
+            paginaActual = null;
+            cargarContenido('/pases', true);
+
+        } else {
+            alert(data.message || "Error al guardar");
+        }
+
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Error al guardar");
+    });
+}
+</script>
+
+</body>
+</html>

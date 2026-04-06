@@ -158,10 +158,8 @@ def detalle_reporte():
         LOG_NOMBRE_SP,
         relacion,
         TABLA_HISTORICA
-        FROM DESARROLLO_AM..T_CATA_REPORTES_NORMA_COPIA 
-        where NOMBRE_PROCESO_REPO = ? 
-        
-        
+        FROM CONTROL_MAKO..T_CATA_REPORTES_NORMA
+        where NOMBRE_PROCESO_REPO = ?                 
     """
     
     cursor.execute(query_tabla, (nombre_reporte,))

@@ -1,0 +1,156 @@
+body {
+    margin: 0;
+    font-family: "Segoe UI", sans-serif;
+    background: #f4f6fb;
+}
+
+/* CONTENEDOR GENERAL */
+.page {
+    display: flex;
+    justify-content: center;
+    padding: 10px 20px;
+}
+
+.form-container {
+    width: 100%;
+    max-width: 1400px;
+}
+
+/* CABECERA */
+.form-header {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.form-header h2 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.form-header p {
+    margin-top: 5px;
+    color: #6c757d;
+}
+
+/* TARJETA */
+.form-card {
+    padding: 25px 30px;
+}
+
+/* ===== GRID PRINCIPAL ===== */
+/* 3 columnas en vez de 2 */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    align-items: start;
+}
+/* COLUMNAS */
+
+
+/* CAMPOS */
+.field {
+    display: flex;
+    flex-direction: column;
+}
+
+.field label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 4px;
+}
+
+.field input,
+.field select {
+    height: 42px;
+    padding: 0 12px;
+    border: 1px solid #d6d9e0;
+    border-radius: 8px;
+    font-size: 14px;
+    background: white;
+    transition: .2s;
+}
+
+.field input:focus,
+.field select:focus {
+    border-color: #0d6efd;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(13,110,253,.15);
+}
+
+/* BOTONES */
+.actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.btn-save,
+.btn-cancel {
+    min-width: 160px;
+    height: 44px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.btn-save {
+    background: #198754;
+    color: white;
+}
+
+.btn-cancel {
+    background: #6c757d;
+    color: white;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1100px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 700px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.actions{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    margin-top:30px;
+}
+
+.btn-save,
+.btn-cancel{
+    min-width:180px;
+    height:45px;
+    border:none;
+    border-radius:8px;
+    font-weight:600;
+    cursor:pointer;
+}
+
+.btn-save{
+    background:#198754;
+    color:white;
+}
+
+.btn-cancel{
+    background:#6c757d;
+    color:white;
+}
+
+.btn-save:hover{
+    opacity:.9;
+}
+
+.btn-cancel:hover{
+    opacity:.9;
+}

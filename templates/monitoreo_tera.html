@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>Monitoreo Teradata</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/monitoreo_tera.css') }}">
+</head>
+
+<body>
+
+<div class="monitor-container">
+
+    <h1>📊 Monitoreo de Schedules Teradata</h1>
+
+    {% set total = datos|length %}
+    {% set finalizados = datos|selectattr("DesEstado","equalto","Schedule Finalizado")|list|length %}
+    {% set pendientes = datos|selectattr("DesEstado","equalto","Schedule Pendiente")|list|length %}
+
+    {% set errores = 0 %}
+    {% for fila in datos %}
+        {% if 'error' in fila.DesEstado|string|lower %}
+            {% set errores = errores + 1 %}
+        {% endif %}
+    {% endfor %}
+
+    <!-- KPIs -->
+
+    <div class="dashboard">
+
+        <div class="card">
+            <h3>Total Schedules</h3>
+            <span>{{ total }}</span>
+        </div>
+
+        <div class="card">
+            <h3>Finalizados</h3>
+            <span class="ok-num">{{ finalizados }}</span>
+        </div>
+
+        <div class="card">
+            <h3>Pendientes</h3>
+            <span class="pend-num">{{ pendientes }}</span>
+        </div>
+
+        <div class="card">
+            <h3>Errores</h3>
+            <span class="err-num">{{ errores }}</span>
+        </div>
+
+    </div>
+
+    <!-- Filtros -->
+
+    <div class="filtros">
+
+        <input
+            type="text"
+            id="filtro"
+            placeholder="🔍 Buscar schedule..."
+            onkeyup="filtrarTabla()">
+
+        <select
+            id="estadoFiltro"
+            onchange="filtrarTabla()">
+
+            <option value="">Todos los estados</option>
+            <option value="finalizado">Finalizado</option>
+            <option value="pendiente">Pendiente</option>
+            <option value="error">Error</option>
+
+        </select>
+
+    </div>
+
+    <!-- Tabla -->
+
+    <div class="tabla-wrapper">
+
+        {% if datos %}
+
+        <table id="tablaDatos">
+
+            <thead>
+                <tr>
+                    {% for col in datos[0].keys() %}
+                        <th>{{ col }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+
+            <tbody>
+
+            {% for fila in datos %}
+                <tr>
+
+                {% for key, valor in fila.items() %}
+
+                    {% if key == 'DesEstado' %}
+
+                        <td>
+
+                        {% if 'Finalizado' in valor %}
+                            <span class="estado-ok">
+                                {{ valor }}
+                            </span>
+
+                        {% elif 'Pendiente' in valor %}
+                            <span class="estado-pendiente">
+                                {{ valor }}
+                            </span>
+
+                        {% elif 'Error' in valor
+                              or 'ERROR' in valor
+                              or 'error' in valor %}
+
+                            <span class="estado-error">
+                                {{ valor }}
+                            </span>
+
+                        {% else %}
+
+                            {{ valor }}
+
+                        {% endif %}
+
+                        </td>
+
+                    {% else %}
+
+                        <td>{{ valor }}</td>
+
+                    {% endif %}
+
+                {% endfor %}
+
+                </tr>
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        {% else %}
+
+            <div style="padding:40px;text-align:center;">
+                No existen registros para mostrar
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+<script>
+
+function filtrarTabla(){
+
+    let texto =
+        document.getElementById("filtro")
+        .value
+        .toLowerCase();
+
+    let estado =
+        document.getElementById("estadoFiltro")
+        .value
+        .toLowerCase();
+
+    let filas =
+        document.querySelectorAll(
+            "#tablaDatos tbody tr"
+        );
+
+    filas.forEach(fila => {
+
+        let contenido =
+            fila.textContent.toLowerCase();
+
+        let mostrar = true;
+
+        if(texto &&
+           !contenido.includes(texto))
+        {
+            mostrar = false;
+        }
+
+        if(estado &&
+           !contenido.includes(estado))
+        {
+            mostrar = false;
+        }
+
+        fila.style.display =
+            mostrar ? "" : "none";
+
+    });
+
+}
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pases - Regulatorio</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pases.css') }}">
+</head>
+
+<body>
+
+<!-- 🔥 IMPORTANTE: CONTENEDOR LIMPIO -->
+<div class="content">
+
+    <!-- WRAPPER INTERNO (evita desplazamientos raros) -->
+    <div class="pases-page">
+
+        <h1 class="page-title">⚡ Gestión de Pases</h1>
+
+        <!-- BARRA DE ACCIONES -->
+        <div class="actions-bar">
+
+            <div class="actions-left">                
+
+                <a href="#" class="btn-action btn-new" onclick="cargarContenido('/pases/form')">➕ Nuevo</a>
+
+                <a href="/pases/exportar/csv" class="btn-action btn-csv">⬇ CSV</a>
+
+                <a href="/pases/exportar/excel" class="btn-action btn-excel">📊 Excel</a>
+
+                <form action="/pases/importar" method="POST" enctype="multipart/form-data" class="import-form">
+                    <input type="file" name="file" id="fileInput" hidden onchange="this.form.submit()">
+                    <button type="button" class="btn-action btn-import"
+                        onclick="document.getElementById('fileInput').click()">
+                        📤 Importar
+                    </button>
+                </form>
+
+            </div>
+
+            <div class="actions-right">
+
+                <input type="text" id="filtroNombre" placeholder="🔍 Proceso..." onkeyup="filtrarTabla()">
+
+                <input type="text" id="filtroCTI" placeholder="CTI..." onkeyup="filtrarTabla()">
+
+                <select id="filtroTipo" onchange="filtrarTabla()">
+                    <option value="">Todos</option>
+                    <option value="OPTIMIZADO">OPTIMIZADO</option>
+                    <option value="REGULAR">REGULAR</option>
+                </select>
+
+            </div>
+
+        </div>
+
+        <!-- TABLA -->
+        <div class="tabla-contenedor">
+
+            <table id="tablaPases">
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Fecha</th>
+                        <th>Proceso</th>
+                        <th>Nombre</th>
+                        <th>CTI</th>
+                        <th>Tinkuy</th>
+                        <th>Tipo</th>
+                        <th>Responsable</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for p in lista_pases %}
+                    <tr>
+                        <td>{{ p.id }}</td>
+                        <td>{{ p.fecha }}</td>
+                        <td>{{ p.proceso }}</td>
+                        <td>{{ p.name_proceso }}</td>
+                        <td>{{ p.cti }}</td>
+                        <td>{{ p.tinkuy }}</td>
+                        <td>{{ p.tipo }}</td>
+                        <td>{{ p.responsablepap }}</td>
+
+                        <td class="acciones">
+
+    <a href="#"
+       class="btn-edit"
+       onclick="cargarContenido('/pases/form/{{ loop.index0 }}'); return false;">
+       Editar
+    </a>
+
+    <a href="#"
+       class="btn-delete"
+       onclick="eliminarPase('{{ p.id }}'); return false;">
+       Eliminar
+    </a>
+
+</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- FILTRO JS -->
+<script>
+function filtrarTabla() {
+
+    const nombre = document.getElementById("filtroNombre").value.toLowerCase();
+    const cti = document.getElementById("filtroCTI").value.toLowerCase();
+    const tipo = document.getElementById("filtroTipo").value.toLowerCase();
+
+    const filas = document.querySelectorAll("#tablaPases tbody tr");
+
+    filas.forEach(fila => {
+
+        const proceso = fila.children[2].textContent.toLowerCase();
+        const nombreProc = fila.children[3].textContent.toLowerCase();
+        const ctiVal = fila.children[4].textContent.toLowerCase();
+        const tipoVal = fila.children[6].textContent.toLowerCase();
+
+        let show = true;
+
+        if (nombre && !proceso.includes(nombre) && !nombreProc.includes(nombre)) show = false;
+        if (cti && !ctiVal.includes(cti)) show = false;
+        if (tipo && tipoVal !== tipo) show = false;
+
+        fila.style.display = show ? "" : "none";
+    });
+}
+
+async function eliminarPase(id) {
+
+    if (!confirm(`¿Desea eliminar el pase ${id}?`)) {
+        return;
+    }
+
+    try {
+
+        const response = await fetch(`/pases/eliminar/${id}`, {
+            method: "POST",
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error("Error del servidor");
+        }
+
+        const data = await response.json();
+
+        if (data.ok) {
+            paginaActual = null;
+
+            setTimeout(() => {
+                cargarContenido('/pases');
+            }, 50);
+        }
+
+    } catch (error) {
+
+        console.error(error);
+        alert("Error al eliminar el registro");
+
+    }
+}
+</script>
+
+</body>
+</html>
