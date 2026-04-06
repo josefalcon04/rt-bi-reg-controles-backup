@@ -225,11 +225,19 @@ def generar_grafico_trfacuv2(df, img_name="grafico_trfacuv2.png"):
         spine.set_color("black")
         spine.set_linewidth(0.8)
 
-    # --- Título y leyenda ---
+   # --- Título y leyenda ---
     plt.title("Cantidad total de eventos por periodo", fontweight="bold", pad=15)
-    ax.legend(loc="best", fontsize=9, frameon=True)
+
+    ax.legend(
+        loc="upper center",
+        bbox_to_anchor=(0.5, -0.15),
+        ncol=2,           # ajusta según cuántas series tengas
+        fontsize=9,
+        frameon=True
+    )
 
     plt.tight_layout()
+
 
     # --- Guardar imagen ---
     img_dir = os.path.join(os.getcwd(), "static/img")

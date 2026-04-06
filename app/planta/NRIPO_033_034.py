@@ -24,7 +24,7 @@ def Query_NRIPO_033():
         MODALIDAD,
         sum(LINEAS_SERVICIO) AS CANTIDAD 
     FROM PROD_REGU_NORMA_DATA..T_NRM_NRIPO_033_HIST
-    WHERE ANIO_MES >= '202401'
+    WHERE ANIO_MES >= '202501'
     GROUP BY 1,2
     ORDER BY 1 desc
     """
@@ -72,7 +72,7 @@ def Query_NRIPO_034():
     SELECT 
     SUBSTRING( ANIO_MES,1,4) || trim(TO_char(MES,'00')) AS PERIODO,MODALIDAD ,sum(LINEAS_SERVICIO) AS CANTIDAD 
     FROM PROD_REGU_NORMA_DATA..T_NRM_NRIPO_034_HIST
-    WHERE ANIO_MES >= '202401'
+    WHERE ANIO_MES >= '202501'
     GROUP BY 1,2
     ORDER BY 1 desc;
     """
@@ -193,6 +193,12 @@ def generar_grafico_nripo_033(df, img_name="grafico_nripo_033.png"):
     return img_name
 
 
+COLORES_TIPO = {
+    "Prepago":  "#ff8c00",  # naranja
+    "Postpago": "#007bff",  # azul
+    "Control":  "#28a745",  # verde
+    "Total":    "#6c757d"   # gris
+}
 
 def generar_grafico_nripo_033_TOT(df, img_name="grafico_nripo_033_tot.png"):
     df = pd.DataFrame(df)
@@ -224,6 +230,7 @@ def generar_grafico_nripo_033_TOT(df, img_name="grafico_nripo_033_tot.png"):
         df["CANTIDAD"],
         marker="o",
         linestyle="-",
+        color=COLORES_TIPO["Total"],
         label="Total"
     )
 
@@ -333,7 +340,7 @@ def generar_grafico_nripo_034(df, img_name="grafico_nripo_034.png"):
     ax.grid(False)
 
     # --- Título y leyenda ---
-    plt.title("Líneas móviles en servicio por modalidad", fontweight="bold")
+    plt.title("Líneas móviles en servicio a 3 meses", fontweight="bold")
     ax.legend(loc="best", fontsize=8, frameon=True)
 
     plt.tight_layout()
@@ -381,6 +388,7 @@ def generar_grafico_nripo_034_TOT(df, img_name="grafico_nripo_034_tot.png"):
         df["CANTIDAD"],
         marker="o",
         linestyle="-",
+        color=COLORES_TIPO["Total"],
         label="Total"
     )
 

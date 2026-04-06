@@ -23,7 +23,7 @@ def Query_NRIPO_035_TOT():
     DISTINCT SUBSTRING( ANIO_MES,1,4) ||LPAD(TRIM(MES), 2, '0') AS PERIODO  
     ,sum(LINEAS_EN_SERVICIO) AS LINEAS_EN_SERVICIO, sum(LINEAS_A_SERVICIO_A_3_MES) AS LINEAS_A_SERVICIO_A_3_MES 
     FROM PROD_REGU_NORMA_DATA..T_NRM_NRIPO_035_HIST
-    WHERE ANIO_MES >= '202401'
+    WHERE ANIO_MES >= '202501'
     GROUP BY 1
     ORDER BY 1 asc
     """
@@ -56,7 +56,7 @@ def Query_nripo_33_35_DIF():
                 SUBSTRING(ANIO_MES,1,4) || TRIM(TO_CHAR(MES,'00')) AS PERIODO,
                 SUM(LINEAS_SERVICIO) AS NRIPO_033
             FROM PROD_REGU_NORMA_DATA..T_NRM_NRIPO_033_HIST
-            WHERE ANIO_MES >= '202401'
+            WHERE ANIO_MES >= '202501'
             GROUP BY 1
         ) b
         FULL OUTER JOIN
@@ -67,7 +67,7 @@ def Query_nripo_33_35_DIF():
                 SUM(LINEAS_EN_SERVICIO) AS LINEAS_EN_SERVICIO,
                 SUM(LINEAS_A_SERVICIO_A_3_MES) AS LINEAS_A_SERVICIO_A_3_MES
             FROM PROD_REGU_NORMA_DATA..T_NRM_NRIPO_035_HIST
-            WHERE ANIO_MES >= '202401'
+            WHERE ANIO_MES >= '202501'
             GROUP BY 1
         ) c
         ON b.PERIODO = c.PERIODO
@@ -102,7 +102,7 @@ def Query_nripo_34_35_DIF():
                 SUBSTRING(ANIO_MES,1,4) || TRIM(TO_CHAR(MES,'00')) AS PERIODO,
                 SUM(LINEAS_SERVICIO) AS NRIPO_034
             FROM PROD_REGU_NORMA_DATA..T_NRM_NRIPO_034_HIST
-            WHERE ANIO_MES >= '202401'
+            WHERE ANIO_MES >= '202501'
             GROUP BY 1
         ) a
         FULL OUTER JOIN        
@@ -113,7 +113,7 @@ def Query_nripo_34_35_DIF():
                 SUM(LINEAS_EN_SERVICIO) AS LINEAS_EN_SERVICIO,
                 SUM(LINEAS_A_SERVICIO_A_3_MES) AS LINEAS_A_SERVICIO_A_3_MES
             FROM PROD_REGU_NORMA_DATA..T_NRM_NRIPO_035_HIST
-            WHERE ANIO_MES >= '202401'
+            WHERE ANIO_MES >= '202501'
             GROUP BY 1
         ) c
         ON a.PERIODO = c.PERIODO
@@ -175,23 +175,33 @@ def generar_grafico_nripo_035_TOT(df, img_name="grafico_nripo_035_tot.png"):
 
     # --- Líneas principales ---
     ax1.plot(df["PERIODO"], df["LINEAS_EN_SERVICIO"], marker="o", linewidth=2.5,
-             color="#007bff", label="Líneas en Servicio")
+            color="#007bff", label="Líneas en Servicio")
+
     ax1.plot(df["PERIODO"], df["LINEAS_A_SERVICIO_A_3_MES"], marker="s", linewidth=2.5,
-             color="#ff8c00", label="Líneas a Servicio a 3 Meses")
+            color="#ff8c00", label="Líneas a Servicio a 3 Meses")
 
-    # Etiquetas sobre las líneas
+    # --- Forzar ticks de los 12 meses ---
+    ax1.set_xticks(df["PERIODO"])
+    ax1.set_xticklabels(df["PERIODO"].dt.strftime("%Y%m"))
+
+    # --- Etiquetas sobre las líneas ---
     for _, row in df.iterrows():
-        ax1.text(row["PERIODO"], row["LINEAS_EN_SERVICIO"], f"{row['LINEAS_EN_SERVICIO']:.1f}",
-                 ha="center", va="bottom", fontsize=8, color="#004085", fontweight="bold")
-        ax1.text(row["PERIODO"], row["LINEAS_A_SERVICIO_A_3_MES"], f"{row['LINEAS_A_SERVICIO_A_3_MES']:.1f}",
-                 ha="center", va="bottom", fontsize=8, color="#cc7000", fontweight="bold")
+        ax1.text(row["PERIODO"], row["LINEAS_EN_SERVICIO"],
+                f"{row['LINEAS_EN_SERVICIO']:.1f}",
+                ha="center", va="bottom", fontsize=8,
+                color="#004085", fontweight="bold")
 
-    # --- Configuración eje izquierdo ---
-    ax1.set_xlabel("Período", fontweight="bold")
-    ax1.set_ylabel("Cantidad (Millones)", fontweight="bold", color="#212529")
-    ax1.yaxis.set_major_formatter(mtick.FuncFormatter(lambda x, _: f"{x:.1f}M"))
-    ax1.tick_params(axis="x", rotation=0)
-    ax1.grid(True, linestyle="--", alpha=0.3)
+        ax1.text(row["PERIODO"], row["LINEAS_A_SERVICIO_A_3_MES"],
+                f"{row['LINEAS_A_SERVICIO_A_3_MES']:.1f}",
+                ha="center", va="bottom", fontsize=8,
+                color="#cc7000", fontweight="bold")
+
+        # --- Configuración eje izquierdo ---
+        ax1.set_xlabel("Período", fontweight="bold")
+        ax1.set_ylabel("Cantidad (Millones)", fontweight="bold", color="#212529")
+        ax1.yaxis.set_major_formatter(mtick.FuncFormatter(lambda x, _: f"{x:.1f}M"))
+        ax1.tick_params(axis="x", rotation=0)
+        ax1.grid(True, linestyle="--", alpha=0.3)
 
     # --- Eje derecho: % de diferencia ---
     ax2 = ax1.twinx()
@@ -217,8 +227,9 @@ def generar_grafico_nripo_035_TOT(df, img_name="grafico_nripo_035_tot.png"):
     ax1.legend(
         lines_labels[0] + bars_labels[0],
         lines_labels[1] + bars_labels[1],
-        loc="center left",
-        bbox_to_anchor=(1.15, 0.5),  # mueve la leyenda más a la derecha
+        loc="upper center",
+        bbox_to_anchor=(0.5, -0.18),   # 👈 ABAJO del gráfico
+        ncol=3,
         fontsize=9,
         frameon=True,
         fancybox=True,
@@ -317,8 +328,9 @@ def generar_grafico_nripo_033_vs_035(df, img_name="grafico_nripo_033_vs_035.png"
     ax1.legend(
         lines_labels[0] + bars_labels[0],
         lines_labels[1] + bars_labels[1],
-        loc="center left",
-        bbox_to_anchor=(1.15, 0.5),
+        loc="center",
+        bbox_to_anchor=(0.5, -0.15),   # 👈 leyenda abajo
+        ncol=3,                        # 👈 en columnas
         fontsize=9,
         frameon=True,
         fancybox=True,
@@ -416,8 +428,9 @@ def generar_grafico_nripo_034_vs_035(df, img_name="grafico_nripo_034_vs_035.png"
     ax1.legend(
         lines_labels[0] + bars_labels[0],
         lines_labels[1] + bars_labels[1],
-        loc="center left",
-        bbox_to_anchor=(1.15, 0.5),
+        loc="center",
+        bbox_to_anchor=(0.5, -0.15),   # 👈 leyenda abajo
+        ncol=3,                        # 👈 en columnas
         fontsize=9,
         frameon=True,
         fancybox=True,

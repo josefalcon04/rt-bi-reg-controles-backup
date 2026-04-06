@@ -13,41 +13,42 @@ def obtener_reportes():
     
     # Consulta SQL para obtener los reportes
     cursor.execute("""
-    SELECT NOMBRE_REPORTE, INDICADOR_COLOR, FRECUENCIA, NOMBRE_ORIGINAL
-FROM (
-    SELECT DISTINCT 
-        CASE 
-            WHEN NOMBRE_PROCESO_REPO = 'INEI CUADRO 1 - BLOQUE 1' THEN 'INEI1-B01'
-            WHEN NOMBRE_PROCESO_REPO = 'INEI CUADRO 1 - BLOQUE 2' THEN 'INEI1-B03'
-            WHEN NOMBRE_PROCESO_REPO = 'INEI CUADRO 1 - BLOQUE 3' THEN 'INEI1-B03'
-            WHEN NOMBRE_PROCESO_REPO = 'INEI CUADRO 2' THEN 'INEI2-B00'
-            WHEN NOMBRE_PROCESO_REPO = 'INFORME TRAFICO (RT)' THEN 'TRAFI-RT1'
-            ELSE NOMBRE_PROCESO_REPO
-        END AS nombre_reporte,    
-        CASE
-            WHEN EJECUCION = 'EXITO' THEN 'green'
-            WHEN EJECUCION = 'PENDIENTE' THEN 'yellow'
-            WHEN EJECUCION = 'ERROR' THEN 'red'
-            ELSE 'grey'
-        END AS indicador_color,
-        frecuencia_repo AS frecuencia,
-        NOMBRE_PROCESO_REPO AS nombre_original,
-        periodo,
-        MAX(PERIODO) OVER (PARTITION BY 
+        SELECT NOMBRE_REPORTE, INDICADOR_COLOR, FRECUENCIA, NOMBRE_ORIGINAL
+    FROM (
+        SELECT DISTINCT 
             CASE 
-                WHEN NOMBRE_PROCESO_REPO = 'INEI CUADRO 1 - BLOQUE 1' THEN 'INEI1-B01'
-                WHEN NOMBRE_PROCESO_REPO = 'INEI CUADRO 1 - BLOQUE 2' THEN 'INEI1-B03'
-                WHEN NOMBRE_PROCESO_REPO = 'INEI CUADRO 1 - BLOQUE 3' THEN 'INEI1-B03'
-                WHEN NOMBRE_PROCESO_REPO = 'INEI CUADRO 2' THEN 'INEI2-B00'
-                WHEN NOMBRE_PROCESO_REPO = 'INFORME TRAFICO (RT)' THEN 'TRAFI-RT1'
-                ELSE NOMBRE_PROCESO_REPO
-            END, frecuencia_repo) AS MAX_PERIODO
-    FROM CONTROL_MAKO..T_AGR_NORMA_CONTROL
-    WHERE SUBSTRING(PERIODO, 1, 4) IN ('2024', '2025')
-) AS X
-WHERE PERIODO = MAX_PERIODO  -- Solo tomamos el máximo periodo por grupo
-ORDER BY frecuencia, nombre_reporte;
-
+                WHEN A.NOMBRE_PROCESO_REPO = 'INEI CUADRO 1 - BLOQUE 1' THEN 'INEI1-B01'
+                WHEN A.NOMBRE_PROCESO_REPO = 'INEI CUADRO 1 - BLOQUE 2' THEN 'INEI1-B03'
+                WHEN A.NOMBRE_PROCESO_REPO = 'INEI CUADRO 1 - BLOQUE 3' THEN 'INEI1-B03'
+                WHEN A.NOMBRE_PROCESO_REPO = 'INEI CUADRO 2' THEN 'INEI2-B00'
+                WHEN A.NOMBRE_PROCESO_REPO = 'INFORME TRAFICO (RT)' THEN 'TRAFI-RT1'
+                ELSE A.NOMBRE_PROCESO_REPO
+            END AS nombre_reporte,    
+            CASE
+                WHEN A.EJECUCION = 'EXITO' THEN 'green'
+                WHEN A.EJECUCION = 'PENDIENTE' THEN 'yellow'
+                WHEN A.EJECUCION = 'ERROR' THEN 'red'
+                ELSE 'grey'
+            END AS indicador_color,
+            A.frecuencia_repo AS frecuencia,
+            A.NOMBRE_PROCESO_REPO AS nombre_original,
+            A.periodo,
+            MAX(A.PERIODO) OVER (PARTITION BY 
+                CASE 
+                    WHEN A.NOMBRE_PROCESO_REPO = 'INEI CUADRO 1 - BLOQUE 1' THEN 'INEI1-B01'
+                    WHEN A.NOMBRE_PROCESO_REPO = 'INEI CUADRO 1 - BLOQUE 2' THEN 'INEI1-B03'
+                    WHEN A.NOMBRE_PROCESO_REPO = 'INEI CUADRO 1 - BLOQUE 3' THEN 'INEI1-B03'
+                    WHEN A.NOMBRE_PROCESO_REPO = 'INEI CUADRO 2' THEN 'INEI2-B00'
+                    WHEN A.NOMBRE_PROCESO_REPO = 'INFORME TRAFICO (RT)' THEN 'TRAFI-RT1'
+                    ELSE A.NOMBRE_PROCESO_REPO
+                END, A.frecuencia_repo) AS MAX_PERIODO
+        FROM CONTROL_MAKO..T_AGR_NORMA_CONTROL A     
+        LEFT JOIN CONTROL_MAKO..T_CATA_REPORTES_NORMA B ON A.NOMBRE_PROCESO_REPO = B.NOMBRE_PROCESO_REPO
+        WHERE SUBSTRING(A.PERIODO, 1, 2) = '20'
+        AND B.ESTADO = '1'
+    ) AS X
+    WHERE PERIODO = MAX_PERIODO  -- Solo tomamos el máximo periodo por grupo
+    ORDER BY frecuencia, nombre_reporte;
     """)
 
     resultados = cursor.fetchall()
@@ -159,6 +160,7 @@ def detalle_reporte():
         TABLA_HISTORICA
         FROM DESARROLLO_AM..T_CATA_REPORTES_NORMA_COPIA 
         where NOMBRE_PROCESO_REPO = ? 
+        AND estado = '1'
         
     """
     

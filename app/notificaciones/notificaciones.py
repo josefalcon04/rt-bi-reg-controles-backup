@@ -34,7 +34,9 @@ def obtener_notificaciones():
     ) AS max_periodos 
         ON t.NOMBRE_PROCESO_REPO = max_periodos.NOMBRE_PROCESO_REPO 
        AND t.PERIODO = max_periodos.MAX_PERIODO
-    WHERE t.EJECUCION_INPUT = 'PENDIENTE' AND (t.EJECUCION <> 'EXITO' OR t.ESTADO_REPORTE IS null)
+    WHERE (t.EJECUCION_INPUT <> 'EXITO' OR 
+        t.EJECUCION <> 'EXITO' OR 
+        t.ESTADO_REPORTE IS NULL) 
       AND t.PERIODO >= '202502'
     ORDER BY t.PERIODO DESC , t.NOMBRE_PROCESO_REPO ASC;
     """
