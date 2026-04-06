@@ -160,7 +160,7 @@ def detalle_reporte():
         TABLA_HISTORICA
         FROM DESARROLLO_AM..T_CATA_REPORTES_NORMA_COPIA 
         where NOMBRE_PROCESO_REPO = ? 
-        AND estado = '1'
+        
         
     """
     
