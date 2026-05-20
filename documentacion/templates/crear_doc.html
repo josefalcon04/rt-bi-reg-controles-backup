@@ -202,7 +202,7 @@
                 <input type="text" name="titulo" value="{{ titulo or '' }}" placeholder="Título del documento" {% if modo == 'editar' %}readonly{% endif %}>
 
                 <label for="contenido">Contenido (Markdown)</label>
-                <textarea name="contenido" rows="15">{{ contenido or '' }}</textarea>
+                <textarea name="contenido" rows="15">{{ contenido|trim if contenido else '' }}</textarea>
 
                 <div class="form-buttons">
                     <button type="submit">{% if modo == 'editar' %}💾 Guardar Cambios{% else %}💾 Guardar Documento{% endif %}</button>

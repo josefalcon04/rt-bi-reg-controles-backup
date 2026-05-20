@@ -9,10 +9,11 @@ from app.planta import planta_mtc_bp  # Importa el blueprint de planta de contro
 from app.planta import NRIPO_033_034_bp  # Importa el blueprint de reporte 33 y 34
 from app.notificaciones.notificaciones import notificaciones_bp  # importa tu blueprint
 from app.planta import NRIPO_035_bp  # Importa el blueprint de reporte 35
-from app.planta import planta_tisa_bp  # Importa el blueprint de planta TISA
+from app.planta import planta_tisa_bp  # Importa el blueprint pip install plotlyde planta TISA
 from app.planta import planta_usua_mtc_bp  # Importa el blueprint de planta USUA MTC
 from app.planta import planta_trfacu_bp # Importa el blueprint de planta USUA MTC
-from documentacion import documentacion_bp
+from documentacion import documentacion_bp # Importa el blueprint de documentacion
+from app.devoluciones import devoluciones_bp # Importa el blueprint de planta USUA MTC
 
 app = Flask(__name__)
 
@@ -31,11 +32,20 @@ app.register_blueprint(planta_tisa_bp)
 app.register_blueprint(planta_usua_mtc_bp)
 app.register_blueprint(planta_trfacu_bp)
 app.register_blueprint(documentacion_bp)
+app.register_blueprint(devoluciones_bp)
 
 @app.route('/')
 def menu():
     # Usar render_template correctamente
     return render_template('menu.html')  # Renderiza la página 'menu.html'
+
+@app.route('/tendencias_plantas')
+def tendencias_plantas():
+    return render_template('tendencias_plantas.html')
+
+@app.route('/tendencias_reportes')
+def tendencias_reportes():
+    return render_template('tendencias_reportes.html')
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0',port=8080)

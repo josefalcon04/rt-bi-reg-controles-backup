@@ -3,256 +3,277 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendario de Reportes Periídicos - Año 2025</title>
+    <title>Calendario de Reportes Periódicos</title>
+
     <style>
         body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 0;
-    padding: 20px;
-}
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
 
-h1 {
-    text-align: center;
-    margin-bottom: 5px; /* Ajusta el espacio inferior */
-    margin-top: 0; /* Elimina cualquier margen superior adicional */
-    font-size: 22px; /* Aumenta ligeramente el tamaño si lo deseas */
-    line-height: 1.5; /* Aumenta la altura del texto */
-}
+        h1 {
+            text-align: center;
+            margin-bottom: 5px;
+            margin-top: 0;
+            font-size: 22px;
+            line-height: 1.5;
+        }
 
+        .contenedor {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+        }
 
-/* Contenedor principal */
-.contenedor {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-}
+        .calendario {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            width: 80%;
+            justify-content: center;
+        }
 
-/* Calendario */
-.calendario {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 columnas por fila */
-    gap: 10px;
-    width: 80%;
-    justify-content: center;
-}
+        .mes {
+            background: white;
+            border-radius: 10px;
+            padding: 5px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+            width: 170px;
+            font-size: 12px;
+        }
 
-.mes {
-    background: white;
-    border-radius: 10px;
-    padding: 5px;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-    width: 170px;
-    font-size: 12px;
-}
+        .mes h3 {
+            background: #007BFF;
+            color: white;
+            padding: 5px;
+            border-radius: 10px 10px 0 0;
+            margin: 0;
+            font-size: 14px;
+            text-align: center;
+        }
 
-.mes h3 {
-    background: #007BFF;
-    color: white;
-    padding: 5px;
-    border-radius: 10px 10px 0 0;
-    margin: 0;
-    font-size: 14px;
-    text-align: center;
-}
+        .dias {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 5px;
+        }
 
-/* Días */
-.dias {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    padding: 5px;
-}
+        .dia {
+            width: 30px;
+            height: auto;
+            margin: 2px;
+            padding: 3px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 10px;
+            border-radius: 5px;
+            background: #fff;
+            box-shadow: 1px 1px 5px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
 
-.dia {
-    width: 30px;
-    height: auto;
-    margin: 2px;
-    padding: 3px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-size: 10px;
-    border-radius: 5px;
-    background: #fff;
-    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-}
+        .dia:hover {
+            background-color: #e0e0e0;
+        }
 
-.dia:hover {
-    background-color: #e0e0e0;
-}
+        .dia-numero {
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
 
-.dia-numero {
-    font-weight: bold;
-    margin-bottom: 2px;
-}
+        .frecuencia {
+            width: 8px;
+            height: 8px;
+            margin: 1px;
+            border-radius: 3px;
+            display: inline-block;
+        }
 
-.frecuencia {
-    width: 8px;
-    height: 8px;
-    margin: 1px;
-    border-radius: 3px;
-    display: inline-block;
-}
+        .barra-lateral {
+            width: 300px;
+            background: white;
+            padding: 15px;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            flex: 1;
+            max-height: 400px;
+            overflow-y: auto;
+            font-size: 12px;
+        }
 
-/* Barra lateral */
-.barra-lateral {
-    width: 300px; /* Aumentado de 200px a 300px */
-    background: white;
-    padding: 15px;
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    flex: 1;
-    max-height: 400px;
-    overflow-y: auto;
-    font-size: 12px;
-}
+        .barra-lateral h2 {
+            margin: 0 0 10px;
+            font-size: 16px;
+            text-align: center;
+            background: #007BFF;
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+        }
 
-.barra-lateral h2 {
-    margin: 0 0 10px;
-    font-size: 16px;
-    text-align: center;
-    background: #007BFF;
-    color: white;
-    padding: 10px;
-    border-radius: 10px;
-}
+        #lista-reportes {
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow-x: hidden;
+        }
 
-#lista-reportes {
-    white-space: nowrap; /* Evita saltos de línea */
-    text-overflow: ellipsis; /* Agrega "..." si el texto es muy largo */
-    overflow-x: hidden;
-}
+        .reporte {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px;
+            border-bottom: 1px solid #ddd;
+            white-space: nowrap;
+            overflow: hidden;
+        }
 
-.reporte {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    padding: 5px;
-    border-bottom: 1px solid #ddd;
-    white-space: nowrap; /* Mantiene todo en una línea */
-    overflow: hidden;
-}
+        .reporte-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+            display: inline-block;
+            flex-shrink: 0;
+        }
 
-.reporte-color {
-    width: 12px;
-    height: 12px;
-    border-radius: 3px;
-    display: inline-block;
-    flex-shrink: 0; /* Evita que el color se oculte */
-}
+        .reporte-nombre {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex-grow: 1;
+        }
 
-.reporte-nombre {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    flex-grow: 1; /* Permite que el nombre del reporte ocupe el espacio necesario */
-}
-/* Leyenda */
-.leyenda {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    font-size: 12px;
-    margin-top: 0px; /* Mantiene la leyenda en su lugar */
-    margin-bottom: 10px; /* Agrega espacio hacia abajo */
-}
+        .leyenda {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            font-size: 12px;
+            margin-top: 0px;
+            margin-bottom: 10px;
+        }
 
+        .leyenda-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
 
-.leyenda-item {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.leyenda-color {
-    width: 10px;
-    height: 10px;
-    border-radius: 3px;
-    display: inline-block;
-}
-
+        .leyenda-color {
+            width: 10px;
+            height: 10px;
+            border-radius: 3px;
+            display: inline-block;
+        }
     </style>
+
     <script>
+        const todosReportes = [
+            {% for mes, info in calendario.items() %}
+                {% for dia, eventos in info.dias.items() %}
+                    {% for evento in eventos %}
+                        {
+                            dia: "{{ dia }}",
+                            nombre: "{{ evento[0] }}",
+                            color: "{{ evento[1] }}"
+                        },
+                    {% endfor %}
+                {% endfor %}
+            {% endfor %}
+        ];
+
+        function pintarReportes(reportes) {
+            let listaReportes = document.getElementById("lista-reportes");
+            listaReportes.innerHTML = "";
+
+            if (reportes.length === 0) {
+                listaReportes.innerHTML = "<p style='color: gray;'>No se encontraron reportes</p>";
+                return;
+            }
+
+            reportes.forEach(reporte => {
+                let div = document.createElement("div");
+                div.classList.add("reporte");
+
+                let color = document.createElement("span");
+                color.classList.add("reporte-color");
+                color.style.backgroundColor = reporte.color;
+
+                let nombre = document.createElement("span");
+                nombre.classList.add("reporte-nombre");
+                nombre.textContent = reporte.nombre;
+
+                let fecha = document.createElement("span");
+                fecha.classList.add("reporte-dia");
+                fecha.textContent = ` (${reporte.dia})`;
+
+                div.appendChild(color);
+                div.appendChild(nombre);
+                div.appendChild(fecha);
+
+                listaReportes.appendChild(div);
+            });
+        }
+
         function mostrarReportes(dia, reportes) {
-    let contenedor = document.getElementById("barra-reportes");
-    let listaReportes = document.getElementById("lista-reportes");
+            let contenedor = document.getElementById("barra-reportes");
 
-    // 🔹 Si hay reportes, mostramos la barra lateral; si no, la ocultamos.
-    if (reportes.length > 0) {
-        contenedor.style.display = "block";
-        listaReportes.innerHTML = ""; // Limpiar lista antes de agregar nuevos reportes
+            if (reportes.length > 0) {
+                contenedor.style.display = "block";
 
-        reportes.forEach(reporte => {
-            let div = document.createElement("div");
-            div.classList.add("reporte");
+                let reportesDia = reportes.map(r => ({
+                    dia: dia,
+                    nombre: r.nombre,
+                    color: r.color
+                }));
 
-            // 🔹 Círculo de color
-            let color = document.createElement("span");
-            color.classList.add("reporte-color");
-            color.style.backgroundColor = reporte.color;
+                pintarReportes(reportesDia);
+            } else {
+                contenedor.style.display = "none";
+            }
+        }
 
-            // 🔹 Nombre del reporte
-            let nombre = document.createElement("span");
-            nombre.classList.add("reporte-nombre");
-            nombre.textContent = reporte.nombre;
+        function filtrarReportes() {
+            let input = document.getElementById("busqueda-reporte").value.toLowerCase().trim();
+            let contenedor = document.getElementById("barra-reportes");
 
-            // 🔹 Fecha
-            let fecha = document.createElement("span");
-            fecha.classList.add("reporte-dia");
-            fecha.textContent = ` (${dia})`;
+            contenedor.style.display = "block";
 
-            // Agregar elementos
-            div.appendChild(color);
-            div.appendChild(nombre);
-            div.appendChild(fecha);
+            if (input === "") {
+                document.getElementById("lista-reportes").innerHTML = "";
+                return;
+            }
 
-            listaReportes.appendChild(div);
+            let filtrados = todosReportes.filter(r =>
+                String(r.nombre).toLowerCase().includes(input)
+            );
+
+            // Dejar solo únicos por nombre
+            let unicosMap = new Map();
+
+            filtrados.forEach(r => {
+                let clave = String(r.nombre).toLowerCase().trim();
+
+                if (!unicosMap.has(clave)) {
+                    unicosMap.set(clave, r);
+                }
         });
-    } else {
-        // 🔹 Si no hay reportes, ocultamos la barra lateral
-        contenedor.style.display = "none";
-    }
-}
-function filtrarReportes() {
-    let input = document.getElementById("busqueda-reporte").value.toLowerCase();
-    let lista = document.getElementById("lista-reportes");
-    let reportes = lista.getElementsByTagName("div"); // Asumiendo que cada reporte está dentro de un <div>
 
-    // Si la barra está vacía, mostrar todos los reportes
-    if (input === "") {
-        for (let reporte of reportes) {
-            reporte.style.display = "block";
+        let unicos = Array.from(unicosMap.values());
+
+        pintarReportes(unicos);
         }
-        return;
-    }
-
-    let hayCoincidencias = false;
-
-    for (let reporte of reportes) {
-        let texto = reporte.textContent.toLowerCase();
-        if (texto.includes(input)) {
-            reporte.style.display = "block";
-            hayCoincidencias = true;
-        } else {
-            reporte.style.display = "none";
-        }
-    }
-
-    // Si no hay coincidencias, la lista se mantiene vacía, pero la barra lateral sigue visible
-    if (!hayCoincidencias) {
-        lista.innerHTML = "<p style='color: gray;'>No se encontraron reportes</p>";
-    }
-}
-
     </script>
 </head>
+
 <body>
-    <h1>📅 Calendario de Reportes Periódicos </h1>
+
+    <h1>📅 Calendario de Reportes Periódicos</h1>
 
     <div class="leyenda">
         <div class="leyenda-item">
@@ -269,14 +290,16 @@ function filtrarReportes() {
         </div>
         <div class="leyenda-item">
             <span class="leyenda-color" style="background-color: #ff0000;"></span> Plantas
-        </div>        
+        </div>
     </div>
 
     <div class="contenedor">
+
         <div class="calendario">
             {% for mes, info in calendario.items() %}
             <div class="mes">
                 <h3>{{ mes }}</h3>
+
                 <div class="dias">
                     {% for dia in info.dias.keys() | sort %}
                     <div class="dia" onclick="mostrarReportes('{{ dia }}', [
@@ -285,6 +308,7 @@ function filtrarReportes() {
                         {% endfor %}
                     ])">
                         <div class="dia-numero">{{ dia }}</div>
+
                         <div class="frecuencias">
                             {% set colores_mostrados = [] %}
                             {% for evento in info.dias[dia] %}
@@ -300,17 +324,20 @@ function filtrarReportes() {
             </div>
             {% endfor %}
         </div>
-        
+
         <div class="barra-lateral" id="barra-reportes" style="display: block;">
             <h2>Lista de reportes</h2>
-            <input type="text" id="busqueda-reporte" placeholder="Buscar reporte..." onkeyup="filtrarReportes()" 
+
+            <input type="text"
+                   id="busqueda-reporte"
+                   placeholder="Buscar reporte..."
+                   onkeyup="filtrarReportes()"
                    style="width: 100%; padding: 5px; margin-bottom: 5px; border: 1px solid #ddd; border-radius: 5px;">
-            
+
             <div id="lista-reportes"></div>
         </div>
-        
-        
-        
+
     </div>
+
 </body>
 </html>

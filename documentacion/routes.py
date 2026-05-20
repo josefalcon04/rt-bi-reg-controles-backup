@@ -2,12 +2,25 @@ from flask import Blueprint, render_template, request, redirect, url_for
 import os
 import markdown
 import datetime
+import re
 
 documentacion_bp = Blueprint('documentacion', __name__, template_folder='templates')
 
 # Carpeta donde se guardarán los archivos .md
 DOCS_FOLDER = os.path.join(os.path.dirname(__file__), 'templates', 'documentos')
 
+def limpiar_contenido(texto):
+    texto = texto.replace('\r\n', '\n')
+    texto = texto.replace('\r', '\n')
+    texto = texto.strip()
+
+    # Quita espacios en líneas vacías
+    texto = re.sub(r'[ \t]+\n', '\n', texto)
+
+    # Reemplaza 3 o más saltos de línea por solo 2
+    texto = re.sub(r'\n{3,}', '\n\n', texto)
+
+    return texto
 # Asegurar que la carpeta exista
 if not os.path.exists(DOCS_FOLDER):
     os.makedirs(DOCS_FOLDER)
@@ -45,7 +58,7 @@ def crear():
 @documentacion_bp.route('/documentacion/guardar', methods=['POST'])
 def guardar():
     titulo = request.form['titulo'].strip()
-    contenido = request.form['contenido']
+    contenido = limpiar_contenido(request.form['contenido'])
 
     if not titulo:
         return "⚠️ El título no puede estar vacío.", 400
@@ -81,14 +94,14 @@ def editar(nombre):
 
     if request.method == 'POST':
         # Guardar cambios
-        contenido = request.form['contenido']
+        contenido = limpiar_contenido(request.form['contenido'])
         with open(ruta, 'w', encoding='utf-8') as f:
             f.write(contenido)
         return redirect(url_for('documentacion.listar'))
 
     # GET -> Mostrar contenido en editor
     with open(ruta, 'r', encoding='utf-8') as f:
-        contenido = f.read()
+         contenido = limpiar_contenido(f.read())
 
     # Enviamos 'modo' para que la plantilla sepa que estamos editando
     return render_template(

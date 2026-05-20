@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>
+        Tendencias Plantas
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="/static/css/tendencias_plantas.css">
+
+</head>
+
+<body>
+
+<div class="tabs-header">
+
+    <div class="tabs-title">
+
+        <h3>
+            📈 Tendencias de Plantas
+        </h3>
+
+        <span>
+            Seleccione una vista para consultar
+            el detalle de cada planta
+        </span>
+
+    </div>
+
+    <div class="tabs-tendencias">
+
+        <button class="tab-btn active" onclick="cargarTabPlanta(this, '/planta')">
+            Planta Control
+        </button>
+
+        <button class="tab-btn" onclick="cargarTabPlanta(this, '/planta_mtc')">
+            Planta MTC
+        </button>
+
+        <button class="tab-btn" onclick="cargarTabPlanta(this, '/planta_trfacu')">
+            Tráfico Acumulado
+        </button>
+
+        <button class="tab-btn" onclick="cargarTabPlanta(this, '/planta_usua_mtc')">
+            USUA MTC
+        </button>
+
+        <button class="tab-btn" onclick="cargarTabPlanta(this, '/planta_tisa')">
+            Planta TISA
+        </button>
+
+    </div>
+
+</div>
+
+<div id="contenido-tab-plantas" class="contenido-tab"></div>
+
+<script>
+
+async function cargarTabPlanta(btn, url){
+
+    document
+        .querySelectorAll('.tab-btn')
+        .forEach(x => x.classList.remove('active'));
+
+    btn.classList.add('active');
+
+    let contenedor =
+        document.getElementById('contenido-tab-plantas');
+
+    contenedor.innerHTML = `
+        <div class="loader-tab">
+            ⏳ Cargando información...
+        </div>
+    `;
+
+    try{
+
+        let res = await fetch(url);
+        let html = await res.text();
+
+        contenedor.innerHTML = html;
+
+    } catch(error){
+
+        contenedor.innerHTML = `
+            <div style="color:red; padding:20px;">
+                Error cargando: ${error}
+            </div>
+        `;
+    }
+}
+
+window.onload = function(){
+    cargarTabPlanta(
+        document.querySelector('.tab-btn.active'),
+        '/planta'
+    );
+};
+
+</script>
+
+</body>
+</html>

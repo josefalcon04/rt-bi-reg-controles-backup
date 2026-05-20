@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>DASHBOARD DEVOLUCIONES</title>
+
+    <!-- 📊 Plotly -->
+    <script src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
+
+    <!-- 🎯 CSS -->
+    <link rel="stylesheet" href="/static/css/devoluciones.css">
+</head>
+
+<body>
+<div id="loading" style="display:none; text-align:center; padding:30px; font-size:20px;">
+    ⏳ Cargando dashboard...
+</div>
+
+<div class="dashboard-container">
+
+    <h2 class="titulo">📊 DASHBOARD DE DEVOLUCIONES</h2>
+
+    <!-- 🎯 FILTROS -->
+    <div class="filtros">
+        <select id="year"></select>
+        <select id="month"><option value="">Mes</option></select>
+        <select id="day"><option value="">Día</option></select>
+
+        <select id="producto"><option value="">Producto</option></select>
+        <select id="comentario"><option value="">Comentario</option></select>
+        <select id="resultado"><option value="">Resultado</option></select>
+
+        <button onclick="cargar()">Filtrar</button>
+        <button onclick="resetFiltros()">Limpiar</button>
+    </div>
+
+    <!-- 🔥 KPIs -->
+    <div class="kpis" id="kpis"></div>
+
+    <!-- 📊 GRÁFICOS -->
+    <div class="charts">
+        <div id="line"></div>
+        <div id="resultado_pie"></div>
+        <div id="producto_pie"></div>
+        <div id="comentario_bar"></div>
+    </div>
+
+</div>
+
+<script>
+
+// =========================
+// 🎯 FILTROS FECHA
+// =========================
+async function cargarFiltros(){
+    let res = await fetch("/devoluciones/filtros");
+    let data = await res.json();
+
+    let yearSelect = document.getElementById("year");
+    yearSelect.innerHTML = "";
+
+    data.years.forEach(y => yearSelect.add(new Option(y, y)));
+
+    yearSelect.onchange = async () => {
+        await cargarMeses();
+        await cargar();
+    };
+
+    await cargarMeses();
+}
+
+async function cargarMeses(){
+    let year = document.getElementById("year").value;
+
+    let res = await fetch(`/devoluciones/meses?year=${year}`);
+    let data = await res.json();
+
+    let monthSelect = document.getElementById("month");
+    monthSelect.innerHTML = `<option value="">Mes</option>`;
+
+    data.months.forEach(m => monthSelect.add(new Option(m, m)));
+
+    monthSelect.onchange = async () => {
+        await cargarDias();
+        await cargar();
+    };
+
+    await cargarDias();
+}
+
+async function cargarDias(){
+    let year = document.getElementById("year").value;
+    let month = document.getElementById("month").value;
+
+    let res = await fetch(`/devoluciones/dias?year=${year}&month=${month}`);
+    let data = await res.json();
+
+    let daySelect = document.getElementById("day");
+    daySelect.innerHTML = `<option value="">Día</option>`;
+
+    data.days.forEach(d => daySelect.add(new Option(d, d)));
+
+    daySelect.onchange = async () => cargar();
+}
+
+// =========================
+// 🎯 CATÁLOGOS
+// =========================
+async function cargarCatalogos(){
+    let res = await fetch("/devoluciones/data_full");
+    let data = await res.json();
+
+    let productoSel = document.getElementById("producto");
+    let comentarioSel = document.getElementById("comentario");
+    let resultadoSel = document.getElementById("resultado");
+
+    productoSel.innerHTML = `<option value="">Producto</option>`;
+    comentarioSel.innerHTML = `<option value="">Comentario</option>`;
+    resultadoSel.innerHTML = `<option value="">Resultado</option>`;
+
+    [...new Set(data.map(x => x.PRODUCTO))].forEach(x => productoSel.add(new Option(x,x)));
+    [...new Set(data.map(x => x.COMENTARIO))].forEach(x => comentarioSel.add(new Option(x,x)));
+    [...new Set(data.map(x => x.RESULTADO_NC))].forEach(x => resultadoSel.add(new Option(x,x)));
+
+    productoSel.onchange = cargar;
+    comentarioSel.onchange = cargar;
+    resultadoSel.onchange = cargar;
+}
+
+// =========================
+// 📊 DATA
+// =========================
+async function cargar(){
+    
+    document.getElementById("loading").style.display = "block";
+    document.getElementById("kpis").style.display = "none";
+    document.querySelector(".charts").style.display = "none";
+    
+    let year = document.getElementById("year").value;
+    let month = document.getElementById("month").value;
+    let day = document.getElementById("day").value;
+
+    let producto = document.getElementById("producto").value;
+    let comentario = document.getElementById("comentario").value;
+    let resultado = document.getElementById("resultado").value;
+
+    let res = await fetch(`/devoluciones/data?year=${year}&month=${month}&day=${day}&producto=${producto}&comentario=${comentario}&resultado=${resultado}`);
+    let data = await res.json();
+
+    // =========================
+    // 🔥 KPIs
+    // =========================
+
+    // =========================
+// 🔥 KPIs
+// =========================
+
+    let total = data.kpis.total_registros || 0;
+    let monto = data.kpis.total_monto || 0;
+
+    let ok = data.kpis.ok || 0;
+    let nok = data.kpis.nok || 0;
+
+    let pctOK = data.kpis.porc_ok || 0;
+    let pctNOK = data.kpis.porc_nok || 0;
+
+    let success = data.resultado
+    .filter(x => String(x.RESULTADO_NC).toUpperCase().includes("SUCCESS"))
+    .reduce((a,b) => a + Number(b.MONTO_SOLES), 0);
+
+    let reject = data.resultado
+    .filter(x => String(x.RESULTADO_NC).toUpperCase().includes("REJECT"))
+    .reduce((a,b) => a + Number(b.MONTO_SOLES), 0);
+
+    let totalSR = success + reject;
+
+    let pctSuccess = totalSR ? ((success / totalSR) * 100).toFixed(1) : 0;
+    let pctReject = totalSR ? ((reject / totalSR) * 100).toFixed(1) : 0;
+
+    document.getElementById("kpis").innerHTML = `
+        <div class="card"><h4>Total</h4><h2>${total}</h2></div>
+        <div class="card"><h4>Monto</h4><h2>S/ ${monto.toLocaleString()}</h2></div>
+        <div class="card"><h4>CANDIDATOS</h4><h2 style="color:#27ae60">${ok}</h2><small>${pctOK}%</small></div>
+        <div class="card"><h4>EXCLUIDO POR CRITERIOS</h4><h2 style="color:#e74c3c">${nok}</h2><small>${pctNOK}%</small></div>
+        <div class="card" style="padding:18px;">
+
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                margin-bottom:12px;
+                font-size:15px;
+            ">
+                <span style="color:#27ae60;font-weight:bold;">
+                    ✔ Success
+                </span>
+
+                <span>
+                    ${success.toLocaleString()}
+                    <small style="color:#666;">
+                        (${pctSuccess}%)
+                    </small>
+                </span>
+            </div>
+
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                font-size:15px;
+            ">
+                <span style="color:#e74c3c;font-weight:bold;">
+                    ✖ Reject
+                </span>
+
+                <span>
+                    ${reject.toLocaleString()}
+                    <small style="color:#666;">
+                        (${pctReject}%)
+                    </small>
+                </span>
+            </div>
+
+        </div>
+    `;
+
+    // =========================
+    // 📈 GRÁFICOS
+    // =========================
+
+    // LINEA
+    let tendencia = data.tendencia || [];
+
+    if (tendencia.length <= 1) {
+
+        Plotly.react('line', [{
+            x: tendencia.map(x => x.FECHA_STR),
+            y: tendencia.map(x => Number(x.MONTO_SOLES)),
+            type: 'bar',
+            text: tendencia.map(x => Number(x.MONTO_SOLES).toLocaleString()),
+            textposition: 'auto'
+        }], {
+            title: "Tendencia",
+            yaxis: { title: "Monto S/" }
+        });
+
+    } else {
+
+        Plotly.react('line', [{
+            x: tendencia.map(x => x.FECHA_STR),
+            y: tendencia.map(x => Number(x.MONTO_SOLES)),
+            type: 'scatter',
+            mode: 'lines+markers'
+        }], {
+            title: "Tendencia",
+            yaxis: { title: "Monto S/" }
+        });
+
+    }
+
+    // TORTA OK vs NOK
+    Plotly.react('resultado_pie', [{
+        labels: data.resultado.map(x => x.RESULTADO_NC),
+        values: data.resultado.map(x => Number(x.MONTO_SOLES)),
+        type: 'pie',
+        hole: 0.4
+    }], {title: "CANDIDATOS AJUSTES"});
+
+    // TORTA PRODUCTO
+    Plotly.react('producto_pie', [{
+        labels: data.producto.map(x => x.PRODUCTO),
+        values: data.producto.map(x => Number(x.MONTO_SOLES)),
+        type: 'pie'
+    }], {title: "Producto"});
+    
+    // BARRA COMENTARIO POR CANTIDAD
+    let comentarios = Array.isArray(data.comentario) ? [...data.comentario] : [];
+
+    comentarios = comentarios.sort((a,b) =>
+        Number(b.TOT_CANT_REGISTROS || 0) - Number(a.TOT_CANT_REGISTROS || 0)
+    );
+
+    Plotly.react('comentario_bar', [{
+        y: comentarios.map(x => String(x.COMENTARIO || "")),
+        x: comentarios.map(x => Number(x.TOT_CANT_REGISTROS || 0)),
+        type: 'bar',
+        orientation: 'h',
+
+        text: comentarios.map(x =>
+            `${Number(x.TOT_CANT_REGISTROS || 0).toLocaleString()} | S/ ${Number(x.MONTO_SOLES || 0).toLocaleString()}`
+        ),
+        textposition: 'auto',
+
+        customdata: comentarios.map(x => [
+            x.COMENTARIO,
+            Number(x.TOT_CANT_REGISTROS || 0).toLocaleString(),
+            Number(x.MONTO_SOLES || 0).toLocaleString()
+        ]),
+
+        hovertemplate:
+            '<b>%{customdata[0]}</b><br>' +
+            'Cantidad: %{customdata[1]}<br>' +
+            'Monto: S/ %{customdata[2]}<extra></extra>'
+
+    }], {
+        title: "Comentarios",
+        margin: { l: 280, r: 40, t: 50, b: 50 },
+        xaxis: { title: "Cantidad" },
+        yaxis: { automargin: true },
+        height: Math.max(400, comentarios.length * 45)
+    });
+
+
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("kpis").style.display = "grid";
+    document.querySelector(".charts").style.display = "grid";
+}
+
+// =========================
+// 🧹 LIMPIAR
+// =========================
+function resetFiltros(){
+    document.querySelectorAll("select").forEach(s => s.selectedIndex = 0);
+    cargar();
+}
+
+// INIT
+(async () => {
+    document.getElementById("loading").style.display = "block";
+    document.getElementById("kpis").style.display = "none";
+    document.querySelector(".charts").style.display = "none";
+
+    await cargarFiltros();
+    await cargarCatalogos();
+    await cargar();
+})();
+
+</script>
+
+</body>
+</html>

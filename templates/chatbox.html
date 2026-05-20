@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Chatbox GPT4All</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        #chat { 
+            border: 1px solid #ccc; 
+            padding: 10px; 
+            height: 400px; 
+            overflow-y: auto; 
+            background-color: #f9f9f9;
+        }
+        #message { width: 80%; padding: 5px; }
+        button { width: 18%; padding: 5px; }
+        .user { color: blue; margin: 5px 0; }
+        .bot { color: green; margin: 5px 0; }
+        .chat-message { padding: 5px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h2>Chatbox GPT4All</h2>
+    <div id="chat"></div>
+    <input type="text" id="message" placeholder="Escribe tu mensaje..." onkeydown="if(event.key==='Enter'){sendMessage();}">
+    <button onclick="sendMessage()">Enviar</button>
+
+    <script>
+        async function sendMessage() {
+            const messageInput = document.getElementById("message");
+            const message = messageInput.value.trim();
+            if (!message) return;
+
+            // Mostrar mensaje del usuario
+            const chat = document.getElementById("chat");
+            const userDiv = document.createElement("div");
+            userDiv.className = "user chat-message";
+            userDiv.innerHTML = `<b>Tú:</b> ${message}`;
+            chat.appendChild(userDiv);
+            chat.scrollTop = chat.scrollHeight;
+            messageInput.value = "";
+
+            // Llamar a Flask /ask
+            const response = await fetch("/ask", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message })
+            });
+
+            const data = await response.json();
+            const botDiv = document.createElement("div");
+            botDiv.className = "bot chat-message";
+            botDiv.innerHTML = `<b>GPT4All:</b> ${data.response}`;
+            chat.appendChild(botDiv);
+            chat.scrollTop = chat.scrollHeight;
+        }
+    </script>
+</body>
+</html>

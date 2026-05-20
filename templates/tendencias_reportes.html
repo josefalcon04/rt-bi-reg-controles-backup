@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>Tendencias Reportes</title>
+
+    <link
+        rel="stylesheet"
+        href="/static/css/tendencias_plantas.css">
+</head>
+
+<body>
+
+<div class="tabs-header">
+
+    <div class="tabs-title">
+        <h3>📄 Tendencias de Reportes</h3>
+        <span>Seleccione un reporte para consultar el detalle</span>
+    </div>
+
+    <div class="tabs-tendencias">
+
+        <button
+            class="tab-btn active"
+            onclick="cargarTabReporte(this, '/NRIPO_033_034')">
+            NRIPO 033/034
+        </button>
+
+        <button
+            class="tab-btn"
+            onclick="cargarTabReporte(this, '/NRIPO_035')">
+            NRIPO 035
+        </button>
+
+    </div>
+
+</div>
+
+<div
+    id="contenido-tab-reportes"
+    class="contenido-tab">
+</div>
+
+<script>
+
+async function cargarTabReporte(btn, url) {
+
+    document
+        .querySelectorAll('.tab-btn')
+        .forEach(x => x.classList.remove('active'));
+
+    btn.classList.add('active');
+
+    let contenedor =
+        document.getElementById('contenido-tab-reportes');
+
+    contenedor.innerHTML = `
+        <div class="loader-tab">
+            ⏳ Cargando información...
+        </div>
+    `;
+
+    try {
+
+        let res = await fetch(url);
+        let html = await res.text();
+
+        contenedor.innerHTML = html;
+
+    } catch(error) {
+
+        contenedor.innerHTML = `
+            <div style="color:red; padding:20px;">
+                Error cargando: ${error}
+            </div>
+        `;
+    }
+}
+
+window.onload = function() {
+    cargarTabReporte(
+        document.querySelector('.tab-btn.active'),
+        '/NRIPO_033_034'
+    );
+};
+
+</script>
+
+</body>
+</html>
