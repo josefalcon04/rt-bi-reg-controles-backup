@@ -228,7 +228,10 @@ def data():
                         'MONTO_SOLES': 'sum'
                     }).reset_index()
 
-    resultado = df.groupby('RESULTADO_NC')['MONTO_SOLES'].sum().reset_index()
+    resultado = df.groupby('RESULTADO_NC').agg({
+                        'TOT_CANT_REGISTROS': 'sum',
+                        'MONTO_SOLES': 'sum'
+                    }).reset_index()
 
     tendencia = df.groupby('FECHA_STR')['MONTO_SOLES'].sum().reset_index()
 

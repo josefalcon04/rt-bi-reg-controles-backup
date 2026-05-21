@@ -164,38 +164,77 @@ async function cargar(){
     let pctOK = data.kpis.porc_ok || 0;
     let pctNOK = data.kpis.porc_nok || 0;
 
-    let success = data.resultado
-    .filter(x => String(x.RESULTADO_NC).toUpperCase().includes("SUCCESS"))
-    .reduce((a,b) => a + Number(b.MONTO_SOLES), 0);
+    // SUCCESS - MONTO
+    let successMonto = data.resultado
+        .filter(x => String(x.RESULTADO_NC).toUpperCase().includes("SUCCESS"))
+        .reduce((a, b) => a + Number(b.MONTO_SOLES || 0), 0);
 
-    let reject = data.resultado
-    .filter(x => String(x.RESULTADO_NC).toUpperCase().includes("REJECT"))
-    .reduce((a,b) => a + Number(b.MONTO_SOLES), 0);
+    // REJECT - MONTO
+    let rejectMonto = data.resultado
+        .filter(x => String(x.RESULTADO_NC).toUpperCase().includes("REJECT"))
+        .reduce((a, b) => a + Number(b.MONTO_SOLES || 0), 0);
 
-    let totalSR = success + reject;
+    // SUCCESS - CANTIDAD
+    let successCant = data.resultado
+        .filter(x => String(x.RESULTADO_NC).toUpperCase().includes("SUCCESS"))
+        .reduce((a, b) => a + Number(b.TOT_CANT_REGISTROS || 0), 0);
 
-    let pctSuccess = totalSR ? ((success / totalSR) * 100).toFixed(1) : 0;
-    let pctReject = totalSR ? ((reject / totalSR) * 100).toFixed(1) : 0;
+    // REJECT - CANTIDAD
+    let rejectCant = data.resultado
+        .filter(x => String(x.RESULTADO_NC).toUpperCase().includes("REJECT"))
+        .reduce((a, b) => a + Number(b.TOT_CANT_REGISTROS || 0), 0);
+
+    // Porcentaje por cantidad
+    let totalSRCant = successCant + rejectCant;
+
+    let pctSuccess = totalSRCant
+        ? ((successCant / totalSRCant) * 100).toFixed(1)
+        : 0;
+
+    let pctReject = totalSRCant
+        ? ((rejectCant / totalSRCant) * 100).toFixed(1)
+        : 0;
 
     document.getElementById("kpis").innerHTML = `
-        <div class="card"><h4>Total</h4><h2>${total}</h2></div>
-        <div class="card"><h4>Monto</h4><h2>S/ ${monto.toLocaleString()}</h2></div>
-        <div class="card"><h4>CANDIDATOS</h4><h2 style="color:#27ae60">${ok}</h2><small>${pctOK}%</small></div>
-        <div class="card"><h4>EXCLUIDO POR CRITERIOS</h4><h2 style="color:#e74c3c">${nok}</h2><small>${pctNOK}%</small></div>
+        <div class="card">
+            <h4>Total</h4>
+            <h2>${total.toLocaleString()}</h2>
+        </div>
+
+        <div class="card">
+            <h4>Monto</h4>
+            <h2>S/ ${monto.toLocaleString()}</h2>
+        </div>
+
+        <div class="card">
+            <h4>CANDIDATOS</h4>
+            <h2 style="color:#27ae60">${ok.toLocaleString()}</h2>
+            <small>${pctOK}%</small>
+        </div>
+
+        <div class="card">
+            <h4>EXCLUIDO POR CRITERIOS</h4>
+            <h2 style="color:#e74c3c">${nok.toLocaleString()}</h2>
+            <small>${pctNOK}%</small>
+        </div>
+
         <div class="card" style="padding:18px;">
 
             <div style="
                 display:flex;
                 justify-content:space-between;
-                margin-bottom:12px;
-                font-size:15px;
+                align-items:center;
+                margin-bottom:14px;
+                font-size:14px;
+                gap:10px;
             ">
-                <span style="color:#27ae60;font-weight:bold;">
+                <span style="color:#27ae60;font-weight:bold;white-space:nowrap;">
                     ✔ Success
                 </span>
 
-                <span>
-                    ${success.toLocaleString()}
+                <span style="text-align:right;">
+                    ${successCant.toLocaleString()} reg |
+                    <b>S/ ${successMonto.toLocaleString()}</b>
                     <small style="color:#666;">
                         (${pctSuccess}%)
                     </small>
@@ -205,14 +244,17 @@ async function cargar(){
             <div style="
                 display:flex;
                 justify-content:space-between;
-                font-size:15px;
+                align-items:center;
+                font-size:14px;
+                gap:10px;
             ">
-                <span style="color:#e74c3c;font-weight:bold;">
+                <span style="color:#e74c3c;font-weight:bold;white-space:nowrap;">
                     ✖ Reject
                 </span>
 
-                <span>
-                    ${reject.toLocaleString()}
+                <span style="text-align:right;">
+                    ${rejectCant.toLocaleString()} reg |
+                    <b>S/ ${rejectMonto.toLocaleString()}</b>
                     <small style="color:#666;">
                         (${pctReject}%)
                     </small>
