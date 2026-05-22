@@ -210,12 +210,12 @@ async function cargar(){
 
     document.getElementById("kpis").innerHTML = `
     <div class="card kpi-card">
-            <h4>Total</h4>
+            <h4>TOTAL</h4>
             <h2>${total.toLocaleString()}</h2>
         </div>
 
         <div class="card kpi-card">
-            <h4>Monto</h4>
+            <h4>MONTO (S/.)</h4>
             <h2>S/ ${monto.toLocaleString()}</h2>
         </div>
 
@@ -234,15 +234,10 @@ async function cargar(){
             </div>
 
             <small>${pctOK}%</small>
-        </div>
+        </div>        
 
         <div class="card kpi-card">
-            <h4>EXCLUIDO POR CRITERIOS</h4>
-            <h2 class="nok">${nok.toLocaleString()}</h2>
-            <small>${pctNOK}%</small>
-        </div>
-
-        <div class="card kpi-card">
+            <h4>CANDIDATOS (POSTPAGO)</h4>
             <div class="sr-row">
                 <span class="success-label">✔ Success</span>
                 <span class="sr-value">
@@ -260,6 +255,12 @@ async function cargar(){
                     <small>(${pctReject}%)</small>
                 </span>
             </div>
+        </div>
+
+        <div class="card kpi-card">
+            <h4>EXCLUIDO POR CRITERIOS</h4>
+            <h2 class="nok">${nok.toLocaleString()}</h2>
+            <small>${pctNOK}%</small>
         </div>
     `;
     
