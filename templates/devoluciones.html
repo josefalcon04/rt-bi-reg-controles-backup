@@ -1,53 +1,55 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>DASHBOARD DEVOLUCIONES</title>
+    <head>
+        <meta charset="UTF-8">
+        <title>DASHBOARD DEVOLUCIONES</title>
 
-    <!-- 📊 Plotly -->
-    <script src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
+        <!-- 📊 Plotly -->
+        <script src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
 
-    <!-- 🎯 CSS -->
-    <link rel="stylesheet" href="/static/css/devoluciones.css">
-</head>
+        <!-- 🎯 CSS -->
+        <link rel="stylesheet" href="/static/css/devoluciones.css">
+    </head>
 
-<body>
-<div id="loading" style="display:none; text-align:center; padding:30px; font-size:20px;">
-    ⏳ Cargando dashboard...
-</div>
+    <body>
+        <div id="loading"
+            style="display:none; text-align:center; padding:30px; font-size:20px;">
+            ⏳ Cargando dashboard...
+        </div>
 
-<div class="dashboard-container">
+        <div class="dashboard-container">
 
-    <h2 class="titulo">📊 DASHBOARD DE DEVOLUCIONES</h2>
+            <h2 class="titulo">📊 DASHBOARD DE DEVOLUCIONES</h2>
 
-    <!-- 🎯 FILTROS -->
-    <div class="filtros">
-        <select id="year"></select>
-        <select id="month"><option value="">Mes</option></select>
-        <select id="day"><option value="">Día</option></select>
+            <!-- 🎯 FILTROS -->
+            <div class="filtros">
+                <select id="year"></select>
+                <select id="month"><option value>Mes</option></select>
+                <select id="day"><option value>Día</option></select>
 
-        <select id="producto"><option value="">Producto</option></select>
-        <select id="comentario"><option value="">Comentario</option></select>
-        <select id="resultado"><option value="">Resultado</option></select>
+                <select id="producto"><option value>Producto</option></select>
+                <select id="comentario"><option
+                        value>Comentario</option></select>
+                <select id="resultado"><option value>Resultado</option></select>
 
-        <button onclick="cargar()">Filtrar</button>
-        <button onclick="resetFiltros()">Limpiar</button>
-    </div>
+                <button onclick="cargar()">Filtrar</button>
+                <button onclick="resetFiltros()">Limpiar</button>
+            </div>
 
-    <!-- 🔥 KPIs -->
-    <div class="kpis" id="kpis"></div>
+            <!-- 🔥 KPIs -->
+            <div class="kpis" id="kpis"></div>
 
-    <!-- 📊 GRÁFICOS -->
-    <div class="charts">
-        <div id="line"></div>
-        <div id="resultado_pie"></div>
-        <div id="producto_pie"></div>
-        <div id="comentario_bar"></div>
-    </div>
+            <!-- 📊 GRÁFICOS -->
+            <div class="charts">
+                <div id="line"></div>
+                <div id="resultado_pie"></div>
+                <div id="producto_pie"></div>
+                <div id="comentario_bar"></div>
+            </div>
 
-</div>
+        </div>
 
-<script>
+        <script>
 
 // =========================
 // 🎯 FILTROS FECHA
@@ -194,76 +196,73 @@ async function cargar(){
     let pctReject = totalSRCant
         ? ((rejectCant / totalSRCant) * 100).toFixed(1)
         : 0;
+    // =========================
+    // 🔥 POSTPAGO / PREPAGO
+    // =========================
+
+    let postpago = data.pie
+        .filter(x => String(x.PRODUCTO).toUpperCase().includes("POST"))
+        .reduce((a,b) => a + Number(x = b.TOT_CANT_REGISTROS || 0),0);
+
+    let prepago = data.pie
+        .filter(x => String(x.PRODUCTO).toUpperCase().includes("PRE"))
+        .reduce((a,b) => a + Number(x = b.TOT_CANT_REGISTROS || 0),0);
 
     document.getElementById("kpis").innerHTML = `
-        <div class="card">
+    <div class="card kpi-card">
             <h4>Total</h4>
             <h2>${total.toLocaleString()}</h2>
         </div>
 
-        <div class="card">
+        <div class="card kpi-card">
             <h4>Monto</h4>
             <h2>S/ ${monto.toLocaleString()}</h2>
         </div>
 
-        <div class="card">
+        <div class="card kpi-card">
             <h4>CANDIDATOS</h4>
-            <h2 style="color:#27ae60">${ok.toLocaleString()}</h2>
+
+            <div class="kpi-split">
+                <div class="kpi-main ok">
+                    ${ok.toLocaleString()}
+                </div>
+
+                <div class="kpi-detail">
+                    <div>Post: <b>${postpago.toLocaleString()}</b></div>
+                    <div>Pre: <b>${prepago.toLocaleString()}</b></div>
+                </div>
+            </div>
+
             <small>${pctOK}%</small>
         </div>
 
-        <div class="card">
+        <div class="card kpi-card">
             <h4>EXCLUIDO POR CRITERIOS</h4>
-            <h2 style="color:#e74c3c">${nok.toLocaleString()}</h2>
+            <h2 class="nok">${nok.toLocaleString()}</h2>
             <small>${pctNOK}%</small>
         </div>
 
-        <div class="card" style="padding:18px;">
-
-            <div style="
-                display:flex;
-                justify-content:space-between;
-                align-items:center;
-                margin-bottom:14px;
-                font-size:14px;
-                gap:10px;
-            ">
-                <span style="color:#27ae60;font-weight:bold;white-space:nowrap;">
-                    ✔ Success
-                </span>
-
-                <span style="text-align:right;">
+        <div class="card kpi-card">
+            <div class="sr-row">
+                <span class="success-label">✔ Success</span>
+                <span class="sr-value">
                     ${successCant.toLocaleString()} reg |
                     <b>S/ ${successMonto.toLocaleString()}</b>
-                    <small style="color:#666;">
-                        (${pctSuccess}%)
-                    </small>
+                    <small>(${pctSuccess}%)</small>
                 </span>
             </div>
 
-            <div style="
-                display:flex;
-                justify-content:space-between;
-                align-items:center;
-                font-size:14px;
-                gap:10px;
-            ">
-                <span style="color:#e74c3c;font-weight:bold;white-space:nowrap;">
-                    ✖ Reject
-                </span>
-
-                <span style="text-align:right;">
+            <div class="sr-row">
+                <span class="reject-label">✖ Reject</span>
+                <span class="sr-value">
                     ${rejectCant.toLocaleString()} reg |
                     <b>S/ ${rejectMonto.toLocaleString()}</b>
-                    <small style="color:#666;">
-                        (${pctReject}%)
-                    </small>
+                    <small>(${pctReject}%)</small>
                 </span>
             </div>
-
         </div>
     `;
-
+    
     // =========================
     // 📈 GRÁFICOS
     // =========================
@@ -377,5 +376,5 @@ function resetFiltros(){
 
 </script>
 
-</body>
+    </body>
 </html>

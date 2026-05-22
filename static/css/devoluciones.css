@@ -156,3 +156,96 @@ body {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+.kpi-card {
+    min-height: 115px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.kpi-card h4 {
+    margin-bottom: 8px;
+    font-size: 13px;
+    line-height: 1.2;
+}
+
+.kpi-card h2 {
+    margin: 0;
+    font-size: 26px;
+}
+
+.kpi-card small {
+    display: block;
+    margin-top: 6px;
+    color: #666;
+    font-weight: 600;
+}
+
+.kpi-split {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.kpi-main {
+    font-size: 25px;
+    font-weight: 800;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.kpi-main.ok,
+.ok {
+    color: #27ae60;
+}
+
+.nok {
+    color: #e74c3c;
+}
+
+.kpi-detail {
+    font-size: 12px;
+    color: #555;
+    line-height: 1.45;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.sr-row {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    margin-bottom: 12px;
+}
+
+.sr-row:last-child {
+    margin-bottom: 0;
+}
+
+.success-label {
+    color: #27ae60;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.reject-label {
+    color: #e74c3c;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.sr-value {
+    text-align: right;
+    color: #333;
+    white-space: nowrap;
+    font-size: 12px;
+}
+
+.sr-value small {
+    display: inline;
+    margin-left: 4px;
+    color: #666;
+}
