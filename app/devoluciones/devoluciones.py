@@ -14,8 +14,8 @@ df_cache = None
 def obtener_datos():
     global df_cache
 
-    if df_cache is not None:
-        return df_cache
+    #if df_cache is not None:
+    #    return df_cache
 
     query = """
     SELECT 
@@ -54,7 +54,7 @@ def obtener_datos():
             lambda x: 'NOK' if 'NOK' in str(x).upper() else 'OK'
         )
 
-        df_cache = df
+        #df_cache = df
         return df
 
     except Exception as e:
