@@ -1,59 +1,262 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Chatbox GPT4All</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        #chat { 
-            border: 1px solid #ccc; 
-            padding: 10px; 
-            height: 400px; 
-            overflow-y: auto; 
-            background-color: #f9f9f9;
-        }
-        #message { width: 80%; padding: 5px; }
-        button { width: 18%; padding: 5px; }
-        .user { color: blue; margin: 5px 0; }
-        .bot { color: green; margin: 5px 0; }
-        .chat-message { padding: 5px; border-radius: 5px; }
-    </style>
+<meta charset="UTF-8">
+<title>BI Assistant</title>
+
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f7f8fa;
+}
+
+.chat-container {
+     height: calc(100vh - 120px);
+    display: flex;
+    flex-direction: column;
+    background: #f7f8fa;
+}
+
+.chat-header-local {
+    padding: 14px 16px 10px 16px;
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.chat-header-local h2 {
+    margin: 0;
+    font-size: 17px;
+    color: #1f2937;
+}
+
+.subtitle {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    color: #6b7280;
+}
+
+#chat {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+}
+
+.chat-row {
+    display: flex;
+    margin-bottom: 12px;
+}
+
+.user-row {
+    justify-content: flex-end;
+}
+
+.bot-row {
+    justify-content: flex-start;
+}
+
+.chat-bubble {
+    max-width: 84%;
+    padding: 10px 13px;
+    border-radius: 15px;
+    font-size: 13px;
+    line-height: 1.45;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.user-bubble {
+    background: #2563eb;
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+.bot-bubble {
+    background: white;
+    color: #1f2937;
+    border: 1px solid #e5e7eb;
+    border-bottom-left-radius: 4px;
+}
+
+.loading {
+    color: #6b7280;
+    font-style: italic;
+}
+
+.chat-image-box {
+    margin-top: 10px;
+    background: #f9fafb;
+    border-radius: 12px;
+    padding: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+.chat-image {
+    width: 100%;
+    max-height: 260px;
+    object-fit: contain;
+    border-radius: 10px;
+    display: block;
+}
+
+.input-row {
+    display: flex;
+    gap: 8px;
+    padding: 12px;
+    background: white;
+    border-top: 1px solid #e5e7eb;
+}
+
+#message {
+    flex: 1;
+    padding: 11px 14px;
+    border-radius: 22px;
+    border: 1px solid #d1d5db;
+    outline: none;
+    font-size: 13px;
+}
+
+button {
+    width: 82px;
+    border: none;
+    border-radius: 22px;
+    background: #1f2937;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #111827;
+}
+</style>
 </head>
+
 <body>
-    <h2>Chatbox GPT4All</h2>
-    <div id="chat"></div>
-    <input type="text" id="message" placeholder="Escribe tu mensaje..." onkeydown="if(event.key==='Enter'){sendMessage();}">
-    <button onclick="sendMessage()">Enviar</button>
 
-    <script>
-        async function sendMessage() {
-            const messageInput = document.getElementById("message");
-            const message = messageInput.value.trim();
-            if (!message) return;
+<div class="chat-container">
 
-            // Mostrar mensaje del usuario
-            const chat = document.getElementById("chat");
-            const userDiv = document.createElement("div");
-            userDiv.className = "user chat-message";
-            userDiv.innerHTML = `<b>Tú:</b> ${message}`;
-            chat.appendChild(userDiv);
-            chat.scrollTop = chat.scrollHeight;
-            messageInput.value = "";
+    <div class="chat-header-local">
+        <h2>🤖 BI Assistant</h2>
+        <small class="subtitle">Documentación • Reportes • Inputs • SQL • IA</small>
+    </div>
 
-            // Llamar a Flask /ask
-            const response = await fetch("/ask", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ message })
-            });
+    <div id="chat">
+        <div class="chat-row bot-row">
+            <div class="chat-bubble bot-bubble">
+👋 Hola, soy tu BI Assistant.
 
-            const data = await response.json();
-            const botDiv = document.createElement("div");
-            botDiv.className = "bot chat-message";
-            botDiv.innerHTML = `<b>GPT4All:</b> ${data.response}`;
-            chat.appendChild(botDiv);
-            chat.scrollTop = chat.scrollHeight;
-        }
-    </script>
+Puedo ayudarte con documentación, reportes, inputs, dashboards y consultas BI.
+            </div>
+        </div>
+    </div>
+
+    <div class="input-row">
+        <input
+            type="text"
+            id="message"
+            placeholder="Escribe tu consulta..."
+            onkeydown="if(event.key === 'Enter'){ sendMessage(); }"
+        />
+
+        <button onclick="sendMessage()">Enviar</button>
+    </div>
+
+</div>
+
+<script>
+function formatearRespuestaConImagen(texto) {
+    let respuesta = texto || "";
+
+    let regexImg = /(\/static\/img\/chatbot\/[^\s]+\.png)/;
+    let matchImg = respuesta.match(regexImg);
+
+    let imagenHTML = "";
+
+    if (matchImg) {
+        let imgUrl = matchImg[1];
+
+        respuesta = respuesta
+            .replace("Gráfico generado:", "")
+            .replace(imgUrl, "")
+            .trim();
+
+        imagenHTML = `
+            <div class="chat-image-box">
+                <img src="${imgUrl}?t=${Date.now()}" class="chat-image" alt="Gráfico generado">
+            </div>
+        `;
+    }
+
+    return `
+        <div class="chat-row bot-row">
+            <div class="chat-bubble bot-bubble">
+${respuesta}
+${imagenHTML}
+            </div>
+        </div>
+    `;
+}
+
+async function sendMessage() {
+    let input = document.getElementById("message");
+    let message = input.value.trim();
+
+    if (!message) return;
+
+    let chat = document.getElementById("chat");
+
+    chat.innerHTML += `
+        <div class="chat-row user-row">
+            <div class="chat-bubble user-bubble">
+${message}
+            </div>
+        </div>
+    `;
+
+    chat.innerHTML += `
+        <div class="chat-row bot-row" id="loading-row">
+            <div class="chat-bubble bot-bubble loading">
+Pensando...
+            </div>
+        </div>
+    `;
+
+    chat.scrollTop = chat.scrollHeight;
+    input.value = "";
+
+    try {
+        let response = await fetch("/chatbox/ask", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                message: message
+            })
+        });
+
+        let data = await response.json();
+
+        document.getElementById("loading-row").outerHTML =
+            formatearRespuestaConImagen(data.response);
+
+    } catch (error) {
+        document.getElementById("loading-row").outerHTML = `
+            <div class="chat-row bot-row">
+                <div class="chat-bubble bot-bubble">
+No pude conectarme con el asistente.
+                </div>
+            </div>
+        `;
+    }
+
+    chat.scrollTop = chat.scrollHeight;
+}
+</script>
+
 </body>
 </html>

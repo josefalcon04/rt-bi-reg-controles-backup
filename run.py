@@ -4,7 +4,7 @@ from app.monitoreo import monitoreo_norma_bp  # Importa el blueprint de monitore
 from app.monitoreo import monitoreo_input_bp  # Importa el blueprint de monitoreo
 from app.planta import planta_bp  # Importa el blueprint de planta de control
 from app.caracteres import caracteres_bp  # Importa el blueprint de caracteres
-#from app.chatbox import chatbox_bp  # Importa el blueprint de chatbox
+from app.chatbox import chatbox_bp  # Importa el blueprint de chatbox
 from app.planta import planta_mtc_bp  # Importa el blueprint de planta de control
 from app.planta import NRIPO_033_034_bp  # Importa el blueprint de reporte 33 y 34
 from app.notificaciones.notificaciones import notificaciones_bp  # importa tu blueprint
@@ -16,6 +16,7 @@ from documentacion import documentacion_bp # Importa el blueprint de documentaci
 from app.devoluciones import devoluciones_bp # Importa el blueprint de planta USUA MTC
 
 app = Flask(__name__)
+app.secret_key = "clave_segura_bi_assistant"
 
 # Registra los blueprints
 app.register_blueprint(calendario_bp)
@@ -23,7 +24,7 @@ app.register_blueprint(monitoreo_norma_bp)
 app.register_blueprint(monitoreo_input_bp)
 app.register_blueprint(planta_bp)
 app.register_blueprint(caracteres_bp)
-#app.register_blueprint(chatbox_bp)
+app.register_blueprint(chatbox_bp)
 app.register_blueprint(planta_mtc_bp)
 app.register_blueprint(NRIPO_033_034_bp)
 app.register_blueprint(notificaciones_bp)

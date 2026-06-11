@@ -200,13 +200,15 @@ async function cargar(){
     // 🔥 POSTPAGO / PREPAGO
     // =========================
 
-    let postpago = data.pie
-        .filter(x => String(x.PRODUCTO).toUpperCase().includes("POST"))
-        .reduce((a,b) => a + Number(x = b.TOT_CANT_REGISTROS || 0),0);
+    let candidatosOK = Array.isArray(data.pie) ? data.pie : [];
 
-    let prepago = data.pie
-        .filter(x => String(x.PRODUCTO).toUpperCase().includes("PRE"))
-        .reduce((a,b) => a + Number(x = b.TOT_CANT_REGISTROS || 0),0);
+    let postpago = candidatosOK
+        .filter(x => String(x.PRODUCTO || "").toUpperCase().includes("POST"))
+        .reduce((a,b) => a + Number(b.TOT_CANT_REGISTROS || 0), 0);
+
+    let prepago = candidatosOK
+        .filter(x => String(x.PRODUCTO || "").toUpperCase().includes("PRE"))
+        .reduce((a,b) => a + Number(b.TOT_CANT_REGISTROS || 0), 0);
 
     document.getElementById("kpis").innerHTML = `
     <div class="card kpi-card">
@@ -228,8 +230,8 @@ async function cargar(){
                 </div>
 
                 <div class="kpi-detail">
-                    <div>Post: <b>${postpago.toLocaleString()}</b></div>
-                    <div>Pre: <b>${prepago.toLocaleString()}</b></div>
+                    <div><strong>Postpago: ${postpago.toLocaleString()}</strong></div>
+                    <div><strong>Prepago : ${prepago.toLocaleString()}</strong></div>
                 </div>
             </div>
 
@@ -241,8 +243,8 @@ async function cargar(){
             <div class="sr-row">
                 <span class="success-label">✔ Success</span>
                 <span class="sr-value">
-                    ${successCant.toLocaleString()} reg |
-                    <b>S/ ${successMonto.toLocaleString()}</b>
+                    <b> ${successCant.toLocaleString()} reg |
+                    S/ ${successMonto.toLocaleString()}</b>
                     <small>(${pctSuccess}%)</small>
                 </span>
             </div>
@@ -250,8 +252,8 @@ async function cargar(){
             <div class="sr-row">
                 <span class="reject-label">✖ Reject</span>
                 <span class="sr-value">
-                    ${rejectCant.toLocaleString()} reg |
-                    <b>S/ ${rejectMonto.toLocaleString()}</b>
+                    <b>${rejectCant.toLocaleString()} reg |
+                    S/ ${rejectMonto.toLocaleString()}</b>
                     <small>(${pctReject}%)</small>
                 </span>
             </div>
@@ -267,50 +269,87 @@ async function cargar(){
     // =========================
     // 📈 GRÁFICOS
     // =========================
-
     // LINEA
-    let tendencia = data.tendencia || [];
+    let tendencia = Array.isArray(data.tendencia) ? data.tendencia : [];
 
     if (tendencia.length <= 1) {
 
         Plotly.react('line', [{
             x: tendencia.map(x => x.FECHA_STR),
-            y: tendencia.map(x => Number(x.MONTO_SOLES)),
+            y: tendencia.map(x => Number(x.TOT_CANT_REGISTROS || 0)),
             type: 'bar',
-            text: tendencia.map(x => Number(x.MONTO_SOLES).toLocaleString()),
-            textposition: 'auto'
+            text: tendencia.map(x => Number(x.TOT_CANT_REGISTROS || 0).toLocaleString()),
+            textposition: 'auto',
+            customdata: tendencia.map(x => [
+                Number(x.MONTO_SOLES || 0).toLocaleString()
+            ]),
+            hovertemplate:
+                '<b>Fecha: %{x}</b><br>' +
+                'Cantidad: %{y}<br>' +
+                'Monto: S/ %{customdata[0]}<extra></extra>'
         }], {
-            title: "Tendencia",
-            yaxis: { title: "Monto S/" }
+            title: "Tendencia de Candidatos",
+            yaxis: { title: "Cantidad de Registros" },
+            xaxis: { title: "Fecha" }
         });
 
     } else {
 
         Plotly.react('line', [{
             x: tendencia.map(x => x.FECHA_STR),
-            y: tendencia.map(x => Number(x.MONTO_SOLES)),
+            y: tendencia.map(x => Number(x.TOT_CANT_REGISTROS || 0)),
             type: 'scatter',
-            mode: 'lines+markers'
+            mode: 'lines+markers+text',
+            text: tendencia.map(x => Number(x.TOT_CANT_REGISTROS || 0).toLocaleString()),
+            textposition: 'top center',
+            customdata: tendencia.map(x => [
+                Number(x.MONTO_SOLES || 0).toLocaleString()
+            ]),
+            hovertemplate:
+                '<b>Fecha: %{x}</b><br>' +
+                'Cantidad: %{y}<br>' +
+                'Monto: S/ %{customdata[0]}<extra></extra>'
         }], {
-            title: "Tendencia",
-            yaxis: { title: "Monto S/" }
+            title: "Tendencia de Candidatos",
+            yaxis: { title: "Cantidad de Registros" },
+            xaxis: { title: "Fecha" },
+            hovermode: 'x unified'
         });
 
     }
 
     // TORTA OK vs NOK
+    let resultadoAjustes = data.resultado
+    .filter(x => String(x.RESULTADO_NC || "").trim() !== "");
+
     Plotly.react('resultado_pie', [{
-        labels: data.resultado.map(x => x.RESULTADO_NC),
-        values: data.resultado.map(x => Number(x.MONTO_SOLES)),
+        labels: resultadoAjustes.map(x => x.RESULTADO_NC),
+        values: resultadoAjustes.map(x => Number(x.MONTO_SOLES || 0)),
+        customdata: resultadoAjustes.map(x => [
+            Number(x.TOT_CANT_REGISTROS || 0).toLocaleString()
+        ]),
         type: 'pie',
-        hole: 0.4
+        hole: 0.4,
+        hovertemplate:
+            '<b>%{label}</b><br>' +
+            'Cantidad: %{customdata[0]}<br>' +
+            'Monto: S/ %{value:,.2f}<br>' +            
+            'Porcentaje: %{percent}<extra></extra>'
     }], {title: "CANDIDATOS AJUSTES"});
 
     // TORTA PRODUCTO
     Plotly.react('producto_pie', [{
         labels: data.producto.map(x => x.PRODUCTO),
-        values: data.producto.map(x => Number(x.MONTO_SOLES)),
-        type: 'pie'
+        values: data.producto.map(x => Number(x.MONTO_SOLES || 0)),
+        customdata: data.producto.map(x => [
+            Number(x.TOT_CANT_REGISTROS || 0).toLocaleString()
+        ]),
+        type: 'pie',
+        hovertemplate:
+            '<b>%{label}</b><br>' +
+            'Cantidad: %{customdata[0]}<br>' +
+            'Monto: S/ %{value:,.2f}<br>' +            
+            'Porcentaje: %{percent}<extra></extra>'
     }], {title: "Producto"});
     
     // BARRA COMENTARIO POR CANTIDAD

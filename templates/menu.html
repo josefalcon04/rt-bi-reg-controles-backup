@@ -6,6 +6,7 @@
     <title>Regulatorio</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat_float.css') }}">
 </head>
 <body>
     <!-- Barra superior -->
@@ -106,7 +107,7 @@
                 </ul>
             </li>
             <li>
-                    <a href="#" onclick="ocultarSidebar(); cargarContenido('/chatbox')">💬 Chatbox (Beta)</a>
+                    <a href="#" onclick="ocultarSidebar(); cargarContenido('/chatbox')">🤖Chatbox (Pronto)</a>
             </li>            
             </ul>
         </nav>
@@ -190,5 +191,28 @@
             });
         });
     </script>
+    <div id="chat-float-btn">🤖</div>
+
+<div id="chat-window">
+    <div class="chat-header">
+        <span>🤖 BI Assistant</span>
+        <span onclick="toggleChat()">✖</span>
+    </div>
+
+    <iframe src="/chatbox"></iframe>
+</div>
+
+<script>
+function toggleChat() {
+    const chat = document.getElementById("chat-window");
+
+    chat.style.display =
+        chat.style.display === "block"
+        ? "none"
+        : "block";
+}
+
+document.getElementById("chat-float-btn").addEventListener("click", toggleChat);
+</script>
 </body>
 </html>

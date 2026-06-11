@@ -31,8 +31,10 @@ def obtener_datos():
 
     try:
         conn = conectar_netezza()
-        df = pd.read_sql(query, conn)
+        df = pd.read_sql(query, conn)        
         conn.close()
+
+        df.columns = df.columns.str.upper()
 
         if df.empty:
             return df
@@ -51,7 +53,7 @@ def obtener_datos():
 
         # 🔥 Clasificación OK / NOK
         df['TIPO'] = df['COMENTARIO'].apply(
-            lambda x: 'NOK' if 'NOK' in str(x).upper() else 'OK'
+            lambda x: 'NOK' if str(x).upper().strip().startswith('NOK') else 'OK'
         )
 
         #df_cache = df
@@ -217,11 +219,21 @@ def data():
     # =========================
     # 📊 GRÁFICOS
     # =========================
-    pie = df.groupby('PRODUCTO')['TOT_CANT_REGISTROS'].sum().reset_index()
+    # Solo candidatos OK
+    df_ok = df[df['TIPO'] == 'OK'].copy()
+    pie = df_ok.groupby('PRODUCTO').agg({
+        'TOT_CANT_REGISTROS': 'sum'
+    }).reset_index()
+
+    df_nok = df[df['TIPO'] == 'NOK'].copy()
+    pie_nok = df_nok.groupby('PRODUCTO')['TOT_CANT_REGISTROS'].sum().reset_index()
 
     barras = df.groupby(['FECHA_STR','TIPO'])['TOT_CANT_REGISTROS'].sum().reset_index()
 
-    producto = df.groupby('PRODUCTO')['MONTO_SOLES'].sum().reset_index()
+    producto = df.groupby('PRODUCTO').agg({
+        'TOT_CANT_REGISTROS': 'sum',
+        'MONTO_SOLES': 'sum'
+    }).reset_index()
 
     comentario = df.groupby('COMENTARIO').agg({
                         'TOT_CANT_REGISTROS': 'sum',
@@ -233,7 +245,10 @@ def data():
                         'MONTO_SOLES': 'sum'
                     }).reset_index()
 
-    tendencia = df.groupby('FECHA_STR')['MONTO_SOLES'].sum().reset_index()
+    tendencia = df.groupby('FECHA_STR').agg({
+        'TOT_CANT_REGISTROS': 'sum',
+        'MONTO_SOLES': 'sum'
+    }).reset_index()
 
     # =========================
     # 🔥 RETURN FINAL
@@ -245,5 +260,6 @@ def data():
         "producto": producto.to_dict(orient="records"),
         "comentario": comentario.to_dict(orient="records"),
         "resultado": resultado.to_dict(orient="records"),
-        "tendencia": tendencia.to_dict(orient="records")
+        "tendencia": tendencia.to_dict(orient="records"),
+        "pie_nok": pie_nok.to_dict(orient="records")
     })
