@@ -38,6 +38,24 @@
 
             <!-- 🔥 KPIs -->
             <div class="kpis" id="kpis"></div>
+            <div class="card reintentos-card">
+    <h4>🔁 REINTENTOS</h4>
+
+    <table class="tabla-reintentos">
+        <thead>
+            <tr>
+                <th>RESULTADO</th>
+                <th>TOTAL</th>
+                <th>R1</th>
+                <th>R2</th>
+                <th>R3</th>
+                <th>R4</th>
+            </tr>
+        </thead>
+        <tbody id="reintentos-body">
+        </tbody>
+    </table>
+</div>
 
             <!-- 📊 GRÁFICOS -->
             <div class="charts">
@@ -209,6 +227,24 @@ async function cargar(){
     let prepago = candidatosOK
         .filter(x => String(x.PRODUCTO || "").toUpperCase().includes("PRE"))
         .reduce((a,b) => a + Number(b.TOT_CANT_REGISTROS || 0), 0);
+
+    // =========================
+// 🔁 REINTENTOS
+// =========================
+let reintentos = Array.isArray(data.reintentos) ? data.reintentos : [];
+
+let body = document.getElementById("reintentos-body");
+
+body.innerHTML = reintentos.map(r => `
+    <tr>
+        <td>${r.RESULTADO ?? ''}</td>
+        <td>${Number(r.TOTAL || 0).toLocaleString()}</td>
+        <td>${Number(r.R1 || 0).toLocaleString()}</td>
+        <td>${Number(r.R2 || 0).toLocaleString()}</td>
+        <td>${Number(r.R3 || 0).toLocaleString()}</td>
+        <td>${Number(r.R4 || 0).toLocaleString()}</td>
+    </tr>
+`).join("");
 
     document.getElementById("kpis").innerHTML = `
     <div class="card kpi-card">

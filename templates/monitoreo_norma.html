@@ -90,6 +90,14 @@
         <div class="header">
             <span>Monitoreo de Reportes Regulatorios</span>
         </div>
+        <!-- 🔍 BUSCADOR GLOBAL -->
+<div class="mb-3">
+    <input type="text"
+           id="buscadorReportes"
+           class="form-control"
+           placeholder="🔍 Buscar reporte..."
+           onkeyup="filtrarReportes()">
+</div>
 
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
@@ -181,6 +189,23 @@
         tab.classList.remove('yellow', 'rojo-alerta'); 
         if (colorTab === 'rojo-alerta') {
             tab.classList.add('rojo-alerta');  
+        }
+    });
+}
+
+function filtrarReportes() {
+    const input = document.getElementById("buscadorReportes");
+    const filter = input.value.toLowerCase();
+
+    const reportes = document.querySelectorAll(".report-item");
+
+    reportes.forEach(item => {
+        const texto = item.innerText.toLowerCase();
+
+        if (texto.includes(filter)) {
+            item.style.display = "flex";
+        } else {
+            item.style.display = "none";
         }
     });
 }

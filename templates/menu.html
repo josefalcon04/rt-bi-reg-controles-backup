@@ -84,15 +84,40 @@
                         <li><a href="#" onclick="ocultarSidebar(); cargarContenido('/devoluciones')">📍 Devoluciones</a></li>
                     </ul>
                 </li>                                   
+                
+                <ul class="submenu-content" style="display: none;">
+        <li>
+            <a href="#" onclick="ocultarSidebar(); cargarContenido('/tendencias_plantas')">
+                🌱 Plantas
+            </a>
+        </li>
 
-                <li class="submenu">
-                    <a href="#" class="submenu-toggle">📘Documentación</a>
-                    <ul class="submenu-content" style="display: none;">                        
-                        <li><a href="{{ url_for('documentacion.crear') }}">➕ Crear Documento</a></li>
-                        <li><a href="{{ url_for('documentacion.listar') }}">📚 Documentación</a></li>
-                    </ul>
-                </li>
-
+        <li>
+            <a href="#" onclick="ocultarSidebar(); cargarContenido('/tendencias_reportes')">
+                📄 Reportes
+            </a>
+        </li>
+    </ul>
+            <li class="submenu">
+                <a href="#" class="submenu-toggle">🚀 Pases a prod.</a>
+                <ul class="submenu-content" style="display: none;">                    
+                    <li>
+                        <a href="#" onclick="ocultarSidebar(); cargarContenido('/pases')">🔄 Pases</a>
+                        <a href="https://dj-bi-qsynthetix-qa-nirvana-qa.apps.ocptest.gp.inet/" 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                onclick="ocultarSidebar();">
+                                ⚡ Implementación
+                            </a>                          
+                        <a href="https://integratelperu.atlassian.net/jira/software/c/projects/REGU/boards/156" 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                onclick="ocultarSidebar();">
+                                ✅ Jira
+                            </a> 
+                    </li>
+                </ul>
+            </li>
             <li class="submenu">
                 <a href="#" class="submenu-toggle">⚙️ Ejecuciones</a>
                 <ul class="submenu-content" style="display: none;">                    

@@ -137,7 +137,32 @@ def dias():
 
     return jsonify({"days": days})
 
+def obtener_reintentos(fecha):
+    query = """
+    SELECT 
+        RESULTADO,
+        CANTIDAD_TOT AS TOTAL,
+        REINTENTO_1 AS R1,
+        REINTENTO_2 AS R2,
+        REINTENTO_3 AS R3,
+        REINTENTO_4 AS R4
+    FROM CONTROL_MAKO..TMP_JFF_FEATDEVO_2_018
+    WHERE FECHA_PROCESO_D = ?
+    """
 
+    try:
+        conn = conectar_netezza()
+        df = pd.read_sql(query, conn, params=[fecha])
+        conn.close()
+
+        if df.empty:
+            return []
+
+        return df.to_dict(orient="records")
+
+    except Exception as e:
+        print(f"Error reintentos: {e}")
+        return []
 # =========================
 # 📊 DATA PRINCIPAL
 # =========================
@@ -151,6 +176,11 @@ def data():
     year = request.args.get("year")
     month = request.args.get("month")
     day = request.args.get("day")
+
+    fecha = None
+
+    if year and month and day:
+        fecha = f"{year}-{int(month):02d}-{int(day):02d}"
 
     producto = request.args.get("producto")
     comentario = request.args.get("comentario")
@@ -253,6 +283,11 @@ def data():
     # =========================
     # 🔥 RETURN FINAL
     # =========================
+    reintentos = []
+
+    if fecha:
+        reintentos = obtener_reintentos(fecha)
+
     return jsonify({
         "kpis": kpis,
         "pie": pie.to_dict(orient="records"),
@@ -261,5 +296,7 @@ def data():
         "comentario": comentario.to_dict(orient="records"),
         "resultado": resultado.to_dict(orient="records"),
         "tendencia": tendencia.to_dict(orient="records"),
-        "pie_nok": pie_nok.to_dict(orient="records")
+        "pie_nok": pie_nok.to_dict(orient="records"),
+         "reintentos": reintentos
     })
+

@@ -249,3 +249,76 @@ body {
     margin-left: 4px;
     color: #666;
 }
+
+.reintentos-container {
+    margin-top: 20px;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.reintentos-container h3 {
+    margin-bottom: 10px;
+}
+
+.reintento-card {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    font-size: 13px;
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+}
+
+.reintento-header {
+    font-weight: bold;
+    background: #f4f4f4;
+}
+
+.reintentos-card{
+    margin: 25px auto;   /* 👈 lo centra */
+    width: 95%;          /* 👈 más ancho */
+    max-width: 1400px;   /* 👈 límite bonito */
+    padding: 20px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+.reintentos-card h4{
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    margin-bottom: 15px;
+    color: #111827;
+}
+/* 🔥 CLAVE: evita que se “rompa” la tabla */
+.tabla-reintentos{
+    width: 100%;
+    border-collapse: separate;  /* 👈 clave */
+    border-spacing: 10px 8px;   /* 👈 separación horizontal y vertical */
+    table-layout: fixed;
+}
+
+/* columnas más compactas y ordenadas */
+.tabla-reintentos th,
+.tabla-reintentos td{
+    padding: 12px 14px;  /* 👈 más aire */
+    text-align: center;
+    font-size: 14px;
+    background: #fff;
+    border-radius: 6px;
+}
+
+/* header fijo visual */
+.tabla-reintentos th{
+    background: #111827;
+    color: white;
+    font-weight: 600;
+}
+
+/* mejora visual tipo dashboard */
+.tabla-reintentos tbody tr:nth-child(even){
+    background: #f5f7fb;
+}

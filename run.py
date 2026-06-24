@@ -14,6 +14,7 @@ from app.planta import planta_usua_mtc_bp  # Importa el blueprint de planta USUA
 from app.planta import planta_trfacu_bp # Importa el blueprint de planta USUA MTC
 from documentacion import documentacion_bp # Importa el blueprint de documentacion
 from app.devoluciones import devoluciones_bp # Importa el blueprint de planta USUA MTC
+from app.pases.pases import pases_bp  # Importa el blueprint de pases
 
 app = Flask(__name__)
 app.secret_key = "clave_segura_bi_assistant"
@@ -34,6 +35,8 @@ app.register_blueprint(planta_usua_mtc_bp)
 app.register_blueprint(planta_trfacu_bp)
 app.register_blueprint(documentacion_bp)
 app.register_blueprint(devoluciones_bp)
+app.register_blueprint(pases_bp)  # Registra el blueprint de pases
+
 
 @app.route('/')
 def menu():
