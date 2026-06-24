@@ -6,7 +6,7 @@ monitoreo_tera_bp = Blueprint(
     __name__
 )
 
-@monitoreo_tera_bp.route('/monitoreo-teradata')
+@monitoreo_tera_bp.route('/monitoreo_tera')
 def obtener_datos():
 
     conn = conectar_teradata()

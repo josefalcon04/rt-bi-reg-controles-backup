@@ -15,6 +15,7 @@ from app.planta import planta_trfacu_bp # Importa el blueprint de planta USUA MT
 from documentacion import documentacion_bp # Importa el blueprint de documentacion
 from app.devoluciones import devoluciones_bp # Importa el blueprint de planta USUA MTC
 from app.pases.pases import pases_bp  # Importa el blueprint de pases
+from app.monitoreo_teradata import monitoreo_tera_bp  # Importa el blueprint de monitoreo Teradata
 
 app = Flask(__name__)
 app.secret_key = "clave_segura_bi_assistant"
@@ -36,7 +37,7 @@ app.register_blueprint(planta_trfacu_bp)
 app.register_blueprint(documentacion_bp)
 app.register_blueprint(devoluciones_bp)
 app.register_blueprint(pases_bp)  # Registra el blueprint de pases
-
+app.register_blueprint(monitoreo_tera_bp)  # Registra el blueprint de monitoreo Teradata
 
 @app.route('/')
 def menu():
