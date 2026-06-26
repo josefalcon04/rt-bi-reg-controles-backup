@@ -4,7 +4,7 @@ from .agente_sql import AgenteSQL
 from .agente_alertas import AgenteAlertas
 from .agente_developer import AgenteDeveloper
 from .agente_tendencias import AgenteTendencias
-from app.servicios.documentacion_service import DocumentacionService
+#from app.servicios.documentacion_service import DocumentacionService
 from app.servicios.ollama_service import llamar_ollama
 
 def clasificar_agente_con_ia(pregunta):
@@ -38,10 +38,10 @@ def obtener_agente(pregunta):
         return AgenteMonitoreo(), None
 
     # 3. Prioridad: Documentación (Solo si el score es alto)
-    doc_service = DocumentacionService()
-    documento = doc_service.buscar(pregunta)
-    if documento and documento.get('score', 0) > 5: 
-        return AgenteRegulatorio(), documento
+    # doc_service = DocumentacionService()
+    # documento = doc_service.buscar(pregunta)
+    # if documento and documento.get('score', 0) > 5: 
+    #     return AgenteRegulatorio(), documento
 
     # 4. Clasificación mediante LLM (Como respaldo si no es nada de lo anterior)
     nombre_agente = clasificar_agente_con_ia(pregunta)
