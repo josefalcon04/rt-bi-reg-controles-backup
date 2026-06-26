@@ -146,7 +146,7 @@ def obtener_reintentos(fecha):
         REINTENTO_2 AS R2,
         REINTENTO_3 AS R3,
         REINTENTO_4 AS R4
-    FROM CONTROL_MAKO..TMP_JFF_FEATDEVO_2_018
+    FROM CONTROL_MAKO..TMP_JFF_FEATDEVO_2_019
     WHERE FECHA_PROCESO_D = ?
     """
 
