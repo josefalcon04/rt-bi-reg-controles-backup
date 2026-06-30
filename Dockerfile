@@ -12,7 +12,7 @@ RUN mkdir -p /app/documentacion/templates/documentos \
     && chmod -R 777 /app/documentacion/templates/documentos
 
  
-RUN pip install --no-cache-dir -r requirements.txt
+#RUN pip install --no-cache-dir -r requirements.txt
 
  # Establecer variable de entorno
 ENV PYTHONUNBUFFERED 1
