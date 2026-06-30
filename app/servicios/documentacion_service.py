@@ -1,7 +1,7 @@
-import os
-import re
+#import os
+#import re
 #from docx import Document
-import textract
+#import textract
 
 
 # class DocumentacionService:
