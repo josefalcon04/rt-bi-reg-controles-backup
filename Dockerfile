@@ -11,6 +11,7 @@ RUN mkdir -p /app/static/img && chmod -R 777 /app/static/img
 RUN mkdir -p /app/documentacion/templates/documentos \
     && chmod -R 777 /app/documentacion/templates/documentos
 
+RUN mkdir -p /app/data && chmod -R 777 /app/data
  
 #RUN pip install --no-cache-dir -r requirements.txt
 
