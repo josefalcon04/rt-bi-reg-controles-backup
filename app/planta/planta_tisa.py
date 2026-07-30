@@ -28,8 +28,8 @@ def Query_TISA_TOT():
         COUNT(*) AS CANTIDAD
     FROM PROD_REGU_INPUT_DATA..T_INP_PLT_TISA
     WHERE TPROD1 IN ('CF', 'CC', 'CP')
-    AND ESTADO1 IN ('A')
-    AND PERIODO >= '202401'
+    AND ESTADO1 IN ('A')    
+    AND PERIODO >= to_char(CURRENT_DATE,'YYYY') -1||'01'
     GROUP BY 1
     ORDER BY 1
     """
@@ -64,7 +64,7 @@ def Query_TISA_MOD():
     FROM PROD_REGU_INPUT_DATA..T_INP_PLT_TISA
     WHERE TPROD1 IN ('CF', 'CC', 'CP')
     AND ESTADO1 IN ('A')
-    AND PERIODO >= '202401'
+    AND PERIODO >= to_char(CURRENT_DATE,'YYYY') -1||'01'
     GROUP BY 1,2
     ORDER BY 1,2
     """

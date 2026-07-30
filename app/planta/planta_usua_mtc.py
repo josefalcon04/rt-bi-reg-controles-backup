@@ -24,8 +24,9 @@ def Query_USUA_TOT():
     FROM PROD_REGU_INPUT_DATA..USUA_PLANTA_MTC
     WHERE TPROD1 IN ( 'CF', 'CC', 'CP')
     AND ESTADO1 = 'A'
-    AND TO_CHAR(TRANS_DT,'YYYY-MM') >= '2024-01'
+    AND TO_CHAR(TRANS_DT,'YYYYMM') >= to_char(CURRENT_DATE,'YYYY') -1||'01'
     GROUP BY 1
+    ORDER BY 1 desc
     """
 
     try:
@@ -53,7 +54,7 @@ def Query_USUA_MOD():
     FROM PROD_REGU_INPUT_DATA..USUA_PLANTA_MTC
     WHERE TPROD1 IN ( 'CF', 'CC', 'CP')
     AND ESTADO1 = 'A'
-    AND TO_CHAR(TRANS_DT,'YYYY-MM') >= '2024-01'
+    AND TO_CHAR(TRANS_DT,'YYYYMM') >= to_char(CURRENT_DATE,'YYYY') -1||'01'
     GROUP BY 1,2
     """
 
