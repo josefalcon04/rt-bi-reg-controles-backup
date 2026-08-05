@@ -1,4 +1,4 @@
-from app.servicios.bases.db import conectar_netezza
+from app.servicios.bases.connection_manager import conectar_netezza
 
 
 def ejecutar_query(sql):

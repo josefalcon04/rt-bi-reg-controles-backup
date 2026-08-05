@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template
-from app.servicios.bases.db import conectar_netezza  # Importa la conexión centralizada
+from app.servicios.bases.connection_manager import conectar_netezza  # Importa la conexión centralizada
 import pandas as pd
 from datetime import datetime
 from calendar import monthrange

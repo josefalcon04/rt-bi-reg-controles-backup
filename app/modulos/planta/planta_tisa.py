@@ -7,7 +7,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-from app.servicios.bases.db import conectar_netezza
+from app.servicios.bases.connection_manager import conectar_netezza
 
 
 planta_tisa_bp = Blueprint('planta_tisa', __name__)

@@ -1,6 +1,6 @@
 import os, logging
 import pandas as pd
-from app.servicios.bases.db import conectar_netezza  # Importa la conexión centralizada
+from app.servicios.bases.connection_manager import conectar_netezza  # Importa la conexión centralizada
 import matplotlib
 matplotlib.use("Agg")  # Usa un backend sin interfaz gráfica
 import matplotlib.pyplot as plt

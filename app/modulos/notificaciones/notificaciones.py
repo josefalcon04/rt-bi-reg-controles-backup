@@ -1,7 +1,7 @@
 import logging
 import pandas as pd
 from flask import Blueprint, jsonify
-from app.servicios.bases.db import conectar_netezza  # Tu función centralizada de conexión
+from app.servicios.bases.connection_manager import conectar_netezza  # Tu función centralizada de conexión
 
 notificaciones_bp = Blueprint('notificaciones', __name__)
 

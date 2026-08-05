@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template
-from app.servicios.bases.db import conectar_teradata
+from app.servicios.bases.connection_manager import conectar_teradata
 
 monitoreo_tera_bp = Blueprint(
     'monitoreo_tera',

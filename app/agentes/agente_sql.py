@@ -1,6 +1,6 @@
 from .base_agent import BaseAgent
 from app.servicios.ollama_service import llamar_ollama
-from app.servicios.bases.db import conectar_netezza
+from app.servicios.bases.connection_manager import conectar_netezza
 import pandas as pd
 
 class AgenteSQL(BaseAgent):

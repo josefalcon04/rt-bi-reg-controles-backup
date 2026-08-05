@@ -5,7 +5,7 @@ from flask import Flask, Blueprint, render_template, send_from_directory
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-from app.servicios.bases.db import conectar_netezza  # Asegúrate de tener esto definido correctamente
+from app.servicios.bases.connection_manager import conectar_netezza  # Asegúrate de tener esto definido correctamente
 
 planta_usua_mtc_bp = Blueprint('planta_usua_mtc', __name__)
 

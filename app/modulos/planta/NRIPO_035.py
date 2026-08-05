@@ -5,7 +5,7 @@ from flask import Flask, Blueprint, render_template, send_from_directory
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-from app.servicios.bases.db import conectar_netezza  # Asegúrate de tener esto definido correctamente
+from app.servicios.bases.connection_manager import conectar_netezza  # Asegúrate de tener esto definido correctamente
 import matplotlib.ticker as mtick
 
 NRIPO_035_bp = Blueprint('NRIPO_035', __name__)
