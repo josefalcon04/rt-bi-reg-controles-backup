@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, jsonify
-from app.db import conectar_netezza
+from app.servicios.bases.db import conectar_netezza
 import pandas as pd
 
 devoluciones_bp = Blueprint('devoluciones', __name__)

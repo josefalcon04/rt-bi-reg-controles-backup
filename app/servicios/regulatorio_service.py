@@ -1,4 +1,4 @@
-from app.db import conectar_netezza
+from app.servicios.bases.db import conectar_netezza
 import pandas as pd
 import re
 

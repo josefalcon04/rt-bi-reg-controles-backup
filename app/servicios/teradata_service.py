@@ -1,6 +1,6 @@
 # app/servicios/teradata_service.py
 import pandas as pd
-from app.db import conectar_teradata # Reutilizamos tu conexión centralizada
+from app.servicios.bases.db import conectar_teradata # Reutilizamos tu conexión centralizada
 
 def ejecutar_query_teradata(query):
     try:

@@ -1,1 +1,0 @@
-from app.notificaciones.notificaciones import notificaciones_bp

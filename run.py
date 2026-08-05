@@ -1,56 +1,11 @@
-from flask import Flask, render_template  # Asegúrate de importar render_template
-from app.calendario import calendario_bp  # Importa el blueprint de calendario
-from app.monitoreo import monitoreo_norma_bp  # Importa el blueprint de monitoreo
-from app.monitoreo import monitoreo_input_bp  # Importa el blueprint de monitoreo
-from app.planta import planta_bp  # Importa el blueprint de planta de control
-from app.caracteres import caracteres_bp  # Importa el blueprint de caracteres
-from app.chatbox import chatbox_bp  # Importa el blueprint de chatbox
-from app.planta import planta_mtc_bp  # Importa el blueprint de planta de control
-from app.planta import NRIPO_033_034_bp  # Importa el blueprint de reporte 33 y 34
-from app.notificaciones.notificaciones import notificaciones_bp  # importa tu blueprint
-from app.planta import NRIPO_035_bp  # Importa el blueprint de reporte 35
-from app.planta import planta_tisa_bp  # Importa el blueprint pip install plotlyde planta TISA
-from app.planta import planta_usua_mtc_bp  # Importa el blueprint de planta USUA MTC
-from app.planta import planta_trfacu_bp # Importa el blueprint de planta USUA MTC
-from documentacion import documentacion_bp # Importa el blueprint de documentacion
-from app.devoluciones import devoluciones_bp # Importa el blueprint de planta USUA MTC
-from app.pases.pases import pases_bp  # Importa el blueprint de pases
-from app.monitoreo_teradata import monitoreo_tera_bp  # Importa el blueprint de monitoreo Teradata
+from app import create_app
 
-app = Flask(__name__)
-app.secret_key = "clave_segura_bi_assistant"
-
-# Registra los blueprints
-app.register_blueprint(calendario_bp)
-app.register_blueprint(monitoreo_norma_bp)
-app.register_blueprint(monitoreo_input_bp)
-app.register_blueprint(planta_bp)
-app.register_blueprint(caracteres_bp)
-app.register_blueprint(chatbox_bp)
-app.register_blueprint(planta_mtc_bp)
-app.register_blueprint(NRIPO_033_034_bp)
-app.register_blueprint(notificaciones_bp)
-app.register_blueprint(NRIPO_035_bp)
-app.register_blueprint(planta_tisa_bp)
-app.register_blueprint(planta_usua_mtc_bp)
-app.register_blueprint(planta_trfacu_bp)
-app.register_blueprint(documentacion_bp)
-app.register_blueprint(devoluciones_bp)
-app.register_blueprint(pases_bp)  # Registra el blueprint de pases
-app.register_blueprint(monitoreo_tera_bp)  # Registra el blueprint de monitoreo Teradata
-
-@app.route('/')
-def menu():
-    # Usar render_template correctamente
-    return render_template('menu.html')  # Renderiza la página 'menu.html'
-
-@app.route('/tendencias_plantas')
-def tendencias_plantas():
-    return render_template('tendencias_plantas.html')
-
-@app.route('/tendencias_reportes')
-def tendencias_reportes():
-    return render_template('tendencias_reportes.html')
+app = create_app()
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0',port=8080)
+
+    app.run(
+        debug=True,
+        host='0.0.0.0',
+        port=8080
+    )

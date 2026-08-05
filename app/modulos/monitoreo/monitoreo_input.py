@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify, Blueprint, url_for
-from app.db import conectar_netezza  # Importa la conexión centralizada
+from app.servicios.bases.db import conectar_netezza  # Importa la conexión centralizada
 
 monitoreo_input_bp = Blueprint('monitoreo_input', __name__)
 
