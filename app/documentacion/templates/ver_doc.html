@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+
+<div class="documentacion-page">
+
+    <!-- =====================================================
+         ENCABEZADO
+         ===================================================== -->
+
+    <section class="doc-header">
+
+        <div class="doc-header-icon">
+            <i class="fas fa-book-open"></i>
+        </div>
+
+        <div class="doc-header-info">
+
+            <h1>
+                {{ titulo }}
+            </h1>
+
+            <p>
+                Visualización de documentación del proceso
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         DOCUMENTO
+         ===================================================== -->
+
+    <section class="doc-card doc-view">
+
+        <div class="doc-card-header">
+
+            <div class="doc-title">
+
+                <div class="doc-card-icon">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+
+                <div>
+
+                    <h2>
+                        Documento
+                    </h2>
+
+                    <span>
+                        Contenido documentado
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- Acciones -->
+
+            <div class="doc-view-actions">
+
+                <a
+                    href="{{ url_for(
+                        'documentacion.editar',
+                        nombre=titulo
+                    ) }}"
+                    class="btn-doc btn-primary"
+                >
+                    <i class="fas fa-edit"></i>
+                    Editar
+                </a>
+
+                <a
+                    href="{{ url_for('documentacion.listar') }}"
+                    class="btn-doc btn-secondary"
+                >
+                    <i class="fas fa-arrow-left"></i>
+                    Volver
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             CONTENIDO MARKDOWN
+             ================================================= -->
+
+        <div class="markdown-content">
+
+            {{ contenido | safe }}
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}

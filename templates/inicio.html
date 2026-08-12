@@ -1,0 +1,422 @@
+{% extends "base.html" %}
+
+{% block title %}
+Inicio - RT BI
+{% endblock %}
+
+{% block estilos_extra %}
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/inicio.css') }}">
+{% endblock %}
+
+{% block contenido %}
+
+<div class="inicio-page">
+
+    <!-- =====================================================
+         ENCABEZADO
+         ===================================================== -->
+
+    <div class="inicio-header">
+
+        <div class="inicio-header-icon">
+            <i class="fa-solid fa-chart-line"></i>
+        </div>
+
+        <div class="inicio-header-info">
+
+            <h1>
+                Centro de Control RT BI
+            </h1>
+
+            <p>
+                Monitoreo, procesos regulatorios, calidad de datos e inteligencia artificial
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         TARJETAS PRINCIPALES
+         ===================================================== -->
+
+    <div class="inicio-kpis">
+
+
+        <!-- EJECUCIONES -->
+
+        <div class="inicio-kpi-card">
+
+            <div class="kpi-icon kpi-blue">
+                <i class="fa-solid fa-calendar-check"></i>
+            </div>
+
+            <div class="kpi-info">
+
+                <span class="kpi-title">
+                    EJECUCIONES
+                </span>
+
+                <strong>
+                    --
+                </strong>
+
+                <small>
+                    Procesos de hoy
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- MONITOREO -->
+
+        <div class="inicio-kpi-card">
+
+            <div class="kpi-icon kpi-purple">
+                <i class="fa-solid fa-desktop"></i>
+            </div>
+
+            <div class="kpi-info">
+
+                <span class="kpi-title">
+                    MONITOREO
+                </span>
+
+                <strong>
+                    --
+                </strong>
+
+                <small>
+                    Schedules pendientes
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- CALIDAD -->
+
+        <div class="inicio-kpi-card">
+
+            <div class="kpi-icon kpi-green">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+
+            <div class="kpi-info">
+
+                <span class="kpi-title">
+                    CALIDAD DEL DATO
+                </span>
+
+                <strong>
+                    --
+                </strong>
+
+                <small>
+                    Nivel de cumplimiento
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- AGENTES -->
+
+        <div class="inicio-kpi-card">
+
+            <div class="kpi-icon kpi-orange">
+                <i class="fa-solid fa-robot"></i>
+            </div>
+
+            <div class="kpi-info">
+
+                <span class="kpi-title">
+                    AGENTES IA
+                </span>
+
+                <strong>
+                    7
+                </strong>
+
+                <small>
+                    Agentes disponibles
+                </small>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         SEGUNDA FILA
+         ===================================================== -->
+
+    <div class="inicio-grid">
+
+
+        <!-- =================================================
+             ESTADO DEL SISTEMA
+             ================================================= -->
+
+        <div class="inicio-panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <h2>
+                        <i class="fa-solid fa-bell"></i>
+                        Estado del sistema
+                    </h2>
+
+                    <span>
+                        Resumen de la plataforma
+                    </span>
+
+                </div>
+
+                <div class="system-status">
+
+                    <span class="status-dot"></span>
+
+                    Sistema operativo
+
+                </div>
+
+            </div>
+
+
+            <div class="system-items">
+
+
+                <div class="system-item">
+
+                    <div class="system-item-left">
+
+                        <span class="system-indicator green"></span>
+
+                        <div>
+
+                            <strong>
+                                Servicios principales
+                            </strong>
+
+                            <small>
+                                Funcionando correctamente
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                    <span class="system-value">
+                        OK
+                    </span>
+
+                </div>
+
+
+                <div class="system-item">
+
+                    <div class="system-item-left">
+
+                        <span class="system-indicator yellow"></span>
+
+                        <div>
+
+                            <strong>
+                                Procesos pendientes
+                            </strong>
+
+                            <small>
+                                Requieren seguimiento
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                    <span class="system-value warning">
+                        --
+                    </span>
+
+                </div>
+
+
+                <div class="system-item">
+
+                    <div class="system-item-left">
+
+                        <span class="system-indicator red"></span>
+
+                        <div>
+
+                            <strong>
+                                Alertas
+                            </strong>
+
+                            <small>
+                                Procesos con incidencias
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                    <span class="system-value danger">
+                        --
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             ACCESOS RÁPIDOS
+             ================================================= -->
+
+        <div class="inicio-panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <h2>
+                        <i class="fa-solid fa-bolt"></i>
+                        Accesos rápidos
+                    </h2>
+
+                    <span>
+                        Módulos principales
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="quick-access">
+
+
+                <!-- CALENDARIO -->
+
+                <a href="{{ url_for('calendario.mostrar_calendario') }}"
+                   class="quick-item">
+
+                    <span class="quick-icon blue">
+                        <i class="fa-solid fa-calendar-days"></i>
+                    </span>
+
+                    <span>
+                        Calendario
+                    </span>
+
+                    <i class="fa-solid fa-chevron-right"></i>
+
+                </a>
+
+
+                <!-- MONITOREO -->
+
+                <a href="{{ url_for('monitoreo_norma.monitoreo_reporte') }}"
+                   class="quick-item">
+
+                    <span class="quick-icon purple">
+                        <i class="fa-solid fa-desktop"></i>
+                    </span>
+
+                    <span>
+                        Monitoreo
+                    </span>
+
+                    <i class="fa-solid fa-chevron-right"></i>
+
+                </a>
+
+
+                <!-- DOCUMENTACIÓN -->
+
+                <a href="{{ url_for('documentacion.listar') }}"
+                   class="quick-item">
+
+                    <span class="quick-icon orange">
+                        <i class="fa-solid fa-book"></i>
+                    </span>
+
+                    <span>
+                        Documentación
+                    </span>
+
+                    <i class="fa-solid fa-chevron-right"></i>
+
+                </a>
+
+
+                
+
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <!-- =====================================================
+         ÚLTIMAS ACTIVIDADES
+         ===================================================== -->
+
+    <div class="inicio-activity">
+
+        <div class="panel-header">
+
+            <div>
+
+                <h2>
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    Últimas actividades
+                </h2>
+
+                <span>
+                    Actividad reciente de la plataforma
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="activity-empty">
+
+            <i class="fa-solid fa-inbox"></i>
+
+            <h3>
+                Sin actividad reciente
+            </h3>
+
+            <p>
+                Las actividades de los procesos aparecerán aquí.
+            </p>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+{% endblock %}

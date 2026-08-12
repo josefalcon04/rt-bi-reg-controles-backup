@@ -1,5 +1,13 @@
+# app/agentes/base_agent.py
+
 from abc import ABC, abstractmethod
 
-class BaseAgent:
-    def execute(self, pregunta):
-        raise NotImplementedError("Cada agente debe implementar el método execute")
+
+class BaseAgent(ABC):
+
+    nombre = "BaseAgent"
+    descripcion = ""
+
+    @abstractmethod
+    def execute(self, pregunta, **kwargs):
+        pass

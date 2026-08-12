@@ -1,0 +1,1016 @@
+{% extends "base.html" %}
+
+{% block title %}
+Roles | Administración
+{% endblock %}
+
+{% block contenido %}
+
+<link
+    rel="stylesheet"
+    href="{{ url_for(
+        'static',
+        filename='css/administracion_roles.css'
+    ) }}"
+>
+
+<div class="roles-page">
+
+    <!-- =================================================
+         ENCABEZADO
+         ================================================= -->
+
+    <div class="roles-header">
+
+        <div class="roles-header-left">
+
+            <div class="roles-icon">
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+            </div>
+
+            <div>
+
+                <h1>
+                    Administración de Roles
+                </h1>
+
+                <p>
+                    Gestiona los roles y niveles de acceso
+                    de la plataforma RT BI.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <button
+            type="button"
+            class="btn-primary"
+            onclick="abrirNuevoRol()">
+
+            <i class="fa-solid fa-plus"></i>
+
+            Nuevo rol
+
+        </button>
+
+    </div>
+
+
+    <!-- =================================================
+         MENSAJES
+         ================================================= -->
+
+    {% with messages = get_flashed_messages(
+        with_categories=true
+    ) %}
+
+        {% if messages %}
+
+            <div class="flash-container">
+
+                {% for category, message in messages %}
+
+                    <div
+                        class="flash-message
+                               flash-{{ category }}">
+
+                        {% if category == "success" %}
+
+                            <i class="fa-solid fa-circle-check"></i>
+
+                        {% else %}
+
+                            <i class="fa-solid fa-circle-exclamation"></i>
+
+                        {% endif %}
+
+                        {{ message }}
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <!-- =================================================
+         CONTENEDOR
+         ================================================= -->
+
+    <div class="roles-card">
+
+
+        <!-- =================================================
+             TOOLBAR
+             ================================================= -->
+
+        <div class="roles-toolbar">
+
+            <div class="search-box">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+                    type="text"
+                    id="buscarRol"
+                    placeholder="Buscar rol..."
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <div class="roles-count">
+
+                {{ roles|length }}
+
+                rol{% if roles|length != 1 %}es{% endif %}
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             TABLA
+             ================================================= -->
+
+        <div class="table-container">
+
+            <table
+                class="roles-table"
+                id="tablaRoles"
+            >
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Rol
+                        </th>
+
+                        <th>
+                            Descripción
+                        </th>
+
+                        <th>
+                            Estado
+                        </th>
+
+                        <th>
+                            Fecha creación
+                        </th>
+
+                        <th class="acciones-col">
+                            Acciones
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for rol in roles %}
+
+                    <tr>
+
+                        <!-- =================================================
+                             NOMBRE DEL ROL
+                             ================================================= -->
+
+                        <td>
+
+                            <div class="rol-cell">
+
+                                <div class="rol-avatar">
+
+                                    <i class="fa-solid fa-shield"></i>
+
+                                </div>
+
+                                <strong>
+
+                                    {{ rol[1] }}
+
+                                </strong>
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- =================================================
+                             DESCRIPCIÓN
+                             ================================================= -->
+
+                        <td>
+
+                            <span class="descripcion-rol">
+
+                                {{ rol[2] or '-' }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- =================================================
+                             ESTADO
+                             ================================================= -->
+
+                        <td>
+
+                            {% if rol[3] == 'A' %}
+
+                                <span class="estado activo">
+
+                                    <span></span>
+
+                                    Activo
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="estado inactivo">
+
+                                    <span></span>
+
+                                    Inactivo
+
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- =================================================
+                             FECHA
+                             ================================================= -->
+
+                        <td>
+
+                            {% if rol[4] %}
+
+                                {{ rol[4] }}
+
+                            {% else %}
+
+                                <span class="sin-dato">
+                                    -
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- =================================================
+                             ACCIONES
+                             ================================================= -->
+
+                        <td>
+
+                            <div class="acciones">
+
+
+                                <!-- =================================================
+                                     EDITAR
+                                     ================================================= -->
+
+                                <button
+                                    type="button"
+                                    class="action-btn edit"
+                                    title="Editar rol"
+
+                                    data-id="{{ rol[0] }}"
+                                    data-nombre="{{ rol[1] }}"
+                                    data-descripcion="{{ rol[2] or '' }}"
+
+                                    onclick="editarRolDesdeBoton(this)"
+                                >
+
+                                    <i class="fa-solid fa-pen"></i>
+
+                                </button>
+
+
+                                <!-- =================================================
+                                     PERMISOS
+                                     ================================================= -->
+
+                                <a
+                                    href="{{ url_for(
+                                        'roles.obtener_permisos',
+                                        id_rol=rol[0]
+                                    ) }}"
+                                    class="action-btn permissions"
+                                    title="Administrar permisos"
+                                >
+
+                                    <i class="fa-solid fa-key"></i>
+
+                                </a>
+
+
+                                <!-- =================================================
+                                     ACTIVAR / DESACTIVAR
+                                     ================================================= -->
+
+                                <button
+                                    type="button"
+
+                                    class="action-btn
+                                        {% if rol[3] == 'A' %}
+                                            disable
+                                        {% else %}
+                                            enable
+                                        {% endif %}"
+
+                                    title="
+                                        {% if rol[3] == 'A' %}
+                                            Desactivar
+                                        {% else %}
+                                            Activar
+                                        {% endif %}
+                                    "
+
+                                    onclick="abrirModalEstadoRol(
+                                        '{{ rol[0] }}',
+                                        '{{ rol[1] }}',
+                                        '{{ rol[3] }}'
+                                    )"
+                                >
+
+                                    {% if rol[3] == 'A' %}
+
+                                        <i class="fa-solid fa-ban"></i>
+
+                                    {% else %}
+
+                                        <i class="fa-solid fa-check"></i>
+
+                                    {% endif %}
+
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+
+                        <td
+                            colspan="5"
+                            class="empty-state"
+                        >
+
+                            <i class="fa-solid fa-shield-halved"></i>
+
+                            <h3>
+                                No hay roles registrados
+                            </h3>
+
+                            <p>
+                                Crea el primer rol
+                                de la plataforma.
+                            </p>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     MODAL CREAR / EDITAR ROL
+     ========================================================= -->
+
+<div
+    id="rolModal"
+    class="modal-overlay"
+>
+
+    <div class="rol-modal">
+
+
+        <!-- =================================================
+             HEADER
+             ================================================= -->
+
+        <div class="modal-header">
+
+            <div>
+
+                <h2 id="modalRolTitulo">
+                    Nuevo rol
+                </h2>
+
+                <p>
+                    Define la información del rol.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="modal-close"
+                onclick="cerrarRolModal()"
+            >
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <!-- =================================================
+             FORMULARIO
+             ================================================= -->
+
+        <form
+            id="rolForm"
+            method="POST"
+            action="{{ url_for('roles.crear') }}"
+        >
+
+            <div class="modal-body">
+
+
+                <!-- NOMBRE -->
+
+                <div class="form-group">
+
+                    <label>
+                        Nombre del rol
+                    </label>
+
+                    <input
+                        type="text"
+                        name="nombre_rol"
+                        id="nombre_rol"
+                        maxlength="50"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- DESCRIPCIÓN -->
+
+                <div class="form-group">
+
+                    <label>
+                        Descripción
+                    </label>
+
+                    <textarea
+                        name="descripcion"
+                        id="descripcion"
+                        maxlength="200"
+                        rows="4"
+                    ></textarea>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 FOOTER
+                 ================================================= -->
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn-secondary"
+                    onclick="cerrarRolModal()"
+                >
+
+                    Cancelar
+
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="btn-primary"
+                >
+
+                    <i class="fa-solid fa-save"></i>
+
+                    Guardar rol
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     MODAL CAMBIAR ESTADO
+     ========================================================= -->
+
+<div
+    id="estadoRolModal"
+    class="estado-modal"
+>
+
+    <div class="estado-modal-content">
+
+
+        <!-- ICONO -->
+
+        <div
+            id="estadoRolModalIcon"
+            class="estado-modal-icon"
+        >
+
+            <i class="fa-solid fa-shield-halved"></i>
+
+        </div>
+
+
+        <!-- TITULO -->
+
+        <h3 id="estadoRolModalTitulo">
+
+            Desactivar rol
+
+        </h3>
+
+
+        <!-- MENSAJE -->
+
+        <p id="estadoRolModalMensaje">
+
+            ¿Deseas desactivar este rol?
+
+        </p>
+
+
+        <!-- BOTONES -->
+
+        <div class="estado-modal-actions">
+
+
+            <!-- CANCELAR -->
+
+            <button
+                type="button"
+                class="btn-modal-cancel"
+                onclick="cerrarModalEstadoRol()"
+            >
+
+                Cancelar
+
+            </button>
+
+
+            <!-- CONFIRMAR -->
+
+            <form
+                id="estadoRolForm"
+                method="POST"
+            >
+
+                <button
+                    type="submit"
+                    class="btn-modal-confirm"
+                >
+
+                    <i class="fa-solid fa-check"></i>
+
+                    Confirmar
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+     ========================================================= -->
+
+<script>
+
+/* =========================================================
+   BUSCADOR
+   ========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const buscador =
+            document.getElementById(
+                "buscarRol"
+            );
+
+
+        if (buscador) {
+
+            buscador.addEventListener(
+                "input",
+                function () {
+
+                    const texto =
+                        this.value.toLowerCase();
+
+
+                    const filas =
+                        document.querySelectorAll(
+                            "#tablaRoles tbody tr"
+                        );
+
+
+                    filas.forEach(
+                        function (fila) {
+
+                            const contenido =
+                                fila.textContent.toLowerCase();
+
+
+                            fila.style.display =
+                                contenido.includes(texto)
+                                    ? ""
+                                    : "none";
+
+                        }
+                    );
+
+                }
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   NUEVO ROL
+   ========================================================= */
+
+function abrirNuevoRol() {
+
+    const modal =
+        document.getElementById(
+            "rolModal"
+        );
+
+
+    const form =
+        document.getElementById(
+            "rolForm"
+        );
+
+
+    document.getElementById(
+        "modalRolTitulo"
+    ).textContent =
+        "Nuevo rol";
+
+
+    form.action =
+        "{{ url_for('roles.crear') }}";
+
+
+    form.reset();
+
+
+    modal.classList.add(
+        "show"
+    );
+
+}
+
+
+/* =========================================================
+   EDITAR ROL
+   ========================================================= */
+
+function editarRol(
+    id,
+    nombre,
+    descripcion
+) {
+
+    const modal =
+        document.getElementById(
+            "rolModal"
+        );
+
+
+    const form =
+        document.getElementById(
+            "rolForm"
+        );
+
+
+    document.getElementById(
+        "modalRolTitulo"
+    ).textContent =
+        "Editar rol";
+
+
+    form.action =
+        "/administracion/roles/editar/"
+        + id;
+
+
+    document.getElementById(
+        "nombre_rol"
+    ).value =
+        nombre || "";
+
+
+    document.getElementById(
+        "descripcion"
+    ).value =
+        descripcion || "";
+
+
+    modal.classList.add(
+        "show"
+    );
+
+}
+
+
+/* =========================================================
+   EDITAR DESDE BOTÓN
+   ========================================================= */
+
+function editarRolDesdeBoton(
+    boton
+) {
+
+    const id =
+        boton.dataset.id;
+
+
+    const nombre =
+        boton.dataset.nombre;
+
+
+    const descripcion =
+        boton.dataset.descripcion;
+
+
+    editarRol(
+        id,
+        nombre,
+        descripcion
+    );
+
+}
+
+
+/* =========================================================
+   CERRAR MODAL ROL
+   ========================================================= */
+
+function cerrarRolModal() {
+
+    document
+        .getElementById(
+            "rolModal"
+        )
+        .classList.remove(
+            "show"
+        );
+
+}
+
+
+/* =========================================================
+   MODAL ESTADO
+   ========================================================= */
+
+function abrirModalEstadoRol(
+    idRol,
+    nombreRol,
+    estado
+) {
+
+    const modal =
+        document.getElementById(
+            "estadoRolModal"
+        );
+
+
+    const titulo =
+        document.getElementById(
+            "estadoRolModalTitulo"
+        );
+
+
+    const mensaje =
+        document.getElementById(
+            "estadoRolModalMensaje"
+        );
+
+
+    const icono =
+        document.getElementById(
+            "estadoRolModalIcon"
+        );
+
+
+    const form =
+        document.getElementById(
+            "estadoRolForm"
+        );
+
+
+    /* =================================================
+       DESACTIVAR
+       ================================================= */
+
+    if (estado === "A") {
+
+        titulo.textContent =
+            "Desactivar rol";
+
+
+        mensaje.textContent =
+            "¿Deseas desactivar el rol "
+            + nombreRol
+            + "?";
+
+
+        icono.innerHTML =
+            '<i class="fa-solid fa-shield-halved"></i>';
+
+
+        icono.classList.remove(
+            "estado-activar"
+        );
+
+
+        icono.classList.add(
+            "estado-desactivar"
+        );
+
+    }
+
+
+    /* =================================================
+       ACTIVAR
+       ================================================= */
+
+    else {
+
+        titulo.textContent =
+            "Activar rol";
+
+
+        mensaje.textContent =
+            "¿Deseas activar el rol "
+            + nombreRol
+            + "?";
+
+
+        icono.innerHTML =
+            '<i class="fa-solid fa-shield-halved"></i>';
+
+
+        icono.classList.remove(
+            "estado-desactivar"
+        );
+
+
+        icono.classList.add(
+            "estado-activar"
+        );
+
+    }
+
+
+    /* =================================================
+       ACTION
+       ================================================= */
+
+    form.action =
+        "/administracion/roles/estado/"
+        + idRol;
+
+
+    /* =================================================
+       MOSTRAR
+       ================================================= */
+
+    modal.classList.add(
+        "show"
+    );
+
+}
+
+
+/* =========================================================
+   CERRAR MODAL ESTADO
+   ========================================================= */
+
+function cerrarModalEstadoRol() {
+
+    document
+        .getElementById(
+            "estadoRolModal"
+        )
+        .classList.remove(
+            "show"
+        );
+
+}
+
+
+/* =========================================================
+   CERRAR CLICK FUERA
+   ========================================================= */
+
+document.addEventListener(
+    "click",
+    function (event) {
+
+        const modal =
+            document.getElementById(
+                "estadoRolModal"
+            );
+
+
+        if (
+            event.target === modal
+        ) {
+
+            cerrarModalEstadoRol();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   ESC
+   ========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (event.key === "Escape") {
+
+            cerrarRolModal();
+
+            cerrarModalEstadoRol();
+
+        }
+
+    }
+);
+
+</script>
+
+{% endblock %}

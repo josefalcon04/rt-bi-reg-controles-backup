@@ -1,59 +1,562 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Gráficos Reporte NRIPO 033/034</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0 ;  /* 🔹 elimina márgenes externos */
-            padding: 20px ;  /* 🔹 mantiene un poco de aire interno */
-        }
+<!-- ============================================================
+     NRIPO 033 / 034
+     CONTENIDO EMBEBIDO EN TENDENCIAS_REPORTES
+     ============================================================ -->
 
-        h1 {
-            text-align: center;
-            margin-top: 0 ;        /* 🔹 lo pega arriba */
-            margin-bottom: 20px ;  /* 🔹 menos espacio hacia abajo */
-        }
+<div class="nripo-report-container">
 
-        /* 🔹 Usamos grid para 2 columnas */
-        .grid-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr; /* 2 columnas iguales */
-            gap: 20px; /* espacio entre gráficos */
-            width: 100%;
-        }
+    <!-- ========================================================
+         CABECERA DEL REPORTE
+         ======================================================== -->
 
-        .grafico-container {
-            width: 100%;
-            text-align: center;
-        }
+    <div class="nripo-report-header">
 
-        .grafico-container img {
-            width: 100%;
-            max-height: 400px;
-            height: auto;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-        }
-    </style>
-</head>
-<body>
-    <h1>REPORTES NRIPO_033 y NRIPO_034</h1>
-
-    <div class="grid-container">
-        <div class="grafico-container">
-            <img src="{{ url_for('NRIPO_033_034.imagenes', filename=img3) }}" alt="Gráfico 1">
+        <div class="nripo-report-header-icon">
+            <i class="fa-solid fa-chart-line"></i>
         </div>
-        <div class="grafico-container">
-            <img src="{{ url_for('NRIPO_033_034.imagenes', filename=img4) }}" alt="Gráfico 2">
+
+        <div class="nripo-report-header-text">
+
+            <h2>
+                REPORTES NRIPO_033 y NRIPO_034
+            </h2>
+
+            <p>
+                Evolución y comportamiento de los indicadores regulatorios
+            </p>
+
         </div>
-        <div class="grafico-container">
-            <img src="{{ url_for('NRIPO_033_034.imagenes', filename=img1) }}" alt="Gráfico 3">
-        </div>
-        <div class="grafico-container">
-            <img src="{{ url_for('NRIPO_033_034.imagenes', filename=img2) }}" alt="Gráfico 4">
-        </div>        
+
     </div>
-</body>
-</html>
+
+
+    <!-- ========================================================
+         GRID DE GRÁFICOS
+         ======================================================== -->
+
+    <div class="nripo-graficos-grid">
+
+
+        <!-- ====================================================
+             GRÁFICO NRIPO 033
+             ==================================================== -->
+
+        <div class="nripo-grafico-card">
+
+            <div class="nripo-grafico-card-header">
+
+                <div class="nripo-grafico-icon">
+                    <i class="fa-solid fa-chart-column"></i>
+                </div>
+
+                <div>
+
+                    <h3>
+                        NRIPO_033
+                    </h3>
+
+                    <span>
+                        Evolución de líneas móviles en servicio
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="nripo-grafico-body">
+
+                <img
+                    src="{{ url_for('NRIPO_033_034.imagenes', filename=img3) }}"
+                    alt="Gráfico NRIPO 033"
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- ====================================================
+             GRÁFICO NRIPO 034
+             ==================================================== -->
+
+        <div class="nripo-grafico-card">
+
+            <div class="nripo-grafico-card-header">
+
+                <div class="nripo-grafico-icon">
+                    <i class="fa-solid fa-chart-column"></i>
+                </div>
+
+                <div>
+
+                    <h3>
+                        NRIPO_034
+                    </h3>
+
+                    <span>
+                        Evolución de líneas móviles en servicio
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="nripo-grafico-body">
+
+                <img
+                    src="{{ url_for('NRIPO_033_034.imagenes', filename=img4) }}"
+                    alt="Gráfico NRIPO 034"
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- ====================================================
+             GRÁFICO 3
+             ==================================================== -->
+
+        <div class="nripo-grafico-card">
+
+            <div class="nripo-grafico-card-header">
+
+                <div class="nripo-grafico-icon">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+
+                <div>
+
+                    <h3>
+                        Evolución por modalidad
+                    </h3>
+
+                    <span>
+                        Líneas móviles en servicio
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="nripo-grafico-body">
+
+                <img
+                    src="{{ url_for('NRIPO_033_034.imagenes', filename=img1) }}"
+                    alt="Gráfico evolución por modalidad"
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- ====================================================
+             GRÁFICO 4
+             ==================================================== -->
+
+        <div class="nripo-grafico-card">
+
+            <div class="nripo-grafico-card-header">
+
+                <div class="nripo-grafico-icon">
+                    <i class="fa-solid fa-chart-area"></i>
+                </div>
+
+                <div>
+
+                    <h3>
+                        Evolución a 3 meses
+                    </h3>
+
+                    <span>
+                        Líneas móviles en servicio
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="nripo-grafico-body">
+
+                <img
+                    src="{{ url_for('NRIPO_033_034.imagenes', filename=img2) }}"
+                    alt="Gráfico evolución a 3 meses"
+                >
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<!-- ============================================================
+     ESTILOS DEL CONTENIDO NRIPO
+     ============================================================ -->
+
+<style>
+
+.nripo-report-container {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 8px 0 15px;
+
+    color: #172033;
+
+}
+
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.nripo-report-header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    width: 100%;
+
+    min-height: 48px;
+
+    padding: 8px 12px;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border: 1px solid #dbe3ef;
+
+    border-radius: 7px;
+
+    margin-bottom: 8px;
+
+}
+
+
+.nripo-report-header-icon {
+
+    width: 34px;
+
+    height: 34px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 6px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 15px;
+
+}
+
+
+.nripo-report-header-text h2 {
+
+    margin: 0;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    color: #172033;
+
+}
+
+
+.nripo-report-header-text p {
+
+    margin: 2px 0 0;
+
+    font-size: 8px;
+
+    color: #64748b;
+
+}
+
+
+/* ============================================================
+   GRID
+   ============================================================ */
+
+.nripo-graficos-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 10px;
+
+    width: 100%;
+
+}
+
+
+/* ============================================================
+   TARJETA
+   ============================================================ */
+
+.nripo-grafico-card {
+
+    min-width: 0;
+
+    background: #ffffff;
+
+    border: 1px solid #dbe3ef;
+
+    border-radius: 7px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 1px 4px rgba(15, 23, 42, 0.04);
+
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+
+}
+
+
+.nripo-grafico-card:hover {
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 4px 12px rgba(15, 23, 42, 0.08);
+
+}
+
+
+/* ============================================================
+   HEADER DE TARJETA
+   ============================================================ */
+
+.nripo-grafico-card-header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    min-height: 38px;
+
+    padding: 6px 9px;
+
+    box-sizing: border-box;
+
+    border-bottom: 1px solid #e5eaf1;
+
+    background: #ffffff;
+
+}
+
+
+.nripo-grafico-icon {
+
+    width: 27px;
+
+    height: 27px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 5px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 11px;
+
+}
+
+
+.nripo-grafico-card-header h3 {
+
+    margin: 0;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    color: #172033;
+
+}
+
+
+.nripo-grafico-card-header span {
+
+    display: block;
+
+    margin-top: 1px;
+
+    font-size: 6.5px;
+
+    color: #94a3b8;
+
+}
+
+
+/* ============================================================
+   CUERPO DEL GRÁFICO
+   ============================================================ */
+
+.nripo-grafico-body {
+
+    width: 100%;
+
+    min-height: 275px;
+
+    padding: 4px;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    overflow: hidden;
+
+}
+
+
+.nripo-grafico-body img {
+
+    display: block;
+
+    width: 100%;
+
+    height: auto;
+
+    max-width: 100%;
+
+    border: none;
+
+    border-radius: 4px;
+
+}
+
+
+/* ============================================================
+   PANTALLAS GRANDES
+   ============================================================ */
+
+@media (min-width: 1600px) {
+
+    .nripo-graficos-grid {
+
+        gap: 12px;
+
+    }
+
+
+    .nripo-grafico-body {
+
+        min-height: 300px;
+
+    }
+
+}
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+    .nripo-graficos-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .nripo-grafico-body {
+
+        min-height: 260px;
+
+    }
+
+}
+
+
+/* ============================================================
+   MÓVIL
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+    .nripo-report-container {
+
+        padding: 5px 0 10px;
+
+    }
+
+
+    .nripo-report-header {
+
+        padding: 7px;
+
+    }
+
+
+    .nripo-report-header-text h2 {
+
+        font-size: 12px;
+
+    }
+
+
+    .nripo-graficos-grid {
+
+        grid-template-columns: 1fr;
+
+        gap: 7px;
+
+    }
+
+
+    .nripo-grafico-body {
+
+        min-height: 220px;
+
+    }
+
+}
+
+</style>

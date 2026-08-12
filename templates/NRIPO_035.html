@@ -1,66 +1,304 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Gráficos Reporte NRIPO_035</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background: #f9f9f9;
-        }
+<div class="nripo035-container">
 
-        h1 {
-            text-align: center;
-            margin-top: 0;
-            margin-bottom: 20px;
-        }
+    <!-- =====================================================
+         HEADER DEL REPORTE
+         ===================================================== -->
 
-        /* 🔹 Contenedor principal: dos filas */
-        .grid-container {
-            display: grid;
-            grid-template-rows: auto auto;
-            gap: 20px;
-            width: 100%;
-        }
+    <section class="nripo035-header">
 
-        /* 🔹 Contenedor fila inferior con 2 columnas */
-        .bottom-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
+        <div class="nripo035-header-content">
 
-        .grafico-container img {
-            width: 100%;
-            max-height: 400px;
-            height: auto;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            background: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-    </style>
-</head>
-<body>
-    <h1>REPORTE NRIPO_035</h1>
+            <span class="nripo035-kicker">
+                ANÁLISIS REGULATORIO
+            </span>
 
-    <div class="grid-container">        
-        <!-- 🔹 Imagen 1 (arriba) -->
-        <div class="grafico-container">
-            <img src="{{ url_for('NRIPO_035.imagenes', filename=img1) }}" alt="Gráfico 1">
+            <h1>
+                REPORTE NRIPO_035
+            </h1>
+
+            <p>
+                Evolución y comportamiento de los indicadores
+                asociados al reporte regulatorio.
+            </p>
+
         </div>
 
-        <!-- 🔹 Imágenes 2 y 3 (abajo, lado a lado) -->
-        <div class="bottom-row">
-            <div class="grafico-container">
-                <img src="{{ url_for('NRIPO_035.imagenes', filename=img2) }}" alt="Gráfico 2">            
-            </div>
-            <div class="grafico-container">
-                <img src="{{ url_for('NRIPO_035.imagenes', filename=img3) }}" alt="Gráfico 3">
-            </div>
+        <div class="nripo035-badge">
+            <i class="fa-solid fa-chart-line"></i>
+            <span>NRIPO 035</span>
         </div>
-    </div>
-</body>
-</html>
+
+    </section>
+
+
+    <!-- =====================================================
+         KPIs
+         ===================================================== -->
+
+    <section class="nripo035-kpis">
+
+        <!-- KPI PERIODO -->
+        <div class="nripo035-kpi">
+
+            <div class="nripo035-kpi-icon">
+                <i class="fa-solid fa-calendar"></i>
+            </div>
+
+            <div class="nripo035-kpi-content">
+
+                <span>
+                    Último período
+                </span>
+
+                <strong id="kpi-periodo">
+                    --
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- KPI SERVICIO -->
+        <div class="nripo035-kpi">
+
+            <div class="nripo035-kpi-icon">
+                <i class="fa-solid fa-signal"></i>
+            </div>
+
+            <div class="nripo035-kpi-content">
+
+                <span>
+                    Líneas en servicio
+                </span>
+
+                <strong id="kpi-servicio">
+                    --
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- KPI VARIACION -->
+        <div class="nripo035-kpi">
+
+            <div class="nripo035-kpi-icon">
+                <i class="fa-solid fa-chart-line"></i>
+            </div>
+
+            <div class="nripo035-kpi-content">
+
+                <span>
+                    Variación
+                </span>
+
+                <strong id="kpi-variacion">
+                    --
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- KPI TENDENCIA -->
+        <div class="nripo035-kpi">
+
+            <div class="nripo035-kpi-icon">
+                <i class="fa-solid fa-arrow-trend-down"></i>
+            </div>
+
+            <div class="nripo035-kpi-content">
+
+                <span>
+                    Tendencia
+                </span>
+
+                <strong id="kpi-tendencia">
+                    --
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         GRÁFICO PRINCIPAL
+         ===================================================== -->
+
+    <section class="nripo035-card nripo035-card-main">
+
+        <div class="nripo035-card-header">
+
+            <div class="nripo035-card-title">
+
+                <h2>
+                    Evolución del NRIPO 035
+                </h2>
+
+                <span>
+                    Evolución histórica de líneas en servicio
+                </span>
+
+            </div>
+
+            <div class="nripo035-card-icon">
+                <i class="fa-solid fa-chart-area"></i>
+            </div>
+
+        </div>
+
+
+        <div
+            id="grafico-nripo-035"
+            class="nripo035-grafico nripo035-grafico-main">
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         GRÁFICOS COMPARATIVOS
+         ===================================================== -->
+
+    <section class="nripo035-grid">
+
+
+        <!-- =================================================
+             NRIPO 033 VS 035
+             ================================================= -->
+
+        <div class="nripo035-card">
+
+            <div class="nripo035-card-header">
+
+                <div class="nripo035-card-title">
+
+                    <h2>
+                        NRIPO 033 vs NRIPO 035
+                    </h2>
+
+                    <span>
+                        Comparación de evolución
+                    </span>
+
+                </div>
+
+                <div class="nripo035-card-icon">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+
+            </div>
+
+
+            <div
+                id="grafico-033-035"
+                class="nripo035-grafico">
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             NRIPO 034 VS 035
+             ================================================= -->
+
+        <div class="nripo035-card">
+
+            <div class="nripo035-card-header">
+
+                <div class="nripo035-card-title">
+
+                    <h2>
+                        NRIPO 034 vs NRIPO 035
+                    </h2>
+
+                    <span>
+                        Comparación de evolución
+                    </span>
+
+                </div>
+
+                <div class="nripo035-card-icon">
+                    <i class="fa-solid fa-chart-column"></i>
+                </div>
+
+            </div>
+
+
+            <div
+                id="grafico-034-035"
+                class="nripo035-grafico">
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =====================================================
+         INFORMACIÓN DEL REPORTE
+         ===================================================== -->
+
+    <section class="nripo035-info">
+
+        <div class="nripo035-info-icon">
+
+            <i class="fa-solid fa-circle-info"></i>
+
+        </div>
+
+        <div class="nripo035-info-content">
+
+            <strong>
+                Información del reporte
+            </strong>
+
+            <p>
+                Los gráficos muestran la evolución histórica
+                y las variaciones de los indicadores asociados
+                al NRIPO 035.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         DATOS ENTREGADOS POR FLASK
+         
+         IMPORTANTE:
+         Estos bloques NO ejecutan JavaScript.
+         El JS los leerá mediante JSON.parse().
+         ===================================================== -->
+
+
+    <script
+        id="datos-nripo-035"
+        type="application/json">
+        {{ datos_035 | safe }}
+    </script>
+
+
+    <script
+        id="datos-nripo-033-035"
+        type="application/json">
+        {{ datos_033_035 | safe }}
+    </script>
+
+
+    <script
+        id="datos-nripo-034-035"
+        type="application/json">
+        {{ datos_034_035 | safe }}
+    </script>
+
+
+</div>  

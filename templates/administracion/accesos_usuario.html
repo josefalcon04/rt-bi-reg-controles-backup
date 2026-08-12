@@ -1,0 +1,1082 @@
+    {% extends "base.html" %}
+
+{% block title %}
+Accesos por Usuario - RT BI
+{% endblock %}
+
+
+{% block estilos_extra %}
+
+<link
+    rel="stylesheet"
+    href="{{ url_for(
+        'static',
+        filename='css/administracion_accesos_usuario.css'
+    ) }}"
+>
+
+{% endblock %}
+
+
+{% block contenido %}
+
+
+<!-- =========================================================
+     ENCABEZADO
+     ========================================================= -->
+
+<div class="au-header">
+
+    <div class="au-header-icon">
+
+        <i class="fa-solid fa-user-lock"></i>
+
+    </div>
+
+
+    <div class="au-header-info">
+
+        <h1>
+            Accesos por usuario
+        </h1>
+
+        <p>
+            Consulta los módulos y permisos disponibles para cada usuario.
+        </p>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     CONTENEDOR
+     ========================================================= -->
+
+<div class="au-container">
+
+
+    <!-- =====================================================
+         SELECCIÓN DE USUARIO
+         ===================================================== -->
+
+    <div class="au-panel">
+
+        <div class="au-panel-header">
+
+            <div>
+
+                <h2>
+
+                    <i class="fa-solid fa-users"></i>
+
+                    Seleccionar usuario
+
+                </h2>
+
+                <p>
+                    Selecciona un usuario para consultar sus accesos.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="au-selector">
+
+            <label for="usuarioSeleccionado">
+
+                <i class="fa-solid fa-user"></i>
+
+                Usuario
+
+            </label>
+
+
+            <select
+                id="usuarioSeleccionado"
+                class="au-select"
+            >
+
+                <option value="">
+                    Seleccione un usuario
+                </option>
+
+
+                {% for usuario in usuarios %}
+
+                <option value="{{ usuario[0] }}">
+
+                    {{ usuario[2] or usuario[1] }}
+
+                    {% if usuario[2] %}
+                        ({{ usuario[1] }})
+                    {% endif %}
+
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         RESUMEN
+         ===================================================== -->
+
+    <div
+        id="auResumen"
+        class="au-summary"
+        style="display:none;"
+    >
+
+
+        <!-- USUARIO -->
+
+        <div class="au-summary-card blue">
+
+            <div class="au-summary-icon">
+
+                <i class="fa-solid fa-user"></i>
+
+            </div>
+
+            <div>
+
+                <span>
+                    Usuario
+                </span>
+
+                <strong id="auUsuario">
+                    -
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- ROL -->
+
+        <div class="au-summary-card purple">
+
+            <div class="au-summary-icon">
+
+                <i class="fa-solid fa-user-shield"></i>
+
+            </div>
+
+            <div>
+
+                <span>
+                    Rol
+                </span>
+
+                <strong id="auRol">
+                    -
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- PERMISOS -->
+
+        <div class="au-summary-card orange">
+
+            <div class="au-summary-icon">
+
+                <i class="fa-solid fa-key"></i>
+
+            </div>
+
+            <div>
+
+                <span>
+                    Permisos
+                </span>
+
+                <strong id="auPermisos">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- MENÚS -->
+
+        <div class="au-summary-card green">
+
+            <div class="au-summary-icon">
+
+                <i class="fa-solid fa-list"></i>
+
+            </div>
+
+            <div>
+
+                <span>
+                    Accesos
+                </span>
+
+                <strong id="auMenus">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         DETALLE DE ACCESOS
+         ===================================================== -->
+
+    <div
+        id="auDetalle"
+        class="au-panel"
+        style="display:none;"
+    >
+
+
+        <div class="au-panel-header">
+
+            <div>
+
+                <h2>
+
+                    <i class="fa-solid fa-shield-halved"></i>
+
+                    Detalle de accesos
+
+                </h2>
+
+                <p>
+                    Permisos y módulos disponibles para el usuario seleccionado.
+                </p>
+
+            </div>
+
+
+            <div class="au-access-status">
+
+                <span class="au-status-dot"></span>
+
+                Acceso autorizado
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             TABLA
+             ================================================= -->
+
+        <div class="au-table-wrapper">
+
+            <table class="au-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Módulo
+                        </th>
+
+                        <th>
+                            Tipo
+                        </th>
+
+                        <th>
+                            Permiso
+                        </th>
+
+                        <th>
+                            Descripción
+                        </th>
+
+                        <th>
+                            URL
+                        </th>
+
+                        <th>
+                            Acceso
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="auTablaBody">
+
+                </tbody>
+
+            </table>
+
+
+            <!-- SIN RESULTADOS -->
+
+            <div
+                id="auSinResultados"
+                class="au-empty"
+                style="display:none;"
+            >
+
+                <i class="fa-solid fa-folder-open"></i>
+
+                <strong>
+                    Sin accesos
+                </strong>
+
+                <span>
+                    El usuario seleccionado no tiene permisos asignados.
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         ESTRUCTURA DE MENÚS
+         ===================================================== -->
+
+    <div
+        id="auEstructura"
+        class="au-panel"
+        style="display:none;"
+    >
+
+        <div class="au-panel-header">
+
+            <div>
+
+                <h2>
+
+                    <i class="fa-solid fa-sitemap"></i>
+
+                    Estructura de módulos
+
+                </h2>
+
+                <p>
+                    Visualización de la relación entre menús principales y submenús.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="auArbol"
+            class="au-tree"
+        >
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     DATOS DE ACCESOS
+     ========================================================= -->
+
+<script
+    type="application/json"
+    id="accesosUsuarioData"
+>
+{{ accesos_por_usuario | tojson }}
+</script>
+
+
+
+<!-- =========================================================
+     JAVASCRIPT
+     ========================================================= -->
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        /* =====================================================
+           DATOS
+           ===================================================== */
+
+        const accesosPorUsuario =
+            JSON.parse(
+                document.getElementById(
+                    "accesosUsuarioData"
+                ).textContent
+            );
+
+
+        /* =====================================================
+           ELEMENTOS
+           ===================================================== */
+
+        const selector =
+            document.getElementById(
+                "usuarioSeleccionado"
+            );
+
+        const resumen =
+            document.getElementById(
+                "auResumen"
+            );
+
+        const detalle =
+            document.getElementById(
+                "auDetalle"
+            );
+
+        const estructura =
+            document.getElementById(
+                "auEstructura"
+            );
+
+        const tablaBody =
+            document.getElementById(
+                "auTablaBody"
+            );
+
+        const sinResultados =
+            document.getElementById(
+                "auSinResultados"
+            );
+
+        const arbol =
+            document.getElementById(
+                "auArbol"
+            );
+
+
+        /* =====================================================
+           ESCAPAR HTML
+           ===================================================== */
+
+        function escapeHtml(valor) {
+
+            if (
+                valor === null ||
+                valor === undefined
+            ) {
+
+                return "";
+
+            }
+
+            return String(valor)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+
+        }
+
+
+        /* =====================================================
+           CAMBIO DE USUARIO
+           ===================================================== */
+
+        selector.addEventListener(
+            "change",
+            function () {
+
+                const idUsuario =
+                    this.value;
+
+
+                if (!idUsuario) {
+
+                    resumen.style.display =
+                        "none";
+
+                    detalle.style.display =
+                        "none";
+
+                    estructura.style.display =
+                        "none";
+
+                    return;
+
+                }
+
+
+                mostrarAccesos(
+                    idUsuario
+                );
+
+            }
+        );
+
+
+        /* =====================================================
+           MOSTRAR ACCESOS
+           ===================================================== */
+
+        function mostrarAccesos(
+            idUsuario
+        ) {
+
+            const accesos =
+                accesosPorUsuario[idUsuario]
+                || [];
+
+
+            /* ===============================================
+               SI NO TIENE ACCESOS
+               =============================================== */
+
+            if (accesos.length === 0) {
+
+                resumen.style.display =
+                    "grid";
+
+                detalle.style.display =
+                    "block";
+
+                estructura.style.display =
+                    "none";
+
+
+                document.getElementById(
+                    "auUsuario"
+                ).textContent =
+                    obtenerNombreUsuario(
+                        idUsuario
+                    );
+
+
+                document.getElementById(
+                    "auRol"
+                ).textContent =
+                    "Sin rol";
+
+
+                document.getElementById(
+                    "auPermisos"
+                ).textContent =
+                    "0";
+
+
+                document.getElementById(
+                    "auMenus"
+                ).textContent =
+                    "0";
+
+
+                tablaBody.innerHTML =
+                    "";
+
+
+                sinResultados.style.display =
+                    "flex";
+
+
+                return;
+
+            }
+
+
+            /* ===============================================
+               DATOS GENERALES
+               =============================================== */
+
+            const primerAcceso =
+                accesos[0];
+
+
+            const usuario =
+                primerAcceso.usuario
+                || "-";
+
+
+            const rol =
+                primerAcceso.rol
+                || "-";
+
+
+            const permisos =
+                new Set(
+                    accesos.map(
+                        function (item) {
+
+                            return item.id_permiso;
+
+                        }
+                    )
+                );
+
+
+            const menus =
+                new Set(
+                    accesos.map(
+                        function (item) {
+
+                            return item.id_menu;
+
+                        }
+                    )
+                );
+
+
+            /* ===============================================
+               RESUMEN
+               =============================================== */
+
+            document.getElementById(
+                "auUsuario"
+            ).textContent =
+                usuario;
+
+
+            document.getElementById(
+                "auRol"
+            ).textContent =
+                rol;
+
+
+            document.getElementById(
+                "auPermisos"
+            ).textContent =
+                permisos.size;
+
+
+            document.getElementById(
+                "auMenus"
+            ).textContent =
+                menus.size;
+
+
+            resumen.style.display =
+                "grid";
+
+
+            /* ===============================================
+               TABLA
+               =============================================== */
+
+            tablaBody.innerHTML =
+                "";
+
+
+            sinResultados.style.display =
+                "none";
+
+
+            accesos.forEach(
+                function (item) {
+
+                    const fila =
+                        document.createElement(
+                            "tr"
+                        );
+
+
+                    const tipo =
+                        Number(
+                            item.id_menu_padre
+                        ) === 0
+                            ? "Principal"
+                            : "Submenú";
+
+
+                    fila.innerHTML = `
+
+                        <td>
+
+                            <div class="au-menu-name">
+
+                                <div class="au-menu-icon">
+
+                                    <i class="${
+                                        escapeHtml(
+                                            item.icono
+                                        )
+                                    }"></i>
+
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                                        ${
+                                            escapeHtml(
+                                                item.nombre_menu
+                                            )
+                                        }
+                                    </strong>
+
+                                    <span>
+                                        ${
+                                            tipo
+                                        }
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <span
+                                class="au-type-badge ${
+                                    tipo === "Principal"
+                                        ? "principal"
+                                        : "submenu"
+                                }"
+                            >
+
+                                ${
+                                    tipo
+                                }
+
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="au-permission-badge">
+
+                                ${
+                                    escapeHtml(
+                                        item.codigo_permiso
+                                    )
+                                }
+
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            ${
+                                escapeHtml(
+                                    item.descripcion_permiso
+                                    || "-"
+                                )
+                            }
+
+                        </td>
+
+
+                        <td>
+
+                            <code>
+                                ${
+                                    escapeHtml(
+                                        item.url
+                                        || "-"
+                                    )
+                                }
+                            </code>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="au-access-badge">
+
+                                <i
+                                    class="fa-solid fa-check">
+                                </i>
+
+                                Permitido
+
+                            </span>
+
+                        </td>
+
+                    `;
+
+
+                    tablaBody.appendChild(
+                        fila
+                    );
+
+                }
+            );
+
+
+            detalle.style.display =
+                "block";
+
+
+            /* ===============================================
+               ÁRBOL
+               =============================================== */
+
+            construirArbol(
+                accesos
+            );
+
+
+            estructura.style.display =
+                "block";
+
+        }
+
+
+        /* =====================================================
+           OBTENER NOMBRE DE USUARIO
+           ===================================================== */
+
+        function obtenerNombreUsuario(
+            idUsuario
+        ) {
+
+            const opcion =
+                selector.querySelector(
+                    `option[value="${idUsuario}"]`
+                );
+
+
+            if (!opcion) {
+
+                return "-";
+
+            }
+
+
+            return opcion.textContent.trim();
+
+        }
+
+
+        /* =====================================================
+           CONSTRUIR ÁRBOL
+           ===================================================== */
+
+        function construirArbol(
+            accesos
+        ) {
+
+            arbol.innerHTML =
+                "";
+
+
+            const padres = {};
+
+
+            const hijos = {};
+
+
+            accesos.forEach(
+                function (item) {
+
+                    if (
+                        Number(
+                            item.id_menu_padre
+                        ) === 0
+                    ) {
+
+                        padres[
+                            item.id_menu
+                        ] = item;
+
+                    } else {
+
+                        if (
+                            !hijos[
+                                item.id_menu_padre
+                            ]
+                        ) {
+
+                            hijos[
+                                item.id_menu_padre
+                            ] = [];
+
+                        }
+
+
+                        hijos[
+                            item.id_menu_padre
+                        ].push(item);
+
+                    }
+
+                }
+            );
+
+
+            Object.values(
+                padres
+            ).forEach(
+                function (padre) {
+
+                    const bloque =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    bloque.className =
+                        "au-tree-parent";
+
+
+                    bloque.innerHTML = `
+
+                        <div class="au-tree-title">
+
+                            <div class="au-tree-icon">
+
+                                <i class="${
+                                    escapeHtml(
+                                        padre.icono
+                                    )
+                                }"></i>
+
+                            </div>
+
+                            <strong>
+
+                                ${
+                                    escapeHtml(
+                                        padre.nombre_menu
+                                    )
+                                }
+
+                            </strong>
+
+                            <span class="au-tree-access">
+
+                                <i
+                                    class="fa-solid fa-check">
+                                </i>
+
+                                Permitido
+
+                            </span>
+
+                        </div>
+
+                    `;
+
+
+                    const lista =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    lista.className =
+                        "au-tree-children";
+
+
+                    const hijosPadre =
+                        hijos[
+                            padre.id_menu
+                        ] || [];
+
+
+                    hijosPadre.forEach(
+                        function (hijo) {
+
+                            const hijoElemento =
+                                document.createElement(
+                                    "div"
+                                );
+
+
+                            hijoElemento.className =
+                                "au-tree-child";
+
+
+                            hijoElemento.innerHTML = `
+
+                                <i
+                                    class="${
+                                        escapeHtml(
+                                            hijo.icono
+                                        )
+                                    }">
+                                </i>
+
+                                <span>
+
+                                    ${
+                                        escapeHtml(
+                                            hijo.nombre_menu
+                                        )
+                                    }
+
+                                </span>
+
+                                <small>
+
+                                    ${
+                                        escapeHtml(
+                                            hijo.codigo_permiso
+                                        )
+                                    }
+
+                                </small>
+
+                            `;
+
+
+                            lista.appendChild(
+                                hijoElemento
+                            );
+
+                        }
+                    );
+
+
+                    bloque.appendChild(
+                        lista
+                    );
+
+
+                    arbol.appendChild(
+                        bloque
+                    );
+
+                }
+            );
+
+        }
+
+    }
+);
+
+</script>
+
+
+{% endblock %}

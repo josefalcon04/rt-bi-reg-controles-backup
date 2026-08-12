@@ -1,0 +1,1013 @@
+/* =========================================================
+   RT BI - MONITOR DE AGENTES
+   Debug / Observabilidad del Chatbox
+   TEMA DARK
+   ========================================================= */
+
+
+/* =========================================================
+   CONTENEDOR PRINCIPAL
+   ========================================================= */
+
+.agent-flow-page {
+
+    width: 100%;
+
+    max-width: 1500px;
+
+    margin: 0 auto;
+
+    padding: 10px 4px 30px;
+
+    box-sizing: border-box;
+
+}
+
+
+/* =========================================================
+   ENCABEZADO
+   ========================================================= */
+
+.agent-flow-header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    background: linear-gradient(
+        135deg,
+        #2563eb,
+        #1d4ed8
+    );
+
+    color: white;
+
+    padding: 18px 22px;
+
+    border-radius: 10px;
+
+    margin-bottom: 16px;
+
+    box-shadow:
+        0 4px 12px rgba(37, 99, 235, 0.18);
+
+}
+
+
+.agent-flow-header-icon {
+
+    width: 44px;
+    height: 44px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(255,255,255,0.16);
+
+    border-radius: 9px;
+
+    font-size: 20px;
+
+}
+
+
+.agent-flow-header-info h1 {
+
+    margin: 0;
+
+    font-size: 20px;
+
+    font-weight: 700;
+
+}
+
+
+.agent-flow-header-info p {
+
+    margin: 4px 0 0;
+
+    font-size: 11px;
+
+    opacity: 0.9;
+
+}
+
+
+/* =========================================================
+   TARJETA PRINCIPAL
+   ========================================================= */
+
+.agent-flow-card {
+
+    background: #000000;
+
+    border: 1px solid #1e293b;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.45);
+
+}
+
+
+/* =========================================================
+   HEADER DEL MONITOR
+   ========================================================= */
+
+.agent-flow-card-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 13px 18px;
+
+    border-bottom: 1px solid #1e293b;
+
+    background: #050505;
+
+}
+
+
+.agent-flow-card-header h2 {
+
+    margin: 0;
+
+    color: #e5e7eb;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+}
+
+
+.agent-flow-card-header h2 i {
+
+    color: #60a5fa;
+
+    margin-right: 7px;
+
+}
+
+
+.agent-flow-card-header span {
+
+    display: block;
+
+    margin-top: 3px;
+
+    color: #94a3b8;
+
+    font-size: 10px;
+
+}
+
+
+/* =========================================================
+   ESTADO DEL MONITOR
+   ========================================================= */
+
+.agent-flow-status {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 6px 10px;
+
+    background: #061a0f;
+
+    border: 1px solid #166534;
+
+    border-radius: 20px;
+
+    color: #4ade80;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+}
+
+
+.status-dot {
+
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #22c55e;
+
+    box-shadow:
+        0 0 0 3px rgba(34,197,94,0.12),
+        0 0 10px rgba(34,197,94,0.65);
+
+}
+
+
+/* =========================================================
+   FLUJO
+   ========================================================= */
+
+.flow {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 25px 20px 35px;
+
+    background: #000000;
+
+    min-height: 450px;
+
+}
+
+
+/* =========================================================
+   NODOS GENERALES
+   ========================================================= */
+
+.box {
+
+    position: relative;
+
+    box-sizing: border-box;
+
+    transition:
+        all 0.25s ease;
+
+}
+
+
+/* =========================================================
+   CHATBOX
+   ========================================================= */
+
+.chat {
+
+    width: 210px;
+
+    min-height: 65px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 12px;
+
+    background: #0b0f14;
+
+    border: 1px solid #334155;
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 3px 10px rgba(0,0,0,0.50);
+
+}
+
+
+.chat .node-icon {
+
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background: #111827;
+
+    color: #60a5fa;
+
+    border-radius: 8px;
+
+}
+
+
+.node-content h3 {
+
+    margin: 0;
+
+    font-size: 12px;
+
+    color: #f8fafc;
+
+}
+
+
+.node-content span {
+
+    display: block;
+
+    margin-top: 3px;
+
+    font-size: 9px;
+
+    color: #94a3b8;
+
+}
+
+
+/* =========================================================
+   CONECTORES VISUALES
+   ========================================================= */
+
+.chat::after,
+.diamond::after,
+.registry::after,
+.mml::after {
+
+    content: "";
+
+    position: absolute;
+
+    left: 50%;
+
+    bottom: -13px;
+
+    width: 2px;
+
+    height: 12px;
+
+    background: #475569;
+
+    box-shadow:
+        0 0 4px rgba(148,163,184,0.15);
+
+}
+
+
+/* =========================================================
+   ROUTER
+   ========================================================= */
+
+.diamond {
+
+    position: relative;
+
+    width: 72px;
+
+    height: 72px;
+
+    transform: rotate(45deg);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #090909;
+
+    border: 2px solid #7c3aed;
+
+    border-radius: 8px;
+
+    box-shadow:
+        0 3px 15px rgba(124,58,237,0.25);
+
+}
+
+
+.diamond > div {
+
+    transform: rotate(-45deg);
+
+    text-align: center;
+
+}
+
+
+.diamond h3 {
+
+    margin: 2px 0;
+
+    font-size: 9px;
+
+    color: #c084fc;
+
+}
+
+
+.diamond span {
+
+    font-size: 7px;
+
+    color: #94a3b8;
+
+}
+
+
+/* =========================================================
+   REGISTRY
+   ========================================================= */
+
+.registry {
+
+    position: relative;
+
+    width: min(620px, 90%);
+
+    padding: 16px;
+
+    background: #090909;
+
+    border: 1px solid #334155;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 4px 18px rgba(0,0,0,0.55);
+
+}
+
+
+/* =========================================================
+   REGISTRY HEADER
+   ========================================================= */
+
+.registry-header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    margin-bottom: 13px;
+
+}
+
+
+.registry-icon {
+
+    width: 30px;
+    height: 30px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background: #111827;
+
+    color: #60a5fa;
+
+    border-radius: 7px;
+
+}
+
+
+.registry-header h3 {
+
+    margin: 0;
+
+    font-size: 12px;
+
+    color: #f8fafc;
+
+}
+
+
+.registry-header span {
+
+    display: block;
+
+    margin-top: 2px;
+
+    font-size: 9px;
+
+    color: #94a3b8;
+
+}
+
+
+/* =========================================================
+   AGENTES
+   ========================================================= */
+
+.agents {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 8px;
+
+}
+
+
+/* =========================================================
+   AGENTE
+   ========================================================= */
+
+.agent {
+
+    min-height: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    background: #0b0f14;
+
+    border: 1px solid #334155;
+
+    border-radius: 7px;
+
+    color: #cbd5e1;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    box-shadow:
+        0 1px 5px rgba(0,0,0,0.35);
+
+}
+
+
+.agent i {
+
+    color: #94a3b8;
+
+    font-size: 11px;
+
+}
+
+
+.agent:hover {
+
+    border-color: #3b82f6;
+
+    background: #111827;
+
+    box-shadow:
+        0 0 10px rgba(59,130,246,0.18);
+
+}
+
+
+/* =========================================================
+   MML / OLLAMA
+   ========================================================= */
+
+.mml {
+
+    width: 210px;
+
+    min-height: 65px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 12px;
+
+    background: #0b0f14;
+
+    border: 1px solid #334155;
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 3px 10px rgba(0,0,0,0.50);
+
+}
+
+
+.mml .node-icon {
+
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background: #1a1026;
+
+    color: #a855f7;
+
+    border-radius: 8px;
+
+}
+
+
+/* =========================================================
+   RESPONSE
+   ========================================================= */
+
+.response {
+
+    width: 210px;
+
+    min-height: 65px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 12px;
+
+    background: #0b0f14;
+
+    border: 1px solid #334155;
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 3px 10px rgba(0,0,0,0.50);
+
+}
+
+
+.response .node-icon {
+
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background: #052e16;
+
+    color: #22c55e;
+
+    border-radius: 8px;
+
+}
+
+
+/* =========================================================
+   ESTADO: RUNNING
+   ========================================================= */
+
+/*
+   IMPORTANTE:
+   El fondo sigue siendo negro.
+   Solo el borde y el glow se iluminan.
+*/
+
+.box.running,
+.diamond.running {
+
+    border-color: #facc15 !important;
+
+    background: #000000 !important;
+
+    box-shadow:
+        0 0 0 3px rgba(250,204,21,0.12),
+        0 0 18px rgba(250,204,21,0.55),
+        0 0 35px rgba(250,204,21,0.25);
+
+    animation:
+        agentPulse 1.2s infinite;
+
+}
+
+
+.agent.running {
+
+    background: #090900 !important;
+
+    color: #fde68a;
+
+    border-color: #facc15;
+
+    box-shadow:
+        0 0 12px rgba(250,204,21,0.35);
+
+}
+
+
+.agent.running i {
+
+    color: #facc15;
+
+}
+
+
+/* =========================================================
+   ESTADO: SUCCESS
+   ========================================================= */
+
+.box.success,
+.diamond.success {
+
+    border-color: #22c55e !important;
+
+    background: #000000 !important;
+
+    box-shadow:
+        0 0 0 3px rgba(34,197,94,0.10),
+        0 0 18px rgba(34,197,94,0.45),
+        0 0 35px rgba(34,197,94,0.20);
+
+}
+
+
+.agent.success {
+
+    background: #031006 !important;
+
+    border-color: #22c55e;
+
+    color: #86efac;
+
+    box-shadow:
+        0 0 10px rgba(34,197,94,0.25);
+
+}
+
+
+.agent.success i {
+
+    color: #22c55e;
+
+}
+
+
+/* =========================================================
+   ESTADO: ERROR
+   ========================================================= */
+
+.box.error,
+.diamond.error {
+
+    border-color: #ef4444 !important;
+
+    background: #000000 !important;
+
+    box-shadow:
+        0 0 0 3px rgba(239,68,68,0.10),
+        0 0 18px rgba(239,68,68,0.45),
+        0 0 35px rgba(239,68,68,0.20);
+
+}
+
+
+.agent.error {
+
+    background: #150505 !important;
+
+    border-color: #ef4444;
+
+    color: #fca5a5;
+
+    box-shadow:
+        0 0 10px rgba(239,68,68,0.25);
+
+}
+
+
+/* =========================================================
+   ANIMACIÓN
+   ========================================================= */
+
+@keyframes agentPulse {
+
+    0% {
+
+        transform:
+            translateY(0);
+
+    }
+
+    50% {
+
+        transform:
+            translateY(-2px);
+
+    }
+
+    100% {
+
+        transform:
+            translateY(0);
+
+    }
+
+}
+
+
+/* =========================================================
+   ROUTER - ANIMACIÓN
+   ========================================================= */
+
+/*
+   Router necesita conservar su rotación
+*/
+
+.diamond.running {
+
+    animation:
+        routerPulse 1.2s infinite;
+
+}
+
+
+@keyframes routerPulse {
+
+    0% {
+
+        transform:
+            rotate(45deg)
+            scale(1);
+
+    }
+
+    50% {
+
+        transform:
+            rotate(45deg)
+            scale(1.05);
+
+    }
+
+    100% {
+
+        transform:
+            rotate(45deg)
+            scale(1);
+
+    }
+
+}
+
+
+/* =========================================================
+   GLOW ESPECIAL PARA EL FLUJO
+   ========================================================= */
+
+/*
+   Cuando un nodo está ejecutándose,
+   reforzamos visualmente el efecto sobre fondo negro.
+*/
+
+.chat.running,
+.mml.running,
+.response.running {
+
+    background: #000000 !important;
+
+    box-shadow:
+        0 0 0 3px rgba(250,204,21,0.12),
+        0 0 20px rgba(250,204,21,0.60),
+        0 0 45px rgba(250,204,21,0.25);
+
+}
+
+
+/* =========================================================
+   ICONOS DURANTE RUNNING
+   ========================================================= */
+
+.box.running .node-icon {
+
+    background: #171300;
+
+    color: #facc15;
+
+    box-shadow:
+        0 0 12px rgba(250,204,21,0.40);
+
+}
+
+
+/* =========================================================
+   ICONOS DURANTE SUCCESS
+   ========================================================= */
+
+.box.success .node-icon {
+
+    background: #032d12;
+
+    color: #22c55e;
+
+    box-shadow:
+        0 0 12px rgba(34,197,94,0.35);
+
+}
+
+
+/* =========================================================
+   ICONOS DURANTE ERROR
+   ========================================================= */
+
+.box.error .node-icon {
+
+    background: #300707;
+
+    color: #ef4444;
+
+    box-shadow:
+        0 0 12px rgba(239,68,68,0.35);
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    .agent-flow-page {
+
+        padding: 8px;
+
+    }
+
+
+    .agent-flow-header {
+
+        padding: 14px;
+
+    }
+
+
+    .agent-flow-card-header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 10px;
+
+    }
+
+
+    .registry {
+
+        width: 100%;
+
+    }
+
+
+    .agents {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
+
+/* =========================================================
+   PANTALLAS PEQUEÑAS
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+    .chat,
+    .mml,
+    .response {
+
+        width: 180px;
+
+    }
+
+
+    .flow {
+
+        padding:
+            20px 8px 30px;
+
+    }
+
+}

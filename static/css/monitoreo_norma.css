@@ -1,0 +1,1050 @@
+/* =========================================================
+   MONITOREO DE REPORTES REGULATORIOS
+   ========================================================= */
+
+.monitoreo-container {
+
+    width: 100%;
+    max-width: 1180px;
+
+    margin: 0 auto;
+
+    padding: 28px 20px 40px;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   ENCABEZADO
+   ========================================================= */
+
+.monitoreo-header {
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #1d4ed8
+        );
+
+    color: white;
+
+    padding: 18px 22px;
+
+    border-radius: 10px;
+
+    margin-bottom: 12px;
+
+    box-shadow:
+        0 6px 18px
+        rgba(37, 99, 235, 0.18);
+}
+
+
+.monitoreo-header h1 {
+
+    margin: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    font-size: 21px;
+
+    font-weight: 700;
+}
+
+
+.monitoreo-header h1 i {
+
+    font-size: 19px;
+}
+
+
+.monitoreo-header p {
+
+    margin: 6px 0 0;
+
+    font-size: 11px;
+
+    color: rgba(255,255,255,0.72);
+}
+
+
+/* =========================================================
+   FILTROS
+   ========================================================= */
+
+.monitoreo-filtros {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    width: 100%;
+
+    margin-bottom: 10px;
+}
+
+
+/* =========================================================
+   BUSCADOR
+   ========================================================= */
+
+.monitoreo-search {
+
+    position: relative;
+
+    flex: 1;
+
+    min-width: 0;
+}
+
+
+.monitoreo-search i {
+
+    position: absolute;
+
+    left: 12px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #64748b;
+
+    font-size: 13px;
+
+    pointer-events: none;
+}
+
+
+.monitoreo-search input {
+
+    width: 100%;
+
+    height: 34px;
+
+    box-sizing: border-box;
+
+    padding:
+        0
+        12px
+        0
+        32px;
+
+    border:
+        1px solid #d5deeb;
+
+    border-radius: 7px;
+
+    background: white;
+
+    color: #334155;
+
+    font-size: 12px;
+
+    outline: none;
+}
+
+
+.monitoreo-search input::placeholder {
+
+    color: #94a3b8;
+}
+
+
+.monitoreo-search input:focus {
+
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 2px
+        rgba(37,99,235,0.08);
+}
+
+
+/* =========================================================
+   FILTRO ESTADO
+   ========================================================= */
+
+.monitoreo-status-filter {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    height: 34px;
+
+    padding:
+        0
+        10px;
+
+    border:
+        1px solid #d5deeb;
+
+    border-radius: 7px;
+
+    background: white;
+
+    box-sizing: border-box;
+
+    flex-shrink: 0;
+}
+
+
+.monitoreo-status-filter label {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    color: #475569;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+
+.monitoreo-status-filter label i {
+
+    color: #2563eb;
+
+    font-size: 11px;
+}
+
+
+.monitoreo-status-filter select {
+
+    height: 26px;
+
+    border: none;
+
+    outline: none;
+
+    background: transparent;
+
+    color: #334155;
+
+    font-size: 11px;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   WORKSPACE
+   ========================================================= */
+
+.monitoreo-workspace {
+
+    display: grid;
+
+    grid-template-columns:
+        300px
+        minmax(0, 1fr);
+
+    gap: 10px;
+
+    width: 100%;
+
+    height: 600px;
+
+    min-height: 500px;
+
+    align-items: stretch;
+}
+
+
+/* =========================================================
+   PANEL REPORTES
+   ========================================================= */
+
+.monitoreo-reportes-panel {
+
+    background: white;
+
+    border:
+        1px solid #dbe3ef;
+
+    border-radius: 9px;
+
+    overflow: hidden;
+
+    min-width: 0;
+
+    height: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    box-shadow:
+        0 2px 8px
+        rgba(15,23,42,0.04);
+}
+
+
+/* =========================================================
+   HEADER DEL PANEL REPORTES
+   ========================================================= */
+
+.monitoreo-panel-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    min-height: 40px;
+
+    padding:
+        0
+        12px;
+
+    border-bottom:
+        1px solid #e2e8f0;
+
+    background: #ffffff;
+
+    flex-shrink: 0;
+}
+
+
+.monitoreo-panel-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    color: #334155;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+
+.monitoreo-panel-title i {
+
+    color: #2563eb;
+
+    font-size: 13px;
+}
+
+
+.monitoreo-count {
+
+    padding:
+        3px
+        7px;
+
+    border-radius: 10px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 9px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   TABS
+   ========================================================= */
+
+.monitoreo-tabs {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    width: 100%;
+
+    flex-shrink: 0;
+
+    border-bottom:
+        1px solid #dbe3ef;
+
+    background: white;
+}
+
+
+.monitoreo-tab {
+
+    height: 38px;
+
+    border: none;
+
+    background: white;
+
+    color: #2563eb;
+
+    font-size: 9px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+
+.monitoreo-tab:hover {
+
+    background: #eff6ff;
+}
+
+
+.monitoreo-tab.active {
+
+    background: #2563eb;
+
+    color: white;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   TAB CONTENT
+   ========================================================= */
+
+.monitoreo-tab-content {
+
+    display: none;
+
+    flex: 1;
+
+    min-height: 0;
+
+    overflow: hidden;
+}
+
+
+.monitoreo-tab-content.active {
+
+    display: flex;
+
+    flex-direction: column;
+}
+
+
+/* =========================================================
+   LISTA
+   ========================================================= */
+
+.report-list {
+
+    flex: 1;
+
+    min-height: 0;
+
+    overflow-y: auto;
+
+    overflow-x: hidden;
+
+    padding: 8px;
+}
+
+
+/* =========================================================
+   SCROLL
+   ========================================================= */
+
+.report-list::-webkit-scrollbar {
+
+    width: 7px;
+}
+
+
+.report-list::-webkit-scrollbar-track {
+
+    background: #f8fafc;
+}
+
+
+.report-list::-webkit-scrollbar-thumb {
+
+    background: #cbd5e1;
+
+    border-radius: 10px;
+}
+
+
+.report-list::-webkit-scrollbar-thumb:hover {
+
+    background: #94a3b8;
+}
+
+
+/* =========================================================
+   ITEM REPORTE
+   ========================================================= */
+
+.report-item {
+
+    width: 100%;
+
+    margin-bottom: 5px;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   BOTÓN REPORTE
+   ========================================================= */
+
+.report-link {
+
+    width: 100%;
+
+    min-height: 40px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    box-sizing: border-box;
+
+    padding:
+        0
+        10px;
+
+    border:
+        1px solid #dbe3ef;
+
+    border-radius: 7px;
+
+    background: white;
+
+    color: #2563eb;
+
+    cursor: pointer;
+
+    text-align: left;
+
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease,
+        box-shadow 0.15s ease,
+        transform 0.15s ease;
+}
+
+
+.report-link:hover {
+
+    background: #f8fbff;
+
+    border-color: #93c5fd;
+
+    transform: translateX(1px);
+}
+
+
+/* =========================================================
+   REPORTE SELECCIONADO
+   ========================================================= */
+
+.report-item.selected .report-link {
+
+    background: #eff6ff;
+
+    border-color: #2563eb;
+
+    box-shadow:
+        inset 3px 0 0 #2563eb;
+}
+
+
+/* =========================================================
+   NOMBRE
+   ========================================================= */
+
+.report-name {
+
+    flex: 1;
+
+    min-width: 0;
+
+    overflow: hidden;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+
+    color: #2563eb;
+
+    font-size: 11px;
+
+    font-weight: 500;
+}
+
+
+/* =========================================================
+   PANEL DETALLE
+   ========================================================= */
+
+.monitoreo-detalle-panel {
+
+    position: relative;
+
+    background: white;
+
+    border:
+        1px solid #dbe3ef;
+
+    border-radius: 9px;
+
+    overflow: hidden;
+
+    min-width: 0;
+
+    width: 100%;
+
+    height: 100%;
+
+    box-shadow:
+        0 2px 8px
+        rgba(15,23,42,0.04);
+}
+
+
+/* =========================================================
+   PLACEHOLDER
+   ========================================================= */
+
+.detalle-placeholder {
+
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    padding: 30px;
+
+    box-sizing: border-box;
+
+    background: white;
+
+    z-index: 1;
+}
+
+
+.detalle-placeholder-icon {
+
+    width: 48px;
+
+    height: 48px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin-bottom: 14px;
+
+    border-radius: 10px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 22px;
+}
+
+
+.detalle-placeholder h3 {
+
+    margin: 0 0 8px;
+
+    color: #0f172a;
+
+    font-size: 14px;
+}
+
+
+.detalle-placeholder p {
+
+    max-width: 400px;
+
+    margin: 0;
+
+    color: #94a3b8;
+
+    font-size: 10px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   DETALLE CARGADO
+   ========================================================= */
+
+.detalle-contenido {
+
+    width: 100%;
+
+    height: 100%;
+
+    overflow-y: auto;
+
+    overflow-x: hidden;
+
+    box-sizing: border-box;
+
+    background: white;
+}
+
+
+.detalle-contenido::-webkit-scrollbar {
+
+    width: 7px;
+}
+
+
+.detalle-contenido::-webkit-scrollbar-track {
+
+    background: #f8fafc;
+}
+
+
+.detalle-contenido::-webkit-scrollbar-thumb {
+
+    background: #cbd5e1;
+
+    border-radius: 10px;
+}
+
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.detalle-loading {
+
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    background:
+        rgba(255,255,255,0.92);
+
+    z-index: 10;
+
+    color: #64748b;
+
+    font-size: 11px;
+}
+
+
+.detalle-loading-icon {
+
+    font-size: 25px;
+
+    color: #2563eb;
+}
+
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+.detalle-error {
+
+    min-height: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    padding: 30px;
+
+    box-sizing: border-box;
+}
+
+
+.detalle-error-icon {
+
+    color: #ef4444;
+
+    font-size: 30px;
+
+    margin-bottom: 12px;
+}
+
+
+.detalle-error h3 {
+
+    margin: 0 0 7px;
+
+    color: #334155;
+
+    font-size: 14px;
+}
+
+
+.detalle-error p {
+
+    margin: 0 0 6px;
+
+    color: #64748b;
+
+    font-size: 11px;
+}
+
+
+.detalle-error small {
+
+    color: #ef4444;
+
+    font-size: 9px;
+}
+
+
+/* =========================================================
+   BOTÓN VOLVER
+   ========================================================= */
+
+.btn-volver-reportes {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding:
+        7px
+        11px;
+
+    border: none;
+
+    border-radius: 6px;
+
+    background: #2563eb;
+
+    color: white;
+
+    font-size: 10px;
+
+    cursor: pointer;
+}
+
+
+.btn-volver-reportes:hover {
+
+    background: #1d4ed8;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .monitoreo-workspace {
+
+        grid-template-columns:
+            260px
+            minmax(0, 1fr);
+
+    }
+
+}
+
+
+@media (max-width: 750px) {
+
+    .monitoreo-filtros {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+    .monitoreo-status-filter {
+
+        width: 100%;
+
+        justify-content: space-between;
+
+    }
+
+    .monitoreo-workspace {
+
+        grid-template-columns: 1fr;
+
+        height: auto;
+
+    }
+
+    .monitoreo-reportes-panel {
+
+        height: 400px;
+
+    }
+
+    .monitoreo-detalle-panel {
+
+        height: 650px;
+
+    }
+
+}
+
+
+@media (max-width: 500px) {
+
+    .monitoreo-container {
+
+        padding:
+            15px
+            10px
+            30px;
+
+    }
+
+    .monitoreo-header h1 {
+
+        font-size: 17px;
+
+    }
+
+}
+/* =========================================================
+   INDICADORES DE ESTADO
+   ========================================================= */
+
+.status-indicator {
+
+    width: 9px;
+    height: 9px;
+
+    min-width: 9px;
+
+    border-radius: 50%;
+
+    margin-left: 8px;
+
+    background: #94a3b8;
+
+    display: inline-block;
+
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+
+/* =========================================================
+   VERDE - ÉXITO
+   ========================================================= */
+
+.status-indicator.green {
+
+    background: #16a34a;
+
+    box-shadow:
+        0 0 0 3px rgba(22,163,74,0.12);
+}
+
+
+/* =========================================================
+   AMARILLO - PENDIENTE
+   ========================================================= */
+
+.status-indicator.yellow {
+
+    background: #f59e0b;
+
+    box-shadow:
+        0 0 0 3px rgba(245,158,11,0.12);
+}
+
+
+/* =========================================================
+   ROJO - ERROR
+   ========================================================= */
+
+.status-indicator.red {
+
+    background: #ef4444;
+
+    box-shadow:
+        0 0 0 3px rgba(239,68,68,0.12);
+}
+
+
+/* =========================================================
+   GRIS - DESCONOCIDO
+   ========================================================= */
+
+.status-indicator.grey {
+
+    background: #94a3b8;
+
+    box-shadow:
+        0 0 0 3px rgba(148,163,184,0.12);
+}
+
+
+/* =========================================================
+   HOVER
+   ========================================================= */
+
+.report-link:hover .status-indicator {
+
+    transform: scale(1.2);
+
+}

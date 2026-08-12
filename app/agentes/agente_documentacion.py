@@ -1,27 +1,151 @@
-#from .base_agent import BaseAgent
-#from app.servicios.documentacion_service import DocumentacionService
-#from app.servicios.ollama_service import llamar_ollama
+# app/agentes/agente_documentacion.py
 
-# class AgenteDocumentacion(BaseAgent):
+from .base_agent import BaseAgent
+from app.servicios.documentacion_service import DocumentacionService
+from app.servicios.ollama_service import OllamaService
 
-#     def __init__(self):
-#         self.doc_service = DocumentacionService()
 
-#     def execute(self, pregunta, memoria=""):
-#         print("\n===== AGENTE DOCUMENTACION =====")
-        
-#         doc = self.doc_service.buscar(pregunta)
+class AgenteDocumentacion(BaseAgent):
 
-#         if not doc:
-#             return "No encontré documentación relacionada."
+    nombre = "AgenteDocumentacion"
 
-#         # Extraemos el contenido
-#         contenido_completo = doc["contenido"]
-#         contexto = contenido_completo[:8000]
+    descripcion = """
+    Agente especializado en búsqueda y consulta
+    de documentación interna.
 
-#         # Llamada a Ollama usando la estructura que espera tu servicio
-#         return llamar_ollama(
-#             pregunta=pregunta,
-#             contexto=f"Documento: {doc['archivo']}\n\nContenido: {contexto}",
-#             memoria=memoria[-2000:]
-#         )
+    Utiliza documentos, manuales, procedimientos
+    y conocimiento corporativo.
+    """
+
+
+    def __init__(self):
+
+        self.doc_service = DocumentacionService()
+        self.ollama = OllamaService()
+
+
+
+    def execute(self, pregunta, memoria=""):
+
+
+        print(
+            "[AGENTE DOCUMENTACION]",
+            pregunta
+        )
+
+
+        try:
+
+
+            # 1. Buscar documento relacionado
+
+            documento = self.doc_service.buscar(
+                pregunta
+            )
+
+
+            if not documento:
+
+
+                return {
+
+                    "tipo": "sin_documentacion",
+
+                    "agente": self.nombre,
+
+                    "respuesta":
+                        "No encontré documentación relacionada."
+
+                }
+
+
+
+            # 2. Extraer contexto
+
+            contenido = documento.get(
+                "contenido",
+                ""
+            )
+
+
+            if not contenido:
+
+
+                return {
+
+                    "tipo": "sin_contenido",
+
+                    "agente": self.nombre,
+
+                    "respuesta":
+                        "Encontré el documento, pero no contiene información."
+
+                }
+
+
+
+            contexto = contenido[:8000]
+
+
+
+            # 3. Consulta al modelo usando RAG
+
+            respuesta = self.ollama.llamar(
+
+                pregunta=pregunta,
+
+                contexto=contexto,
+
+                memoria=memoria,
+
+                system_prompt="""
+
+                Eres un asistente experto en documentación BI.
+
+                Reglas:
+
+                - Responde únicamente usando el contexto proporcionado.
+                - No inventes información.
+                - Si no encuentras la respuesta,
+                  indica que no existe evidencia suficiente.
+                - Responde siempre en español.
+
+                """
+
+            )
+
+
+
+            return {
+
+                "tipo": "respuesta_documentacion",
+
+                "agente": self.nombre,
+
+                "documento":
+                    documento.get("archivo"),
+
+                "respuesta": respuesta
+
+            }
+
+
+
+        except Exception as e:
+
+
+            print(
+                f"[ERROR AGENTE DOCUMENTACION] {str(e)}"
+            )
+
+
+            return {
+
+                "tipo": "error",
+
+                "agente": self.nombre,
+
+                "respuesta":
+                    f"Error consultando documentación: {str(e)}"
+
+            }

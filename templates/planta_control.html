@@ -1,0 +1,1626 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="planta-control-page">
+
+    <!-- =====================================================
+         CABECERA
+    ====================================================== -->
+
+    <div class="planta-control-header">
+
+        <div class="planta-control-title">
+
+            <div class="planta-control-icon">
+                📈
+            </div>
+
+            <div>
+
+                <h1>
+                    Planta Control
+                </h1>
+
+                <p>
+                    Evolución y comparación de la planta comercial
+                    y la planta de control BI.
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="planta-control-badge">
+            PLANTA CONTROL
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FILTROS GENERALES
+    ====================================================== -->
+
+    <div class="planta-control-filtros">
+
+        <div class="filtro-grupo">
+
+            <label for="filtroTecnologia">
+                Tecnología
+            </label>
+
+            <select id="filtroTecnologia">
+
+                <option value="TODAS" selected>
+                    TODAS
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="filtro-grupo">
+
+            <label for="filtroEstado">
+                Estado
+            </label>
+
+            <select id="filtroEstado">
+
+                <option value="ACTIVO" selected>
+                    ACTIVO
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="filtro-grupo">
+
+            <label for="filtroPeriodo">
+                Período
+            </label>
+
+            <input
+                type="text"
+                id="filtroPeriodo"
+                value="2026"
+                placeholder="Ej. 2026"
+            >
+
+        </div>
+
+
+        <button
+            type="button"
+            id="btnActualizarPlantas"
+            class="btn-actualizar-planta">
+
+            🔄 Actualizar
+
+        </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         RESUMEN
+    ====================================================== -->
+
+    <div class="planta-control-resumen">
+
+        <div class="planta-resumen-card">
+
+            <span class="resumen-icon azul">
+                📊
+            </span>
+
+            <div>
+
+                <strong id="resumenComercial">
+                    --
+                </strong>
+
+                <small>
+                    Registros Planta Comercial
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="planta-resumen-card">
+
+            <span class="resumen-icon verde">
+                🗄️
+            </span>
+
+            <div>
+
+                <strong id="resumenControl">
+                    --
+                </strong>
+
+                <small>
+                    Registros Planta Control BI
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="planta-resumen-card">
+
+            <span class="resumen-icon naranja">
+                ⚙️
+            </span>
+
+            <div>
+
+                <strong id="resumenTecnologia">
+                    TODAS
+                </strong>
+
+                <small>
+                    Tecnología seleccionada
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="planta-resumen-card">
+
+            <span class="resumen-icon morado">
+                📅
+            </span>
+
+            <div>
+
+                <strong id="resumenPeriodo">
+                    2026
+                </strong>
+
+                <small>
+                    Período seleccionado
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         PLANTA COMERCIAL
+    ====================================================== -->
+
+    <section class="planta-grafico-card">
+
+        <div class="planta-grafico-header">
+
+            <div class="planta-grafico-titulo">
+
+                <div class="grafico-header-icon comercial">
+                    🏢
+                </div>
+
+                <div>
+
+                    <h2>
+                        Planta Comercial
+                    </h2>
+
+                    <p>
+                        Evolución de la cantidad de activos
+                        por tecnología.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="btn-expandir-grafico"
+                data-grafico="graficoComercial"
+                title="Ampliar gráfico">
+
+                ⛶
+
+            </button>
+
+        </div>
+
+
+        <div
+            id="estadoGraficoComercial"
+            class="estado-grafico">
+
+            <div class="estado-grafico-icon">
+                ⏳
+            </div>
+
+            <strong>
+                Cargando gráfico...
+            </strong>
+
+        </div>
+
+
+        <div
+            id="graficoComercial"
+            class="grafico-planta">
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         PLANTA CONTROL BI
+    ====================================================== -->
+
+    <section class="planta-grafico-card">
+
+        <div class="planta-grafico-header">
+
+            <div class="planta-grafico-titulo">
+
+                <div class="grafico-header-icon control">
+                    🗄️
+                </div>
+
+                <div>
+
+                    <h2>
+                        Planta Control BI
+                    </h2>
+
+                    <p>
+                        Evolución de la cantidad de activos
+                        registrados en la planta de control BI.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="btn-expandir-grafico"
+                data-grafico="graficoControl"
+                title="Ampliar gráfico">
+
+                ⛶
+
+            </button>
+
+        </div>
+
+
+        <div
+            id="estadoGraficoControl"
+            class="estado-grafico">
+
+            <div class="estado-grafico-icon">
+                ⏳
+            </div>
+
+            <strong>
+                Cargando gráfico...
+            </strong>
+
+        </div>
+
+
+        <div
+            id="graficoControl"
+            class="grafico-planta">
+
+        </div>
+
+    </section>
+
+
+</div>
+
+
+<!-- =========================================================
+     MODAL PARA GRÁFICO AMPLIADO
+========================================================== -->
+
+<div
+    id="modalGraficoPlanta"
+    class="modal-grafico-planta">
+
+    <div
+        class="modal-grafico-overlay"
+        id="cerrarModalOverlay">
+    </div>
+
+
+    <div class="modal-grafico-contenido">
+
+        <div class="modal-grafico-header">
+
+            <div>
+
+                <h2 id="modalGraficoTitulo">
+                    Planta Control
+                </h2>
+
+                <span>
+                    Vista ampliada
+                </span>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="cerrarModalGrafico"
+                class="modal-grafico-cerrar">
+
+                ✕
+
+            </button>
+
+        </div>
+
+
+        <div
+            id="graficoModal"
+            class="grafico-modal">
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     PLOTLY
+========================================================== -->
+
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+     TEMPORALMENTE DENTRO DEL HTML
+========================================================== -->
+
+<script>
+
+(function () {
+
+    "use strict";
+
+
+    console.log(
+        "📊 Planta Control HTML inicializado"
+    );
+
+
+    /* ========================================================
+       COLORES POR TECNOLOGÍA
+    ======================================================== */
+
+    const COLORES = {
+
+        ADSL: "#F59E0B",
+
+        FTTH: "#2563EB",
+
+        HFC: "#16A34A"
+
+    };
+
+
+    /* ========================================================
+       ELEMENTOS
+    ======================================================== */
+
+    const tecnologiaSelect =
+        document.getElementById(
+            "filtroTecnologia"
+        );
+
+    const estadoSelect =
+        document.getElementById(
+            "filtroEstado"
+        );
+
+    const periodoInput =
+        document.getElementById(
+            "filtroPeriodo"
+        );
+
+    const btnActualizar =
+        document.getElementById(
+            "btnActualizarPlantas"
+        );
+
+
+    /* ========================================================
+       CARGAR OPCIONES
+    ======================================================== */
+
+    async function cargarOpciones() {
+
+        try {
+
+            console.log(
+                "🔄 Consultando /planta_opciones"
+            );
+
+
+            const response =
+                await fetch(
+                    "/planta_opciones"
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "HTTP " +
+                    response.status
+                );
+
+            }
+
+
+            const data =
+                await response.json();
+
+
+            console.log(
+                "✅ Opciones recibidas:",
+                data
+            );
+
+
+            /* ------------------------------------------------
+               TECNOLOGÍAS
+            ------------------------------------------------ */
+
+            tecnologiaSelect.innerHTML = "";
+
+
+            const tecnologias =
+                data.tecnologias || [
+                    "TODAS",
+                    "ADSL",
+                    "FTTH",
+                    "HFC"
+                ];
+
+
+            tecnologias.forEach(
+                tecnologia => {
+
+                    const option =
+                        document.createElement(
+                            "option"
+                        );
+
+                    option.value =
+                        tecnologia;
+
+                    option.textContent =
+                        tecnologia;
+
+
+                    if (
+                        tecnologia === "TODAS"
+                    ) {
+
+                        option.selected =
+                            true;
+
+                    }
+
+
+                    tecnologiaSelect
+                        .appendChild(
+                            option
+                        );
+
+                }
+            );
+
+
+            /* ------------------------------------------------
+               ESTADOS
+            ------------------------------------------------ */
+
+            estadoSelect.innerHTML = "";
+
+
+            const estados =
+                data.estados || [
+                    "ACTIVO"
+                ];
+
+
+            estados.forEach(
+                estado => {
+
+                    const option =
+                        document.createElement(
+                            "option"
+                        );
+
+                    option.value =
+                        estado;
+
+                    option.textContent =
+                        estado;
+
+
+                    if (
+                        estado === "ACTIVO"
+                    ) {
+
+                        option.selected =
+                            true;
+
+                    }
+
+
+                    estadoSelect
+                        .appendChild(
+                            option
+                        );
+
+                }
+            );
+
+
+            /* ------------------------------------------------
+               AÑO ACTUAL
+            ------------------------------------------------ */
+
+            const anioActual =
+                data.anio_actual ||
+                new Date()
+                    .getFullYear()
+                    .toString();
+
+
+            periodoInput.value =
+                anioActual;
+
+
+            actualizarResumen();
+
+
+        } catch (error) {
+
+            console.error(
+                "❌ Error cargando opciones:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /* ========================================================
+       OBTENER FILTROS
+    ======================================================== */
+
+    function obtenerFiltros() {
+
+        return {
+
+            tecnologia:
+                tecnologiaSelect.value ||
+                "TODAS",
+
+            estado:
+                estadoSelect.value ||
+                "ACTIVO",
+
+            periodo:
+                periodoInput.value.trim() ||
+                new Date()
+                    .getFullYear()
+                    .toString()
+
+        };
+
+    }
+
+
+    /* ========================================================
+       ACTUALIZAR RESUMEN
+    ======================================================== */
+
+    function actualizarResumen() {
+
+        const filtros =
+            obtenerFiltros();
+
+
+        document.getElementById(
+            "resumenTecnologia"
+        ).textContent =
+            filtros.tecnologia;
+
+
+        document.getElementById(
+            "resumenPeriodo"
+        ).textContent =
+            filtros.periodo;
+
+    }
+
+
+    /* ========================================================
+       CARGAR LOS DOS GRÁFICOS
+    ======================================================== */
+
+    async function cargarGraficos() {
+
+        const filtros =
+            obtenerFiltros();
+
+
+        actualizarResumen();
+
+
+        console.log(
+            "🔎 Filtros utilizados:",
+            filtros
+        );
+
+
+        const parametros =
+            new URLSearchParams({
+
+                tecnologia:
+                    filtros.tecnologia,
+
+                estado:
+                    filtros.estado,
+
+                periodo:
+                    filtros.periodo
+
+            });
+
+
+        mostrarEstado(
+            "estadoGraficoComercial",
+            "loading"
+        );
+
+
+        mostrarEstado(
+            "estadoGraficoControl",
+            "loading"
+        );
+
+
+        try {
+
+            const resultados =
+                await Promise.all([
+
+                    fetch(
+                        "/planta_datos1?" +
+                        parametros.toString()
+                    ),
+
+                    fetch(
+                        "/planta_datos2?" +
+                        parametros.toString()
+                    )
+
+                ]);
+
+
+            const response1 =
+                resultados[0];
+
+            const response2 =
+                resultados[1];
+
+
+            if (!response1.ok) {
+
+                throw new Error(
+                    "Error Planta Comercial: HTTP " +
+                    response1.status
+                );
+
+            }
+
+
+            if (!response2.ok) {
+
+                throw new Error(
+                    "Error Planta Control BI: HTTP " +
+                    response2.status
+                );
+
+            }
+
+
+            const datosComercial =
+                await response1.json();
+
+
+            const datosControl =
+                await response2.json();
+
+
+            console.log(
+                "🏢 Planta Comercial:",
+                datosComercial
+            );
+
+
+            console.log(
+                "🗄️ Planta Control BI:",
+                datosControl
+            );
+
+
+            /* ----------------------------------------------
+               RESUMEN
+            ---------------------------------------------- */
+
+            document.getElementById(
+                "resumenComercial"
+            ).textContent =
+                datosComercial.total ?? 0;
+
+
+            document.getElementById(
+                "resumenControl"
+            ).textContent =
+                datosControl.total ?? 0;
+
+
+            /* ----------------------------------------------
+               GRÁFICO 1
+            ---------------------------------------------- */
+
+            construirGrafico(
+
+                "graficoComercial",
+
+                datosComercial,
+
+                "Planta Comercial"
+
+            );
+
+
+            /* ----------------------------------------------
+               GRÁFICO 2
+            ---------------------------------------------- */
+
+            construirGrafico(
+
+                "graficoControl",
+
+                datosControl,
+
+                "Planta Control BI"
+
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "❌ Error cargando gráficos:",
+                error
+            );
+
+
+            mostrarEstado(
+                "estadoGraficoComercial",
+                "error"
+            );
+
+
+            mostrarEstado(
+                "estadoGraficoControl",
+                "error"
+            );
+
+        }
+
+    }
+
+
+    /* ========================================================
+       CONSTRUIR GRÁFICO
+    ======================================================== */
+
+    function construirGrafico(
+        id,
+        respuesta,
+        titulo
+    ) {
+
+        const contenedor =
+            document.getElementById(
+                id
+            );
+
+
+        if (!contenedor) {
+
+            console.error(
+                "No existe el contenedor:",
+                id
+            );
+
+            return;
+
+        }
+
+
+        /* ----------------------------------------------------
+           VALIDAR DATOS
+        ---------------------------------------------------- */
+
+        if (
+            !respuesta ||
+            !respuesta.success ||
+            !Array.isArray(
+                respuesta.datos
+            ) ||
+            respuesta.datos.length === 0
+        ) {
+
+            contenedor.innerHTML = "";
+
+            mostrarEstado(
+                id === "graficoComercial"
+                    ? "estadoGraficoComercial"
+                    : "estadoGraficoControl",
+                "empty"
+            );
+
+            return;
+
+        }
+
+
+        /* ----------------------------------------------------
+           OCULTAR ESTADO
+        ---------------------------------------------------- */
+
+        const estadoId =
+            id === "graficoComercial"
+                ? "estadoGraficoComercial"
+                : "estadoGraficoControl";
+
+
+        mostrarEstado(
+            estadoId,
+            "hidden"
+        );
+
+
+        /* ----------------------------------------------------
+           AGRUPAR POR TECNOLOGÍA
+        ---------------------------------------------------- */
+
+        const tecnologias = [
+            ...new Set(
+                respuesta.datos.map(
+                    item =>
+                        item.tecnologia
+                )
+            )
+        ];
+
+
+        const traces = [];
+
+
+        tecnologias.forEach(
+            tecnologia => {
+
+                const registros =
+                    respuesta.datos
+                        .filter(
+                            item =>
+                                item.tecnologia ===
+                                tecnologia
+                        )
+                        .sort(
+                            (a, b) =>
+                                a.periodo.localeCompare(
+                                    b.periodo
+                                )
+                        );
+
+
+                const color =
+                    COLORES[
+                        tecnologia
+                    ] ||
+                    registros[0]?.color ||
+                    "#64748B";
+
+
+                traces.push({
+
+                    x:
+                        registros.map(
+                            item =>
+                                item.periodo_label
+                        ),
+
+                    y:
+                        registros.map(
+                            item =>
+                                Number(
+                                    item.cantidad
+                                )
+                        ),
+
+                    type:
+                        "scatter",
+
+                    mode:
+                        "lines+markers",
+
+                    name:
+                        tecnologia,
+
+                    line: {
+
+                        color:
+                            color,
+
+                        width:
+                            3.5
+
+                    },
+
+                    marker: {
+
+                        color:
+                            color,
+
+                        size:
+                            8,
+
+                        line: {
+
+                            color:
+                                "#FFFFFF",
+
+                            width:
+                                1.5
+
+                        }
+
+                    },
+
+                    hovertemplate:
+
+                        "<b>" +
+                        tecnologia +
+                        "</b>" +
+
+                        "<br>%{x}" +
+
+                        "<br>" +
+
+                        "Cantidad: " +
+
+                        "<b>%{y:.3f} M</b>" +
+
+                        "<extra></extra>"
+
+                });
+
+            }
+        );
+
+
+        /* ----------------------------------------------------
+           LAYOUT
+        ---------------------------------------------------- */
+
+        const layout = {
+
+            height:
+                520,
+
+            margin: {
+
+                l:
+                    80,
+
+                r:
+                    40,
+
+                t:
+                    70,
+
+                b:
+                    85
+
+            },
+
+
+            paper_bgcolor:
+                "#FFFFFF",
+
+
+            plot_bgcolor:
+                "#FFFFFF",
+
+
+            font: {
+
+                family:
+                    "Segoe UI, Arial, sans-serif",
+
+                color:
+                    "#334155"
+
+            },
+
+
+            title: {
+
+                text:
+                    titulo,
+
+                x:
+                    0.02,
+
+                xanchor:
+                    "left",
+
+                font: {
+
+                    size:
+                        20,
+
+                    color:
+                        "#0F172A"
+
+                }
+
+            },
+
+
+            xaxis: {
+
+                title: {
+
+                    text:
+                        "Período",
+
+                    font: {
+
+                        size:
+                            14
+
+                    }
+
+                },
+
+                tickangle:
+                    -30,
+
+                showgrid:
+                    true,
+
+                gridcolor:
+                    "#E2E8F0",
+
+                zeroline:
+                    false
+
+            },
+
+
+            yaxis: {
+
+                title: {
+
+                    text:
+                        "Cantidad (Millones)",
+
+                    font: {
+
+                        size:
+                            14
+
+                    }
+
+                },
+
+                showgrid:
+                    true,
+
+                gridcolor:
+                    "#E2E8F0",
+
+                zeroline:
+                    false,
+
+                tickformat:
+                    ".3f"
+
+            },
+
+
+            legend: {
+
+                orientation:
+                    "h",
+
+                x:
+                    0,
+
+                y:
+                    1.08,
+
+                bgcolor:
+                    "rgba(255,255,255,0)"
+
+            },
+
+
+            hovermode:
+                "x unified"
+
+        };
+
+
+        /* ----------------------------------------------------
+           CONFIG
+        ---------------------------------------------------- */
+
+        const config = {
+
+            responsive:
+                true,
+
+            displaylogo:
+                false,
+
+            scrollZoom:
+                true,
+
+            modeBarButtonsToRemove: [
+
+                "lasso2d",
+
+                "select2d"
+
+            ]
+
+        };
+
+
+        /* ----------------------------------------------------
+           PINTAR
+        ---------------------------------------------------- */
+        console.log("========== DEBUG GRÁFICO ==========");
+        console.log("Contenedor:", contenedor);
+        console.log("ID:", id);
+        console.log("Ancho:", contenedor.offsetWidth);
+        console.log("Alto:", contenedor.offsetHeight);
+        console.log("Respuesta:", respuesta);
+        console.log("Traces:", traces);
+        console.log("Plotly:", typeof Plotly);
+        console.log("====================================");
+        Plotly.newPlot(
+
+            contenedor,
+
+            traces,
+
+            layout,
+
+            config
+
+        );
+
+    }
+
+
+    /* ========================================================
+       ESTADOS DEL GRÁFICO
+    ======================================================== */
+
+    function mostrarEstado(
+        id,
+        estado
+    ) {
+
+        const elemento =
+            document.getElementById(
+                id
+            );
+
+
+        if (!elemento) {
+            return;
+        }
+
+
+        if (
+            estado === "hidden"
+        ) {
+
+            elemento.style.display =
+                "none";
+
+            return;
+
+        }
+
+
+        elemento.style.display =
+            "flex";
+
+
+        if (
+            estado === "loading"
+        ) {
+
+            elemento.innerHTML = `
+
+                <div class="estado-grafico-icon">
+                    ⏳
+                </div>
+
+                <strong>
+                    Cargando gráfico...
+                </strong>
+
+            `;
+
+        }
+
+
+        else if (
+            estado === "error"
+        ) {
+
+            elemento.innerHTML = `
+
+                <div class="estado-grafico-icon">
+                    ⚠️
+                </div>
+
+                <strong>
+                    No se pudo generar el gráfico
+                </strong>
+
+                <span>
+                    Revise la consola del navegador
+                    para conocer el detalle.
+                </span>
+
+            `;
+
+        }
+
+
+        else if (
+            estado === "empty"
+        ) {
+
+            elemento.innerHTML = `
+
+                <div class="estado-grafico-icon">
+                    📊
+                </div>
+
+                <strong>
+                    Sin datos disponibles
+                </strong>
+
+                <span>
+                    No existen registros para
+                    los filtros seleccionados.
+                </span>
+
+            `;
+
+        }
+
+    }
+
+
+    /* ========================================================
+       MODAL
+    ======================================================== */
+
+    function abrirGraficoGrande(
+        id
+    ) {
+
+        const origen =
+            document.getElementById(
+                id
+            );
+
+
+        if (!origen) {
+            return;
+        }
+
+
+        const modal =
+            document.getElementById(
+                "modalGraficoPlanta"
+            );
+
+
+        const destino =
+            document.getElementById(
+                "graficoModal"
+            );
+
+
+        const titulo =
+            document.getElementById(
+                "modalGraficoTitulo"
+            );
+
+
+        titulo.textContent =
+            id === "graficoComercial"
+                ? "Planta Comercial"
+                : "Planta Control BI";
+
+
+        modal.classList.add(
+            "mostrar"
+        );
+
+
+        /*
+         * Obtenemos la configuración actual
+         */
+
+        const data =
+            origen.data || [];
+
+
+        const layout =
+            {
+
+                ...(origen.layout || {}),
+
+                height:
+                    Math.max(
+                        600,
+                        window.innerHeight *
+                        0.70
+                    ),
+
+                autosize:
+                    true
+
+            };
+
+
+        Plotly.newPlot(
+
+            destino,
+
+            data,
+
+            layout,
+
+            {
+
+                responsive:
+                    true,
+
+                displaylogo:
+                    false,
+
+                scrollZoom:
+                    true
+
+            }
+
+        );
+
+    }
+
+
+    /* ========================================================
+       CERRAR MODAL
+    ======================================================== */
+
+    function cerrarModal() {
+
+        const modal =
+            document.getElementById(
+                "modalGraficoPlanta"
+            );
+
+
+        modal.classList.remove(
+            "mostrar"
+        );
+
+
+        const grafico =
+            document.getElementById(
+                "graficoModal"
+            );
+
+
+        if (
+            grafico &&
+            window.Plotly
+        ) {
+
+            Plotly.purge(
+                grafico
+            );
+
+        }
+
+    }
+
+
+    /* ========================================================
+       EVENTOS
+    ======================================================== */
+
+    btnActualizar.addEventListener(
+        "click",
+        function () {
+
+            cargarGraficos();
+
+        }
+    );
+
+
+    tecnologiaSelect.addEventListener(
+        "change",
+        function () {
+
+            cargarGraficos();
+
+        }
+    );
+
+
+    estadoSelect.addEventListener(
+        "change",
+        function () {
+
+            cargarGraficos();
+
+        }
+    );
+
+
+    periodoInput.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                cargarGraficos();
+
+            }
+
+        }
+    );
+
+
+    /* ========================================================
+       BOTONES AMPLIAR
+    ======================================================== */
+
+    document
+        .querySelectorAll(
+            ".btn-expandir-grafico"
+        )
+        .forEach(
+            boton => {
+
+                boton.addEventListener(
+                    "click",
+                    function () {
+
+                        const id =
+                            this.dataset.grafico;
+
+                        abrirGraficoGrande(
+                            id
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+    /* ========================================================
+       CERRAR MODAL
+    ======================================================== */
+
+    document
+        .getElementById(
+            "cerrarModalGrafico"
+        )
+        .addEventListener(
+            "click",
+            cerrarModal
+        );
+
+
+    document
+        .getElementById(
+            "cerrarModalOverlay"
+        )
+        .addEventListener(
+            "click",
+            cerrarModal
+        );
+
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                event.key === "Escape"
+            ) {
+
+                cerrarModal();
+
+            }
+
+        }
+    );
+
+
+    /* ========================================================
+       INICIO
+    ======================================================== */
+
+    cargarOpciones()
+        .then(
+            () => cargarGraficos()
+        );
+
+
+})();
+
+</script>
+
+{% endblock %}

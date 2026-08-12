@@ -1,59 +1,116 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Gráficos Planta USUA MTC</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background: #f9f9f9;
-        }
+<!-- =====================================================
+     ENCABEZADO
+     ===================================================== -->
 
-        h1 {
-            text-align: center;
-            margin-top: 0;
-            margin-bottom: 20px;
-        }
+<section class="planta-usua-mtc-header">
 
-        /* 🔹 Contenedor principal: dos filas */
-        .grid-container {
-            display: grid;
-            grid-template-rows: auto auto;
-            gap: 20px;
-            width: 100%;
-        }
-
-        /* 🔹 Contenedor fila inferior con 2 columnas */
-        .bottom-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        .grafico-container img {
-            width: 100%;
-            max-height: 400px;
-            height: auto;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            background: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-    </style>
-</head>
-<body>
-    <h1>PLANTA USUA MTC</h1>
-
-    <div class="grid-container">        
-        <!-- 🔹 Imagen 1 (arriba) -->
-        <div class="grafico-container">
-            <img src="{{ url_for('planta_usua_mtc.imagenes', filename=img1) }}" alt="Gráfico 1">
-        </div>
-        <div class="grafico-container">
-            <img src="{{ url_for('planta_usua_mtc.imagenes', filename=img2) }}" alt="Gráfico 2">
-        </div>              
+    <div class="planta-usua-mtc-header-icon">
+        <i class="fas fa-users"></i>
     </div>
-</body>
-</html>
+
+    <div class="planta-usua-mtc-header-info">
+
+        <h1>USUA MTC</h1>
+
+        <p>
+            Evolución y análisis de usuarios de la planta MTC
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     GRÁFICOS
+     ===================================================== -->
+
+<div class="planta-usua-mtc-grid">
+
+
+    <!-- =================================================
+         GRÁFICO 1
+         ================================================= -->
+
+    <section class="planta-usua-mtc-card">
+
+        <div class="planta-usua-mtc-card-header">
+
+            <div class="planta-usua-mtc-title">
+
+                <div class="planta-usua-mtc-card-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+
+                <div>
+
+                    <h2>
+                        Evolución USUA MTC
+                    </h2>
+
+                    <span>
+                        Indicadores de evolución
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="planta-usua-mtc-chart">
+
+            <img
+                src="{{ url_for('planta_usua_mtc.imagenes', filename=img1) }}"
+                alt="Gráfico evolución USUA MTC"
+            >
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         GRÁFICO 2
+         ================================================= -->
+
+    <section class="planta-usua-mtc-card">
+
+        <div class="planta-usua-mtc-card-header">
+
+            <div class="planta-usua-mtc-title">
+
+                <div class="planta-usua-mtc-card-icon">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+
+                <div>
+
+                    <h2>
+                        Comparativo USUA MTC
+                    </h2>
+
+                    <span>
+                        Análisis comparativo
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="planta-usua-mtc-chart">
+
+            <img
+                src="{{ url_for('planta_usua_mtc.imagenes', filename=img2) }}"
+                alt="Gráfico comparativo USUA MTC"
+            >
+
+        </div>
+
+    </section>
+
+</div>

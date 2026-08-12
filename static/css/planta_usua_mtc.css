@@ -1,0 +1,310 @@
+/* =========================================================
+   USUA MTC
+   ========================================================= */
+
+.planta-usua-mtc-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 14px 18px;
+    margin-bottom: 12px;
+
+    background: linear-gradient(
+        135deg,
+        #2563eb,
+        #1d4ed8
+    );
+
+    border-radius: 10px;
+
+    color: #ffffff;
+
+    box-shadow:
+        0 4px 12px rgba(37, 99, 235, 0.18);
+}
+
+
+/* =========================================================
+   ICONO HEADER
+   ========================================================= */
+
+.planta-usua-mtc-header-icon {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    background: rgba(255, 255, 255, 0.16);
+
+    border-radius: 8px;
+
+    font-size: 20px;
+}
+
+
+.planta-usua-mtc-header-info {
+    min-width: 0;
+}
+
+
+.planta-usua-mtc-header-info h1 {
+    margin: 0;
+
+    font-size: 20px;
+    line-height: 1.2;
+
+    font-weight: 700;
+
+    color: #ffffff;
+}
+
+
+.planta-usua-mtc-header-info p {
+    margin: 3px 0 0;
+
+    font-size: 11px;
+    line-height: 1.3;
+
+    color: rgba(255, 255, 255, 0.88);
+}
+
+
+/* =========================================================
+   GRID
+   ========================================================= */
+
+.planta-usua-mtc-grid {
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    gap: 12px;
+
+    width: 100%;
+}
+
+
+/* =========================================================
+   CARD
+   ========================================================= */
+
+.planta-usua-mtc-card {
+    width: 100%;
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border: 1px solid #dbe3ef;
+
+    border-radius: 9px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 2px 7px rgba(15, 23, 42, 0.05);
+}
+
+
+/* =========================================================
+   HEADER CARD
+   ========================================================= */
+
+.planta-usua-mtc-card-header {
+    display: flex;
+    align-items: center;
+
+    min-height: 48px;
+
+    padding: 8px 12px;
+
+    box-sizing: border-box;
+
+    border-bottom: 1px solid #e5eaf1;
+
+    background: #ffffff;
+}
+
+
+.planta-usua-mtc-title {
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+}
+
+
+/* =========================================================
+   ICONO CARD
+   ========================================================= */
+
+.planta-usua-mtc-card-icon {
+    width: 30px;
+    height: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    border-radius: 7px;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   TITULO
+   ========================================================= */
+
+.planta-usua-mtc-title h2 {
+    margin: 0;
+
+    font-size: 13px;
+    line-height: 1.25;
+
+    font-weight: 700;
+
+    color: #1e293b;
+}
+
+
+.planta-usua-mtc-title span {
+    display: block;
+
+    margin-top: 2px;
+
+    font-size: 9px;
+
+    color: #94a3b8;
+}
+
+
+/* =========================================================
+   CONTENEDOR GRÁFICO
+   ========================================================= */
+
+.planta-usua-mtc-chart {
+    width: 100%;
+
+    padding: 8px;
+
+    box-sizing: border-box;
+
+    background: #f8fafc;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* =========================================================
+   IMAGEN
+   ========================================================= */
+
+.planta-usua-mtc-chart img {
+    display: block;
+
+    width: 100%;
+
+    max-width: 100%;
+
+    height: auto;
+
+    max-height: 430px;
+
+    object-fit: contain;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 7px;
+
+    box-sizing: border-box;
+
+    box-shadow:
+        0 1px 4px rgba(15, 23, 42, 0.05);
+}
+
+
+/* =========================================================
+   HOVER
+   ========================================================= */
+
+.planta-usua-mtc-card {
+    transition:
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.planta-usua-mtc-card:hover {
+    box-shadow:
+        0 5px 14px rgba(15, 23, 42, 0.08);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .planta-usua-mtc-header {
+        padding: 12px 14px;
+    }
+
+    .planta-usua-mtc-header-info h1 {
+        font-size: 17px;
+    }
+
+    .planta-usua-mtc-card-header {
+        padding: 7px 10px;
+    }
+
+    .planta-usua-mtc-chart {
+        padding: 6px;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .planta-usua-mtc-header {
+        gap: 10px;
+    }
+
+    .planta-usua-mtc-header-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+    }
+
+    .planta-usua-mtc-header-info h1 {
+        font-size: 15px;
+    }
+
+    .planta-usua-mtc-header-info p {
+        font-size: 9px;
+    }
+
+    .planta-usua-mtc-title h2 {
+        font-size: 12px;
+    }
+
+}

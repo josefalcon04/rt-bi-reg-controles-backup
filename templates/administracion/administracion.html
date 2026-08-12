@@ -1,0 +1,359 @@
+{% extends "base.html" %}
+
+{% block title %}
+Administración - RT BI
+{% endblock %}
+
+{% block estilos_extra %}
+
+{% endblock %}
+
+{% block contenido %}
+
+<!-- =====================================================
+     ENCABEZADO
+     ===================================================== -->
+
+<div class="administracion-header">
+
+    <div class="administracion-header-icon">
+
+        <i class="fa-solid fa-gears"></i>
+
+    </div>
+
+
+    <div class="administracion-header-info">
+
+        <h1>
+            Administración
+        </h1>
+
+        <p>
+            Gestión de usuarios, roles, permisos y configuración de la plataforma
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     TARJETAS DE ADMINISTRACIÓN
+     ===================================================== -->
+
+<div class="administracion-grid">
+
+
+    <!-- =================================================
+         USUARIOS
+         ================================================= -->
+
+    <a
+        href="{{ url_for('usuarios.index') }}"
+        class="administracion-card"
+    >
+
+        <div class="administracion-card-icon usuarios">
+
+            <i class="fa-solid fa-users"></i>
+
+        </div>
+
+
+        <div class="administracion-card-content">
+
+            <h2>
+                Usuarios
+            </h2>
+
+            <p>
+                Crear, editar, activar y administrar los usuarios de la plataforma.
+            </p>
+
+            <span class="administracion-card-link">
+
+                Gestionar usuarios
+
+                <i class="fa-solid fa-arrow-right"></i>
+
+            </span>
+
+        </div>
+
+    </a>
+
+
+    <!-- =================================================
+         ROLES
+         ================================================= -->
+
+    <a
+        href="{{ url_for('roles.index') }}"
+        class="administracion-card"
+    >
+
+        <div class="administracion-card-icon roles">
+
+            <i class="fa-solid fa-user-shield"></i>
+
+        </div>
+
+
+        <div class="administracion-card-content">
+
+            <h2>
+                Roles
+            </h2>
+
+            <p>
+                Crear y administrar los roles disponibles en la aplicación.
+            </p>
+
+            <span class="administracion-card-link">
+
+                Gestionar roles
+
+                <i class="fa-solid fa-arrow-right"></i>
+
+            </span>
+
+        </div>
+
+    </a>
+
+
+    <!-- =================================================
+         PERMISOS
+         ================================================= -->
+
+    <a
+        href="{{ url_for('permisos.index') }}"
+        class="administracion-card"
+    >
+
+        <div class="administracion-card-icon permisos">
+
+            <i class="fa-solid fa-key"></i>
+
+        </div>
+
+
+        <div class="administracion-card-content">
+
+            <h2>
+                Permisos
+            </h2>
+
+            <p>
+                Administrar los permisos disponibles para los diferentes roles.
+            </p>
+
+            <span class="administracion-card-link">
+
+                Gestionar permisos
+
+                <i class="fa-solid fa-arrow-right"></i>
+
+            </span>
+
+        </div>
+
+    </a>
+
+
+    <!-- =================================================
+         MENÚS
+         ================================================= -->
+
+    <a
+        href="{{ url_for('menus.index') }}"
+        class="administracion-card"
+    >
+
+        <div class="administracion-card-icon menus">
+
+            <i class="fa-solid fa-list"></i>
+
+        </div>
+
+
+        <div class="administracion-card-content">
+
+            <h2>
+                Menús y módulos
+            </h2>
+
+            <p>
+                Administrar los módulos y accesos disponibles para los usuarios.
+            </p>
+
+            <span class="administracion-card-link">
+
+                Gestionar módulos
+
+                <i class="fa-solid fa-arrow-right"></i>
+
+            </span>
+
+        </div>
+
+    </a>
+
+
+</div>
+
+
+<!-- =====================================================
+     RESUMEN DE SEGURIDAD
+     ===================================================== -->
+
+<div class="administracion-panel">
+
+
+    <div class="administracion-panel-header">
+
+        <div>
+
+            <h2>
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+                Seguridad y acceso
+
+            </h2>
+
+            <p>
+                Control centralizado de acceso a RT BI
+            </p>
+
+        </div>
+
+
+        <div class="administracion-status">
+
+            <span class="administracion-status-dot"></span>
+
+            Sistema activo
+
+        </div>
+
+    </div>
+
+
+    <div class="administracion-security-grid">
+
+
+        <!-- =================================================
+             USUARIOS
+             ================================================= -->
+
+        <div class="security-item">
+
+            <div class="security-icon blue">
+
+                <i class="fa-solid fa-users"></i>
+
+            </div>
+
+            <div>
+
+                <strong>
+                    Usuarios
+                </strong>
+
+                <span>
+                    Administración de cuentas
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             ROLES
+             ================================================= -->
+
+        <div class="security-item">
+
+            <div class="security-icon purple">
+
+                <i class="fa-solid fa-user-shield"></i>
+
+            </div>
+
+            <div>
+
+                <strong>
+                    Roles
+                </strong>
+
+                <span>
+                    Perfiles de acceso
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             PERMISOS
+             ================================================= -->
+
+        <div class="security-item">
+
+            <div class="security-icon orange">
+
+                <i class="fa-solid fa-key"></i>
+
+            </div>
+
+            <div>
+
+                <strong>
+                    Permisos
+                </strong>
+
+                <span>
+                    Autorizaciones del sistema
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             CONTROL DE ACCESO
+             ================================================= -->
+
+        <div class="security-item">
+
+            <div class="security-icon green">
+
+                <i class="fa-solid fa-lock"></i>
+
+            </div>
+
+            <div>
+
+                <strong>
+                    Control de acceso
+                </strong>
+
+                <span>
+                    Seguridad de módulos
+                </span>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+{% endblock %}

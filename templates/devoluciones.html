@@ -1,456 +1,1175 @@
-<!DOCTYPE html>
-<html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <title>DASHBOARD DEVOLUCIONES</title>
+{% extends "base.html" %}
 
-        <!-- 📊 Plotly -->
-        <script src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
+{% block contenido %}
 
-        <!-- 🎯 CSS -->
-        <link rel="stylesheet" href="/static/css/devoluciones.css">
-    </head>
+<div class="devoluciones-page">
 
-    <body>
-        <div id="loading"
-            style="display:none; text-align:center; padding:30px; font-size:20px;">
-            ⏳ Cargando dashboard...
+    <!-- =====================================================
+         ENCABEZADO
+         ===================================================== -->
+
+    <section class="devoluciones-header">
+
+        <div class="devoluciones-header-icon">
+            <i class="fas fa-undo-alt"></i>
         </div>
 
-        <div class="dashboard-container">
+        <div class="devoluciones-header-info">
 
-            <h2 class="titulo">📊 DASHBOARD DE DEVOLUCIONES</h2>
+            <h1>Dashboard de Devoluciones</h1>
 
-            <!-- 🎯 FILTROS -->
-            <div class="filtros">
-                <select id="year"></select>
-                <select id="month"><option value>Mes</option></select>
-                <select id="day"><option value>Día</option></select>
+            <p>
+                Análisis y seguimiento de devoluciones
+            </p>
 
-                <select id="producto"><option value>Producto</option></select>
-                <select id="comentario"><option
-                        value>Comentario</option></select>
-                <select id="resultado"><option value>Resultado</option></select>
+        </div>
 
-                <button onclick="cargar()">Filtrar</button>
-                <button onclick="resetFiltros()">Limpiar</button>
+    </section>
+
+
+    <!-- =====================================================
+         FILTROS
+         ===================================================== -->
+
+    <section class="devoluciones-filtros">
+
+        <div class="filtro-item">
+            <label>Año</label>
+            <select id="year"></select>
+        </div>
+
+        <div class="filtro-item">
+            <label>Mes</label>
+            <select id="month">
+                <option value="">Mes</option>
+            </select>
+        </div>
+
+        <div class="filtro-item">
+            <label>Día</label>
+            <select id="day">
+                <option value="">Día</option>
+            </select>
+        </div>
+
+        <div class="filtro-item">
+            <label>Producto</label>
+            <select id="producto">
+                <option value="">Producto</option>
+            </select>
+        </div>
+
+        <div class="filtro-item">
+            <label>Comentario</label>
+            <select id="comentario">
+                <option value="">Comentario</option>
+            </select>
+        </div>
+
+        <div class="filtro-item">
+            <label>Resultado</label>
+            <select id="resultado">
+                <option value="">Resultado</option>
+            </select>
+        </div>
+
+        <div class="filtro-actions">
+
+            <button
+                type="button"
+                class="btn-aplicar"
+                onclick="cargar()">
+                <i class="fas fa-filter"></i>
+                Filtrar
+            </button>
+
+            <button
+                type="button"
+                class="btn-limpiar"
+                onclick="resetFiltros()">
+                <i class="fas fa-eraser"></i>
+                Limpiar
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         LOADING
+         ===================================================== -->
+
+    <div
+        id="loading"
+        class="devoluciones-loading"
+        style="display:none;">
+
+        <i class="fas fa-spinner fa-spin"></i>
+
+        <span>Cargando dashboard...</span>
+
+    </div>
+
+
+    <!-- =====================================================
+         KPIs
+         ===================================================== -->
+
+    <section
+        class="kpis"
+        id="kpis">
+    </section>
+
+
+    <!-- =====================================================
+         REINTENTOS
+         ===================================================== -->
+
+    <section class="reintentos-card">
+
+        <div class="section-title">
+
+            <div class="section-title-icon">
+                <i class="fas fa-sync-alt"></i>
             </div>
 
-            <!-- 🔥 KPIs -->
-            <div class="kpis" id="kpis"></div>
-            <div class="card reintentos-card">
-    <h4>🔁 REINTENTOS</h4>
+            <div>
+                <h3>Reintentos</h3>
+                <span>Detalle de reintentos por resultado</span>
+            </div>
 
-    <table class="tabla-reintentos">
-        <thead>
-            <tr>
-                <th>RESULTADO</th>
-                <th>TOTAL</th>
-                <th>R1</th>
-                <th>R2</th>
-                <th>R3</th>
-                <th>R4</th>
-            </tr>
-        </thead>
-        <tbody id="reintentos-body">
-        </tbody>
-    </table>
+        </div>
+
+
+        <div class="tabla-wrapper">
+
+            <table class="tabla-reintentos">
+
+                <thead>
+
+                    <tr>
+                        <th>RESULTADO</th>
+                        <th>TOTAL</th>
+                        <th>R1</th>
+                        <th>R2</th>
+                        <th>R3</th>
+                        <th>R4</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="reintentos-body">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         GRÁFICOS
+         ===================================================== -->
+
+    <section class="charts">
+
+        <div class="chart-card">
+            <div id="line"></div>
+        </div>
+
+        <div class="chart-card">
+            <div id="resultado_pie"></div>
+        </div>
+
+        <div class="chart-card">
+            <div id="producto_pie"></div>
+        </div>
+
+        <div class="chart-card">
+            <div id="comentario_bar"></div>
+        </div>
+
+    </section>
+
 </div>
 
-            <!-- 📊 GRÁFICOS -->
-            <div class="charts">
-                <div id="line"></div>
-                <div id="resultado_pie"></div>
-                <div id="producto_pie"></div>
-                <div id="comentario_bar"></div>
-            </div>
 
-        </div>
+<!-- =====================================================
+     PLOTLY
+     ===================================================== -->
 
-        <script>
+<script src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
 
-// =========================
-// 🎯 FILTROS FECHA
-// =========================
+
+<!-- =====================================================
+     JAVASCRIPT ACTUAL
+     ===================================================== -->
+
+<script>
+
+// =========================================================
+// FILTROS FECHA
+// =========================================================
+
 async function cargarFiltros(){
+
     let res = await fetch("/devoluciones/filtros");
     let data = await res.json();
 
     let yearSelect = document.getElementById("year");
+
     yearSelect.innerHTML = "";
 
-    data.years.forEach(y => yearSelect.add(new Option(y, y)));
+    data.years.forEach(y => {
+        yearSelect.add(new Option(y, y));
+    });
 
     yearSelect.onchange = async () => {
+
         await cargarMeses();
         await cargar();
+
     };
 
     await cargarMeses();
 }
 
+
+// =========================================================
+// MESES
+// =========================================================
+
 async function cargarMeses(){
+
     let year = document.getElementById("year").value;
 
-    let res = await fetch(`/devoluciones/meses?year=${year}`);
+    let res = await fetch(
+        `/devoluciones/meses?year=${year}`
+    );
+
     let data = await res.json();
 
-    let monthSelect = document.getElementById("month");
-    monthSelect.innerHTML = `<option value="">Mes</option>`;
+    let monthSelect =
+        document.getElementById("month");
 
-    data.months.forEach(m => monthSelect.add(new Option(m, m)));
+    monthSelect.innerHTML =
+        `<option value="">Mes</option>`;
+
+    data.months.forEach(m => {
+
+        monthSelect.add(
+            new Option(m, m)
+        );
+
+    });
 
     monthSelect.onchange = async () => {
+
         await cargarDias();
         await cargar();
+
     };
 
     await cargarDias();
 }
 
-async function cargarDias(){
-    let year = document.getElementById("year").value;
-    let month = document.getElementById("month").value;
 
-    let res = await fetch(`/devoluciones/dias?year=${year}&month=${month}`);
+// =========================================================
+// DÍAS
+// =========================================================
+
+async function cargarDias(){
+
+    let year =
+        document.getElementById("year").value;
+
+    let month =
+        document.getElementById("month").value;
+
+    let res = await fetch(
+        `/devoluciones/dias?year=${year}&month=${month}`
+    );
+
     let data = await res.json();
 
-    let daySelect = document.getElementById("day");
-    daySelect.innerHTML = `<option value="">Día</option>`;
+    let daySelect =
+        document.getElementById("day");
 
-    data.days.forEach(d => daySelect.add(new Option(d, d)));
+    daySelect.innerHTML =
+        `<option value="">Día</option>`;
 
-    daySelect.onchange = async () => cargar();
+    data.days.forEach(d => {
+
+        daySelect.add(
+            new Option(d, d)
+        );
+
+    });
+
+    daySelect.onchange = cargar;
 }
 
-// =========================
-// 🎯 CATÁLOGOS
-// =========================
+
+// =========================================================
+// CATÁLOGOS
+// =========================================================
+
 async function cargarCatalogos(){
-    let res = await fetch("/devoluciones/data_full");
-    let data = await res.json();
 
-    let productoSel = document.getElementById("producto");
-    let comentarioSel = document.getElementById("comentario");
-    let resultadoSel = document.getElementById("resultado");
+    let res =
+        await fetch("/devoluciones/data_full");
 
-    productoSel.innerHTML = `<option value="">Producto</option>`;
-    comentarioSel.innerHTML = `<option value="">Comentario</option>`;
-    resultadoSel.innerHTML = `<option value="">Resultado</option>`;
+    let data =
+        await res.json();
 
-    [...new Set(data.map(x => x.PRODUCTO))].forEach(x => productoSel.add(new Option(x,x)));
-    [...new Set(data.map(x => x.COMENTARIO))].forEach(x => comentarioSel.add(new Option(x,x)));
-    [...new Set(data.map(x => x.RESULTADO_NC))].forEach(x => resultadoSel.add(new Option(x,x)));
+    let productoSel =
+        document.getElementById("producto");
+
+    let comentarioSel =
+        document.getElementById("comentario");
+
+    let resultadoSel =
+        document.getElementById("resultado");
+
+
+    productoSel.innerHTML =
+        `<option value="">Producto</option>`;
+
+    comentarioSel.innerHTML =
+        `<option value="">Comentario</option>`;
+
+    resultadoSel.innerHTML =
+        `<option value="">Resultado</option>`;
+
+
+    [...new Set(
+        data.map(x => x.PRODUCTO)
+    )].forEach(x => {
+
+        productoSel.add(
+            new Option(x, x)
+        );
+
+    });
+
+
+    [...new Set(
+        data.map(x => x.COMENTARIO)
+    )].forEach(x => {
+
+        comentarioSel.add(
+            new Option(x, x)
+        );
+
+    });
+
+
+    [...new Set(
+        data.map(x => x.RESULTADO_NC)
+    )].forEach(x => {
+
+        resultadoSel.add(
+            new Option(x, x)
+        );
+
+    });
+
 
     productoSel.onchange = cargar;
     comentarioSel.onchange = cargar;
     resultadoSel.onchange = cargar;
+
 }
 
-// =========================
-// 📊 DATA
-// =========================
+
+// =========================================================
+// CARGAR DASHBOARD
+// =========================================================
+
 async function cargar(){
-    
-    document.getElementById("loading").style.display = "block";
-    document.getElementById("kpis").style.display = "none";
-    document.querySelector(".charts").style.display = "none";
-    
-    let year = document.getElementById("year").value;
-    let month = document.getElementById("month").value;
-    let day = document.getElementById("day").value;
 
-    let producto = document.getElementById("producto").value;
-    let comentario = document.getElementById("comentario").value;
-    let resultado = document.getElementById("resultado").value;
+    document.getElementById(
+        "loading"
+    ).style.display = "flex";
 
-    let res = await fetch(`/devoluciones/data?year=${year}&month=${month}&day=${day}&producto=${producto}&comentario=${comentario}&resultado=${resultado}`);
-    let data = await res.json();
 
-    // =========================
-    // 🔥 KPIs
-    // =========================
+    document.getElementById(
+        "kpis"
+    ).style.display = "none";
 
-    // =========================
-// 🔥 KPIs
-// =========================
 
-    let total = data.kpis.total_registros || 0;
-    let monto = data.kpis.total_monto || 0;
+    document.querySelector(
+        ".charts"
+    ).style.display = "none";
 
-    let ok = data.kpis.ok || 0;
-    let nok = data.kpis.nok || 0;
 
-    let pctOK = data.kpis.porc_ok || 0;
-    let pctNOK = data.kpis.porc_nok || 0;
+    let year =
+        document.getElementById("year").value;
 
+    let month =
+        document.getElementById("month").value;
+
+    let day =
+        document.getElementById("day").value;
+
+    let producto =
+        document.getElementById("producto").value;
+
+    let comentario =
+        document.getElementById("comentario").value;
+
+    let resultado =
+        document.getElementById("resultado").value;
+
+
+    let res = await fetch(
+        `/devoluciones/data?year=${year}` +
+        `&month=${month}` +
+        `&day=${day}` +
+        `&producto=${producto}` +
+        `&comentario=${comentario}` +
+        `&resultado=${resultado}`
+    );
+
+
+    let data =
+        await res.json();
+
+
+    // =====================================================
+    // KPIs
+    // =====================================================
+
+    let total =
+        data.kpis.total_registros || 0;
+
+    let monto =
+        data.kpis.total_monto || 0;
+
+    let ok =
+        data.kpis.ok || 0;
+
+    let nok =
+        data.kpis.nok || 0;
+
+    let pctOK =
+        data.kpis.porc_ok || 0;
+
+    let pctNOK =
+        data.kpis.porc_nok || 0;
+
+
+    // =====================================================
     // SUCCESS - MONTO
-    let successMonto = data.resultado
-        .filter(x => String(x.RESULTADO_NC).toUpperCase().includes("SUCCESS"))
-        .reduce((a, b) => a + Number(b.MONTO_SOLES || 0), 0);
+    // =====================================================
 
+    let successMonto =
+        data.resultado
+
+        .filter(x =>
+            String(x.RESULTADO_NC)
+            .toUpperCase()
+            .includes("SUCCESS")
+        )
+
+        .reduce(
+            (a, b) =>
+                a + Number(
+                    b.MONTO_SOLES || 0
+                ),
+            0
+        );
+
+
+    // =====================================================
     // REJECT - MONTO
-    let rejectMonto = data.resultado
-        .filter(x => String(x.RESULTADO_NC).toUpperCase().includes("REJECT"))
-        .reduce((a, b) => a + Number(b.MONTO_SOLES || 0), 0);
+    // =====================================================
 
+    let rejectMonto =
+        data.resultado
+
+        .filter(x =>
+            String(x.RESULTADO_NC)
+            .toUpperCase()
+            .includes("REJECT")
+        )
+
+        .reduce(
+            (a, b) =>
+                a + Number(
+                    b.MONTO_SOLES || 0
+                ),
+            0
+        );
+
+
+    // =====================================================
     // SUCCESS - CANTIDAD
-    let successCant = data.resultado
-        .filter(x => String(x.RESULTADO_NC).toUpperCase().includes("SUCCESS"))
-        .reduce((a, b) => a + Number(b.TOT_CANT_REGISTROS || 0), 0);
+    // =====================================================
 
+    let successCant =
+        data.resultado
+
+        .filter(x =>
+            String(x.RESULTADO_NC)
+            .toUpperCase()
+            .includes("SUCCESS")
+        )
+
+        .reduce(
+            (a, b) =>
+                a + Number(
+                    b.TOT_CANT_REGISTROS || 0
+                ),
+            0
+        );
+
+
+    // =====================================================
     // REJECT - CANTIDAD
-    let rejectCant = data.resultado
-        .filter(x => String(x.RESULTADO_NC).toUpperCase().includes("REJECT"))
-        .reduce((a, b) => a + Number(b.TOT_CANT_REGISTROS || 0), 0);
+    // =====================================================
 
-    // Porcentaje por cantidad
-    let totalSRCant = successCant + rejectCant;
+    let rejectCant =
+        data.resultado
 
-    let pctSuccess = totalSRCant
-        ? ((successCant / totalSRCant) * 100).toFixed(1)
-        : 0;
+        .filter(x =>
+            String(x.RESULTADO_NC)
+            .toUpperCase()
+            .includes("REJECT")
+        )
 
-    let pctReject = totalSRCant
-        ? ((rejectCant / totalSRCant) * 100).toFixed(1)
-        : 0;
-    // =========================
-    // 🔥 POSTPAGO / PREPAGO
-    // =========================
+        .reduce(
+            (a, b) =>
+                a + Number(
+                    b.TOT_CANT_REGISTROS || 0
+                ),
+            0
+        );
 
-    let candidatosOK = Array.isArray(data.pie) ? data.pie : [];
 
-    let postpago = candidatosOK
-        .filter(x => String(x.PRODUCTO || "").toUpperCase().includes("POST"))
-        .reduce((a,b) => a + Number(b.TOT_CANT_REGISTROS || 0), 0);
+    let totalSRCant =
+        successCant + rejectCant;
 
-    let prepago = candidatosOK
-        .filter(x => String(x.PRODUCTO || "").toUpperCase().includes("PRE"))
-        .reduce((a,b) => a + Number(b.TOT_CANT_REGISTROS || 0), 0);
 
-    // =========================
-// 🔁 REINTENTOS
-// =========================
-let reintentos = Array.isArray(data.reintentos) ? data.reintentos : [];
+    let pctSuccess =
+        totalSRCant
+            ? ((successCant / totalSRCant) * 100)
+                .toFixed(1)
+            : 0;
 
-let body = document.getElementById("reintentos-body");
 
-body.innerHTML = reintentos.map(r => `
-    <tr>
-        <td>${r.RESULTADO ?? ''}</td>
-        <td>${Number(r.TOTAL || 0).toLocaleString()}</td>
-        <td>${Number(r.R1 || 0).toLocaleString()}</td>
-        <td>${Number(r.R2 || 0).toLocaleString()}</td>
-        <td>${Number(r.R3 || 0).toLocaleString()}</td>
-        <td>${Number(r.R4 || 0).toLocaleString()}</td>
-    </tr>
-`).join("");
+    let pctReject =
+        totalSRCant
+            ? ((rejectCant / totalSRCant) * 100)
+                .toFixed(1)
+            : 0;
 
-    document.getElementById("kpis").innerHTML = `
-    <div class="card kpi-card">
+
+    // =====================================================
+    // POSTPAGO / PREPAGO
+    // =====================================================
+
+    let candidatosOK =
+        Array.isArray(data.pie)
+            ? data.pie
+            : [];
+
+
+    let postpago =
+        candidatosOK
+
+        .filter(x =>
+            String(x.PRODUCTO || "")
+            .toUpperCase()
+            .includes("POST")
+        )
+
+        .reduce(
+            (a,b) =>
+                a + Number(
+                    b.TOT_CANT_REGISTROS || 0
+                ),
+            0
+        );
+
+
+    let prepago =
+        candidatosOK
+
+        .filter(x =>
+            String(x.PRODUCTO || "")
+            .toUpperCase()
+            .includes("PRE")
+        )
+
+        .reduce(
+            (a,b) =>
+                a + Number(
+                    b.TOT_CANT_REGISTROS || 0
+                ),
+            0
+        );
+
+
+    // =====================================================
+    // REINTENTOS
+    // =====================================================
+
+    let reintentos =
+        Array.isArray(data.reintentos)
+            ? data.reintentos
+            : [];
+
+
+    let body =
+        document.getElementById(
+            "reintentos-body"
+        );
+
+
+    body.innerHTML =
+        reintentos.map(r => `
+
+            <tr>
+
+                <td>${r.RESULTADO ?? ""}</td>
+
+                <td>
+                    ${Number(
+                        r.TOTAL || 0
+                    ).toLocaleString()}
+                </td>
+
+                <td>
+                    ${Number(
+                        r.R1 || 0
+                    ).toLocaleString()}
+                </td>
+
+                <td>
+                    ${Number(
+                        r.R2 || 0
+                    ).toLocaleString()}
+                </td>
+
+                <td>
+                    ${Number(
+                        r.R3 || 0
+                    ).toLocaleString()}
+                </td>
+
+                <td>
+                    ${Number(
+                        r.R4 || 0
+                    ).toLocaleString()}
+                </td>
+
+            </tr>
+
+        `).join("");
+
+
+    // =====================================================
+    // KPIs HTML
+    // =====================================================
+
+    document.getElementById(
+        "kpis"
+    ).innerHTML = `
+
+        <div class="card kpi-card">
             <h4>TOTAL</h4>
-            <h2>${total.toLocaleString()}</h2>
+            <h2>
+                ${total.toLocaleString()}
+            </h2>
         </div>
+
 
         <div class="card kpi-card">
             <h4>MONTO (S/.)</h4>
-            <h2>S/ ${monto.toLocaleString()}</h2>
+            <h2>
+                S/ ${monto.toLocaleString()}
+            </h2>
         </div>
 
+
         <div class="card kpi-card">
+
             <h4>CANDIDATOS</h4>
 
             <div class="kpi-split">
+
                 <div class="kpi-main ok">
                     ${ok.toLocaleString()}
                 </div>
 
                 <div class="kpi-detail">
-                    <div><strong>Postpago: ${postpago.toLocaleString()}</strong></div>
-                    <div><strong>Prepago : ${prepago.toLocaleString()}</strong></div>
+
+                    <div>
+                        <strong>
+                            Postpago:
+                            ${postpago.toLocaleString()}
+                        </strong>
+                    </div>
+
+                    <div>
+                        <strong>
+                            Prepago:
+                            ${prepago.toLocaleString()}
+                        </strong>
+                    </div>
+
                 </div>
+
             </div>
 
             <small>${pctOK}%</small>
-        </div>        
 
-        <div class="card kpi-card">
-            <h4>CANDIDATOS (POSTPAGO)</h4>
-            <div class="sr-row">
-                <span class="success-label">✔ Success</span>
-                <span class="sr-value">
-                    <b> ${successCant.toLocaleString()} reg |
-                    S/ ${successMonto.toLocaleString()}</b>
-                    <small>(${pctSuccess}%)</small>
-                </span>
-            </div>
-
-            <div class="sr-row">
-                <span class="reject-label">✖ Reject</span>
-                <span class="sr-value">
-                    <b>${rejectCant.toLocaleString()} reg |
-                    S/ ${rejectMonto.toLocaleString()}</b>
-                    <small>(${pctReject}%)</small>
-                </span>
-            </div>
         </div>
 
+
         <div class="card kpi-card">
-            <h4>EXCLUIDO POR CRITERIOS</h4>
-            <h2 class="nok">${nok.toLocaleString()}</h2>
-            <small>${pctNOK}%</small>
+
+            <h4>
+                CANDIDATOS POSTPAGO
+            </h4>
+
+            <div class="sr-row">
+
+                <span class="success-label">
+                    ✔ Success
+                </span>
+
+                <span class="sr-value">
+
+                    <b>
+                        ${successCant.toLocaleString()}
+                        reg |
+                        S/ ${successMonto.toLocaleString()}
+                    </b>
+
+                    <small>
+                        (${pctSuccess}%)
+                    </small>
+
+                </span>
+
+            </div>
+
+
+            <div class="sr-row">
+
+                <span class="reject-label">
+                    ✖ Reject
+                </span>
+
+                <span class="sr-value">
+
+                    <b>
+                        ${rejectCant.toLocaleString()}
+                        reg |
+                        S/ ${rejectMonto.toLocaleString()}
+                    </b>
+
+                    <small>
+                        (${pctReject}%)
+                    </small>
+
+                </span>
+
+            </div>
+
         </div>
+
+
+        <div class="card kpi-card">
+
+            <h4>
+                EXCLUIDO POR CRITERIOS
+            </h4>
+
+            <h2 class="nok">
+                ${nok.toLocaleString()}
+            </h2>
+
+            <small>
+                ${pctNOK}%
+            </small>
+
+        </div>
+
     `;
-    
-    // =========================
-    // 📈 GRÁFICOS
-    // =========================
-    // LINEA
-    let tendencia = Array.isArray(data.tendencia) ? data.tendencia : [];
+
+
+    // =====================================================
+    // GRÁFICO TENDENCIA
+    // =====================================================
+
+    let tendencia =
+        Array.isArray(data.tendencia)
+            ? data.tendencia
+            : [];
+
 
     if (tendencia.length <= 1) {
 
-        Plotly.react('line', [{
-            x: tendencia.map(x => x.FECHA_STR),
-            y: tendencia.map(x => Number(x.TOT_CANT_REGISTROS || 0)),
-            type: 'bar',
-            text: tendencia.map(x => Number(x.TOT_CANT_REGISTROS || 0).toLocaleString()),
-            textposition: 'auto',
-            customdata: tendencia.map(x => [
-                Number(x.MONTO_SOLES || 0).toLocaleString()
-            ]),
-            hovertemplate:
-                '<b>Fecha: %{x}</b><br>' +
-                'Cantidad: %{y}<br>' +
-                'Monto: S/ %{customdata[0]}<extra></extra>'
-        }], {
-            title: "Tendencia de Candidatos",
-            yaxis: { title: "Cantidad de Registros" },
-            xaxis: { title: "Fecha" }
-        });
+        Plotly.react(
+            "line",
+            [{
+                x: tendencia.map(
+                    x => x.FECHA_STR
+                ),
+
+                y: tendencia.map(
+                    x => Number(
+                        x.TOT_CANT_REGISTROS || 0
+                    )
+                ),
+
+                type: "bar",
+
+                text: tendencia.map(
+                    x =>
+                        Number(
+                            x.TOT_CANT_REGISTROS || 0
+                        ).toLocaleString()
+                ),
+
+                textposition: "auto",
+
+                customdata:
+                    tendencia.map(x => [
+                        Number(
+                            x.MONTO_SOLES || 0
+                        ).toLocaleString()
+                    ]),
+
+                hovertemplate:
+                    "<b>Fecha: %{x}</b><br>" +
+                    "Cantidad: %{y}<br>" +
+                    "Monto: S/ %{customdata[0]}" +
+                    "<extra></extra>"
+            }],
+            {
+                title: "Tendencia de Candidatos",
+                yaxis: {
+                    title: "Cantidad de Registros"
+                },
+                xaxis: {
+                    title: "Fecha"
+                }
+            }
+        );
 
     } else {
 
-        Plotly.react('line', [{
-            x: tendencia.map(x => x.FECHA_STR),
-            y: tendencia.map(x => Number(x.TOT_CANT_REGISTROS || 0)),
-            type: 'scatter',
-            mode: 'lines+markers+text',
-            text: tendencia.map(x => Number(x.TOT_CANT_REGISTROS || 0).toLocaleString()),
-            textposition: 'top center',
-            customdata: tendencia.map(x => [
-                Number(x.MONTO_SOLES || 0).toLocaleString()
-            ]),
-            hovertemplate:
-                '<b>Fecha: %{x}</b><br>' +
-                'Cantidad: %{y}<br>' +
-                'Monto: S/ %{customdata[0]}<extra></extra>'
-        }], {
-            title: "Tendencia de Candidatos",
-            yaxis: { title: "Cantidad de Registros" },
-            xaxis: { title: "Fecha" },
-            hovermode: 'x unified'
-        });
+        Plotly.react(
+            "line",
+            [{
+                x: tendencia.map(
+                    x => x.FECHA_STR
+                ),
+
+                y: tendencia.map(
+                    x => Number(
+                        x.TOT_CANT_REGISTROS || 0
+                    )
+                ),
+
+                type: "scatter",
+
+                mode: "lines+markers+text",
+
+                text: tendencia.map(
+                    x =>
+                        Number(
+                            x.TOT_CANT_REGISTROS || 0
+                        ).toLocaleString()
+                ),
+
+                textposition: "top center",
+
+                customdata:
+                    tendencia.map(x => [
+                        Number(
+                            x.MONTO_SOLES || 0
+                        ).toLocaleString()
+                    ]),
+
+                hovertemplate:
+                    "<b>Fecha: %{x}</b><br>" +
+                    "Cantidad: %{y}<br>" +
+                    "Monto: S/ %{customdata[0]}" +
+                    "<extra></extra>"
+            }],
+            {
+                title: "Tendencia de Candidatos",
+
+                yaxis: {
+                    title: "Cantidad de Registros"
+                },
+
+                xaxis: {
+                    title: "Fecha"
+                },
+
+                hovermode: "x unified"
+            }
+        );
 
     }
 
-    // TORTA OK vs NOK
-    let resultadoAjustes = data.resultado
-    .filter(x => String(x.RESULTADO_NC || "").trim() !== "");
 
-    Plotly.react('resultado_pie', [{
-        labels: resultadoAjustes.map(x => x.RESULTADO_NC),
-        values: resultadoAjustes.map(x => Number(x.MONTO_SOLES || 0)),
-        customdata: resultadoAjustes.map(x => [
-            Number(x.TOT_CANT_REGISTROS || 0).toLocaleString()
-        ]),
-        type: 'pie',
-        hole: 0.4,
-        hovertemplate:
-            '<b>%{label}</b><br>' +
-            'Cantidad: %{customdata[0]}<br>' +
-            'Monto: S/ %{value:,.2f}<br>' +            
-            'Porcentaje: %{percent}<extra></extra>'
-    }], {title: "CANDIDATOS AJUSTES"});
+    // =====================================================
+    // RESULTADO
+    // =====================================================
 
-    // TORTA PRODUCTO
-    Plotly.react('producto_pie', [{
-        labels: data.producto.map(x => x.PRODUCTO),
-        values: data.producto.map(x => Number(x.MONTO_SOLES || 0)),
-        customdata: data.producto.map(x => [
-            Number(x.TOT_CANT_REGISTROS || 0).toLocaleString()
-        ]),
-        type: 'pie',
-        hovertemplate:
-            '<b>%{label}</b><br>' +
-            'Cantidad: %{customdata[0]}<br>' +
-            'Monto: S/ %{value:,.2f}<br>' +            
-            'Porcentaje: %{percent}<extra></extra>'
-    }], {title: "Producto"});
-    
-    // BARRA COMENTARIO POR CANTIDAD
-    let comentarios = Array.isArray(data.comentario) ? [...data.comentario] : [];
+    let resultadoAjustes =
+        data.resultado
 
-    comentarios = comentarios.sort((a,b) =>
-        Number(b.TOT_CANT_REGISTROS || 0) - Number(a.TOT_CANT_REGISTROS || 0)
+        .filter(
+            x =>
+                String(
+                    x.RESULTADO_NC || ""
+                ).trim() !== ""
+        );
+
+
+    Plotly.react(
+        "resultado_pie",
+        [{
+            labels:
+                resultadoAjustes.map(
+                    x => x.RESULTADO_NC
+                ),
+
+            values:
+                resultadoAjustes.map(
+                    x =>
+                        Number(
+                            x.MONTO_SOLES || 0
+                        )
+                ),
+
+            customdata:
+                resultadoAjustes.map(x => [
+                    Number(
+                        x.TOT_CANT_REGISTROS || 0
+                    ).toLocaleString()
+                ]),
+
+            type: "pie",
+
+            hole: 0.4,
+
+            hovertemplate:
+                "<b>%{label}</b><br>" +
+                "Cantidad: %{customdata[0]}<br>" +
+                "Monto: S/ %{value:,.2f}<br>" +
+                "Porcentaje: %{percent}" +
+                "<extra></extra>"
+        }],
+        {
+            title: "CANDIDATOS AJUSTES"
+        }
     );
 
-    Plotly.react('comentario_bar', [{
-        y: comentarios.map(x => String(x.COMENTARIO || "")),
-        x: comentarios.map(x => Number(x.TOT_CANT_REGISTROS || 0)),
-        type: 'bar',
-        orientation: 'h',
 
-        text: comentarios.map(x =>
-            `${Number(x.TOT_CANT_REGISTROS || 0).toLocaleString()} | S/ ${Number(x.MONTO_SOLES || 0).toLocaleString()}`
-        ),
-        textposition: 'auto',
+    // =====================================================
+    // PRODUCTO
+    // =====================================================
 
-        customdata: comentarios.map(x => [
-            x.COMENTARIO,
-            Number(x.TOT_CANT_REGISTROS || 0).toLocaleString(),
-            Number(x.MONTO_SOLES || 0).toLocaleString()
-        ]),
+    Plotly.react(
+        "producto_pie",
+        [{
+            labels:
+                data.producto.map(
+                    x => x.PRODUCTO
+                ),
 
-        hovertemplate:
-            '<b>%{customdata[0]}</b><br>' +
-            'Cantidad: %{customdata[1]}<br>' +
-            'Monto: S/ %{customdata[2]}<extra></extra>'
+            values:
+                data.producto.map(
+                    x =>
+                        Number(
+                            x.MONTO_SOLES || 0
+                        )
+                ),
 
-    }], {
-        title: "Comentarios",
-        margin: { l: 280, r: 40, t: 50, b: 50 },
-        xaxis: { title: "Cantidad" },
-        yaxis: { automargin: true },
-        height: Math.max(400, comentarios.length * 45)
-    });
+            customdata:
+                data.producto.map(x => [
+                    Number(
+                        x.TOT_CANT_REGISTROS || 0
+                    ).toLocaleString()
+                ]),
+
+            type: "pie",
+
+            hovertemplate:
+                "<b>%{label}</b><br>" +
+                "Cantidad: %{customdata[0]}<br>" +
+                "Monto: S/ %{value:,.2f}<br>" +
+                "Porcentaje: %{percent}" +
+                "<extra></extra>"
+        }],
+        {
+            title: "Producto"
+        }
+    );
 
 
-    document.getElementById("loading").style.display = "none";
-    document.getElementById("kpis").style.display = "grid";
-    document.querySelector(".charts").style.display = "grid";
+    // =====================================================
+    // COMENTARIOS
+    // =====================================================
+
+    let comentarios =
+        Array.isArray(data.comentario)
+            ? [...data.comentario]
+            : [];
+
+
+    comentarios.sort(
+        (a,b) =>
+            Number(
+                b.TOT_CANT_REGISTROS || 0
+            ) -
+            Number(
+                a.TOT_CANT_REGISTROS || 0
+            )
+    );
+
+
+    Plotly.react(
+        "comentario_bar",
+        [{
+            y:
+                comentarios.map(
+                    x =>
+                        String(
+                            x.COMENTARIO || ""
+                        )
+                ),
+
+            x:
+                comentarios.map(
+                    x =>
+                        Number(
+                            x.TOT_CANT_REGISTROS || 0
+                        )
+                ),
+
+            type: "bar",
+
+            orientation: "h",
+
+            text:
+                comentarios.map(
+                    x =>
+                        `${Number(
+                            x.TOT_CANT_REGISTROS || 0
+                        ).toLocaleString()} | S/ ${
+                            Number(
+                                x.MONTO_SOLES || 0
+                            ).toLocaleString()
+                        }`
+                ),
+
+            textposition: "auto",
+
+            hovertemplate:
+                "<b>%{y}</b><br>" +
+                "Cantidad: %{x}<extra></extra>"
+        }],
+        {
+            title: "Comentarios",
+
+            margin: {
+                l: 280,
+                r: 40,
+                t: 50,
+                b: 50
+            },
+
+            xaxis: {
+                title: "Cantidad"
+            },
+
+            yaxis: {
+                automargin: true
+            },
+
+            height:
+                Math.max(
+                    400,
+                    comentarios.length * 45
+                )
+        }
+    );
+
+
+    document.getElementById(
+        "loading"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "kpis"
+    ).style.display = "grid";
+
+
+    document.querySelector(
+        ".charts"
+    ).style.display = "grid";
+
 }
 
-// =========================
-// 🧹 LIMPIAR
-// =========================
+
+// =========================================================
+// LIMPIAR
+// =========================================================
+
 function resetFiltros(){
-    document.querySelectorAll("select").forEach(s => s.selectedIndex = 0);
+
+    document
+        .querySelectorAll(
+            ".devoluciones-page select"
+        )
+        .forEach(
+            s => s.selectedIndex = 0
+        );
+
     cargar();
 }
 
+
+// =========================================================
 // INIT
+// =========================================================
+
 (async () => {
-    document.getElementById("loading").style.display = "block";
-    document.getElementById("kpis").style.display = "none";
-    document.querySelector(".charts").style.display = "none";
+
+    document.getElementById(
+        "loading"
+    ).style.display = "flex";
+
+    document.getElementById(
+        "kpis"
+    ).style.display = "none";
+
+    document.querySelector(
+        ".charts"
+    ).style.display = "none";
+
 
     await cargarFiltros();
+
     await cargarCatalogos();
+
     await cargar();
+
 })();
 
 </script>
 
-    </body>
-</html>
+{% endblock %}

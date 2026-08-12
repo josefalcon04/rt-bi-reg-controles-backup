@@ -1,0 +1,528 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+
+<div class="documentacion-page">
+
+    <!-- =====================================================
+         ENCABEZADO
+         ===================================================== -->
+
+    <div class="documentacion-header">
+
+        <div class="documentacion-header-icon">
+            <i class="fas fa-book"></i>
+        </div>
+
+        <div class="documentacion-header-info">
+
+            <h1>Documentación</h1>
+
+            <p>
+                Gestión y consulta de procesos documentados
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- =====================================================
+         BARRA DE ACCIONES
+         ===================================================== -->
+
+    <div class="documentacion-toolbar">
+
+        <div>
+
+            <h2>
+                Procesos Documentados
+            </h2>
+
+            <p>
+                Consulta, edita o elimina los documentos registrados.
+            </p>
+
+        </div>
+
+        <a
+            href="{{ url_for('documentacion.crear') }}"
+            class="btn-crear">
+            <i class="fas fa-plus"></i>
+            Crear documento
+        </a>
+
+    </div>
+
+    <!-- =====================================================
+         TABLA
+         ===================================================== -->
+
+    <div class="documentacion-table-container">
+
+        {% if documentos %}
+
+        <table id="tablaProcesos">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Nombre del Proceso
+                    </th>
+
+                    <th>
+                        Descripción
+                    </th>
+
+                    <th>
+                        Última Modificación
+                    </th>
+
+                    <th>
+                        Acciones
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for doc in documentos %}
+
+                <tr
+                    class="document-row"
+                    data-documento="{{ doc.nombre }}"
+                    title="Doble clic para abrir">
+
+                    <td>
+                        {{ doc.nombre }}
+                    </td>
+
+                    <td>
+                        {{ doc.descripcion or 'Sin descripción' }}
+                    </td>
+
+                    <td>
+                        {{ doc.fecha_modificacion }}
+                    </td>
+
+                    <td>
+
+                        <div class="actions">
+
+                            <!-- EDITAR -->
+
+                            <a
+                                href="{{ url_for(
+                                    'documentacion.editar',
+                                    nombre=doc.nombre
+                                ) }}"
+                                class="btn btn-edit">
+                                <i class="fas fa-edit"></i>
+                                Editar
+                            </a>
+
+                            <!-- ELIMINAR -->
+
+                            <form
+                                action="{{ url_for(
+        'documentacion.eliminar',
+        nombre=doc.nombre
+    ) }}"
+                                method="POST"
+                                class="form-eliminar">
+                                <button
+                                    type="button"
+                                    class="btn btn-delete"
+                                    onclick="abrirModalEliminar(this)"
+                                    data-documento="{{ doc.nombre }}">
+                                    <i class="fas fa-trash"></i>
+                                    Eliminar
+                                </button>
+                            </form>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        <!-- =================================================
+             PAGINACIÓN
+             ================================================= -->
+
+        <div class="pagination">
+
+            <button
+                id="prevBtn"
+                type="button">
+                <i class="fas fa-chevron-left"></i>
+                Anterior
+            </button>
+
+            <span
+                id="pageInfo"
+                class="page-info"></span>
+
+            <button
+                id="nextBtn"
+                type="button">
+                Siguiente
+                <i class="fas fa-chevron-right"></i>
+            </button>
+
+        </div>
+
+        {% else %}
+
+        <!-- =================================================
+             SIN DOCUMENTOS
+             ================================================= -->
+
+        <div class="documentacion-empty">
+
+            <i class="fas fa-folder-open"></i>
+
+            <h3>
+                No hay documentos registrados
+            </h3>
+
+            <p>
+                Puedes comenzar creando tu primer documento.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+<script>
+
+function abrirDocumento(nombre) {
+
+    const urlBase =
+        "{{ url_for('documentacion.ver', nombre='__NOMBRE__') }}";
+
+    window.location.href =
+        urlBase.replace(
+            "__NOMBRE__",
+            encodeURIComponent(nombre)
+        );
+
+}
+
+
+/* =========================================================
+   DOBLE CLIC EN DOCUMENTO
+   ========================================================= */
+
+document.querySelectorAll(".document-row").forEach(
+    row => {
+
+        row.addEventListener(
+            "dblclick",
+            function () {
+
+                const nombre =
+                    this.dataset.documento;
+
+                abrirDocumento(nombre);
+
+            }
+        );
+
+    }
+);
+
+
+/* =========================================================
+   PAGINACIÓN
+   ========================================================= */
+
+const rowsPerPage = 10;
+
+const rows =
+    document.querySelectorAll(
+        "#tablaProcesos tbody tr"
+    );
+
+const prevBtn =
+    document.getElementById("prevBtn");
+
+const nextBtn =
+    document.getElementById("nextBtn");
+
+const pageInfo =
+    document.getElementById("pageInfo");
+
+
+if (
+    rows.length > 0 &&
+    prevBtn &&
+    nextBtn
+) {
+
+    const totalPages =
+        Math.ceil(
+            rows.length / rowsPerPage
+        );
+
+    let currentPage = 1;
+
+
+    function mostrarPagina(page) {
+
+        rows.forEach(
+            (row, index) => {
+
+                const inicio =
+                    (page - 1) *
+                    rowsPerPage;
+
+                const fin =
+                    page *
+                    rowsPerPage;
+
+                row.style.display =
+                    (
+                        index >= inicio &&
+                        index < fin
+                    )
+                        ? ""
+                        : "none";
+
+            }
+        );
+
+
+        prevBtn.disabled =
+            page === 1;
+
+        nextBtn.disabled =
+            page === totalPages;
+
+
+        if (pageInfo) {
+
+            pageInfo.textContent =
+                `Página ${page} de ${totalPages}`;
+
+        }
+
+    }
+
+
+    prevBtn.addEventListener(
+        "click",
+        () => {
+
+            if (currentPage > 1) {
+
+                currentPage--;
+
+                mostrarPagina(
+                    currentPage
+                );
+
+            }
+
+        }
+    );
+
+
+    nextBtn.addEventListener(
+        "click",
+        () => {
+
+            if (
+                currentPage <
+                totalPages
+            ) {
+
+                currentPage++;
+
+                mostrarPagina(
+                    currentPage
+                );
+
+            }
+
+        }
+    );
+
+
+    mostrarPagina(
+        currentPage
+    );
+
+}
+
+</script>
+<!-- =====================================================
+     MODAL ELIMINAR DOCUMENTO
+     ===================================================== -->
+
+<div id="modalEliminar" class="modal-eliminar">
+
+    <div class="modal-eliminar-overlay"></div>
+
+    <div class="modal-eliminar-card">
+
+        <div class="modal-eliminar-icon">
+            <i class="fas fa-trash-alt"></i>
+        </div>
+
+        <h3>
+            ¿Eliminar documento?
+        </h3>
+
+        <p>
+            Estás a punto de eliminar:
+        </p>
+
+        <div
+            id="nombreDocumentoEliminar"
+            class="modal-documento-nombre"
+        >
+        </div>
+
+        <p class="modal-advertencia">
+            Esta acción no se puede deshacer.
+        </p>
+
+        <div class="modal-eliminar-actions">
+
+            <button
+                type="button"
+                class="modal-btn modal-btn-cancelar"
+                onclick="cerrarModalEliminar()"
+            >
+                Cancelar
+            </button>
+
+            <button
+                type="button"
+                class="modal-btn modal-btn-eliminar"
+                onclick="confirmarEliminar()"
+            >
+                <i class="fas fa-trash"></i>
+                Eliminar documento
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+let formularioEliminarActual = null;
+
+
+/* =====================================================
+   ABRIR MODAL
+   ===================================================== */
+
+function abrirModalEliminar(button) {
+
+    formularioEliminarActual = button.closest("form");
+
+    const nombre = button.dataset.documento;
+
+    document.getElementById(
+        "nombreDocumentoEliminar"
+    ).textContent = nombre;
+
+    document.getElementById(
+        "modalEliminar"
+    ).classList.add("activo");
+
+}
+
+
+/* =====================================================
+   CERRAR MODAL
+   ===================================================== */
+
+function cerrarModalEliminar() {
+
+    document.getElementById(
+        "modalEliminar"
+    ).classList.remove("activo");
+
+    formularioEliminarActual = null;
+
+}
+
+
+/* =====================================================
+   CONFIRMAR ELIMINACIÓN
+   ===================================================== */
+
+function confirmarEliminar() {
+
+    if (formularioEliminarActual) {
+
+        formularioEliminarActual.submit();
+
+    }
+
+}
+
+
+/* =====================================================
+   CERRAR CON ESC
+   ===================================================== */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key === "Escape"
+        ) {
+
+            cerrarModalEliminar();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   CERRAR AL HACER CLICK EN OVERLAY
+   ===================================================== */
+
+document.addEventListener(
+    "click",
+    function(event) {
+
+        if (
+            event.target.classList.contains(
+                "modal-eliminar-overlay"
+            )
+        ) {
+
+            cerrarModalEliminar();
+
+        }
+
+    }
+);
+
+</script>
+{% endblock %}

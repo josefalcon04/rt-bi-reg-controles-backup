@@ -1,0 +1,748 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+
+<div class="agent-flow-page">
+
+    <!-- =====================================================
+         ENCABEZADO
+         ===================================================== -->
+
+    <section class="agent-flow-header">
+
+        <div class="agent-flow-header-icon">
+            <i class="fas fa-project-diagram"></i>
+        </div>
+
+        <div class="agent-flow-header-info">
+
+            <h1>
+                Monitor de Agentes
+            </h1>
+
+            <p>
+                Visualización en tiempo real del flujo de ejecución de la inteligencia artificial
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         MONITOR
+         ===================================================== -->
+
+    <section class="agent-flow-card">
+
+        <div class="agent-flow-card-header">
+
+            <div>
+
+                <h2>
+                    <i class="fas fa-network-wired"></i>
+                    AI Agent Flow
+                </h2>
+
+                <span>
+                    Seguimiento de consultas, agentes y procesamiento IA
+                </span>
+
+            </div>
+
+
+            <div class="agent-flow-status">
+
+                <span class="status-dot"></span>
+
+                <span>
+                    Monitor activo
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             FLUJO
+             ================================================= -->
+
+        <div class="flow">
+
+
+            <!-- =================================================
+                 CHATBOX
+                 ================================================= -->
+
+            <div
+                id="chat"
+                class="box chat"
+            >
+
+                <div class="node-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+
+                <div class="node-content">
+
+                    <h3>
+                        CHATBOX
+                    </h3>
+
+                    <span>
+                        Consulta usuario
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 ROUTER
+                 ================================================= -->
+
+            <div
+                id="router"
+                class="diamond"
+            >
+
+                <div>
+
+                    <div class="node-icon">
+                        <i class="fas fa-random"></i>
+                    </div>
+
+                    <h3>
+                        ROUTER
+                    </h3>
+
+                    <span>
+                        Decisión
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 AGENT REGISTRY
+                 ================================================= -->
+
+            <div class="registry">
+
+                <div class="registry-header">
+
+                    <div class="registry-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            AGENT REGISTRY
+                        </h3>
+
+                        <span>
+                            Agentes disponibles
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="agents">
+
+
+                    <!-- SQL -->
+
+                    <div
+                        id="sql"
+                        class="box agent"
+                    >
+
+                        <i class="fas fa-database"></i>
+
+                        <span>
+                            SQL
+                        </span>
+
+                    </div>
+
+
+                    <!-- MONITOREO -->
+
+                    <div
+                        id="monitoreo"
+                        class="box agent"
+                    >
+
+                        <i class="fas fa-chart-line"></i>
+
+                        <span>
+                            MONITOREO
+                        </span>
+
+                    </div>
+
+
+                    <!-- DEVELOPER -->
+
+                    <div
+                        id="developer"
+                        class="box agent"
+                    >
+
+                        <i class="fas fa-code"></i>
+
+                        <span>
+                            DEVELOPER
+                        </span>
+
+                    </div>
+
+
+                    <!-- REGULATORIO -->
+
+                    <div
+                        id="regulatorio"
+                        class="box agent"
+                    >
+
+                        <i class="fas fa-file-alt"></i>
+
+                        <span>
+                            REGULATORIO
+                        </span>
+
+                    </div>
+
+
+                    <!-- ALERTAS -->
+
+                    <div
+                        id="alertas"
+                        class="box agent"
+                    >
+
+                        <i class="fas fa-exclamation-triangle"></i>
+
+                        <span>
+                            ALERTAS
+                        </span>
+
+                    </div>
+
+
+                    <!-- TENDENCIAS -->
+
+                    <div
+                        id="tendencias"
+                        class="box agent"
+                    >
+
+                        <i class="fas fa-chart-area"></i>
+
+                        <span>
+                            TENDENCIAS
+                        </span>
+
+                    </div>
+
+
+                    <!-- DOCUMENTACIÓN -->
+
+                    <div
+                        id="documentacion"
+                        class="box agent"
+                    >
+
+                        <i class="fas fa-book"></i>
+
+                        <span>
+                            DOCUMENTACIÓN
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 MML / OLLAMA
+                 ================================================= -->
+
+            <div
+                id="mml"
+                class="box mml"
+            >
+
+                <div class="node-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+
+                <div class="node-content">
+
+                    <h3>
+                        MML / OLLAMA
+                    </h3>
+
+                    <span>
+                        IA generativa
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 RESPONSE
+                 ================================================= -->
+
+            <div
+                id="response"
+                class="box response"
+            >
+
+                <div class="node-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+
+                <div class="node-content">
+
+                    <h3>
+                        RESPONSE
+                    </h3>
+
+                    <span>
+                        Resultado final
+                    </span>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+     ========================================================= -->
+
+<script>
+
+let indiceEvento = 0;
+
+let eventosProcesados = [];
+
+
+/* =========================================================
+   MAPEO DE AGENTES
+   ========================================================= */
+
+const mapa = {
+
+    "AgenteSQL": "sql",
+
+    "AgenteMonitoreo": "monitoreo",
+
+    "AgenteDeveloper": "developer",
+
+    "AgenteRegulatorio": "regulatorio",
+
+    "AgenteAlertas": "alertas",
+
+    "AgenteTendencias": "tendencias",
+
+    "AgenteDocumentacion": "documentacion"
+
+};
+
+
+/* =========================================================
+   ESPERA
+   ========================================================= */
+
+function esperar(ms) {
+
+    return new Promise(
+        resolve => setTimeout(resolve, ms)
+    );
+
+}
+
+
+/* =========================================================
+   LIMPIAR ESTADOS
+   ========================================================= */
+
+function limpiar() {
+
+    document
+        .querySelectorAll(
+            ".agent-flow-page .box, .agent-flow-page .diamond"
+        )
+        .forEach(n => {
+
+            n.classList.remove(
+                "running",
+                "success",
+                "error"
+            );
+
+        });
+
+}
+
+
+/* =========================================================
+   CAMBIAR ESTADO
+   ========================================================= */
+
+function estado(id, tipo) {
+
+    let n = document.getElementById(id);
+
+    if (!n)
+        return;
+
+    n.classList.remove(
+        "running",
+        "success",
+        "error"
+    );
+
+    n.classList.add(tipo);
+
+}
+
+
+/* =========================================================
+   PROCESAR EVENTO
+   ========================================================= */
+
+async function procesarEvento(e) {
+
+    console.log(
+        "Procesando:",
+        e.evento
+    );
+
+
+    switch (e.evento) {
+
+
+        /* =================================================
+           CHAT RECIBIDO
+           ================================================= */
+
+        case "CHAT_RECEIVED":
+
+            estado(
+                "chat",
+                "running"
+            );
+
+            break;
+
+
+        /* =================================================
+           ROUTER
+           ================================================= */
+
+        case "ROUTER_START":
+
+            estado(
+                "chat",
+                "success"
+            );
+
+            estado(
+                "router",
+                "running"
+            );
+
+            break;
+
+
+        /* =================================================
+           AGENTE SELECCIONADO
+           ================================================= */
+
+        case "AGENT_SELECTED":
+
+            estado(
+                "router",
+                "success"
+            );
+
+            let agente =
+                mapa[
+                    e.detalle.agente
+                ];
+
+            if (agente) {
+
+                estado(
+                    agente,
+                    "running"
+                );
+
+            }
+
+            break;
+
+
+        /* =================================================
+           AGENTE FINALIZADO
+           ================================================= */
+
+        case "AGENT_EXECUTION_FINISH":
+
+            let terminado =
+                mapa[
+                    e.detalle.agente
+                ];
+
+            if (terminado) {
+
+                estado(
+                    terminado,
+                    "success"
+                );
+
+            }
+
+            break;
+
+
+        /* =================================================
+           MML INICIO
+           ================================================= */
+
+        case "LLM_SUMMARY_START":
+
+            estado(
+                "mml",
+                "running"
+            );
+
+            break;
+
+
+        /* =================================================
+           MML FIN
+           ================================================= */
+
+        case "LLM_SUMMARY_FINISH":
+
+            estado(
+                "mml",
+                "success"
+            );
+
+            break;
+
+
+        /* =================================================
+           ERROR
+           ================================================= */
+
+        case "ERROR":
+
+            estado(
+                "response",
+                "error"
+            );
+
+            break;
+
+
+        /* =================================================
+           CHAT FINALIZADO
+           ================================================= */
+
+        case "CHAT_FINISHED":
+
+            document
+                .querySelectorAll(
+                    ".running"
+                )
+                .forEach(x => {
+
+                    x.classList.remove(
+                        "running"
+                    );
+
+                    x.classList.add(
+                        "success"
+                    );
+
+                });
+
+
+            estado(
+                "response",
+                "success"
+            );
+
+            break;
+
+    }
+
+}
+
+
+/* =========================================================
+   MONITOR DE EVENTOS
+   ========================================================= */
+
+async function monitor() {
+
+    try {
+
+        let r =
+            await fetch(
+                "/agent_events"
+            );
+
+
+        let eventos =
+            await r.json();
+
+
+        if (!eventos.length)
+            return;
+
+
+        /* =================================================
+           SI EL BACKEND REINICIA LOS EVENTOS
+           ================================================= */
+
+        if (
+            eventos.length <
+            indiceEvento
+        ) {
+
+            indiceEvento = 0;
+
+            limpiar();
+
+        }
+
+
+        /* =================================================
+           PROCESAR EVENTOS NUEVOS
+           ================================================= */
+
+        while (
+            indiceEvento <
+            eventos.length
+        ) {
+
+            await procesarEvento(
+                eventos[indiceEvento]
+            );
+
+
+            indiceEvento++;
+
+
+            await esperar(
+                800
+            );
+
+        }
+
+
+    }
+    catch (e) {
+
+        console.log(
+            "Error monitor:",
+            e
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   INICIAR MONITOR
+   ========================================================= */
+
+async function iniciarMonitor() {
+
+    try {
+
+        /*
+         * Cada vez que entramos al Monitor
+         * limpiamos los eventos anteriores.
+         */
+
+        await fetch(
+            "/agent_events/reset",
+            {
+                method: "POST"
+            }
+        );
+
+        /*
+         * Reiniciamos el índice local
+         */
+
+        indiceEvento = 0;
+
+        eventosProcesados = [];
+
+        limpiar();
+
+        /*
+         * Comenzamos a monitorear
+         */
+
+        setInterval(
+            monitor,
+            1000
+        );
+
+    }
+    catch (error) {
+
+        console.error(
+            "Error iniciando monitor:",
+            error
+        );
+
+    }
+
+}
+
+
+/*
+ * Iniciar monitor al cargar la página
+ */
+
+iniciarMonitor();
+
+
+/* Primera consulta */
+
+monitor();
+
+</script>
+
+{% endblock %}

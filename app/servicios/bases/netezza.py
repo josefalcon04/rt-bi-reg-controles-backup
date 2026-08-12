@@ -9,6 +9,8 @@ def conectar_netezza():
             port=5480, 
             user="APP_MONITOR_BI", 
             password="P3ru2026%!"
+            #user="jfalconf",             
+            #password="jfalconf23!"
         )
         print("Conexión exitosa a Netezza")
         return conn

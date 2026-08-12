@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>RT BI Assistant</title>
+
+        <link rel="stylesheet"
+            href="{{ url_for('static', filename='css/styles_v2.css') }}">
+
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+        <link rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css">
+        <link rel="stylesheet"
+            href="{{ url_for('static', filename='css/password_modal.css') }}">
+    </head>
+
+    <body>
+
+        <div class="layout">
+
+            <aside class="sidebar" id="sidebar">
+
+                <div class="sidebar-logo">
+                    <img
+                        src="{{ url_for('static', filename='img/logo2.png') }}">
+                    <h2>RT BI</h2>
+                </div>
+
+                <div class="sidebar-search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input
+                        id="buscarMenu"
+                        type="text"
+                        placeholder="Buscar módulo...">
+                </div>
+
+                <div class="sidebar-title">FAVORITOS</div>
+
+                <ul class="sidebar-favoritos">
+
+                    {% if favoritos %}
+
+                    {% for fav in favoritos %}
+
+                    <li>
+
+                        <a href="{{ fav.url }}"
+                            {% if fav.es_externo %}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            {% endif %}>
+
+                            <i class="{{ fav.icono }}"></i>
+
+                            <span>{{ fav.nombre }}</span>
+
+                        </a>
+
+                    </li>
+
+                    {% endfor %}
+
+                    {% else %}
+
+                    <li class="sin-favoritos">
+
+                        Sin favoritos
+
+                    </li>
+
+                    {% endif %}
+
+                </ul>
+
+                <div class="sidebar-title">MÓDULOS</div>
+
+                <ul class="sidebar-menu">
+
+                    {% for menu in menus %}
+
+                    {% if menu.hijos %}
+
+                    <li class="submenu">
+
+                        <a href="#" class="submenu-toggle">
+
+                            <div class="menu-left">
+                                <i class="{{ menu.icono }}"></i>
+                                <span>{{ menu.nombre }}</span>
+                            </div>
+
+                            <i class="fa-solid fa-chevron-down flecha"></i>
+
+                        </a>
+
+                        <ul class="submenu-content">
+
+                            {% for hijo in menu.hijos %}
+
+                            <li>
+
+                                <a href="{{ hijo.url }}"
+                                    {% if hijo.es_externo %}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    {% endif %}>
+
+                                    <div class="menu-left">
+                                        <i class="{{ hijo.icono }}"></i>
+                                        <span>{{ hijo.nombre }}</span>
+                                    </div>
+
+                                    {% if hijo.favorito %}
+
+                                    <i class="fa-solid fa-star favorito"
+                                        data-menu="{{ hijo.id_menu }}">
+                                    </i>
+
+                                    {% else %}
+
+                                    <i class="fa-regular fa-star favorito"
+                                        data-menu="{{ hijo.id_menu }}">
+                                    </i>
+
+                                    {% endif %}
+
+                                </a>
+
+                            </li>
+
+                            {% endfor %}
+
+                        </ul>
+
+                    </li>
+
+                    {% else %}
+
+                    <li>
+
+                        <a href="{{ menu.url }}"
+                            {% if menu.es_externo %}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            {% endif %}>
+
+                            <div class="menu-left">
+                                <i class="{{ menu.icono }}"></i>
+                                <span>{{ menu.nombre }}</span>
+                            </div>
+
+                            {% if menu.favorito %}
+
+                            <i class="fa-solid fa-star favorito"
+                                data-menu="{{ menu.id_menu }}">
+                            </i>
+
+                            {% else %}
+
+                            <i class="fa-regular fa-star favorito"
+                                data-menu="{{ menu.id_menu }}">
+                            </i>
+
+                            {% endif %}
+
+                        </a>
+
+                    </li>
+
+                    {% endif %}
+
+                    {% endfor %}
+
+                </ul>
+
+                <div class="sidebar-user">
+
+                    <div class="avatar">
+                        {{ session["nombre"][0] }}
+                    </div>
+
+                    <div class="user-info">
+
+                        <div class="nombre">
+                            {{ session["nombre"] }}
+                        </div>
+
+                        <div class="rol">
+                            {{ session["rol_nombre"] }}
+                        </div>
+
+                        <div class="estado">
+                            ● En línea
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </aside>
+
+            <main class="contenido" id="contenido">
+
+                <header class="topbar">
+
+                    <div class="topbar-left">
+
+                        <button id="toggleSidebar" class="toggle-sidebar">
+                            <i class="fa-solid fa-bars"></i>
+                        </button>
+
+                        <span class="page-title">
+                            Inicio
+                        </span>
+
+                    </div>
+
+                    <div class="topbar-right">
+
+                        <i class="fa-solid fa-bell notification-icon"></i>
+
+                        <div class="user-dropdown">
+
+                            <button class="user-button" id="userMenuButton">
+
+                                <div class="avatar-small">
+
+                                    {{ session["nombre"][0] }}
+
+                                </div>
+
+                                <span class="user-name">
+
+                                    {{ session["nombre"] }}
+
+                                </span>
+
+                                <i class="fa-solid fa-chevron-down"></i>
+
+                            </button>
+
+                            <div class="user-menu" id="userMenu">
+
+                                <div class="user-header">
+
+                                    <div class="nombre">
+
+                                        {{ session["nombre"] }}
+
+                                    </div>
+
+                                    <div class="rol">
+
+                                        {{ session["rol_nombre"] }}
+
+                                    </div>
+
+                                </div>
+
+                                <a href="#"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#modalPassword">
+
+                                    <i class="fa-solid fa-key"></i>
+
+                                    Cambiar contraseña
+
+                                </a>
+
+                                <hr>
+
+                                <a href="/logout">
+                                    <i
+                                        class="fa-solid fa-right-from-bracket"></i>
+                                    Cerrar sesión
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </header>
+
+                <main id="contenidoPrincipal" class="contenido-body">
+
+                    {% block contenido %}
+
+                    {% endblock %}
+
+                </main>
+
+            </main>
+
+        </div>
+
+        <script
+            src="{{ url_for('static', filename='js/menu_v2.js') }}"></script>
+
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js">
+</script>
+
+        <script
+            src="{{ url_for('static', filename='js/password.js') }}">
+</script>
+        <!-- Modal Cambio de Contraseña -->
+
+        <div class="modal fade"
+            id="modalPassword"
+            tabindex="-1"
+            aria-hidden="true">
+
+            <div class="modal-dialog modal-dialog-centered">
+
+                <div class="modal-content">
+
+                    <div class="modal-header">
+
+                        <h5 class="modal-title">
+
+                            <i class="fa-solid fa-lock"></i>
+
+                            Cambiar contraseña
+
+                        </h5>
+
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal">
+                        </button>
+
+                    </div>
+
+                    <form id="formPassword">
+
+                        <div class="modal-body">
+
+                            <!-- Contraseña actual -->
+
+                            <div class="mb-4">
+
+                                <label class="form-label fw-bold">
+
+                                    Contraseña actual
+
+                                </label>
+
+                                <div class="input-group">
+
+                                    <input
+                                        type="password"
+                                        class="form-control"
+                                        id="password_actual"
+                                        name="password_actual"
+                                        required>
+
+                                    <button
+                                        class="btn btn-outline-secondary toggle-password"
+                                        type="button"
+                                        data-target="password_actual">
+
+                                        <i class="fa-solid fa-eye"></i>
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                            <!-- Nueva contraseña -->
+
+                            <div class="mb-3">
+
+                                <label class="form-label fw-bold">
+
+                                    Nueva contraseña
+
+                                </label>
+
+                                <div class="input-group">
+
+                                    <input
+                                        type="password"
+                                        class="form-control"
+                                        id="password_nueva"
+                                        name="password_nueva"
+                                        autocomplete="new-password"
+                                        required>
+
+                                    <button
+                                        class="btn btn-outline-secondary toggle-password"
+                                        type="button"
+                                        data-target="password_nueva">
+
+                                        <i class="fa-solid fa-eye"></i>
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                            <!-- Barra de seguridad -->
+
+                            <div class="password-strength">
+
+                                <div class="progress">
+
+                                    <div
+                                        id="strengthBar"
+                                        class="progress-bar bg-danger"
+                                        style="width:0%">
+                                    </div>
+
+                                </div>
+
+                                <small
+                                    id="strengthText"
+                                    class="text-muted">
+
+                                    Escriba una contraseña...
+
+                                </small>
+
+                            </div>
+
+                            <!-- Reglas -->
+
+                            <div
+                                class="password-rules"
+                                id="passwordRules">
+
+                                <div id="rule-length">❌ Mínimo 12
+                                    caracteres</div>
+
+                                <div id="rule-upper">❌ Una letra mayúscula</div>
+
+                                <div id="rule-lower">❌ Una letra minúscula</div>
+
+                                <div id="rule-number">❌ Un número</div>
+
+                                <div id="rule-special">❌ Un carácter
+                                    especial</div>
+
+                            </div>
+
+                            <!-- Confirmar -->
+
+                            <div class="mt-4">
+
+                                <label class="form-label fw-bold">
+
+                                    Confirmar contraseña
+
+                                </label>
+
+                                <div class="input-group">
+
+                                    <input
+                                        type="password"
+                                        class="form-control"
+                                        id="password_confirmar"
+                                        name="password_confirmar"
+                                        autocomplete="new-password"
+                                        required>
+
+                                    <button
+                                        class="btn btn-outline-secondary toggle-password"
+                                        type="button"
+                                        data-target="password_confirmar">
+
+                                        <i class="fa-solid fa-eye"></i>
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                            <div
+                                id="matchMessage"
+                                class="mt-2 fw-bold">
+                            </div>
+
+                            <div
+                                id="mensajePassword"
+                                class="mt-3">
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+
+                            <button
+                                type="button"
+                                class="btn btn-secondary"
+                                data-bs-dismiss="modal">
+
+                                Cancelar
+
+                            </button>
+
+                            <button
+                                type="submit"
+                                id="btnGuardarPassword"
+                                class="btn btn-primary"
+                                disabled>
+
+                                Guardar
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ========================================= -->
+        <!-- Modal Advertencia de Sesión -->
+        <!-- ========================================= -->
+
+        <div
+            class="modal fade"
+            id="modalSessionExpired"
+            data-bs-backdrop="static"
+            data-bs-keyboard="false"
+            tabindex="-1">
+
+            <div class="modal-dialog modal-dialog-centered">
+
+                <div class="modal-content">
+
+                    <div class="modal-header bg-warning">
+
+                        <h5 class="modal-title text-dark">
+
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+
+                            Sesión por expirar
+
+                        </h5>
+
+                    </div>
+
+                    <div class="modal-body text-center">
+
+                        <div class="mb-3">
+
+                            <i
+                                class="fa-solid fa-user-clock"
+                                style="font-size:65px;color:#f59e0b">
+                            </i>
+
+                        </div>
+
+                        <h4>
+
+                            Su sesión está por expirar
+
+                        </h4>
+
+                        <p class="text-muted">
+
+                            Por motivos de seguridad, su sesión se cerrará
+                            automáticamente por inactividad.
+
+                        </p>
+
+                        <h1
+                            id="countdown"
+                            class="display-3 text-danger fw-bold">
+
+                            60
+
+                        </h1>
+
+                        <small class="text-muted">
+
+                            segundos restantes
+
+                        </small>
+
+                    </div>
+
+                    <div class="modal-footer justify-content-center">
+
+                        <button
+                            id="btnContinuarSesion"
+                            class="btn btn-primary btn-lg">
+
+                            <i class="fa-solid fa-arrow-rotate-right"></i>
+
+                            Continuar trabajando
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        <script
+            src="{{ url_for('static', filename='js/session_timeout.js') }}"></script>
+    </body>
+</html>

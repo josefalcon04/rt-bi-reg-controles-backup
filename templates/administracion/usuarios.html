@@ -1,0 +1,1116 @@
+{% extends "base.html" %}
+
+{% block title %}
+Usuarios | Administración
+{% endblock %}
+
+{% block contenido %}
+
+<link
+    rel="stylesheet"
+    href="{{ url_for(
+        'static',
+        filename='css/administracion_usuarios.css'
+    ) }}">
+
+<div class="usuarios-page">
+
+    <!-- =================================================
+         ENCABEZADO
+         ================================================= -->
+
+    <div class="usuarios-header">
+
+        <div class="usuarios-header-left">
+
+            <div class="usuarios-icon">
+                <i class="fa-solid fa-users"></i>
+            </div>
+
+            <div>
+
+                <h1>
+                    Administración de Usuarios
+                </h1>
+
+                <p>
+                    Gestiona usuarios, roles y accesos
+                    de la plataforma RT BI.
+                </p>
+
+            </div>
+
+        </div>
+
+        <button
+            type="button"
+            class="btn-primary"
+            onclick="abrirNuevoUsuario()">
+
+            <i class="fa-solid fa-plus"></i>
+
+            Nuevo usuario
+
+        </button>
+
+    </div>
+
+
+    <!-- =================================================
+         MENSAJES
+         ================================================= -->
+
+    {% with messages = get_flashed_messages(
+        with_categories=true
+    ) %}
+
+        {% if messages %}
+
+            <div class="flash-container">
+
+                {% for category, message in messages %}
+
+                    <div
+                        class="flash-message
+                               flash-{{ category }}">
+
+                        {% if category == "success" %}
+
+                            <i class="fa-solid fa-circle-check"></i>
+
+                        {% else %}
+
+                            <i class="fa-solid fa-circle-exclamation"></i>
+
+                        {% endif %}
+
+                        {{ message }}
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <!-- =================================================
+         CONTENEDOR
+         ================================================= -->
+
+    <div class="usuarios-card">
+
+        <!-- =================================================
+             BARRA DE HERRAMIENTAS
+             ================================================= -->
+
+        <div class="usuarios-toolbar">
+
+            <div class="search-box">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+                    type="text"
+                    id="buscarUsuario"
+                    placeholder="Buscar usuario..."
+                    autocomplete="off">
+
+            </div>
+
+            <div class="usuarios-count">
+
+                {{ usuarios|length }}
+
+                usuario{% if usuarios|length != 1 %}s{% endif %}
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             TABLA
+             ================================================= -->
+
+        <div class="table-container">
+
+            <table
+                class="usuarios-table"
+                id="tablaUsuarios">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Usuario</th>
+
+                        <th>Nombre completo</th>
+
+                        <th>Email</th>
+
+                        <th>Rol</th>
+
+                        <th>Estado</th>
+
+                        <th>Último login</th>
+
+                        <th class="acciones-col">
+                            Acciones
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for usuario in usuarios %}
+
+                    <tr>
+
+                        <!-- =================================================
+                             USUARIO
+                             ================================================= -->
+
+                        <td>
+
+                            <div class="usuario-cell">
+
+                                <div class="usuario-avatar">
+
+                                    {{ usuario[1][0]|upper }}
+
+                                </div>
+
+                                <strong>
+
+                                    {{ usuario[1] }}
+
+                                </strong>
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- =================================================
+                             NOMBRE
+                             ================================================= -->
+
+                        <td>
+
+                            {{ usuario[2] or '-' }}
+
+                        </td>
+
+
+                        <!-- =================================================
+                             EMAIL
+                             ================================================= -->
+
+                        <td>
+
+                            {{ usuario[3] or '-' }}
+
+                        </td>
+
+
+                        <!-- =================================================
+                             ROL
+                             ================================================= -->
+
+                        <td>
+
+                            <span class="rol-badge">
+
+                                <i class="fa-solid fa-shield-halved"></i>
+
+                                {{ usuario[5] }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- =================================================
+                             ESTADO
+                             ================================================= -->
+
+                        <td>
+
+                            {% if usuario[6] == 'A' %}
+
+                                <span class="estado activo">
+
+                                    <span></span>
+
+                                    Activo
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="estado inactivo">
+
+                                    <span></span>
+
+                                    Inactivo
+
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- =================================================
+                             LOGIN
+                             ================================================= -->
+
+                        <td>
+
+                            {% if usuario[8] %}
+
+                                {{ usuario[8] }}
+
+                            {% else %}
+
+                                <span class="sin-dato">
+                                    Nunca
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- =================================================
+                             ACCIONES
+                             ================================================= -->
+
+                        <td>
+
+                            <div class="acciones">
+
+                                <!-- =================================================
+                                     EDITAR
+                                     ================================================= -->
+
+                                <button
+                                    type="button"
+                                    class="action-btn edit"
+                                    title="Editar usuario"
+
+                                    data-id="{{ usuario[0] }}"
+                                    data-nombre="{{ usuario[2] or '' }}"
+                                    data-email="{{ usuario[3] or '' }}"
+                                    data-rol="{{ usuario[4] }}"
+
+                                    onclick="editarUsuarioDesdeBoton(this)">
+
+                                    <i class="fa-solid fa-pen"></i>
+
+                                </button>
+
+
+                                <!-- =================================================
+                                     ACTIVAR / DESACTIVAR
+                                     ================================================= -->
+
+                                <button
+                                    type="button"
+
+                                    class="action-btn
+                                        {% if usuario[6] == 'A' %}
+                                            disable
+                                        {% else %}
+                                            enable
+                                        {% endif %}"
+
+                                    title="
+                                        {% if usuario[6] == 'A' %}
+                                            Desactivar
+                                        {% else %}
+                                            Activar
+                                        {% endif %}
+                                    "
+
+                                    onclick="abrirModalEstado(
+                                        '{{ usuario[0] }}',
+                                        '{{ usuario[1] }}',
+                                        '{{ usuario[6] }}'
+                                    )">
+
+                                    {% if usuario[6] == 'A' %}
+
+                                        <i class="fa-solid fa-ban"></i>
+
+                                    {% else %}
+
+                                        <i class="fa-solid fa-check"></i>
+
+                                    {% endif %}
+
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+
+                    {% else %}
+
+                    <tr>
+
+                        <td
+                            colspan="7"
+                            class="empty-state">
+
+                            <i class="fa-solid fa-users"></i>
+
+                            <h3>
+                                No hay usuarios registrados
+                            </h3>
+
+                            <p>
+                                Crea el primer usuario
+                                de la plataforma.
+                            </p>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     MODAL USUARIO
+     ========================================================= -->
+
+<div
+    id="usuarioModal"
+    class="modal-overlay">
+
+    <div class="usuario-modal">
+
+        <!-- HEADER -->
+
+        <div class="modal-header">
+
+            <div>
+
+                <h2 id="modalTitulo">
+                    Nuevo usuario
+                </h2>
+
+                <p>
+                    Completa la información del usuario.
+                </p>
+
+            </div>
+
+            <button
+                type="button"
+                class="modal-close"
+                onclick="cerrarUsuarioModal()">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <!-- FORM -->
+
+        <form
+            id="usuarioForm"
+            method="POST"
+            action="{{ url_for('usuarios.crear') }}">
+
+            <div class="modal-body">
+
+
+                <!-- =================================================
+                     USUARIO
+                     ================================================= -->
+
+                <div class="form-group">
+
+                    <label>
+                        Usuario
+                    </label>
+
+                    <input
+                        type="text"
+                        name="usuario"
+                        id="usuario"
+                        maxlength="50"
+                        required>
+
+                </div>
+
+
+                <!-- =================================================
+                     NOMBRE
+                     ================================================= -->
+
+                <div class="form-group">
+
+                    <label>
+                        Nombre completo
+                    </label>
+
+                    <input
+                        type="text"
+                        name="nombre_completo"
+                        id="nombre_completo"
+                        maxlength="150">
+
+                </div>
+
+
+                <!-- =================================================
+                     EMAIL
+                     ================================================= -->
+
+                <div class="form-group">
+
+                    <label>
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        name="email"
+                        id="email"
+                        maxlength="150">
+
+                </div>
+
+
+                <!-- =================================================
+                     ROL
+                     ================================================= -->
+
+                <div class="form-group">
+
+                    <label>
+                        Rol
+                    </label>
+
+                    <select
+                        name="id_rol"
+                        id="id_rol"
+                        required>
+
+                        <option value="">
+                            Seleccionar rol...
+                        </option>
+
+                        {% for rol in roles %}
+
+                            <option value="{{ rol[0] }}">
+                                {{ rol[1] }}
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- =================================================
+                     PASSWORD
+                     ================================================= -->
+
+                <div class="form-group">
+
+                    <label>
+                        Contraseña
+                    </label>
+
+                    <input
+                        type="password"
+                        name="password"
+                        id="password">
+
+                    <small id="passwordHelp">
+                        Obligatoria para nuevos usuarios.
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <!-- FOOTER -->
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn-secondary"
+                    onclick="cerrarUsuarioModal()">
+
+                    Cancelar
+
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn-primary">
+
+                    <i class="fa-solid fa-save"></i>
+
+                    Guardar usuario
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     MODAL CAMBIAR ESTADO
+     ========================================================= -->
+
+<div
+    id="estadoModal"
+    class="estado-modal">
+
+    <div class="estado-modal-content">
+
+
+        <!-- ICONO -->
+
+        <div
+            id="estadoModalIcon"
+            class="estado-modal-icon">
+
+            <i class="fa-solid fa-user-slash"></i>
+
+        </div>
+
+
+        <!-- TITULO -->
+
+        <h3 id="estadoModalTitulo">
+            Desactivar usuario
+        </h3>
+
+
+        <!-- MENSAJE -->
+
+        <p id="estadoModalMensaje">
+            ¿Deseas desactivar este usuario?
+        </p>
+
+
+        <!-- BOTONES -->
+
+        <div class="estado-modal-actions">
+
+
+            <!-- CANCELAR -->
+
+            <button
+                type="button"
+                class="btn-modal-cancel"
+                onclick="cerrarModalEstado()">
+
+                Cancelar
+
+            </button>
+
+
+            <!-- CONFIRMAR -->
+
+            <form
+                id="estadoForm"
+                method="POST">
+
+                <button
+                    type="submit"
+                    class="btn-modal-confirm">
+
+                    <i class="fa-solid fa-check"></i>
+
+                    Confirmar
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+     ========================================================= -->
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        /* =================================================
+           BUSCADOR
+           ================================================= */
+
+        const buscador =
+            document.getElementById(
+                "buscarUsuario"
+            );
+
+
+        if (buscador) {
+
+            buscador.addEventListener(
+                "input",
+                function () {
+
+                    const texto =
+                        this.value.toLowerCase();
+
+
+                    const filas =
+                        document.querySelectorAll(
+                            "#tablaUsuarios tbody tr"
+                        );
+
+
+                    filas.forEach(
+                        function (fila) {
+
+                            const contenido =
+                                fila.textContent.toLowerCase();
+
+
+                            fila.style.display =
+                                contenido.includes(texto)
+                                    ? ""
+                                    : "none";
+
+                        }
+                    );
+
+                }
+            );
+
+        }
+
+    }
+);
+
+
+/* =================================================
+   NUEVO USUARIO
+   ================================================= */
+
+function abrirNuevoUsuario() {
+
+    const modal =
+        document.getElementById(
+            "usuarioModal"
+        );
+
+
+    const form =
+        document.getElementById(
+            "usuarioForm"
+        );
+
+
+    document.getElementById(
+        "modalTitulo"
+    ).textContent =
+        "Nuevo usuario";
+
+
+    form.action =
+        "{{ url_for('usuarios.crear') }}";
+
+
+    form.reset();
+
+
+    document.getElementById(
+        "usuario"
+    ).disabled = false;
+
+
+    document.getElementById(
+        "password"
+    ).required = true;
+
+
+    document.getElementById(
+        "passwordHelp"
+    ).textContent =
+        "Obligatoria para nuevos usuarios.";
+
+
+    modal.classList.add("show");
+
+}
+
+
+/* =================================================
+   EDITAR USUARIO
+   ================================================= */
+
+function editarUsuario(
+    id,
+    nombre,
+    email,
+    idRol
+) {
+
+    const modal =
+        document.getElementById(
+            "usuarioModal"
+        );
+
+
+    const form =
+        document.getElementById(
+            "usuarioForm"
+        );
+
+
+    document.getElementById(
+        "modalTitulo"
+    ).textContent =
+        "Editar usuario";
+
+
+    form.action =
+        "/administracion/usuarios/editar/"
+        + id;
+
+
+    document.getElementById(
+        "usuario"
+    ).value =
+        document.querySelector(
+            '[onclick*="' + id + '"]'
+        )
+        ?.closest("tr")
+        ?.querySelector(
+            ".usuario-cell strong"
+        )
+        ?.textContent
+        ?.trim() || "";
+
+
+    document.getElementById(
+        "usuario"
+    ).disabled = true;
+
+
+    document.getElementById(
+        "nombre_completo"
+    ).value =
+        nombre || "";
+
+
+    document.getElementById(
+        "email"
+    ).value =
+        email || "";
+
+
+    document.getElementById(
+        "id_rol"
+    ).value =
+        idRol;
+
+
+    document.getElementById(
+        "password"
+    ).value = "";
+
+
+    document.getElementById(
+        "password"
+    ).required = false;
+
+
+    document.getElementById(
+        "passwordHelp"
+    ).textContent =
+        "Déjala vacía para mantener la contraseña actual.";
+
+
+    modal.classList.add("show");
+
+}
+
+
+/* =================================================
+   CERRAR MODAL USUARIO
+   ================================================= */
+
+function cerrarUsuarioModal() {
+
+    document
+        .getElementById(
+            "usuarioModal"
+        )
+        .classList.remove("show");
+
+}
+
+
+/* =================================================
+   ABRIR MODAL ESTADO
+   ================================================= */
+
+function abrirModalEstado(
+    idUsuario,
+    usuario,
+    estado
+) {
+
+    const modal =
+        document.getElementById(
+            "estadoModal"
+        );
+
+
+    const titulo =
+        document.getElementById(
+            "estadoModalTitulo"
+        );
+
+
+    const mensaje =
+        document.getElementById(
+            "estadoModalMensaje"
+        );
+
+
+    const icono =
+        document.getElementById(
+            "estadoModalIcon"
+        );
+
+
+    const form =
+        document.getElementById(
+            "estadoForm"
+        );
+
+
+    /* =================================================
+       DESACTIVAR
+       ================================================= */
+
+    if (estado === "A") {
+
+        titulo.textContent =
+            "Desactivar usuario";
+
+
+        mensaje.textContent =
+            "¿Deseas desactivar al usuario "
+            + usuario
+            + "?";
+
+
+        icono.innerHTML =
+            '<i class="fa-solid fa-user-slash"></i>';
+
+
+        icono.classList.remove(
+            "estado-activar"
+        );
+
+
+        icono.classList.add(
+            "estado-desactivar"
+        );
+
+    }
+
+
+    /* =================================================
+       ACTIVAR
+       ================================================= */
+
+    else {
+
+        titulo.textContent =
+            "Activar usuario";
+
+
+        mensaje.textContent =
+            "¿Deseas activar al usuario "
+            + usuario
+            + "?";
+
+
+        icono.innerHTML =
+            '<i class="fa-solid fa-user-check"></i>';
+
+
+        icono.classList.remove(
+            "estado-desactivar"
+        );
+
+
+        icono.classList.add(
+            "estado-activar"
+        );
+
+    }
+
+
+    /* =================================================
+       ACTION
+       ================================================= */
+
+    form.action =
+        "/administracion/usuarios/estado/"
+        + idUsuario;
+
+
+    /* =================================================
+       MOSTRAR
+       ================================================= */
+
+    modal.classList.add("show");
+
+}
+
+
+/* =================================================
+   CERRAR MODAL ESTADO
+   ================================================= */
+
+function cerrarModalEstado() {
+
+    const modal =
+        document.getElementById(
+            "estadoModal"
+        );
+
+
+    modal.classList.remove("show");
+
+}
+
+
+/* =================================================
+   CERRAR CLICK FUERA
+   ================================================= */
+
+document.addEventListener(
+    "click",
+    function (event) {
+
+        const modal =
+            document.getElementById(
+                "estadoModal"
+            );
+
+
+        if (
+            event.target === modal
+        ) {
+
+            cerrarModalEstado();
+
+        }
+
+    }
+);
+
+
+/* =================================================
+   CERRAR CON ESC
+   ================================================= */
+
+document.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (event.key === "Escape") {
+
+            cerrarUsuarioModal();
+
+            cerrarModalEstado();
+
+        }
+
+    }
+);
+
+
+/* =================================================
+   EDITAR DESDE BOTON
+   ================================================= */
+
+function editarUsuarioDesdeBoton(
+    boton
+) {
+
+    const id =
+        boton.dataset.id;
+
+
+    const nombre =
+        boton.dataset.nombre;
+
+
+    const email =
+        boton.dataset.email;
+
+
+    const idRol =
+        boton.dataset.rol;
+
+
+    editarUsuario(
+        id,
+        nombre,
+        email,
+        idRol
+    );
+
+}
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>RT BI Assistant</title>
+
+
+    <!-- =====================================================
+         CSS PRINCIPAL
+         ===================================================== -->
+
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='css/styles_v2.css') }}">
+
+
+    <!-- =====================================================
+         FONT AWESOME
+         ===================================================== -->
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+
+    <!-- =====================================================
+         BOOTSTRAP
+         ===================================================== -->
+
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css">
+
+
+    <!-- =====================================================
+         CSS SEGURIDAD
+         ===================================================== -->
+
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='css/password_modal.css') }}">
+
+
+    <!-- =====================================================
+         CSS CARACTERES
+         ===================================================== -->
+
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='css/caracteres.css') }}">
+
+
+    <!-- =====================================================
+         CSS TENDENCIAS
+         ===================================================== -->
+
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='css/tendencias_plantas.css') }}">
+
+
+    <!-- =====================================================
+         CSS DOCUMENTACIÓN
+         ===================================================== -->
+
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='css/documentacion.css') }}">
+
+
+    <!-- =====================================================
+         CSS CHATBOX FLOTANTE
+         ===================================================== -->
+
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='css/chat_float.css') }}">
+
+
+    <!-- =====================================================
+         CSS ESPECÍFICOS DE MÓDULOS
+         ===================================================== -->
+
+    {% block estilos_extra %}
+
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='css/devoluciones.css') }}">
+
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='css/agent_flow.css') }}">
+
+    {% endblock %}
+
+
+</head>
+
+
+<body>
+
+
+<div class="layout">
+
+
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
+
+    <aside class="sidebar" id="sidebar">
+
+
+        <!-- LOGO -->
+
+        <div class="sidebar-logo">
+
+            <img
+                src="{{ url_for('static', filename='img/logo2.png') }}"
+            >
+
+            <h2>
+                RT BI
+            </h2>
+
+        </div>
+
+
+        <!-- BUSCADOR -->
+
+        <div class="sidebar-search">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input
+                id="buscarMenu"
+                type="text"
+                placeholder="Buscar módulo..."
+            >
+
+        </div>
+
+
+        <!-- =================================================
+             FAVORITOS
+             ================================================= -->
+
+        <div class="sidebar-title">
+            FAVORITOS
+        </div>
+
+
+        <ul class="sidebar-favoritos">
+
+            {% if favoritos %}
+
+                {% for fav in favoritos %}
+
+                <li>
+
+                    <a
+                        href="{{ fav.url }}"
+
+                        {% if fav.es_externo %}
+
+                        target="_blank"
+                        rel="noopener noreferrer"
+
+                        {% endif %}
+                    >
+
+                        <i class="{{ fav.icono }}"></i>
+
+                        <span>
+                            {{ fav.nombre }}
+                        </span>
+
+                    </a>
+
+                </li>
+
+                {% endfor %}
+
+            {% else %}
+
+                <li class="sin-favoritos">
+
+                    Sin favoritos
+
+                </li>
+
+            {% endif %}
+
+        </ul>
+
+
+        <!-- =================================================
+             MÓDULOS
+             ================================================= -->
+
+        <div class="sidebar-title">
+            MÓDULOS
+        </div>
+
+
+        <ul class="sidebar-menu">
+
+
+            {% for menu in menus %}
+
+
+                {% if menu.hijos %}
+
+
+                <!-- =========================================
+                     SUBMENÚ
+                     ========================================= -->
+
+                <li class="submenu">
+
+                    <a
+                        href="#"
+                        class="submenu-toggle"
+                    >
+
+                        <div class="menu-left">
+
+                            <i class="{{ menu.icono }}"></i>
+
+                            <span>
+                                {{ menu.nombre }}
+                            </span>
+
+                        </div>
+
+
+                        <i
+                            class="fa-solid fa-chevron-down flecha"
+                        ></i>
+
+                    </a>
+
+
+                    <ul class="submenu-content">
+
+
+                        {% for hijo in menu.hijos %}
+
+                        <li>
+
+                            <a
+                                href="{{ hijo.url }}"
+
+                                {% if hijo.es_externo %}
+
+                                target="_blank"
+                                rel="noopener noreferrer"
+
+                                {% endif %}
+                            >
+
+                                <div class="menu-left">
+
+                                    <i class="{{ hijo.icono }}"></i>
+
+                                    <span>
+                                        {{ hijo.nombre }}
+                                    </span>
+
+                                </div>
+
+
+                                {% if hijo.favorito %}
+
+                                <i
+                                    class="fa-solid fa-star favorito"
+                                    data-menu="{{ hijo.id_menu }}"
+                                ></i>
+
+                                {% else %}
+
+                                <i
+                                    class="fa-regular fa-star favorito"
+                                    data-menu="{{ hijo.id_menu }}"
+                                ></i>
+
+                                {% endif %}
+
+                            </a>
+
+                        </li>
+
+                        {% endfor %}
+
+
+                    </ul>
+
+                </li>
+
+
+                {% else %}
+
+
+                <!-- =========================================
+                     MENÚ SIMPLE
+                     ========================================= -->
+
+                <li>
+
+                    <a
+                        href="{{ menu.url }}"
+
+                        {% if menu.es_externo %}
+
+                        target="_blank"
+                        rel="noopener noreferrer"
+
+                        {% endif %}
+                    >
+
+                        <div class="menu-left">
+
+                            <i class="{{ menu.icono }}"></i>
+
+                            <span>
+                                {{ menu.nombre }}
+                            </span>
+
+                        </div>
+
+
+                        {% if menu.favorito %}
+
+                        <i
+                            class="fa-solid fa-star favorito"
+                            data-menu="{{ menu.id_menu }}"
+                        ></i>
+
+                        {% else %}
+
+                        <i
+                            class="fa-regular fa-star favorito"
+                            data-menu="{{ menu.id_menu }}"
+                        ></i>
+
+                        {% endif %}
+
+
+                    </a>
+
+                </li>
+
+
+                {% endif %}
+
+
+            {% endfor %}
+
+
+        </ul>
+
+
+        <!-- =================================================
+             USUARIO
+             ================================================= -->
+
+        <div class="sidebar-user">
+
+
+            <div class="avatar">
+
+                {{ session["nombre"][0] }}
+
+            </div>
+
+
+            <div class="user-info">
+
+                <div class="nombre">
+
+                    {{ session["nombre"] }}
+
+                </div>
+
+
+                <div class="rol">
+
+                    {{ session["rol_nombre"] }}
+
+                </div>
+
+
+                <div class="estado">
+
+                    ● En línea
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+    </aside>
+
+
+    <!-- =====================================================
+         CONTENIDO PRINCIPAL
+         ===================================================== -->
+
+    <main
+        class="contenido"
+        id="contenido"
+    >
+
+
+        <!-- =================================================
+             TOPBAR
+             ================================================= -->
+
+        <header class="topbar">
+
+
+            <div class="topbar-left">
+
+
+                <!-- BOTÓN SIDEBAR -->
+
+                <button
+                    id="toggleSidebar"
+                    class="toggle-sidebar"
+                    title="Contraer menú"
+                >
+
+                    <i class="fa-solid fa-bars"></i>
+
+                </button>
+
+
+                <!-- INICIO -->
+
+                <a
+                    href="{{ url_for('menu') }}"
+                    class="breadcrumb-inicio"
+                >
+
+                    <i class="fa-solid fa-house"></i>
+
+                    <span>
+                        Inicio
+                    </span>
+
+                </a>
+
+
+            </div>
+
+
+            <!-- =================================================
+                 PARTE DERECHA
+                 ================================================= -->
+
+            <div class="topbar-right">
+
+
+                <!-- NOTIFICACIONES -->
+
+                <div class="notification-container">
+
+
+                    <button
+                        type="button"
+                        id="notificationButton"
+                        class="notification-button"
+                        title="Notificaciones"
+                    >
+
+                        <i class="fa-solid fa-bell"></i>
+
+
+                        <span
+                            id="notificationBadge"
+                            class="notification-badge"
+                            style="display:none;"
+                        >
+                            0
+                        </span>
+
+
+                    </button>
+
+
+                    <div
+                        id="notificationPanel"
+                        class="notification-panel"
+                    >
+
+
+                        <div class="notification-header">
+
+                            <div>
+
+                                <i class="fa-solid fa-bell"></i>
+
+                                <span>
+                                    Notificaciones
+                                </span>
+
+                            </div>
+
+
+                            <span
+                                id="notificationCount"
+                                class="notification-count"
+                            >
+                                0
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            id="notificationList"
+                            class="notification-list"
+                        >
+
+                            <div class="notification-empty">
+
+                                <i
+                                    class="fa-regular fa-circle-check"
+                                ></i>
+
+                                <span>
+                                    No hay notificaciones pendientes
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- =================================================
+                     USUARIO
+                     ================================================= -->
+
+                <div class="user-dropdown">
+
+
+                    <button
+                        class="user-button"
+                        id="userMenuButton"
+                    >
+
+
+                        <div class="avatar-small">
+
+                            {{ session["nombre"][0] }}
+
+                        </div>
+
+
+                        <span class="user-name">
+
+                            {{ session["nombre"] }}
+
+                        </span>
+
+
+                        <i
+                            class="fa-solid fa-chevron-down"
+                        ></i>
+
+
+                    </button>
+
+
+                    <div
+                        class="user-menu"
+                        id="userMenu"
+                    >
+
+
+                        <div class="user-header">
+
+                            <div class="nombre">
+
+                                {{ session["nombre"] }}
+
+                            </div>
+
+
+                            <div class="rol">
+
+                                {{ session["rol_nombre"] }}
+
+                            </div>
+
+                        </div>
+
+
+                        <a
+                            href="#"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalPassword"
+                        >
+
+                            <i class="fa-solid fa-key"></i>
+
+                            Cambiar contraseña
+
+                        </a>
+
+
+                        <hr>
+
+
+                        <a href="/logout">
+
+                            <i
+                                class="fa-solid fa-right-from-bracket"
+                            ></i>
+
+                            Cerrar sesión
+
+                        </a>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </header>
+
+
+        <!-- =================================================
+             CONTENIDO DE CADA MÓDULO
+             ================================================= -->
+
+        <main
+            id="contenidoPrincipal"
+            class="contenido-body"
+        >
+
+            {% block contenido %}
+
+            {% endblock %}
+
+        </main>
+
+
+    </main>
+
+
+</div>
+
+<!-- =========================================================
+     SMART BI ASSISTANT
+     CHAT FLOTANTE
+     ========================================================= -->
+
+{% set permisos_usuario = session.get("permisos", []) %}
+
+{% if "CHAT" in permisos_usuario %}
+
+<div id="smartBiChat" class="smart-bi-chat">
+
+    {% include 'chatbox.html' %}
+
+</div>
+
+
+<button
+    type="button"
+    id="chatOpenButton"
+    class="chat-open-button"
+    title="Abrir Smart BI Assistant"
+>
+    🤖
+</button>
+
+
+<!-- =========================================================
+     JAVASCRIPT SMART BI ASSISTANT
+     ========================================================= -->
+
+<script
+    src="{{ url_for('static', filename='js/chat_float.js') }}?v=10">
+</script>
+
+{% endif %}
+
+<!-- =========================================================
+     JAVASCRIPT PRINCIPAL
+     ========================================================= -->
+
+<script
+    src="{{ url_for('static', filename='js/menu_v2.js') }}">
+</script>
+
+
+<script
+    src="{{ url_for('static', filename='js/notificaciones.js') }}">
+</script>
+
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js">
+</script>
+
+
+<script
+    src="{{ url_for('static', filename='js/password.js') }}">
+</script>
+
+
+<!-- =========================================================
+     MODAL CAMBIO DE CONTRASEÑA
+     ========================================================= -->
+
+<div
+    class="modal fade"
+    id="modalPassword"
+    tabindex="-1"
+    aria-hidden="true"
+>
+
+
+    <div class="modal-dialog modal-dialog-centered">
+
+
+        <div class="modal-content">
+
+
+            <div class="modal-header">
+
+
+                <h5 class="modal-title">
+
+                    <i class="fa-solid fa-lock"></i>
+
+                    Cambiar contraseña
+
+                </h5>
+
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                ></button>
+
+
+            </div>
+
+
+            <form id="formPassword">
+
+
+                <div class="modal-body">
+
+
+                    <!-- CONTRASEÑA ACTUAL -->
+
+                    <div class="mb-4">
+
+
+                        <label class="form-label fw-bold">
+
+                            Contraseña actual
+
+                        </label>
+
+
+                        <div class="input-group">
+
+
+                            <input
+                                type="password"
+                                class="form-control"
+                                id="password_actual"
+                                name="password_actual"
+                                required
+                            >
+
+
+                            <button
+                                class="btn btn-outline-secondary toggle-password"
+                                type="button"
+                                data-target="password_actual"
+                            >
+
+                                <i
+                                    class="fa-solid fa-eye"
+                                ></i>
+
+                            </button>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- NUEVA CONTRASEÑA -->
+
+                    <div class="mb-3">
+
+
+                        <label class="form-label fw-bold">
+
+                            Nueva contraseña
+
+                        </label>
+
+
+                        <div class="input-group">
+
+
+                            <input
+                                type="password"
+                                class="form-control"
+                                id="password_nueva"
+                                name="password_nueva"
+                                autocomplete="new-password"
+                                required
+                            >
+
+
+                            <button
+                                class="btn btn-outline-secondary toggle-password"
+                                type="button"
+                                data-target="password_nueva"
+                            >
+
+                                <i
+                                    class="fa-solid fa-eye"
+                                ></i>
+
+                            </button>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- SEGURIDAD -->
+
+                    <div class="password-strength">
+
+
+                        <div class="progress">
+
+
+                            <div
+                                id="strengthBar"
+                                class="progress-bar bg-danger"
+                                style="width:0%"
+                            ></div>
+
+
+                        </div>
+
+
+                        <small
+                            id="strengthText"
+                            class="text-muted"
+                        >
+
+                            Escriba una contraseña...
+
+                        </small>
+
+
+                    </div>
+
+
+                    <!-- REGLAS -->
+
+                    <div
+                        class="password-rules"
+                        id="passwordRules"
+                    >
+
+
+                        <div id="rule-length">
+
+                            ❌ Mínimo 12 caracteres
+
+                        </div>
+
+
+                        <div id="rule-upper">
+
+                            ❌ Una letra mayúscula
+
+                        </div>
+
+
+                        <div id="rule-lower">
+
+                            ❌ Una letra minúscula
+
+                        </div>
+
+
+                        <div id="rule-number">
+
+                            ❌ Un número
+
+                        </div>
+
+
+                        <div id="rule-special">
+
+                            ❌ Un carácter especial
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- CONFIRMAR -->
+
+                    <div class="mt-4">
+
+
+                        <label class="form-label fw-bold">
+
+                            Confirmar contraseña
+
+                        </label>
+
+
+                        <div class="input-group">
+
+
+                            <input
+                                type="password"
+                                class="form-control"
+                                id="password_confirmar"
+                                name="password_confirmar"
+                                autocomplete="new-password"
+                                required
+                            >
+
+
+                            <button
+                                class="btn btn-outline-secondary toggle-password"
+                                type="button"
+                                data-target="password_confirmar"
+                            >
+
+                                <i
+                                    class="fa-solid fa-eye"
+                                ></i>
+
+                            </button>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div
+                        id="matchMessage"
+                        class="mt-2 fw-bold"
+                    ></div>
+
+
+                    <div
+                        id="mensajePassword"
+                        class="mt-3"
+                    ></div>
+
+
+                </div>
+
+
+                <div class="modal-footer">
+
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                    >
+
+                        Cancelar
+
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        id="btnGuardarPassword"
+                        class="btn btn-primary"
+                        disabled
+                    >
+
+                        Guardar
+
+                    </button>
+
+
+                </div>
+
+
+            </form>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+<!-- =========================================================
+     MODAL ADVERTENCIA DE SESIÓN
+     ========================================================= -->
+
+<div
+    class="modal fade"
+    id="modalSessionExpired"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+>
+
+
+    <div class="modal-dialog modal-dialog-centered">
+
+
+        <div class="modal-content">
+
+
+            <div class="modal-header bg-warning">
+
+
+                <h5 class="modal-title text-dark">
+
+
+                    <i
+                        class="fa-solid fa-triangle-exclamation"
+                    ></i>
+
+
+                    Sesión por expirar
+
+
+                </h5>
+
+
+            </div>
+
+
+            <div class="modal-body text-center">
+
+
+                <div class="mb-3">
+
+
+                    <i
+                        class="fa-solid fa-user-clock"
+                        style="
+                            font-size:65px;
+                            color:#f59e0b
+                        "
+                    ></i>
+
+
+                </div>
+
+
+                <h4>
+
+                    Su sesión está por expirar
+
+                </h4>
+
+
+                <p class="text-muted">
+
+                    Por motivos de seguridad,
+                    su sesión se cerrará
+                    automáticamente por inactividad.
+
+                </p>
+
+
+                <h1
+                    id="countdown"
+                    class="display-3 text-danger fw-bold"
+                >
+
+                    60
+
+                </h1>
+
+
+                <small class="text-muted">
+
+                    segundos restantes
+
+                </small>
+
+
+            </div>
+
+
+            <div class="modal-footer justify-content-center">
+
+
+                <button
+                    id="btnContinuarSesion"
+                    class="btn btn-primary btn-lg"
+                >
+
+                    <i
+                        class="fa-solid fa-arrow-rotate-right"
+                    ></i>
+
+                    Continuar trabajando
+
+                </button>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+<script
+    src="{{ url_for('static', filename='js/session_timeout.js') }}">
+</script>
+
+
+</body>
+
+</html>

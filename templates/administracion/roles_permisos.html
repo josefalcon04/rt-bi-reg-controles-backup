@@ -1,0 +1,868 @@
+{% extends "base.html" %}
+
+{% block title %}
+Roles y Permisos - RT BI
+{% endblock %}
+
+
+{% block estilos_extra %}
+
+<link
+    rel="stylesheet"
+    href="{{ url_for(
+        'static',
+        filename='css/administracion_roles_permisos.css'
+    ) }}"
+>
+
+<style>
+
+/* =========================================================
+   CAPA SUPERIOR DEL TOPBAR
+   Evita que el contenido de Roles y Permisos
+   tape el menú del usuario.
+   ========================================================= */
+
+.topbar {
+    position: relative;
+    z-index: 10000;
+}
+
+.user-dropdown {
+    position: relative;
+    z-index: 10001;
+}
+
+.user-menu {
+    z-index: 10002;
+}
+
+
+/* =========================================================
+   MENSAJES FLASH
+   ========================================================= */
+
+.rp-flash-container {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.rp-flash {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 11px 15px;
+
+    border-radius: 7px;
+
+    font-size: 13px;
+    font-weight: 500;
+
+    animation: rpFlashEntrada 0.25s ease;
+}
+
+.rp-flash.success {
+    background: #ecfdf3;
+    border: 1px solid #a7f3d0;
+    color: #047857;
+}
+
+.rp-flash.error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #dc2626;
+}
+
+.rp-flash.warning {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    color: #b45309;
+}
+
+.rp-flash.info {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #2563eb;
+}
+
+.rp-flash i {
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+@keyframes rpFlashEntrada {
+
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block contenido %}
+
+
+<!-- =========================================================
+     ENCABEZADO
+     ========================================================= -->
+
+<div class="rp-header">
+
+    <div class="rp-header-icon">
+
+        <i class="fa-solid fa-user-shield"></i>
+
+    </div>
+
+
+    <div class="rp-header-info">
+
+        <h1>
+            Roles y Permisos
+        </h1>
+
+        <p>
+            Administra los permisos asignados a cada rol de la plataforma.
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     MENSAJES FLASH
+     ========================================================= -->
+
+{% with mensajes = get_flashed_messages(with_categories=true) %}
+
+    {% if mensajes %}
+
+        <div class="rp-flash-container">
+
+            {% for categoria, mensaje in mensajes %}
+
+                <div class="rp-flash {{ categoria }}">
+
+                    {% if categoria == 'success' %}
+
+                        <i class="fa-solid fa-circle-check"></i>
+
+                    {% elif categoria == 'error' %}
+
+                        <i class="fa-solid fa-circle-exclamation"></i>
+
+                    {% elif categoria == 'warning' %}
+
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+
+                    {% else %}
+
+                        <i class="fa-solid fa-circle-info"></i>
+
+                    {% endif %}
+
+                    <span>
+                        {{ mensaje }}
+                    </span>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+{% endwith %}
+
+
+
+<!-- =========================================================
+     CONTENEDOR PRINCIPAL
+     ========================================================= -->
+
+<div class="rp-container">
+
+
+    <!-- =====================================================
+         PANEL DE SELECCIÓN DE ROL
+         ===================================================== -->
+
+    <div class="rp-panel">
+
+        <div class="rp-panel-header">
+
+            <div>
+
+                <h2>
+
+                    <i class="fa-solid fa-users-gear"></i>
+
+                    Configuración de permisos
+
+                </h2>
+
+                <p>
+                    Selecciona un rol para consultar y modificar
+                    sus permisos.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             SELECTOR DE ROL
+             ================================================= -->
+
+        <div class="rp-role-selector">
+
+            <label for="rol">
+
+                <i class="fa-solid fa-user-tag"></i>
+
+                Seleccionar rol
+
+            </label>
+
+
+            <select
+                id="rol"
+                name="rol"
+                class="rp-select"
+            >
+
+                <option value="">
+                    Seleccione un rol
+                </option>
+
+
+                {% for rol in roles %}
+
+                <option
+                    value="{{ rol[0] }}"
+                >
+
+                    {{ rol[1] }}
+
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FORMULARIO DE PERMISOS
+         ===================================================== -->
+
+    <form
+        method="POST"
+        action="{{ url_for('roles_permisos.guardar') }}"
+        id="formPermisos"
+    >
+
+
+        <!-- ROL SELECCIONADO -->
+
+        <input
+            type="hidden"
+            name="id_rol"
+            id="id_rol"
+            value=""
+        >
+
+
+        <!-- =================================================
+             PANEL DE PERMISOS
+             ================================================= -->
+
+        <div class="rp-panel">
+
+
+            <div class="rp-panel-header">
+
+                <div>
+
+                    <h2>
+
+                        <i class="fa-solid fa-key"></i>
+
+                        Permisos disponibles
+
+                    </h2>
+
+                    <p>
+                        Marca los permisos que tendrá el rol seleccionado.
+                    </p>
+
+                </div>
+
+
+                <div class="rp-permission-counter">
+
+                    <span id="contadorPermisos">
+                        0
+                    </span>
+
+                    permisos seleccionados
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 TOOLBAR
+                 ================================================= -->
+
+            <div class="rp-toolbar">
+
+
+                <div class="rp-search">
+
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                    <input
+                        type="text"
+                        id="buscarPermiso"
+                        placeholder="Buscar permiso..."
+                        autocomplete="off"
+                    >
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="rp-select-all"
+                    id="btnSeleccionarTodos"
+                >
+
+                    <i class="fa-solid fa-check-double"></i>
+
+                    Seleccionar todos
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="rp-deselect-all"
+                    id="btnDeseleccionarTodos"
+                >
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                    Limpiar
+
+                </button>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 LISTA DE PERMISOS
+                 ================================================= -->
+
+            <div
+                class="rp-permissions-grid"
+                id="listaPermisos"
+            >
+
+                {% for permiso in permisos %}
+
+                <label
+                    class="rp-permission-card"
+                    data-permiso="{{ permiso[1] }} {{ permiso[2] or '' }}"
+                >
+
+                    <input
+                        type="checkbox"
+                        name="permisos"
+                        value="{{ permiso[0] }}"
+                        class="permiso-checkbox"
+                    >
+
+
+                    <div class="rp-permission-check">
+
+                        <i class="fa-solid fa-check"></i>
+
+                    </div>
+
+
+                    <div class="rp-permission-icon">
+
+                        <i class="fa-solid fa-key"></i>
+
+                    </div>
+
+
+                    <div class="rp-permission-info">
+
+                        <strong>
+                            {{ permiso[1] }}
+                        </strong>
+
+
+                        {% if permiso[2] %}
+
+                        <span>
+                            {{ permiso[2] }}
+                        </span>
+
+                        {% else %}
+
+                        <span>
+                            Sin descripción
+                        </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </label>
+
+                {% else %}
+
+                <div class="rp-empty">
+
+                    <i class="fa-solid fa-circle-info"></i>
+
+                    <p>
+                        No existen permisos activos.
+                    </p>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+
+
+            <!-- =================================================
+                 FOOTER
+                 ================================================= -->
+
+            <div class="rp-actions">
+
+                <div class="rp-selected-info">
+
+                    <i class="fa-solid fa-shield-halved"></i>
+
+                    Los cambios se aplicarán al rol seleccionado.
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="rp-btn-save"
+                    id="btnGuardar"
+                    disabled
+                >
+
+                    <i class="fa-solid fa-floppy-disk"></i>
+
+                    Guardar permisos
+
+                </button>
+
+            </div>
+
+
+        </div>
+
+    </form>
+
+</div>
+
+
+
+<!-- =========================================================
+     DATOS DE PERMISOS POR ROL
+     ========================================================= -->
+
+<script
+    type="application/json"
+    id="permisosPorRolData"
+>
+{{ permisos_por_rol | tojson }}
+</script>
+
+
+
+<!-- =========================================================
+     JAVASCRIPT
+     ========================================================= -->
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        /* =====================================================
+           DATOS
+           ===================================================== */
+
+        const permisosPorRol =
+            JSON.parse(
+                document.getElementById(
+                    "permisosPorRolData"
+                ).textContent
+            );
+
+
+        /* =====================================================
+           ELEMENTOS
+           ===================================================== */
+
+        const selectorRol =
+            document.getElementById("rol");
+
+        const inputRol =
+            document.getElementById("id_rol");
+
+        const checkboxes =
+            document.querySelectorAll(
+                ".permiso-checkbox"
+            );
+
+        const contador =
+            document.getElementById(
+                "contadorPermisos"
+            );
+
+        const btnGuardar =
+            document.getElementById(
+                "btnGuardar"
+            );
+
+        const btnSeleccionarTodos =
+            document.getElementById(
+                "btnSeleccionarTodos"
+            );
+
+        const btnDeseleccionarTodos =
+            document.getElementById(
+                "btnDeseleccionarTodos"
+            );
+
+        const buscador =
+            document.getElementById(
+                "buscarPermiso"
+            );
+
+
+        /* =====================================================
+           CONTADOR
+           ===================================================== */
+
+        function actualizarContador() {
+
+            const seleccionados =
+                document.querySelectorAll(
+                    ".permiso-checkbox:checked"
+                ).length;
+
+            contador.textContent =
+                seleccionados;
+        }
+
+
+        /* =====================================================
+           CARGAR PERMISOS
+           ===================================================== */
+
+        function cargarPermisosRol(idRol) {
+
+            checkboxes.forEach(
+                function (checkbox) {
+
+                    checkbox.checked = false;
+
+                }
+            );
+
+
+            if (!idRol) {
+
+                inputRol.value = "";
+
+                btnGuardar.disabled = true;
+
+                actualizarContador();
+
+                return;
+            }
+
+
+            inputRol.value = idRol;
+
+
+            const permisosAsignados =
+                permisosPorRol[idRol] || [];
+
+
+            checkboxes.forEach(
+                function (checkbox) {
+
+                    const idPermiso =
+                        parseInt(
+                            checkbox.value
+                        );
+
+
+                    checkbox.checked =
+                        permisosAsignados.includes(
+                            idPermiso
+                        );
+
+                }
+            );
+
+
+            btnGuardar.disabled = false;
+
+            actualizarContador();
+
+        }
+
+
+        /* =====================================================
+           CAMBIO DE ROL
+           ===================================================== */
+
+        selectorRol.addEventListener(
+            "change",
+            function () {
+
+                cargarPermisosRol(
+                    this.value
+                );
+
+            }
+        );
+
+
+        /* =====================================================
+           CHECKBOX
+           ===================================================== */
+
+        checkboxes.forEach(
+            function (checkbox) {
+
+                checkbox.addEventListener(
+                    "change",
+                    function () {
+
+                        actualizarContador();
+
+                    }
+                );
+
+            }
+        );
+
+
+        /* =====================================================
+           SELECCIONAR TODOS
+           ===================================================== */
+
+        btnSeleccionarTodos.addEventListener(
+            "click",
+            function () {
+
+                if (!selectorRol.value) {
+
+                    alert(
+                        "Primero debes seleccionar un rol."
+                    );
+
+                    return;
+                }
+
+
+                checkboxes.forEach(
+                    function (checkbox) {
+
+                        const card =
+                            checkbox.closest(
+                                ".rp-permission-card"
+                            );
+
+
+                        if (
+                            card &&
+                            card.style.display !== "none"
+                        ) {
+
+                            checkbox.checked = true;
+
+                        }
+
+                    }
+                );
+
+
+                actualizarContador();
+
+            }
+        );
+
+
+        /* =====================================================
+           DESELECCIONAR TODOS
+           ===================================================== */
+
+        btnDeseleccionarTodos.addEventListener(
+            "click",
+            function () {
+
+                checkboxes.forEach(
+                    function (checkbox) {
+
+                        checkbox.checked = false;
+
+                    }
+                );
+
+
+                actualizarContador();
+
+            }
+        );
+
+
+        /* =====================================================
+           BUSCADOR
+           ===================================================== */
+
+        buscador.addEventListener(
+            "input",
+            function () {
+
+                const texto =
+                    this.value
+                        .toLowerCase()
+                        .trim();
+
+
+                document
+                    .querySelectorAll(
+                        ".rp-permission-card"
+                    )
+                    .forEach(
+                        function (card) {
+
+                            const contenido =
+                                (
+                                    card.dataset.permiso
+                                    || ""
+                                ).toLowerCase();
+
+
+                            if (
+                                contenido.includes(
+                                    texto
+                                )
+                            ) {
+
+                                card.style.display =
+                                    "flex";
+
+                            } else {
+
+                                card.style.display =
+                                    "none";
+
+                            }
+
+                        }
+                    );
+
+            }
+        );
+
+
+        /* =====================================================
+           VALIDAR FORMULARIO
+           ===================================================== */
+
+        document
+            .getElementById("formPermisos")
+            .addEventListener(
+                "submit",
+                function (event) {
+
+                    if (!selectorRol.value) {
+
+                        event.preventDefault();
+
+                        alert(
+                            "Debes seleccionar un rol."
+                        );
+
+                        return;
+                    }
+
+
+                    const seleccionados =
+                        document.querySelectorAll(
+                            ".permiso-checkbox:checked"
+                        ).length;
+
+
+                    if (seleccionados === 0) {
+
+                        const confirmar =
+                            confirm(
+                                "El rol no tendrá ningún permiso. ¿Deseas continuar?"
+                            );
+
+
+                        if (!confirmar) {
+
+                            event.preventDefault();
+
+                        }
+
+                    }
+
+                }
+            );
+
+    }
+);
+
+</script>
+
+
+{% endblock %}

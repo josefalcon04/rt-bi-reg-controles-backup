@@ -1,0 +1,477 @@
+/* =========================================================
+   TENDENCIAS - PLANTAS
+========================================================= */
+
+.tendencias-plantas-page {
+
+    width: 100%;
+    max-width: 1500px;
+
+    margin: 0 auto;
+
+    padding: 30px 35px 45px;
+
+    box-sizing: border-box;
+
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.tendencias-header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    background: linear-gradient(
+        135deg,
+        #2563eb,
+        #1d4ed8
+    );
+
+    color: white;
+
+    padding: 22px 26px;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 6px 18px rgba(
+            37,
+            99,
+            235,
+            0.20
+        );
+
+    margin-bottom: 22px;
+
+}
+
+
+.tendencias-header-icon {
+
+    width: 48px;
+
+    height: 48px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: rgba(
+        255,
+        255,
+        255,
+        0.18
+    );
+
+    font-size: 22px;
+
+}
+
+
+.tendencias-header h1 {
+
+    margin: 0;
+
+    font-size: 24px;
+
+    font-weight: 700;
+
+}
+
+
+.tendencias-header p {
+
+    margin: 5px 0 0;
+
+    font-size: 13px;
+
+    opacity: 0.85;
+
+}
+
+
+/* =========================================================
+   CONTENEDOR COMPARACIÓN
+========================================================= */
+
+.plantas-comparacion {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 22px;
+
+}
+
+
+/* =========================================================
+   TARJETA PLANTA
+========================================================= */
+
+.planta-card {
+
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 4px 14px rgba(
+            15,
+            23,
+            42,
+            0.07
+        );
+
+}
+
+
+/* =========================================================
+   HEADER TARJETA
+========================================================= */
+
+.planta-card-header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 18px 20px;
+
+    border-bottom: 1px solid #e8edf4;
+
+}
+
+
+.planta-icon {
+
+    width: 44px;
+
+    height: 44px;
+
+    border-radius: 10px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 19px;
+
+}
+
+
+.planta-icon.comercial {
+
+    color: #2563eb;
+
+    background: #eff6ff;
+
+}
+
+
+.planta-icon.control {
+
+    color: #059669;
+
+    background: #ecfdf5;
+
+}
+
+
+.planta-card-header h2 {
+
+    margin: 0;
+
+    color: #0f172a;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+}
+
+
+.planta-card-header span {
+
+    display: block;
+
+    margin-top: 3px;
+
+    color: #64748b;
+
+    font-size: 12px;
+
+}
+
+
+/* =========================================================
+   CONTROLES
+========================================================= */
+
+.planta-controles {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        1fr
+        1.4fr;
+
+    gap: 12px;
+
+    padding: 18px 20px;
+
+    background: #f8fafc;
+
+    border-bottom: 1px solid #e8edf4;
+
+}
+
+
+.planta-control {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+
+}
+
+
+.planta-control label {
+
+    color: #475569;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+}
+
+
+.planta-control select,
+.planta-control input {
+
+    width: 100%;
+
+    height: 38px;
+
+    box-sizing: border-box;
+
+    padding: 0 11px;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 7px;
+
+    background: white;
+
+    color: #1e293b;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s;
+
+}
+
+
+.planta-control select:focus,
+.planta-control input:focus {
+
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(
+            37,
+            99,
+            235,
+            0.10
+        );
+
+}
+
+
+.planta-input-icon {
+
+    position: relative;
+
+}
+
+
+.planta-input-icon i {
+
+    position: absolute;
+
+    left: 11px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #64748b;
+
+    font-size: 12px;
+
+    pointer-events: none;
+
+}
+
+
+.planta-input-icon input {
+
+    padding-left: 32px;
+
+}
+
+
+/* =========================================================
+   GRÁFICO
+========================================================= */
+
+.grafico-contenedor {
+
+    min-height: 390px;
+
+    padding: 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #ffffff;
+
+}
+
+
+.grafico-planta {
+
+    display: none;
+
+    width: 100%;
+
+    max-width: 100%;
+
+    height: auto;
+
+    border-radius: 8px;
+
+    object-fit: contain;
+
+}
+
+
+.grafico-loading {
+
+    min-height: 320px;
+
+    width: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    color: #94a3b8;
+
+    text-align: center;
+
+}
+
+
+.grafico-loading i {
+
+    font-size: 35px;
+
+    color: #2563eb;
+
+    opacity: 0.7;
+
+}
+
+
+.grafico-loading span {
+
+    font-size: 13px;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+
+    .plantas-comparacion {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .tendencias-plantas-page {
+
+        padding: 20px 15px;
+
+    }
+
+
+    .planta-controles {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .tendencias-header {
+
+        padding: 18px;
+
+    }
+
+
+    .tendencias-header h1 {
+
+        font-size: 20px;
+
+    }
+
+}

@@ -1,92 +1,379 @@
-<!DOCTYPE html>
-<html lang="es">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
+{% block contenido %}
 
-    <title>Tendencias Reportes</title>
+<!-- =====================================================
+     ESTILOS Y LIBRERÍA PLOTLY
+     ===================================================== -->
 
-    <link
-        rel="stylesheet"
-        href="/static/css/tendencias_plantas.css">
-</head>
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/tendencias_plantas.css') }}"
+>
 
-<body>
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/nripo_035.css') }}"
+>
 
-<div class="tabs-header">
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
 
-    <div class="tabs-title">
-        <h3>📄 Tendencias de Reportes</h3>
-        <span>Seleccione un reporte para consultar el detalle</span>
+<script src="{{ url_for('static', filename='js/nripo_035.js') }}"></script>
+
+
+<div class="tendencias-plantas-page">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="tendencias-header">
+
+        <div class="tendencias-header-icon">
+            <i class="fa-solid fa-chart-line"></i>
+        </div>
+
+        <div class="tendencias-header-text">
+
+            <h1>
+                Tendencias de Reportes
+            </h1>
+
+            <p>
+                Consulta la evolución y comportamiento de los reportes regulatorios.
+            </p>
+
+        </div>
+
     </div>
 
-    <div class="tabs-tendencias">
+
+    <!-- =====================================================
+         TABS
+         ===================================================== -->
+
+    <div class="tendencias-tabs">
 
         <button
-            class="tab-btn active"
-            onclick="cargarTabReporte(this, '/NRIPO_033_034')">
-            NRIPO 033/034
+            type="button"
+            class="tendencia-tab active"
+            onclick="cargarTabReporte(this, '/NRIPO_033_034')"
+        >
+
+            <i class="fa-solid fa-chart-line"></i>
+
+            <span>
+                NRIPO 033/034
+            </span>
+
         </button>
 
+
         <button
-            class="tab-btn"
-            onclick="cargarTabReporte(this, '/NRIPO_035')">
-            NRIPO 035
+            type="button"
+            class="tendencia-tab"
+            onclick="cargarTabReporte(this, '/NRIPO_035')"
+        >
+
+            <i class="fa-solid fa-chart-column"></i>
+
+            <span>
+                NRIPO 035
+            </span>
+
         </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         CONTENIDO DINÁMICO
+         ===================================================== -->
+
+    <div
+        id="contenido-tab-reportes"
+        class="tendencias-contenido"
+    >
+
+        <div class="tendencia-placeholder">
+
+            <div class="placeholder-icon">
+
+                <i class="fa-solid fa-spinner fa-spin"></i>
+
+            </div>
+
+            <h3>
+                Cargando información
+            </h3>
+
+            <p>
+                Espere un momento...
+            </p>
+
+        </div>
 
     </div>
 
 </div>
 
-<div
-    id="contenido-tab-reportes"
-    class="contenido-tab">
-</div>
+
+<!-- =====================================================
+     JAVASCRIPT
+     ===================================================== -->
 
 <script>
 
 async function cargarTabReporte(btn, url) {
 
+    /* =====================================================
+       ACTIVAR TAB
+       ===================================================== */
+
     document
-        .querySelectorAll('.tab-btn')
-        .forEach(x => x.classList.remove('active'));
+        .querySelectorAll(".tendencia-tab")
+        .forEach(function(tab) {
 
-    btn.classList.add('active');
+            tab.classList.remove("active");
 
-    let contenedor =
-        document.getElementById('contenido-tab-reportes');
+        });
+
+
+    btn.classList.add("active");
+
+
+    /* =====================================================
+       CONTENEDOR
+       ===================================================== */
+
+    const contenedor =
+        document.getElementById(
+            "contenido-tab-reportes"
+        );
+
+
+    /* =====================================================
+       LOADING
+       ===================================================== */
 
     contenedor.innerHTML = `
-        <div class="loader-tab">
-            ⏳ Cargando información...
+
+        <div class="tendencia-placeholder">
+
+            <div class="placeholder-icon">
+
+                <i class="fa-solid fa-spinner fa-spin"></i>
+
+            </div>
+
+            <h3>
+                Cargando información
+            </h3>
+
+            <p>
+                Estamos consultando los datos del reporte.
+            </p>
+
         </div>
+
     `;
+
 
     try {
 
-        let res = await fetch(url);
-        let html = await res.text();
+        /* =================================================
+           FETCH
+           ================================================= */
+
+        const response =
+            await fetch(url, {
+
+                method: "GET",
+
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
+
+            });
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Error HTTP " + response.status
+            );
+
+        }
+
+
+        const html =
+            await response.text();
+
+
+        /* =================================================
+           MOSTRAR CONTENIDO
+           ================================================= */
 
         contenedor.innerHTML = html;
 
-    } catch(error) {
+
+/* =================================================
+   INICIALIZAR NRIPO 035
+   ================================================= */
+
+if (
+    url === "/NRIPO_035" &&
+    typeof window.inicializarNRIPO035 === "function"
+) {
+
+    console.log(
+        "Ejecutando inicialización NRIPO 035..."
+    );
+
+    setTimeout(function () {
+
+        window.inicializarNRIPO035();
+
+    }, 50);
+}
+        /* =================================================
+           INICIALIZACIÓN ESPECÍFICA NRIPO 035
+           ================================================= */
+
+        if (url === "/NRIPO_035") {
+
+            if (
+                typeof inicializarNRIPO035 === "function"
+            ) {
+
+                setTimeout(function() {
+
+                    inicializarNRIPO035();
+
+                }, 50);
+
+            } else {
+
+                console.warn(
+                    "No se encontró la función inicializarNRIPO035()."
+                );
+
+            }
+
+        }
+
+
+        /* =================================================
+           REDIMENSIONAR GRÁFICOS PLOTLY
+           ================================================= */
+
+        setTimeout(function() {
+
+            if (window.Plotly) {
+
+                const graficos =
+                    contenedor.querySelectorAll(
+                        ".js-plotly-plot"
+                    );
+
+
+                graficos.forEach(function(grafico) {
+
+                    try {
+
+                        Plotly.Plots.resize(
+                            grafico
+                        );
+
+                    } catch (e) {
+
+                        console.warn(
+                            "No se pudo redimensionar gráfico:",
+                            e
+                        );
+
+                    }
+
+                });
+
+            }
+
+        }, 200);
+
+
+    } catch (error) {
+
+        console.error(
+            "Error cargando tendencias:",
+            error
+        );
+
+
+        /* =================================================
+           MENSAJE DE ERROR
+           ================================================= */
 
         contenedor.innerHTML = `
-            <div style="color:red; padding:20px;">
-                Error cargando: ${error}
+
+            <div class="tendencia-placeholder">
+
+                <div
+                    class="placeholder-icon"
+                    style="
+                        background:#fef2f2;
+                        color:#dc2626;
+                    "
+                >
+
+                    <i class="fa-solid fa-circle-exclamation"></i>
+
+                </div>
+
+
+                <h3>
+                    Error cargando información
+                </h3>
+
+
+                <p>
+                    ${error.message}
+                </p>
+
             </div>
+
         `;
+
     }
+
 }
 
-window.onload = function() {
-    cargarTabReporte(
-        document.querySelector('.tab-btn.active'),
-        '/NRIPO_033_034'
-    );
-};
+
+/* =====================================================
+   CARGA INICIAL
+   ===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        const primeraTab =
+            document.querySelector(
+                ".tendencia-tab.active"
+            );
+
+
+        if (primeraTab) {
+
+            cargarTabReporte(
+                primeraTab,
+                "/NRIPO_033_034"
+            );
+
+        }
+
+    }
+);
 
 </script>
 
-</body>
-</html>
+{% endblock %}

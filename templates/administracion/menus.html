@@ -1,0 +1,1637 @@
+{% extends "base.html" %}
+
+{% block title %}
+Menús y Módulos | Administración
+{% endblock %}
+
+{% block estilos_extra %}
+
+<link
+    rel="stylesheet"
+    href="{{ url_for(
+        'static',
+        filename='css/administracion_menus.css'
+    ) }}"
+>
+
+{% endblock %}
+
+{% block contenido %}
+
+<div class="menus-page">
+
+    <!-- =====================================================
+         ENCABEZADO
+         ===================================================== -->
+
+    <div class="menus-header">
+
+        <div class="menus-header-left">
+
+            <div class="menus-header-icon">
+
+                <i class="fa-solid fa-list"></i>
+
+            </div>
+
+            <div>
+
+                <h1>
+                    Menús y Módulos
+                </h1>
+
+                <p>
+                    Administra los módulos, accesos y estructura
+                    de navegación de la plataforma.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <button
+            type="button"
+            class="btn-primary"
+            onclick="abrirNuevoMenu()"
+        >
+
+            <i class="fa-solid fa-plus"></i>
+
+            Nuevo menú
+
+        </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         MENSAJES
+         ===================================================== -->
+
+    {% with messages = get_flashed_messages(
+        with_categories=true
+    ) %}
+
+        {% if messages %}
+
+            <div class="flash-container">
+
+                {% for category, message in messages %}
+
+                    <div
+                        class="flash-message
+                        flash-{{ category }}"
+                    >
+
+                        {% if category == "success" %}
+
+                            <i class="fa-solid fa-circle-check"></i>
+
+                        {% else %}
+
+                            <i class="fa-solid fa-circle-exclamation"></i>
+
+                        {% endif %}
+
+                        {{ message }}
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <!-- =====================================================
+         CARD PRINCIPAL
+         ===================================================== -->
+
+    <div class="menus-card">
+
+
+        <!-- =================================================
+             TOOLBAR
+             ================================================= -->
+
+        <div class="menus-toolbar">
+
+            <div class="search-box">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+                    type="text"
+                    id="buscarMenu"
+                    placeholder="Buscar menú..."
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <div class="menus-count">
+
+                {{ menus_admin|length }}
+
+                menú{% if menus_admin|length != 1 %}s{% endif %}
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             TABLA
+             ================================================= -->
+
+        <div class="table-container">
+
+            <table
+                class="menus-table"
+                id="tablaMenus"
+            >
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            ID
+                        </th>
+
+                        <th>
+                            Menú
+                        </th>
+
+                        <th>
+                            URL
+                        </th>
+
+                        <th>
+                            Blueprint
+                        </th>
+
+                        <th>
+                            Permiso
+                        </th>
+
+                        <th>
+                            Orden
+                        </th>
+
+                        <th>
+                            Padre
+                        </th>
+
+                        <th>
+                            Visible
+                        </th>
+
+                        <th>
+                            Estado
+                        </th>
+
+                        <th class="acciones-col">
+                            Acciones
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for menu in menus_admin %}
+
+                    <tr
+                        data-menu-id="{{ menu[0] }}"
+                        data-padre="{{ menu[6] }}"
+                    >
+
+                        <!-- =================================
+                             ID
+                             ================================= -->
+
+                        <td>
+
+                            <span class="menu-id">
+
+                                #{{ menu[0] }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- =================================
+                             NOMBRE
+                             ================================= -->
+
+                        <td>
+
+                            <div
+                                class="
+                                    menu-name-cell
+                                    {% if menu[6] != 0 %}
+                                        submenu-row
+                                    {% endif %}
+                                "
+                            >
+
+                                {% if menu[6] != 0 %}
+
+                                    <span class="submenu-line">
+                                        └
+                                    </span>
+
+                                {% endif %}
+
+
+                                <div class="menu-icon">
+
+                                    {% if menu[4] %}
+
+                                        <i class="{{ menu[4] }}"></i>
+
+                                    {% else %}
+
+                                        <i class="fa-solid fa-folder"></i>
+
+                                    {% endif %}
+
+                                </div>
+
+
+                                <div>
+
+                                    <strong>
+                                        {{ menu[1] }}
+                                    </strong>
+
+
+                                    {% if menu[6] == 0 %}
+
+                                        <span class="menu-type padre">
+                                            Menú principal
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="menu-type hijo">
+                                            Submenú
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- =================================
+                             URL
+                             ================================= -->
+
+                        <td>
+
+                            <span class="menu-url">
+
+                                {{ menu[2] or '-' }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- =================================
+                             BLUEPRINT
+                             ================================= -->
+
+                        <td>
+
+                            {% if menu[3] %}
+
+                                <span class="blueprint-badge">
+
+                                    {{ menu[3] }}
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="sin-dato">
+                                    -
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- =================================
+                             PERMISO
+                             ================================= -->
+
+                        <td>
+
+                            {% if menu[10] %}
+
+                                <span class="permiso-badge">
+
+                                    <i class="fa-solid fa-key"></i>
+
+                                    {{ menu[10] }}
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="sin-dato">
+                                    Sin permiso
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- =================================
+                             ORDEN
+                             ================================= -->
+
+                        <td>
+
+                            <span class="orden-badge">
+
+                                {{ menu[5] }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- =================================
+                             PADRE
+                             ================================= -->
+
+                        <td>
+
+                            {% if menu[6] == 0 %}
+
+                                <span class="padre-badge">
+
+                                    Principal
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="padre-badge">
+
+                                    #{{ menu[6] }}
+
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- =================================
+                             VISIBLE
+                             ================================= -->
+
+                        <td>
+
+                            {% if menu[8] == 'S' %}
+
+                                <span class="visible-badge visible-si">
+
+                                    <span></span>
+
+                                    Sí
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="visible-badge visible-no">
+
+                                    <span></span>
+
+                                    No
+
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- =================================
+                             ESTADO
+                             ================================= -->
+
+                        <td>
+
+                            {% if menu[9] == 'A' %}
+
+                                <span class="estado activo">
+
+                                    <span></span>
+
+                                    Activo
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="estado inactivo">
+
+                                    <span></span>
+
+                                    Inactivo
+
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- =================================
+                             ACCIONES
+                             ================================= -->
+
+                        <td>
+
+                            <div class="acciones">
+
+
+                                <!-- =========================
+                                     EDITAR
+                                     ========================= -->
+
+                                <button
+                                    type="button"
+                                    class="action-btn edit"
+                                    title="Editar menú"
+
+                                    data-id="{{ menu[0] }}"
+                                    data-nombre="{{ menu[1] }}"
+                                    data-url="{{ menu[2] }}"
+                                    data-blueprint="{{ menu[3] or '' }}"
+                                    data-icono="{{ menu[4] or '' }}"
+                                    data-orden="{{ menu[5] }}"
+                                    data-padre="{{ menu[6] }}"
+                                    data-permiso="{{ menu[7] }}"
+                                    data-visible="{{ menu[8] }}"
+
+                                    onclick="editarMenuDesdeBoton(this)"
+                                >
+
+                                    <i class="fa-solid fa-pen"></i>
+
+                                </button>
+
+
+                                <!-- =========================
+                                     VISIBILIDAD
+                                     ========================= -->
+
+                                <button
+                                    type="button"
+
+                                    class="
+                                        action-btn
+                                        {% if menu[8] == 'S' %}
+                                            visibility
+                                        {% else %}
+                                            visibility-off
+                                        {% endif %}
+                                    "
+
+                                    title="
+                                        {% if menu[8] == 'S' %}
+                                            Ocultar menú
+                                        {% else %}
+                                            Mostrar menú
+                                        {% endif %}
+                                    "
+
+                                    onclick="abrirModalVisible(
+                                        '{{ menu[0] }}',
+                                        '{{ menu[1] }}',
+                                        '{{ menu[8] }}'
+                                    )"
+                                >
+
+                                    {% if menu[8] == 'S' %}
+
+                                        <i class="fa-solid fa-eye"></i>
+
+                                    {% else %}
+
+                                        <i class="fa-solid fa-eye-slash"></i>
+
+                                    {% endif %}
+
+                                </button>
+
+
+                                <!-- =========================
+                                     ESTADO
+                                     ========================= -->
+
+                                <button
+                                    type="button"
+
+                                    class="
+                                        action-btn
+                                        {% if menu[9] == 'A' %}
+                                            disable
+                                        {% else %}
+                                            enable
+                                        {% endif %}
+                                    "
+
+                                    title="
+                                        {% if menu[9] == 'A' %}
+                                            Desactivar menú
+                                        {% else %}
+                                            Activar menú
+                                        {% endif %}
+                                    "
+
+                                    onclick="abrirModalEstado(
+                                        '{{ menu[0] }}',
+                                        '{{ menu[1] }}',
+                                        '{{ menu[9] }}'
+                                    )"
+                                >
+
+                                    {% if menu[9] == 'A' %}
+
+                                        <i class="fa-solid fa-ban"></i>
+
+                                    {% else %}
+
+                                        <i class="fa-solid fa-check"></i>
+
+                                    {% endif %}
+
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+
+                        <td
+                            colspan="10"
+                            class="empty-state"
+                        >
+
+                            <i class="fa-solid fa-list"></i>
+
+                            <h3>
+                                No hay menús registrados
+                            </h3>
+
+                            <p>
+                                Crea el primer menú de la plataforma.
+                            </p>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     MODAL CREAR / EDITAR MENÚ
+     ========================================================= -->
+
+<div
+    id="menuModal"
+    class="modal-overlay"
+>
+
+    <div class="menu-modal">
+
+
+        <!-- =================================================
+             HEADER
+             ================================================= -->
+
+        <div class="modal-header">
+
+            <div>
+
+                <h2 id="modalMenuTitulo">
+                    Nuevo menú
+                </h2>
+
+                <p>
+                    Configura el acceso y la estructura del módulo.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="modal-close"
+                onclick="cerrarMenuModal()"
+            >
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <!-- =================================================
+             FORMULARIO
+             ================================================= -->
+
+        <form
+            id="menuForm"
+            method="POST"
+            action="{{ url_for('menus.crear') }}"
+        >
+
+            <div class="modal-body">
+
+
+                <!-- =============================================
+                     NOMBRE
+                     ============================================= -->
+
+                <div class="form-group">
+
+                    <label>
+                        Nombre del menú
+                    </label>
+
+                    <input
+                        type="text"
+                        name="nombre_menu"
+                        id="nombre_menu"
+                        maxlength="100"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- =============================================
+                     URL
+                     ============================================= -->
+
+                <div class="form-group">
+
+                    <label>
+                        URL
+                    </label>
+
+                    <input
+                        type="text"
+                        name="url"
+                        id="url"
+                        maxlength="200"
+                        placeholder="/modulo/"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- =============================================
+                     BLUEPRINT
+                     ============================================= -->
+
+                <div class="form-group">
+
+                    <label>
+                        Blueprint
+                    </label>
+
+                    <input
+                        type="text"
+                        name="blueprint"
+                        id="blueprint"
+                        maxlength="80"
+                        placeholder="ejemplo: monitoreo"
+                    >
+
+                </div>
+
+
+                <!-- =============================================
+                     ICONO
+                     ============================================= -->
+
+                <div class="form-group">
+
+                    <label>
+                        Icono
+                    </label>
+
+                    <input
+                        type="text"
+                        name="icono"
+                        id="icono"
+                        maxlength="100"
+                        placeholder="fa-solid fa-chart-line"
+                    >
+
+                    <small>
+                        Puedes utilizar clases de Font Awesome.
+                    </small>
+
+                </div>
+
+
+                <!-- =============================================
+                     ORDEN
+                     ============================================= -->
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label>
+                            Orden
+                        </label>
+
+                        <input
+                            type="number"
+                            name="orden_menu"
+                            id="orden_menu"
+                            value="0"
+                            min="0"
+                        >
+
+                    </div>
+
+
+                    <!-- =========================================
+                         MENÚ PADRE
+                         ========================================= -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Menú padre
+                        </label>
+
+                        <select
+                            name="id_menu_padre"
+                            id="id_menu_padre"
+                        >
+
+                            <option value="0">
+                                Menú principal
+                            </option>
+
+                            {% for padre in menus_padre %}
+
+                                <option value="{{ padre[0] }}">
+
+                                    {{ padre[1] }}
+
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =============================================
+                     PERMISO
+                     ============================================= -->
+
+                <div class="form-group">
+
+                    <label>
+                        Permiso requerido
+                    </label>
+
+                    <select
+                        name="id_permiso"
+                        id="id_permiso"
+                        required
+                    >
+
+                        <option value="">
+                            Seleccionar permiso
+                        </option>
+
+                        {% for permiso in permisos %}
+
+                            <option
+                                value="{{ permiso[0] }}"
+                            >
+
+                                {{ permiso[1] }}
+
+                                {% if permiso[2] %}
+
+                                    - {{ permiso[2] }}
+
+                                {% endif %}
+
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- =============================================
+                     VISIBLE
+                     ============================================= -->
+
+                <div class="form-group">
+
+                    <label>
+                        Visibilidad
+                    </label>
+
+                    <select
+                        name="visible"
+                        id="visible"
+                    >
+
+                        <option value="S">
+                            Visible
+                        </option>
+
+                        <option value="N">
+                            Oculto
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 FOOTER
+                 ================================================= -->
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn-secondary"
+                    onclick="cerrarMenuModal()"
+                >
+
+                    Cancelar
+
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="btn-save"
+                >
+
+                    <i class="fa-solid fa-save"></i>
+
+                    Guardar menú
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     MODAL ESTADO
+     ========================================================= -->
+
+<div
+    id="estadoMenuModal"
+    class="confirm-modal"
+>
+
+    <div class="confirm-modal-content">
+
+        <div
+            id="estadoMenuIcon"
+            class="confirm-icon"
+        >
+
+            <i class="fa-solid fa-list"></i>
+
+        </div>
+
+
+        <h3 id="estadoMenuTitulo">
+            Desactivar menú
+        </h3>
+
+
+        <p id="estadoMenuMensaje">
+            ¿Deseas desactivar este menú?
+        </p>
+
+
+        <div class="confirm-actions">
+
+            <button
+                type="button"
+                class="btn-secondary"
+                onclick="cerrarModalEstado()"
+            >
+
+                Cancelar
+
+            </button>
+
+
+            <form
+                id="estadoMenuForm"
+                method="POST"
+            >
+
+                <button
+                    type="submit"
+                    class="btn-confirm"
+                >
+
+                    Confirmar
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     MODAL VISIBILIDAD
+     ========================================================= -->
+
+<div
+    id="visibleMenuModal"
+    class="confirm-modal"
+>
+
+    <div class="confirm-modal-content">
+
+        <div
+            id="visibleMenuIcon"
+            class="confirm-icon visible-confirm"
+        >
+
+            <i class="fa-solid fa-eye"></i>
+
+        </div>
+
+
+        <h3 id="visibleMenuTitulo">
+            Ocultar menú
+        </h3>
+
+
+        <p id="visibleMenuMensaje">
+            ¿Deseas ocultar este menú?
+        </p>
+
+
+        <div class="confirm-actions">
+
+            <button
+                type="button"
+                class="btn-secondary"
+                onclick="cerrarModalVisible()"
+            >
+
+                Cancelar
+
+            </button>
+
+
+            <form
+                id="visibleMenuForm"
+                method="POST"
+            >
+
+                <button
+                    type="submit"
+                    class="btn-confirm"
+                >
+
+                    Confirmar
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+     ========================================================= -->
+
+<script>
+
+/* =========================================================
+   BUSCADOR
+   ========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const buscador =
+            document.getElementById(
+                "buscarMenu"
+            );
+
+
+        if (buscador) {
+
+            buscador.addEventListener(
+                "input",
+                function () {
+
+                    const texto =
+                        this.value.toLowerCase();
+
+
+                    const filas =
+                        document.querySelectorAll(
+                            "#tablaMenus tbody tr"
+                        );
+
+
+                    filas.forEach(
+                        function (fila) {
+
+                            const contenido =
+                                fila.textContent.toLowerCase();
+
+
+                            fila.style.display =
+                                contenido.includes(texto)
+                                    ? ""
+                                    : "none";
+
+                        }
+                    );
+
+                }
+            );
+
+        }
+
+
+        actualizarIconoPreview();
+
+    }
+);
+
+
+/* =========================================================
+   NUEVO MENÚ
+   ========================================================= */
+
+function abrirNuevoMenu() {
+
+    const modal =
+        document.getElementById(
+            "menuModal"
+        );
+
+
+    const form =
+        document.getElementById(
+            "menuForm"
+        );
+
+
+    document.getElementById(
+        "modalMenuTitulo"
+    ).textContent =
+        "Nuevo menú";
+
+
+    form.action =
+        "{{ url_for('menus.crear') }}";
+
+
+    form.reset();
+
+
+    document.getElementById(
+        "orden_menu"
+    ).value = 0;
+
+
+    document.getElementById(
+        "id_menu_padre"
+    ).value = 0;
+
+
+    document.getElementById(
+        "visible"
+    ).value = "S";
+
+
+    modal.classList.add(
+        "show"
+    );
+
+}
+
+
+/* =========================================================
+   EDITAR MENÚ
+   ========================================================= */
+
+function editarMenu(
+    id,
+    nombre,
+    url,
+    blueprint,
+    icono,
+    orden,
+    padre,
+    permiso,
+    visible
+) {
+
+    const modal =
+        document.getElementById(
+            "menuModal"
+        );
+
+
+    const form =
+        document.getElementById(
+            "menuForm"
+        );
+
+
+    document.getElementById(
+        "modalMenuTitulo"
+    ).textContent =
+        "Editar menú";
+
+
+    form.action =
+        "/administracion/menus/editar/"
+        + id;
+
+
+    document.getElementById(
+        "nombre_menu"
+    ).value =
+        nombre || "";
+
+
+    document.getElementById(
+        "url"
+    ).value =
+        url || "";
+
+
+    document.getElementById(
+        "blueprint"
+    ).value =
+        blueprint || "";
+
+
+    document.getElementById(
+        "icono"
+    ).value =
+        icono || "";
+
+
+    document.getElementById(
+        "orden_menu"
+    ).value =
+        orden || 0;
+
+
+    document.getElementById(
+        "id_menu_padre"
+    ).value =
+        padre || 0;
+
+
+    document.getElementById(
+        "id_permiso"
+    ).value =
+        permiso || "";
+
+
+    document.getElementById(
+        "visible"
+    ).value =
+        visible || "S";
+
+
+    modal.classList.add(
+        "show"
+    );
+
+}
+
+
+/* =========================================================
+   EDITAR DESDE BOTÓN
+   ========================================================= */
+
+function editarMenuDesdeBoton(
+    boton
+) {
+
+    editarMenu(
+
+        boton.dataset.id,
+
+        boton.dataset.nombre,
+
+        boton.dataset.url,
+
+        boton.dataset.blueprint,
+
+        boton.dataset.icono,
+
+        boton.dataset.orden,
+
+        boton.dataset.padre,
+
+        boton.dataset.permiso,
+
+        boton.dataset.visible
+
+    );
+
+}
+
+
+/* =========================================================
+   CERRAR MODAL MENÚ
+   ========================================================= */
+
+function cerrarMenuModal() {
+
+    document
+        .getElementById(
+            "menuModal"
+        )
+        .classList.remove(
+            "show"
+        );
+
+}
+
+
+/* =========================================================
+   MODAL ESTADO
+   ========================================================= */
+
+function abrirModalEstado(
+    idMenu,
+    nombre,
+    estado
+) {
+
+    const modal =
+        document.getElementById(
+            "estadoMenuModal"
+        );
+
+
+    const titulo =
+        document.getElementById(
+            "estadoMenuTitulo"
+        );
+
+
+    const mensaje =
+        document.getElementById(
+            "estadoMenuMensaje"
+        );
+
+
+    const icono =
+        document.getElementById(
+            "estadoMenuIcon"
+        );
+
+
+    const form =
+        document.getElementById(
+            "estadoMenuForm"
+        );
+
+
+    if (estado === "A") {
+
+        titulo.textContent =
+            "Desactivar menú";
+
+
+        mensaje.textContent =
+            "¿Deseas desactivar el menú "
+            + nombre
+            + "?";
+
+
+        icono.classList.remove(
+            "confirm-active"
+        );
+
+        icono.classList.add(
+            "confirm-danger"
+        );
+
+    } else {
+
+        titulo.textContent =
+            "Activar menú";
+
+
+        mensaje.textContent =
+            "¿Deseas activar el menú "
+            + nombre
+            + "?";
+
+
+        icono.classList.remove(
+            "confirm-danger"
+        );
+
+        icono.classList.add(
+            "confirm-active"
+        );
+
+    }
+
+
+    form.action =
+        "/administracion/menus/estado/"
+        + idMenu;
+
+
+    modal.classList.add(
+        "show"
+    );
+
+}
+
+
+/* =========================================================
+   CERRAR ESTADO
+   ========================================================= */
+
+function cerrarModalEstado() {
+
+    document
+        .getElementById(
+            "estadoMenuModal"
+        )
+        .classList.remove(
+            "show"
+        );
+
+}
+
+
+/* =========================================================
+   MODAL VISIBILIDAD
+   ========================================================= */
+
+function abrirModalVisible(
+    idMenu,
+    nombre,
+    visible
+) {
+
+    const modal =
+        document.getElementById(
+            "visibleMenuModal"
+        );
+
+
+    const titulo =
+        document.getElementById(
+            "visibleMenuTitulo"
+        );
+
+
+    const mensaje =
+        document.getElementById(
+            "visibleMenuMensaje"
+        );
+
+
+    const icono =
+        document.getElementById(
+            "visibleMenuIcon"
+        );
+
+
+    const form =
+        document.getElementById(
+            "visibleMenuForm"
+        );
+
+
+    if (visible === "S") {
+
+        titulo.textContent =
+            "Ocultar menú";
+
+
+        mensaje.textContent =
+            "¿Deseas ocultar el menú "
+            + nombre
+            + "?";
+
+
+        icono.innerHTML =
+            '<i class="fa-solid fa-eye-slash"></i>';
+
+    } else {
+
+        titulo.textContent =
+            "Mostrar menú";
+
+
+        mensaje.textContent =
+            "¿Deseas mostrar el menú "
+            + nombre
+            + "?";
+
+
+        icono.innerHTML =
+            '<i class="fa-solid fa-eye"></i>';
+
+    }
+
+
+    form.action =
+        "/administracion/menus/visible/"
+        + idMenu;
+
+
+    modal.classList.add(
+        "show"
+    );
+
+}
+
+
+/* =========================================================
+   CERRAR VISIBILIDAD
+   ========================================================= */
+
+function cerrarModalVisible() {
+
+    document
+        .getElementById(
+            "visibleMenuModal"
+        )
+        .classList.remove(
+            "show"
+        );
+
+}
+
+
+/* =========================================================
+   CERRAR MODALES AL HACER CLICK FUERA
+   ========================================================= */
+
+document.addEventListener(
+    "click",
+    function (event) {
+
+        const menuModal =
+            document.getElementById(
+                "menuModal"
+            );
+
+
+        const estadoModal =
+            document.getElementById(
+                "estadoMenuModal"
+            );
+
+
+        const visibleModal =
+            document.getElementById(
+                "visibleMenuModal"
+            );
+
+
+        if (
+            event.target === menuModal
+        ) {
+
+            cerrarMenuModal();
+
+        }
+
+
+        if (
+            event.target === estadoModal
+        ) {
+
+            cerrarModalEstado();
+
+        }
+
+
+        if (
+            event.target === visibleModal
+        ) {
+
+            cerrarModalVisible();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   ESC PARA CERRAR
+   ========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (event.key === "Escape") {
+
+            cerrarMenuModal();
+
+            cerrarModalEstado();
+
+            cerrarModalVisible();
+
+        }
+
+    }
+);
+
+</script>
+
+{% endblock %}

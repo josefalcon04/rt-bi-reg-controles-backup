@@ -1,59 +1,73 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Gráficos Planta TRAFICO ACUMULADO</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background: #f9f9f9;
-        }
+<!-- ============================================================
+     PLANTA TRÁFICO ACUMULADO
+     ============================================================ -->
 
-        h1 {
-            text-align: center;
-            margin-top: 0;
-            margin-bottom: 20px;
-        }
+<section class="planta-trfacu-header">
 
-        /* 🔹 Contenedor principal: dos filas */
-        .grid-container {
-            display: grid;
-            grid-template-rows: auto auto;
-            gap: 20px;
-            width: 100%;
-        }
-
-        /* 🔹 Contenedor fila inferior con 2 columnas */
-        .bottom-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        .grafico-container img {
-            width: 100%;
-            max-height: 400px;
-            height: auto;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            background: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-    </style>
-</head>
-<body>
-    <h1>PLANTA TRAFICO ACUMULADO</h1>
-
-    <div class="grid-container">        
-        <!-- 🔹 Imagen 1 (arriba) -->
-        <!--*<div class="grafico-container">
-            <img src="{{ url_for('planta_trfacu.imagenes', filename=img1) }}" alt="Gráfico 1">
-        </div>-->
-        <div class="grafico-container">
-            <img src="{{ url_for('planta_trfacu.imagenes', filename=img2) }}" alt="Gráfico 2">
-        </div>              
+    <div class="planta-trfacu-header-icon">
+        <i class="fas fa-chart-line"></i>
     </div>
-</body>
-</html>
+
+    <div class="planta-trfacu-header-info">
+
+        <h1>Tráfico Acumulado</h1>
+
+        <p>
+            Evolución y análisis del tráfico acumulado
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- ============================================================
+     GRÁFICO
+     ============================================================ -->
+
+<div class="planta-trfacu-grid">
+
+
+    <!-- ========================================================
+         GRÁFICO PRINCIPAL
+         ======================================================== -->
+
+    <section class="planta-trfacu-card">
+
+        <div class="planta-trfacu-card-header">
+
+            <div class="planta-trfacu-title">
+
+                <div class="planta-trfacu-card-icon">
+                    <i class="fas fa-chart-area"></i>
+                </div>
+
+                <div>
+
+                    <h2>
+                        Evolución del Tráfico Acumulado
+                    </h2>
+
+                    <span>
+                        Indicadores de evolución
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="planta-trfacu-chart">
+
+            <img
+                src="{{ url_for('planta_trfacu.imagenes', filename=img2) }}"
+                alt="Gráfico de Tráfico Acumulado"
+            >
+
+        </div>
+
+    </section>
+
+</div>

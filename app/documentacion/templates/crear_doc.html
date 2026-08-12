@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+
+<div class="documentacion-page">
+
+    <!-- =====================================================
+         ENCABEZADO
+         ===================================================== -->
+
+    <section class="doc-header">
+
+        <div class="doc-header-icon">
+            <i class="fas fa-file-circle-plus"></i>
+        </div>
+
+        <div class="doc-header-info">
+
+            <h1>
+                {% if modo == 'editar' %}
+                    Editar Documento
+                {% else %}
+                    Crear Nueva Documentación
+                {% endif %}
+            </h1>
+
+            <p>
+                {% if modo == 'editar' %}
+                    Modifica el contenido del proceso documentado.
+                {% else %}
+                    Registra un nuevo proceso en la documentación.
+                {% endif %}
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         FORMULARIO
+         ===================================================== -->
+
+    <section class="doc-card">
+
+        <div class="doc-card-header">
+
+            <div class="doc-title">
+
+                <div class="doc-card-icon">
+                    <i class="fas fa-file-lines"></i>
+                </div>
+
+                <div>
+
+                    <h2>
+                        {% if modo == 'editar' %}
+                            Información del documento
+                        {% else %}
+                            Nuevo documento
+                        {% endif %}
+                    </h2>
+
+                    <span>
+                        Completa la información del proceso.
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             FORMULARIO
+             ================================================= -->
+
+        <form
+            action="{% if modo == 'editar' %}{{ url_for('documentacion.editar', nombre=titulo) }}{% else %}{{ url_for('documentacion.guardar') }}{% endif %}"
+            method="POST"
+            class="doc-form"
+        >
+
+            <!-- TÍTULO -->
+
+            <div class="form-group">
+
+                <label for="titulo">
+                    Nombre del documento
+                </label>
+
+                <input
+                    type="text"
+                    id="titulo"
+                    name="titulo"
+                    value="{{ titulo or '' }}"
+                    placeholder="Ejemplo: Proceso_Devoluciones"
+                    {% if modo == 'editar' %}readonly{% endif %}
+                    required
+                >
+
+                {% if modo == 'editar' %}
+
+                    <small>
+                        El nombre del documento no puede modificarse durante la edición.
+                    </small>
+
+                {% else %}
+
+                    <small>
+                        Utiliza un nombre descriptivo para identificar fácilmente el proceso.
+                    </small>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- CONTENIDO -->
+
+            <div class="form-group">
+
+                <label for="contenido">
+                    Contenido del documento
+                </label>
+
+                <textarea
+                    id="contenido"
+                    name="contenido"
+                    rows="20"
+                    placeholder="Escribe aquí la documentación del proceso utilizando Markdown..."
+                    required
+                >{{ contenido|trim if contenido else '' }}</textarea>
+
+                <small>
+                    Puedes utilizar formato Markdown para estructurar la documentación.
+                </small>
+
+            </div>
+
+
+            <!-- =================================================
+                 BOTONES
+                 ================================================= -->
+
+            <div class="doc-form-actions">
+
+                <a
+                    href="{{ url_for('documentacion.listar') }}"
+                    class="btn-doc btn-secondary"
+                >
+                    <i class="fas fa-arrow-left"></i>
+                    Ver documentos
+                </a>
+
+
+                <button
+                    type="submit"
+                    class="btn-doc btn-primary"
+                >
+
+                    {% if modo == 'editar' %}
+
+                        <i class="fas fa-save"></i>
+                        Guardar cambios
+
+                    {% else %}
+
+                        <i class="fas fa-plus"></i>
+                        Guardar documento
+
+                    {% endif %}
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,513 @@
+/* =========================================================
+   PLANTA MTC
+   Diseño integrado con RT BI / base.html
+   ========================================================= */
+
+
+/* =========================================================
+   CONTENEDOR PRINCIPAL
+   ========================================================= */
+
+.planta-mtc-page {
+
+    width: 100%;
+
+    max-width: none;
+
+    box-sizing: border-box;
+
+    padding: 8px 0 20px 0;
+
+    margin: 0;
+
+}
+
+
+/* =========================================================
+   HEADER DE LA PÁGINA
+   ========================================================= */
+
+.planta-mtc-header {
+
+    width: 100%;
+
+    min-height: 70px;
+
+    box-sizing: border-box;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    padding: 12px 18px;
+
+    margin-bottom: 9px;
+
+    border-radius: 8px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb 0%,
+            #1d4ed8 100%
+        );
+
+    color: #ffffff;
+
+    box-shadow:
+        0 4px 12px
+        rgba(
+            37,
+            99,
+            235,
+            0.18
+        );
+
+}
+
+
+/* =========================================================
+   ICONO HEADER
+   ========================================================= */
+
+.planta-mtc-header-icon {
+
+    width: 40px;
+
+    height: 40px;
+
+    min-width: 40px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 8px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.18
+        );
+
+    font-size: 18px;
+
+}
+
+
+/* =========================================================
+   INFORMACIÓN HEADER
+   ========================================================= */
+
+.planta-mtc-header-info {
+
+    min-width: 0;
+
+}
+
+
+.planta-mtc-header h1 {
+
+    margin: 0;
+
+    padding: 0;
+
+    color: #ffffff;
+
+    font-size: 20px;
+
+    font-weight: 700;
+
+    line-height: 1.2;
+
+}
+
+
+.planta-mtc-header p {
+
+    margin: 3px 0 0 0;
+
+    padding: 0;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.90
+        );
+
+    font-size: 10px;
+
+    line-height: 1.3;
+
+}
+
+
+/* =========================================================
+   GRID
+   ========================================================= */
+
+.planta-mtc-grid {
+
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    gap: 10px;
+
+    box-sizing: border-box;
+
+}
+
+
+/* =========================================================
+   CARD
+   ========================================================= */
+
+.planta-mtc-card {
+
+    width: 100%;
+
+    min-width: 0;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border:
+        1px solid #dbe3ef;
+
+    border-radius: 8px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 2px 7px
+        rgba(
+            15,
+            23,
+            42,
+            0.05
+        );
+
+}
+
+
+/* =========================================================
+   HEADER CARD
+   ========================================================= */
+
+.planta-mtc-card-header {
+
+    width: 100%;
+
+    min-height: 46px;
+
+    box-sizing: border-box;
+
+    display: flex;
+
+    align-items: center;
+
+    padding: 7px 13px;
+
+    border-bottom:
+        1px solid #e5eaf1;
+
+    background:
+        linear-gradient(
+            180deg,
+            #ffffff 0%,
+            #f8fafc 100%
+        );
+
+}
+
+
+/* =========================================================
+   TÍTULO CARD
+   ========================================================= */
+
+.planta-mtc-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    min-width: 0;
+
+}
+
+
+/* =========================================================
+   ICONO CARD
+   ========================================================= */
+
+.planta-mtc-card-icon {
+
+    width: 29px;
+
+    height: 29px;
+
+    min-width: 29px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 7px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 13px;
+
+}
+
+
+/* =========================================================
+   TÍTULO
+   ========================================================= */
+
+.planta-mtc-title h2 {
+
+    margin: 0;
+
+    padding: 0;
+
+    color: #1e293b;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    line-height: 1.2;
+
+}
+
+
+/* =========================================================
+   SUBTÍTULO
+   ========================================================= */
+
+.planta-mtc-title span {
+
+    display: block;
+
+    margin-top: 2px;
+
+    color: #94a3b8;
+
+    font-size: 8px;
+
+    line-height: 1.2;
+
+}
+
+
+/* =========================================================
+   CONTENEDOR DE GRÁFICO
+   ========================================================= */
+
+.planta-mtc-chart {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 7px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #ffffff;
+
+}
+
+
+/* =========================================================
+   IMÁGENES
+   ========================================================= */
+
+.planta-mtc-chart img {
+
+    display: block;
+
+    width: 100%;
+
+    max-width: 100%;
+
+    height: auto;
+
+    max-height: 430px;
+
+    object-fit: contain;
+
+    box-sizing: border-box;
+
+    border:
+        1px solid #e2e8f0;
+
+    border-radius: 6px;
+
+    background: #ffffff;
+
+}
+
+
+/* =========================================================
+   EVITAR DESBORDAMIENTO
+   ========================================================= */
+
+.planta-mtc-page * {
+
+    box-sizing: border-box;
+
+}
+
+
+/* =========================================================
+   PANTALLAS GRANDES
+   ========================================================= */
+
+@media (min-width: 1400px) {
+
+    .planta-mtc-chart {
+
+        padding: 6px 8px;
+
+    }
+
+
+    .planta-mtc-chart img {
+
+        max-height: 450px;
+
+    }
+
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+    .planta-mtc-header {
+
+        min-height: 64px;
+
+        padding: 10px 14px;
+
+    }
+
+
+    .planta-mtc-header h1 {
+
+        font-size: 18px;
+
+    }
+
+
+    .planta-mtc-card-header {
+
+        padding:
+            7px 10px;
+
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .planta-mtc-page {
+
+        padding:
+            5px 0 15px 0;
+
+    }
+
+
+    .planta-mtc-header {
+
+        min-height: 58px;
+
+        padding:
+            9px 11px;
+
+        gap: 9px;
+
+    }
+
+
+    .planta-mtc-header-icon {
+
+        width: 34px;
+
+        height: 34px;
+
+        min-width: 34px;
+
+        font-size: 15px;
+
+    }
+
+
+    .planta-mtc-header h1 {
+
+        font-size: 15px;
+
+    }
+
+
+    .planta-mtc-header p {
+
+        font-size: 8px;
+
+    }
+
+
+    .planta-mtc-grid {
+
+        gap: 8px;
+
+    }
+
+
+    .planta-mtc-chart {
+
+        padding: 4px;
+
+    }
+
+
+    .planta-mtc-title h2 {
+
+        font-size: 11px;
+
+    }
+
+}

@@ -1,0 +1,471 @@
+{% extends "base.html" %}
+
+{% block title %}
+Permisos del Rol | Administración
+{% endblock %}
+
+{% block contenido %}
+<link
+    rel="stylesheet"
+    href="{{ url_for(
+        'static',
+        filename='css/rol_permisos.css'
+    ) }}"
+>
+<div class="rol-permisos-page">
+
+    <!-- =================================================
+         ENCABEZADO
+         ================================================= -->
+
+    <div class="rol-permisos-header">
+
+        <div class="rol-permisos-header-left">
+
+            <div class="rol-permisos-icon">
+
+                <i class="fa-solid fa-key"></i>
+
+            </div>
+
+            <div>
+
+                <h1>
+                    Permisos del Rol
+                </h1>
+
+                <p>
+                    Selecciona los permisos que tendrá este rol.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <a
+            href="{{ url_for('roles.index') }}"
+            class="btn-back"
+        >
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Volver a roles
+
+        </a>
+
+    </div>
+
+
+    <!-- =================================================
+         MENSAJES
+         ================================================= -->
+
+    {% with messages = get_flashed_messages(
+        with_categories=true
+    ) %}
+
+        {% if messages %}
+
+            <div class="flash-container">
+
+                {% for category, message in messages %}
+
+                    <div
+                        class="flash-message
+                               flash-{{ category }}"
+                    >
+
+                        {% if category == "success" %}
+
+                            <i class="fa-solid fa-circle-check"></i>
+
+                        {% else %}
+
+                            <i class="fa-solid fa-circle-exclamation"></i>
+
+                        {% endif %}
+
+                        {{ message }}
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <!-- =================================================
+         CONTENEDOR
+         ================================================= -->
+
+    <div class="rol-permisos-card">
+
+
+        <!-- =================================================
+             INFORMACIÓN
+             ================================================= -->
+
+        <div class="rol-info">
+
+            <div class="rol-info-icon">
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+            </div>
+
+            <div>
+
+                <span>
+                    Rol seleccionado
+                </span>
+
+                <strong>
+                    ID {{ id_rol }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             TOOLBAR
+             ================================================= -->
+
+        <div class="permisos-toolbar">
+
+            <div class="toolbar-title">
+
+                <i class="fa-solid fa-list-check"></i>
+
+                Permisos disponibles
+
+            </div>
+
+
+            <div class="toolbar-actions">
+
+                <button
+                    type="button"
+                    class="btn-toolbar"
+                    onclick="seleccionarTodos()"
+                >
+
+                    <i class="fa-solid fa-check-double"></i>
+
+                    Seleccionar todos
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="btn-toolbar"
+                    onclick="deseleccionarTodos()"
+                >
+
+                    <i class="fa-solid fa-square-minus"></i>
+
+                    Deseleccionar todos
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             FORMULARIO
+             ================================================= -->
+
+        <form
+            method="POST"
+            action="{{ url_for(
+                'roles.guardar_permisos',
+                id_rol=id_rol
+            ) }}"
+            id="permisosForm"
+        >
+
+
+            <!-- =================================================
+                 LISTA DE PERMISOS
+                 ================================================= -->
+
+            <div class="permisos-list">
+
+
+                {% for permiso in permisos %}
+
+                <label
+                    class="permiso-item
+                    {% if permiso[0] in permisos_asignados %}
+                        seleccionado
+                    {% endif %}"
+                >
+
+                    <div class="permiso-check">
+
+                        <input
+                            type="checkbox"
+                            name="permisos"
+                            value="{{ permiso[0] }}"
+
+                            {% if permiso[0] in permisos_asignados %}
+                                checked
+                            {% endif %}
+                        >
+
+                        <span class="checkmark"></span>
+
+                    </div>
+
+
+                    <div class="permiso-info">
+
+                        <div class="permiso-codigo">
+
+                            <i class="fa-solid fa-key"></i>
+
+                            {{ permiso[1] }}
+
+                        </div>
+
+                        <div class="permiso-descripcion">
+
+                            {{ permiso[2] or 'Sin descripción' }}
+
+                        </div>
+
+                    </div>
+
+                </label>
+
+                {% else %}
+
+                <div class="empty-permisos">
+
+                    <i class="fa-solid fa-key"></i>
+
+                    <h3>
+                        No hay permisos disponibles
+                    </h3>
+
+                    <p>
+                        Primero debes crear permisos
+                        desde Administración → Permisos.
+                    </p>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+
+            <!-- =================================================
+                 RESUMEN
+                 ================================================= -->
+
+            <div class="permisos-summary">
+
+                <div>
+
+                    <i class="fa-solid fa-circle-info"></i>
+
+                    Permisos seleccionados:
+
+                    <strong id="contadorPermisos">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 FOOTER
+                 ================================================= -->
+
+            <div class="rol-permisos-footer">
+
+                <a
+                    href="{{ url_for('roles.index') }}"
+                    class="btn-secondary"
+                >
+
+                    Cancelar
+
+                </a>
+
+
+                <button
+                    type="submit"
+                    class="btn-save"
+                >
+
+                    <i class="fa-solid fa-save"></i>
+
+                    Guardar permisos
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+     ========================================================= -->
+
+<script>
+
+/* =========================================================
+   ELEMENTOS
+   ========================================================= */
+
+const checkboxes =
+    document.querySelectorAll(
+        'input[name="permisos"]'
+    );
+
+const contador =
+    document.getElementById(
+        "contadorPermisos"
+    );
+
+
+/* =========================================================
+   ACTUALIZAR CONTADOR
+   ========================================================= */
+
+function actualizarContador() {
+
+    const seleccionados =
+        document.querySelectorAll(
+            'input[name="permisos"]:checked'
+        ).length;
+
+
+    contador.textContent =
+        seleccionados;
+
+
+    checkboxes.forEach(
+        function (checkbox) {
+
+            const item =
+                checkbox.closest(
+                    ".permiso-item"
+                );
+
+
+            if (!item) {
+                return;
+            }
+
+
+            if (checkbox.checked) {
+
+                item.classList.add(
+                    "seleccionado"
+                );
+
+            } else {
+
+                item.classList.remove(
+                    "seleccionado"
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   SELECCIONAR TODOS
+   ========================================================= */
+
+function seleccionarTodos() {
+
+    checkboxes.forEach(
+        function (checkbox) {
+
+            checkbox.checked = true;
+
+        }
+    );
+
+
+    actualizarContador();
+
+}
+
+
+/* =========================================================
+   DESELECCIONAR TODOS
+   ========================================================= */
+
+function deseleccionarTodos() {
+
+    checkboxes.forEach(
+        function (checkbox) {
+
+            checkbox.checked = false;
+
+        }
+    );
+
+
+    actualizarContador();
+
+}
+
+
+/* =========================================================
+   CAMBIO CHECKBOX
+   ========================================================= */
+
+checkboxes.forEach(
+    function (checkbox) {
+
+        checkbox.addEventListener(
+            "change",
+            actualizarContador
+        );
+
+    }
+);
+
+
+/* =========================================================
+   INICIALIZAR
+   ========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        actualizarContador();
+
+    }
+);
+
+</script>
+
+{% endblock %}

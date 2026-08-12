@@ -1,0 +1,1022 @@
+{% extends "base.html" %}
+
+{% block title %}
+Permisos | Administración
+{% endblock %}
+
+{% block contenido %}
+
+<link
+    rel="stylesheet"
+    href="{{ url_for(
+        'static',
+        filename='css/administracion_permisos.css'
+    ) }}"
+>
+
+<div class="permisos-page">
+
+    <!-- =================================================
+         ENCABEZADO
+         ================================================= -->
+
+    <div class="permisos-header">
+
+        <div class="permisos-header-left">
+
+            <div class="permisos-icon">
+
+                <i class="fa-solid fa-key"></i>
+
+            </div>
+
+            <div>
+
+                <h1>
+                    Administración de Permisos
+                </h1>
+
+                <p>
+                    Gestiona los permisos disponibles
+                    para los roles de la plataforma RT BI.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <button
+            type="button"
+            class="btn-primary"
+            onclick="abrirNuevoPermiso()"
+        >
+
+            <i class="fa-solid fa-plus"></i>
+
+            Nuevo permiso
+
+        </button>
+
+    </div>
+
+
+    <!-- =================================================
+         MENSAJES
+         ================================================= -->
+
+    {% with messages = get_flashed_messages(
+        with_categories=true
+    ) %}
+
+        {% if messages %}
+
+            <div class="flash-container">
+
+                {% for category, message in messages %}
+
+                    <div
+                        class="flash-message
+                               flash-{{ category }}"
+                    >
+
+                        {% if category == "success" %}
+
+                            <i class="fa-solid fa-circle-check"></i>
+
+                        {% else %}
+
+                            <i class="fa-solid fa-circle-exclamation"></i>
+
+                        {% endif %}
+
+                        {{ message }}
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <!-- =================================================
+         CONTENEDOR
+         ================================================= -->
+
+    <div class="permisos-card">
+
+
+        <!-- =================================================
+             TOOLBAR
+             ================================================= -->
+
+        <div class="permisos-toolbar">
+
+            <div class="search-box">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+                    type="text"
+                    id="buscarPermiso"
+                    placeholder="Buscar permiso..."
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <div class="permisos-count">
+
+                {{ permisos|length }}
+
+                permiso{% if permisos|length != 1 %}s{% endif %}
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             TABLA
+             ================================================= -->
+
+        <div class="table-container">
+
+            <table
+                class="permisos-table"
+                id="tablaPermisos"
+            >
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            ID
+                        </th>
+
+                        <th>
+                            Código
+                        </th>
+
+                        <th>
+                            Descripción
+                        </th>
+
+                        <th>
+                            Estado
+                        </th>
+
+                        <th class="acciones-col">
+                            Acciones
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for permiso in permisos %}
+
+                    <tr>
+
+
+                        <!-- =================================================
+                             ID
+                             ================================================= -->
+
+                        <td>
+
+                            <span class="permiso-id">
+
+                                #{{ permiso[0] }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- =================================================
+                             CÓDIGO
+                             ================================================= -->
+
+                        <td>
+
+                            <div class="codigo-cell">
+
+                                <div class="codigo-icon">
+
+                                    <i class="fa-solid fa-key"></i>
+
+                                </div>
+
+                                <strong>
+
+                                    {{ permiso[1] }}
+
+                                </strong>
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- =================================================
+                             DESCRIPCIÓN
+                             ================================================= -->
+
+                        <td>
+
+                            <span class="descripcion-permiso">
+
+                                {{ permiso[2] or '-' }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- =================================================
+                             ESTADO
+                             ================================================= -->
+
+                        <td>
+
+                            {% if permiso[3] == 'A' %}
+
+                                <span class="estado activo">
+
+                                    <span></span>
+
+                                    Activo
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="estado inactivo">
+
+                                    <span></span>
+
+                                    Inactivo
+
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- =================================================
+                             ACCIONES
+                             ================================================= -->
+
+                        <td>
+
+                            <div class="acciones">
+
+
+                                <!-- =================================================
+                                     EDITAR
+                                     ================================================= -->
+
+                                <button
+                                    type="button"
+                                    class="action-btn edit"
+                                    title="Editar permiso"
+
+                                    data-id="{{ permiso[0] }}"
+                                    data-codigo="{{ permiso[1] }}"
+                                    data-descripcion="{{ permiso[2] or '' }}"
+
+                                    onclick="editarPermisoDesdeBoton(this)"
+                                >
+
+                                    <i class="fa-solid fa-pen"></i>
+
+                                </button>
+
+
+                                <!-- =================================================
+                                     ACTIVAR / DESACTIVAR
+                                     ================================================= -->
+
+                                <button
+                                    type="button"
+
+                                    class="action-btn
+                                        {% if permiso[3] == 'A' %}
+                                            disable
+                                        {% else %}
+                                            enable
+                                        {% endif %}"
+
+                                    title="
+                                        {% if permiso[3] == 'A' %}
+                                            Desactivar
+                                        {% else %}
+                                            Activar
+                                        {% endif %}
+                                    "
+
+                                    onclick="abrirModalEstadoPermiso(
+                                        '{{ permiso[0] }}',
+                                        '{{ permiso[1] }}',
+                                        '{{ permiso[3] }}'
+                                    )"
+                                >
+
+                                    {% if permiso[3] == 'A' %}
+
+                                        <i class="fa-solid fa-ban"></i>
+
+                                    {% else %}
+
+                                        <i class="fa-solid fa-check"></i>
+
+                                    {% endif %}
+
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+
+                        <td
+                            colspan="5"
+                            class="empty-state"
+                        >
+
+                            <i class="fa-solid fa-key"></i>
+
+                            <h3>
+                                No hay permisos registrados
+                            </h3>
+
+                            <p>
+                                Crea el primer permiso
+                                de la plataforma.
+                            </p>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     MODAL CREAR / EDITAR PERMISO
+     ========================================================= -->
+
+<div
+    id="permisoModal"
+    class="modal-overlay"
+>
+
+    <div class="permiso-modal">
+
+
+        <!-- =================================================
+             HEADER
+             ================================================= -->
+
+        <div class="modal-header">
+
+            <div>
+
+                <h2 id="modalPermisoTitulo">
+                    Nuevo permiso
+                </h2>
+
+                <p>
+                    Define la información del permiso.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="modal-close"
+                onclick="cerrarPermisoModal()"
+            >
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <!-- =================================================
+             FORMULARIO
+             ================================================= -->
+
+        <form
+            id="permisoForm"
+            method="POST"
+            action="{{ url_for('permisos.crear') }}"
+        >
+
+            <div class="modal-body">
+
+
+                <!-- =================================================
+                     CÓDIGO
+                     ================================================= -->
+
+                <div class="form-group">
+
+                    <label>
+                        Código del permiso
+                    </label>
+
+                    <input
+                        type="text"
+                        name="codigo"
+                        id="codigo"
+                        maxlength="50"
+                        required
+                    >
+
+                    <small>
+                        Ejemplo: MONITOREO, SQL, USUARIOS.
+                    </small>
+
+                </div>
+
+
+                <!-- =================================================
+                     DESCRIPCIÓN
+                     ================================================= -->
+
+                <div class="form-group">
+
+                    <label>
+                        Descripción
+                    </label>
+
+                    <textarea
+                        name="descripcion"
+                        id="descripcion"
+                        maxlength="200"
+                        rows="4"
+                    ></textarea>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 FOOTER
+                 ================================================= -->
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn-secondary"
+                    onclick="cerrarPermisoModal()"
+                >
+
+                    Cancelar
+
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="btn-primary"
+                >
+
+                    <i class="fa-solid fa-save"></i>
+
+                    Guardar permiso
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     MODAL CAMBIAR ESTADO
+     ========================================================= -->
+
+<div
+    id="estadoPermisoModal"
+    class="estado-modal"
+>
+
+    <div class="estado-modal-content">
+
+
+        <!-- =================================================
+             ICONO
+             ================================================= -->
+
+        <div
+            id="estadoPermisoModalIcon"
+            class="estado-modal-icon"
+        >
+
+            <i class="fa-solid fa-key"></i>
+
+        </div>
+
+
+        <!-- =================================================
+             TITULO
+             ================================================= -->
+
+        <h3 id="estadoPermisoModalTitulo">
+
+            Desactivar permiso
+
+        </h3>
+
+
+        <!-- =================================================
+             MENSAJE
+             ================================================= -->
+
+        <p id="estadoPermisoModalMensaje">
+
+            ¿Deseas desactivar este permiso?
+
+        </p>
+
+
+        <!-- =================================================
+             BOTONES
+             ================================================= -->
+
+        <div class="estado-modal-actions">
+
+
+            <!-- CANCELAR -->
+
+            <button
+                type="button"
+                class="btn-modal-cancel"
+                onclick="cerrarModalEstadoPermiso()"
+            >
+
+                Cancelar
+
+            </button>
+
+
+            <!-- CONFIRMAR -->
+
+            <form
+                id="estadoPermisoForm"
+                method="POST"
+            >
+
+                <button
+                    type="submit"
+                    class="btn-modal-confirm"
+                >
+
+                    <i class="fa-solid fa-check"></i>
+
+                    Confirmar
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+     ========================================================= -->
+
+<script>
+
+
+/* =========================================================
+   BUSCADOR
+   ========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const buscador =
+            document.getElementById(
+                "buscarPermiso"
+            );
+
+
+        if (buscador) {
+
+            buscador.addEventListener(
+                "input",
+                function () {
+
+                    const texto =
+                        this.value.toLowerCase();
+
+
+                    const filas =
+                        document.querySelectorAll(
+                            "#tablaPermisos tbody tr"
+                        );
+
+
+                    filas.forEach(
+                        function (fila) {
+
+                            const contenido =
+                                fila.textContent.toLowerCase();
+
+
+                            fila.style.display =
+                                contenido.includes(texto)
+                                    ? ""
+                                    : "none";
+
+                        }
+                    );
+
+                }
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   NUEVO PERMISO
+   ========================================================= */
+
+function abrirNuevoPermiso() {
+
+    const modal =
+        document.getElementById(
+            "permisoModal"
+        );
+
+
+    const form =
+        document.getElementById(
+            "permisoForm"
+        );
+
+
+    document.getElementById(
+        "modalPermisoTitulo"
+    ).textContent =
+        "Nuevo permiso";
+
+
+    form.action =
+        "{{ url_for('permisos.crear') }}";
+
+
+    form.reset();
+
+
+    document.getElementById(
+        "codigo"
+    ).disabled = false;
+
+
+    modal.classList.add(
+        "show"
+    );
+
+}
+
+
+/* =========================================================
+   EDITAR PERMISO
+   ========================================================= */
+
+function editarPermiso(
+    id,
+    codigo,
+    descripcion
+) {
+
+    const modal =
+        document.getElementById(
+            "permisoModal"
+        );
+
+
+    const form =
+        document.getElementById(
+            "permisoForm"
+        );
+
+
+    document.getElementById(
+        "modalPermisoTitulo"
+    ).textContent =
+        "Editar permiso";
+
+
+    form.action =
+        "/administracion/permisos/editar/"
+        + id;
+
+
+    document.getElementById(
+        "codigo"
+    ).value =
+        codigo || "";
+
+
+    document.getElementById(
+        "codigo"
+    ).disabled = false;
+
+
+    document.getElementById(
+        "descripcion"
+    ).value =
+        descripcion || "";
+
+
+    modal.classList.add(
+        "show"
+    );
+
+}
+
+
+/* =========================================================
+   EDITAR DESDE BOTÓN
+   ========================================================= */
+
+function editarPermisoDesdeBoton(
+    boton
+) {
+
+    const id =
+        boton.dataset.id;
+
+
+    const codigo =
+        boton.dataset.codigo;
+
+
+    const descripcion =
+        boton.dataset.descripcion;
+
+
+    editarPermiso(
+        id,
+        codigo,
+        descripcion
+    );
+
+}
+
+
+/* =========================================================
+   CERRAR MODAL PERMISO
+   ========================================================= */
+
+function cerrarPermisoModal() {
+
+    document
+        .getElementById(
+            "permisoModal"
+        )
+        .classList.remove(
+            "show"
+        );
+
+}
+
+
+/* =========================================================
+   MODAL ESTADO
+   ========================================================= */
+
+function abrirModalEstadoPermiso(
+    idPermiso,
+    codigo,
+    estado
+) {
+
+    const modal =
+        document.getElementById(
+            "estadoPermisoModal"
+        );
+
+
+    const titulo =
+        document.getElementById(
+            "estadoPermisoModalTitulo"
+        );
+
+
+    const mensaje =
+        document.getElementById(
+            "estadoPermisoModalMensaje"
+        );
+
+
+    const icono =
+        document.getElementById(
+            "estadoPermisoModalIcon"
+        );
+
+
+    const form =
+        document.getElementById(
+            "estadoPermisoForm"
+        );
+
+
+    /* =================================================
+       DESACTIVAR
+       ================================================= */
+
+    if (estado === "A") {
+
+        titulo.textContent =
+            "Desactivar permiso";
+
+
+        mensaje.textContent =
+            "¿Deseas desactivar el permiso "
+            + codigo
+            + "?";
+
+
+        icono.innerHTML =
+            '<i class="fa-solid fa-key"></i>';
+
+
+        icono.classList.remove(
+            "estado-activar"
+        );
+
+
+        icono.classList.add(
+            "estado-desactivar"
+        );
+
+    }
+
+
+    /* =================================================
+       ACTIVAR
+       ================================================= */
+
+    else {
+
+        titulo.textContent =
+            "Activar permiso";
+
+
+        mensaje.textContent =
+            "¿Deseas activar el permiso "
+            + codigo
+            + "?";
+
+
+        icono.innerHTML =
+            '<i class="fa-solid fa-key"></i>';
+
+
+        icono.classList.remove(
+            "estado-desactivar"
+        );
+
+
+        icono.classList.add(
+            "estado-activar"
+        );
+
+    }
+
+
+    /* =================================================
+       ACTION
+       ================================================= */
+
+    form.action =
+        "/administracion/permisos/estado/"
+        + idPermiso;
+
+
+    /* =================================================
+       MOSTRAR
+       ================================================= */
+
+    modal.classList.add(
+        "show"
+    );
+
+}
+
+
+/* =========================================================
+   CERRAR MODAL ESTADO
+   ========================================================= */
+
+function cerrarModalEstadoPermiso() {
+
+    document
+        .getElementById(
+            "estadoPermisoModal"
+        )
+        .classList.remove(
+            "show"
+        );
+
+}
+
+
+/* =========================================================
+   CLICK FUERA
+   ========================================================= */
+
+document.addEventListener(
+    "click",
+    function (event) {
+
+        const modal =
+            document.getElementById(
+                "estadoPermisoModal"
+            );
+
+
+        if (
+            event.target === modal
+        ) {
+
+            cerrarModalEstadoPermiso();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   ESC
+   ========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (event.key === "Escape") {
+
+            cerrarPermisoModal();
+
+            cerrarModalEstadoPermiso();
+
+        }
+
+    }
+);
+
+</script>
+
+{% endblock %}

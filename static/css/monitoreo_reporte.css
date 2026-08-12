@@ -1,0 +1,1256 @@
+/* =========================================================
+   MONITOREO DE REPORTES REGULATORIOS
+   ========================================================= */
+
+
+/* =========================================================
+   CONTENEDOR PRINCIPAL
+   ========================================================= */
+
+.monitoreo-page {
+
+    width: 100%;
+
+    max-width: none;
+
+    margin: 0;
+
+    padding: 20px 24px 35px;
+
+    box-sizing: border-box;
+
+}
+
+
+/* =========================================================
+   ENCABEZADO
+   ========================================================= */
+
+.monitoreo-header {
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #1d4ed8
+        );
+
+    color: white;
+
+    border-radius: 10px;
+
+    padding: 18px 20px;
+
+    margin-bottom: 12px;
+
+    box-shadow:
+        0 5px 15px rgba(
+            37,
+            99,
+            235,
+            0.18
+        );
+
+}
+
+
+.monitoreo-header h1 {
+
+    margin: 0;
+
+    font-size: 20px;
+
+    font-weight: 700;
+
+}
+
+
+.monitoreo-header h1 i {
+
+    margin-right: 8px;
+
+}
+
+
+.monitoreo-header p {
+
+    margin: 6px 0 0;
+
+    font-size: 12px;
+
+    opacity: 0.92;
+
+}
+
+
+/* =========================================================
+   BUSCADOR
+   ========================================================= */
+
+.monitoreo-search {
+
+    position: relative;
+
+    width: 100%;
+
+    margin-bottom: 12px;
+
+}
+
+
+.monitoreo-search i {
+
+    position: absolute;
+
+    left: 12px;
+
+    top: 50%;
+
+    transform:
+        translateY(-50%);
+
+    color: #64748b;
+
+    font-size: 12px;
+
+}
+
+
+.monitoreo-search input {
+
+    width: 100%;
+
+    height: 34px;
+
+    box-sizing: border-box;
+
+    padding:
+        0
+        12px
+        0
+        34px;
+
+    border:
+        1px solid #dbe3ef;
+
+    border-radius: 7px;
+
+    background: white;
+
+    color: #334155;
+
+    font-size: 11px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+
+}
+
+
+.monitoreo-search input:focus {
+
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 2px
+        rgba(
+            37,
+            99,
+            235,
+            0.10
+        );
+
+}
+
+
+/* =========================================================
+   MASTER - DETAIL
+   ========================================================= */
+
+.monitoreo-master-detail {
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(300px, 28%)
+        minmax(0, 72%);
+
+    gap: 12px;
+
+    width: 100%;
+
+    min-height: 640px;
+
+    align-items: stretch;
+
+}
+
+
+/* =========================================================
+   APROVECHAR TODO EL ANCHO DISPONIBLE
+   ========================================================= */
+
+@media (min-width: 1101px) {
+
+    .monitoreo-page {
+        width: 100%;
+        max-width: none;
+        margin: 0;
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+
+    .monitoreo-master-detail {
+        width: 100%;
+        grid-template-columns:
+            minmax(300px, 28%)
+            minmax(0, 72%);
+    }
+
+}
+
+
+/* =========================================================
+   PANEL IZQUIERDO
+   ========================================================= */
+
+.monitoreo-lista-panel {
+
+    min-width: 0;
+
+    background: #ffffff;
+
+    border:
+        1px solid #dbe3ef;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 3px 10px
+        rgba(
+            15,
+            23,
+            42,
+            0.05
+        );
+
+    display: flex;
+
+    flex-direction: column;
+
+}
+
+
+/* =========================================================
+   TABS
+   ========================================================= */
+
+.monitoreo-tabs {
+
+    display: flex;
+
+    align-items: stretch;
+
+    border-bottom:
+        1px solid #dbe3ef;
+
+    background: #ffffff;
+
+    overflow-x: auto;
+
+    scrollbar-width: thin;
+
+}
+
+
+.monitoreo-tab {
+
+    position: relative;
+
+    flex: 1;
+
+    min-width: 75px;
+
+    height: 40px;
+
+    padding:
+        0
+        8px;
+
+    border: none;
+
+    background: transparent;
+
+    color: #2563eb;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    white-space: nowrap;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+
+}
+
+
+.monitoreo-tab:hover {
+
+    background:
+        #eff6ff;
+
+}
+
+
+.monitoreo-tab.active {
+
+    color: white;
+
+    background:
+        #2563eb;
+
+}
+
+
+.monitoreo-tab.alerta:not(.active)::after {
+
+    content: "";
+
+    position: absolute;
+
+    top: 7px;
+
+    right: 8px;
+
+    width: 6px;
+
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: #ef4444;
+
+    box-shadow:
+        0 0 0 2px white;
+
+}
+
+
+/* =========================================================
+   CONTENIDO TABS
+   ========================================================= */
+
+.monitoreo-tab-content {
+
+    display: none;
+
+    flex: 1;
+
+    min-height: 0;
+
+}
+
+
+.monitoreo-tab-content.active {
+
+    display: block;
+
+}
+
+
+/* =========================================================
+   LISTA DE REPORTES
+   ========================================================= */
+
+.report-list {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr;
+
+    gap: 6px;
+
+    padding: 9px;
+
+    max-height: 585px;
+
+    overflow-y: auto;
+
+    box-sizing: border-box;
+
+}
+
+
+/* Scroll */
+
+.report-list::-webkit-scrollbar {
+
+    width: 6px;
+
+}
+
+
+.report-list::-webkit-scrollbar-track {
+
+    background:
+        #f8fafc;
+
+}
+
+
+.report-list::-webkit-scrollbar-thumb {
+
+    background:
+        #cbd5e1;
+
+    border-radius: 10px;
+
+}
+
+
+.report-list::-webkit-scrollbar-thumb:hover {
+
+    background:
+        #94a3b8;
+
+}
+
+
+/* =========================================================
+   ITEM REPORTE
+   ========================================================= */
+
+.report-item {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 8px;
+
+    min-height: 38px;
+
+    padding:
+        0
+        10px;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border:
+        1px solid #dbe3ef;
+
+    border-radius: 7px;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.15s ease;
+
+}
+
+
+.report-item:hover {
+
+    background:
+        #f8fbff;
+
+    border-color:
+        #93c5fd;
+
+    box-shadow:
+        0 2px 7px
+        rgba(
+            37,
+            99,
+            235,
+            0.10
+        );
+
+    transform:
+        translateY(-1px);
+
+}
+
+
+/* =========================================================
+   BOTÓN DEL REPORTE
+   ========================================================= */
+
+.reporte-detalle-btn {
+
+    flex: 1;
+
+    min-width: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    padding:
+        9px
+        0;
+
+    border: none;
+
+    background: transparent;
+
+    color: #2563eb;
+
+    text-align: left;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    overflow: hidden;
+
+}
+
+
+.reporte-detalle-btn:hover {
+
+    color:
+        #1d4ed8;
+
+}
+
+
+.reporte-detalle-btn.selected {
+
+    color:
+        #1d4ed8;
+
+}
+
+
+.reporte-detalle-btn.selected
+.reporte-nombre {
+
+    font-weight: 700;
+
+}
+
+
+.reporte-nombre {
+
+    display: block;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+}
+
+
+/* =========================================================
+   INDICADOR DE ESTADO
+   ========================================================= */
+
+.status-indicator {
+
+    flex-shrink: 0;
+
+    width: 8px;
+
+    height: 8px;
+
+    border-radius: 50%;
+
+}
+
+
+.status-indicator.green {
+
+    background:
+        #16a34a;
+
+    box-shadow:
+        0 0 0 2px
+        rgba(
+            22,
+            163,
+            74,
+            0.12
+        );
+
+}
+
+
+.status-indicator.yellow {
+
+    background:
+        #f59e0b;
+
+    box-shadow:
+        0 0 0 2px
+        rgba(
+            245,
+            158,
+            11,
+            0.12
+        );
+
+}
+
+
+.status-indicator.red {
+
+    background:
+        #ef4444;
+
+    box-shadow:
+        0 0 0 2px
+        rgba(
+            239,
+            68,
+            68,
+            0.12
+        );
+
+}
+
+
+.status-indicator.grey {
+
+    background:
+        #94a3b8;
+
+}
+
+
+/* =========================================================
+   PANEL DERECHO - DETALLE
+   ========================================================= */
+
+.detalle-reporte-container {
+
+    position: relative;
+
+    min-width: 0;
+
+    min-height: 640px;
+
+    background:
+        #ffffff;
+
+    border:
+        1px solid #dbe3ef;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 3px 10px
+        rgba(
+            15,
+            23,
+            42,
+            0.05
+        );
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+
+}
+
+
+.detalle-reporte-container.activo {
+
+    border-color:
+        #93c5fd;
+
+    box-shadow:
+        0 5px 18px
+        rgba(
+            37,
+            99,
+            235,
+            0.10
+        );
+
+}
+
+
+/* =========================================================
+   ESTADO VACÍO
+   ========================================================= */
+
+.detalle-reporte-vacio {
+
+    height: 100%;
+
+    min-height: 640px;
+
+    padding:
+        35px;
+
+    box-sizing: border-box;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    color: #64748b;
+
+}
+
+
+.detalle-vacio-icon {
+
+    width: 58px;
+
+    height: 58px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin-bottom: 14px;
+
+    border-radius: 14px;
+
+    background:
+        #eff6ff;
+
+    color:
+        #2563eb;
+
+    font-size: 24px;
+
+}
+
+
+.detalle-reporte-vacio h2 {
+
+    margin:
+        0
+        0
+        7px;
+
+    color:
+        #334155;
+
+    font-size: 17px;
+
+}
+
+
+.detalle-reporte-vacio p {
+
+    max-width: 420px;
+
+    margin: 0;
+
+    color:
+        #94a3b8;
+
+    font-size: 11px;
+
+    line-height: 1.6;
+
+}
+
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.detalle-reporte-loading {
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 10;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.94
+        );
+
+    color:
+        #64748b;
+
+    font-size: 11px;
+
+}
+
+
+.detalle-loading-spinner {
+
+    color:
+        #2563eb;
+
+    font-size: 25px;
+
+}
+
+
+/* =========================================================
+   CONTENIDO DEL DETALLE
+   ========================================================= */
+
+.detalle-reporte-contenido {
+
+    width: 100%;
+
+    height: 100%;
+
+    min-height: 640px;
+
+    overflow-y: auto;
+
+    overflow-x: hidden;
+
+    box-sizing: border-box;
+
+}
+
+
+/* Scroll del detalle */
+
+.detalle-reporte-contenido::-webkit-scrollbar {
+
+    width: 7px;
+
+}
+
+
+.detalle-reporte-contenido::-webkit-scrollbar-track {
+
+    background:
+        #f8fafc;
+
+}
+
+
+.detalle-reporte-contenido::-webkit-scrollbar-thumb {
+
+    background:
+        #cbd5e1;
+
+    border-radius: 10px;
+
+}
+
+
+.detalle-reporte-contenido::-webkit-scrollbar-thumb:hover {
+
+    background:
+        #94a3b8;
+
+}
+
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+.detalle-reporte-error {
+
+    min-height: 400px;
+
+    padding: 40px 25px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+}
+
+
+.detalle-error-icon {
+
+    width: 55px;
+
+    height: 55px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin-bottom: 12px;
+
+    border-radius: 50%;
+
+    background:
+        #fef2f2;
+
+    color:
+        #dc2626;
+
+    font-size: 22px;
+
+}
+
+
+.detalle-reporte-error h2 {
+
+    margin:
+        0
+        0
+        8px;
+
+    color:
+        #334155;
+
+    font-size: 16px;
+
+}
+
+
+.detalle-reporte-error p {
+
+    margin:
+        0
+        0
+        18px;
+
+    color:
+        #64748b;
+
+    font-size: 11px;
+
+}
+
+
+.detalle-reintentar {
+
+    border: none;
+
+    padding:
+        9px
+        14px;
+
+    border-radius: 7px;
+
+    background:
+        #2563eb;
+
+    color: white;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+}
+
+
+.detalle-reintentar:hover {
+
+    background:
+        #1d4ed8;
+
+}
+
+
+/* =========================================================
+   BOTÓN VOLVER
+   ========================================================= */
+
+.detalle-volver {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    border: none;
+
+    padding:
+        7px
+        11px;
+
+    border-radius: 6px;
+
+    background:
+        #eff6ff;
+
+    color:
+        #2563eb;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+
+}
+
+
+.detalle-volver:hover {
+
+    background:
+        #dbeafe;
+
+    color:
+        #1d4ed8;
+
+}
+
+
+/* =========================================================
+   ANIMACIÓN DEL DETALLE
+   ========================================================= */
+
+@keyframes detalleEntrada {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateX(15px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateX(0);
+
+    }
+
+}
+
+
+.detalle-reporte-container.activo
+.detalle-reporte-contenido {
+
+    animation:
+        detalleEntrada
+        0.22s
+        ease-out;
+
+}
+
+
+/* =========================================================
+   OCULTAR LISTA EN MÓVIL
+   ========================================================= */
+
+.lista-oculta {
+
+    display: none !important;
+
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+    .monitoreo-page {
+
+        max-width: 100%;
+
+        padding:
+            16px
+            14px
+            30px;
+
+    }
+
+
+    .monitoreo-master-detail {
+
+        grid-template-columns:
+            minmax(270px, 33%)
+            minmax(0, 67%);
+
+    }
+
+
+    .monitoreo-tab {
+
+        font-size: 9px;
+
+        min-width: 68px;
+
+    }
+
+}
+
+
+/* =========================================================
+   PANTALLA PEQUEÑA
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .monitoreo-master-detail {
+
+        grid-template-columns:
+            1fr;
+
+        min-height: auto;
+
+    }
+
+
+    .monitoreo-lista-panel {
+
+        min-height: 400px;
+
+    }
+
+
+    .detalle-reporte-container {
+
+        min-height: 600px;
+
+    }
+
+
+    .detalle-reporte-vacio {
+
+        min-height: 600px;
+
+    }
+
+
+    .detalle-reporte-contenido {
+
+        min-height: 600px;
+
+    }
+
+}
+
+
+/* =========================================================
+   MÓVIL
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .monitoreo-page {
+
+        padding:
+            10px
+            8px
+            25px;
+
+    }
+
+
+    .monitoreo-header {
+
+        padding:
+            14px;
+
+        border-radius:
+            8px;
+
+    }
+
+
+    .monitoreo-header h1 {
+
+        font-size: 16px;
+
+    }
+
+
+    .monitoreo-header p {
+
+        font-size: 10px;
+
+    }
+
+
+    .monitoreo-tabs {
+
+        overflow-x: auto;
+
+    }
+
+
+    .monitoreo-tab {
+
+        flex:
+            0 0 auto;
+
+        min-width:
+            85px;
+
+    }
+
+
+    .report-list {
+
+        max-height:
+            450px;
+
+    }
+
+
+    .detalle-reporte-container {
+
+        border-radius:
+            8px;
+
+    }
+
+}

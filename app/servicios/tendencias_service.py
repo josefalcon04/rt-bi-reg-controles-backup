@@ -1,30 +1,77 @@
+# app/servicios/tendencias_service.py
+
 from app.servicios.netezza_service import ejecutar_query
+
 
 
 def buscar_consulta_tendencia(pregunta):
 
-    sql = f"""
-    SELECT *
+
+    sql = """
+
+    SELECT
+        *
     FROM CONTROL_MAKO..TABLERO_IA_CATALOGO_CONSULTAS
     WHERE ACTIVO='S'
+
     """
+
 
     catalogo = ejecutar_query(sql)
 
+
+
+    if not catalogo:
+
+        return None
+
+
+
     pregunta = pregunta.lower()
+
+
+
+    mejor_match = None
+    mayor_score = 0
+
+
 
     for fila in catalogo:
 
+
         palabras = (
-            fila["PALABRAS_CLAVE"] or ""
+            fila.get(
+                "PALABRAS_CLAVE",
+                ""
+            )
+            or ""
         ).lower()
 
-        lista_palabras = palabras.split(",")
 
-        for palabra in lista_palabras:
 
-            if palabra.strip() in pregunta:
+        lista = [
+            x.strip()
+            for x in palabras.split(",")
+        ]
 
-                return fila
 
-    return None
+
+        score = sum(
+
+            1
+            for palabra in lista
+            if palabra and palabra in pregunta
+
+        )
+
+
+
+        if score > mayor_score:
+
+            mayor_score = score
+
+            mejor_match = fila
+
+
+
+    return mejor_match

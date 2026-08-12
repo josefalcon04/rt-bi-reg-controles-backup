@@ -1,0 +1,463 @@
+/* =====================================================
+   MONITOREO INPUTS REGULATORIOS
+   ===================================================== */
+
+.monitoreo-input-container {
+
+    width: 100%;
+
+    max-width: 1500px;
+
+    margin: 0 auto;
+
+    padding: 20px 28px 40px;
+
+    box-sizing: border-box;
+
+}
+
+
+/* =====================================================
+   HEADER
+   ===================================================== */
+
+.monitoreo-input-header {
+
+       width: 100%;
+    min-height: 95px;
+
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    padding: 20px 24px;
+    margin-bottom: 14px;
+
+    border-radius: 10px;
+
+    background: linear-gradient(
+        135deg,
+        #2563eb,
+        #1d4ed8
+    );
+
+    color: white;
+
+    box-shadow:
+        0 8px 20px rgba(37, 99, 235, .18);
+
+    box-sizing: border-box;
+
+}
+
+
+.header-icon {
+
+    width: 48px;
+
+    height: 48px;
+
+    border-radius: 12px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: rgba(255,255,255,.15);
+
+    font-size: 22px;
+
+}
+
+
+.monitoreo-input-header h1 {
+
+    margin: 0;
+
+    font-size: 21px;
+
+    font-weight: 700;
+
+    letter-spacing: .1px;
+     color: white;
+
+}
+
+
+.monitoreo-input-header p {
+
+    margin: 5px 0 0;
+
+    font-size: 13px;
+
+    color: rgba(255,255,255,.88);
+
+}
+
+
+/* =====================================================
+   BUSCADOR
+   ===================================================== */
+
+.monitoreo-input-search {
+    position: relative;
+    width: 100%;
+    margin-bottom: 14px;
+}
+
+.monitoreo-input-search i {
+    position: absolute;
+
+    left: 15px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #64748b;
+
+    font-size: 13px;
+}
+
+.monitoreo-input-search input {
+    width: 100%;
+    height: 44px;
+
+    padding: 0 15px 0 38px;
+
+    border: 1px solid #dbe2ea;
+
+    border-radius: 8px;
+
+    background: white;
+
+    color: #1e293b;
+
+    font-size: 13px;
+
+    outline: none;
+
+    transition: .2s;
+
+    box-sizing: border-box;
+}
+
+.monitoreo-input-search input:focus {
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37,99,235,.10);
+}
+
+/* =====================================================
+   TABS
+   ===================================================== */
+
+.input-tabs {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 4px;
+
+    border-bottom: 1px solid #dbe2ea;
+
+    margin-bottom: 14px;
+
+}
+
+
+.input-tab {
+
+    border: none;
+
+    background: transparent;
+
+    color: #2563eb;
+
+    padding: 10px 18px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    border-radius: 7px 7px 0 0;
+
+    transition: .2s;
+
+}
+
+
+.input-tab:hover {
+
+    background: #eff6ff;
+
+}
+
+
+.input-tab.active {
+
+    color: white;
+
+    background: #2563eb;
+
+}
+
+
+/* =====================================================
+   ALERTAS EN TABS
+   ===================================================== */
+
+.input-tab.tab-warning {
+
+    background: #f59e0b;
+
+    color: white;
+
+}
+
+
+.input-tab.tab-error {
+
+    background: #dc2626;
+
+    color: white;
+
+}
+
+
+/* =====================================================
+   PANELES
+   ===================================================== */
+
+.input-panel {
+
+    display: none;
+
+}
+
+
+.input-panel.active {
+
+    display: block;
+
+}
+
+
+/* =====================================================
+   GRID
+   ===================================================== */
+
+.input-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, minmax(0, 1fr));
+
+    gap: 12px;
+
+}
+
+
+/* =====================================================
+   TARJETAS
+   ===================================================== */
+
+.input-card {
+
+    min-width: 0;
+
+}
+
+
+.input-link {
+
+    width: 100%;
+
+    min-height: 52px;
+
+    padding: 0 15px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 12px;
+
+    box-sizing: border-box;
+
+    background: white;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 9px;
+
+    text-decoration: none;
+
+    box-shadow:
+        0 2px 6px rgba(15,23,42,.06);
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease,
+        border-color .18s ease;
+
+}
+
+
+.input-link:hover {
+
+    transform: translateY(-2px);
+
+    border-color: #93c5fd;
+
+    box-shadow:
+        0 7px 16px rgba(15,23,42,.10);
+
+}
+
+
+.input-name {
+
+    min-width: 0;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+    color: #2563eb;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+}
+
+
+/* =====================================================
+   INDICADOR
+   ===================================================== */
+
+.status-indicator {
+
+    flex: 0 0 auto;
+
+    width: 11px;
+
+    height: 11px;
+
+    border-radius: 50%;
+
+    box-shadow:
+        0 0 0 3px rgba(255,255,255,.9);
+
+}
+
+
+/* VERDE */
+
+.status-indicator.green {
+
+    background: #16a34a;
+
+}
+
+
+/* AMARILLO */
+
+.status-indicator.yellow {
+
+    background: #f59e0b;
+
+}
+
+
+/* ROJO */
+
+.status-indicator.red {
+
+    background: #dc2626;
+
+}
+
+
+/* GRIS */
+
+.status-indicator.grey {
+
+    background: #64748b;
+
+}
+
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+
+@media (max-width: 1400px) {
+
+    .input-grid {
+
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr));
+
+    }
+
+}
+
+
+@media (max-width: 1100px) {
+
+    .input-grid {
+
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+
+    }
+
+}
+
+
+@media (max-width: 800px) {
+
+    .input-grid {
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+    }
+
+}
+
+
+@media (max-width: 550px) {
+
+    .input-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+    .monitoreo-input-container {
+
+        padding: 15px;
+
+    }
+
+    .input-tabs {
+
+        overflow-x: auto;
+
+    }
+
+}

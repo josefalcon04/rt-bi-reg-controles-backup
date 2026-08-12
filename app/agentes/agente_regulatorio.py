@@ -1,38 +1,224 @@
+# app/agentes/agente_regulatorio.py
+
 from .base_agent import BaseAgent
-from app.servicios.ollama_service import llamar_ollama
+from app.servicios.ollama_service import OllamaService
+from app.servicios.documentacion_service import DocumentacionService
+
 
 PROMPT_REGULATORIO = """
-Eres un asistente ejecutivo senior, experto en documentación regulatoria y normas del sector.
+
+Eres un asistente senior especializado en regulación
+del sector telecomunicaciones.
+
+Tu conocimiento incluye:
+
+- Normativas OSIPTEL
+- Reportes regulatorios
+- Procedimientos BI
+- Validaciones regulatorias
+- Definiciones de indicadores
+
 
 Reglas:
-1. Si la pregunta es sobre tu identidad, quién te creó o quién es tu autor, responde:
-   "Fui creado por Jose Falcon, Especialista en Datos Regulatorios del equipo BI."
-2. Si la pregunta no es sobre tu identidad, sigue estas reglas:
-   - Revisa primero la sección MEMORIA.
-   - Si la pregunta hace referencia a "eso", "lo anterior", usa la MEMORIA.
-   - Solo si no está en MEMORIA, busca en DOCUMENTACION.
-   - Si no encuentras la respuesta, responde exactamente: "No encontré esa información en la documentación cargada."
+
+1. Responde siempre en español.
+
+2. Usa primero el contexto documental entregado.
+
+3. No inventes información.
+
+4. Si la información no está disponible responde:
+
+"No encontré esa información en la documentación cargada."
+
+
+5. Si preguntan quién creó este asistente responde:
+
+"Fui creado por José Luis Falcon Flores,
+Especialista en Datos Regulatorios del equipo BI."
+
 """
+
 
 class AgenteRegulatorio(BaseAgent):
 
-    def execute(self, pregunta, memoria="", documento=None):
-        # 1. Filtro de Identidad Institucional
-        pregunta_lower = pregunta.lower()
-        if any(x in pregunta_lower for x in ["quien te creo", "quien es tu creador", "quien te hizo", "autor"]):
-            return "Fui creado por José Luis Falcon Flores, Especialista en Datos Regulatorios del equipo BI."
+    nombre = "AgenteRegulatorio"
 
-        # 2. Lógica para RAG (Si llega un documento del router)
-        if not documento:
-            return "No encontré documentación relacionada para tu consulta."
 
-        contexto = documento.get("contenido", "")[:3000]
+    descripcion = """
+    Agente especializado en normativa regulatoria,
+    documentación OSIPTEL y procesos BI regulatorios.
+    """
 
-        # 3. Llamada al servicio con el prompt especializado
-        # Nota: llamamos a llamar_ollama pasando la pregunta formateada en el prompt
-        return llamar_ollama(
-            pregunta=pregunta,
-            contexto=contexto,
-            memoria=memoria,
-            system_prompt=PROMPT_REGULATORIO
+
+    def __init__(self):
+
+        self.ollama = OllamaService()
+
+        self.doc_service = DocumentacionService()
+
+
+
+    def execute(
+        self,
+        pregunta,
+        memoria=""
+    ):
+
+        print(
+            "[AGENTE REGULATORIO]",
+            pregunta
+        )
+
+
+        try:
+
+
+            # 1. Validar identidad
+
+            if self.es_pregunta_identidad(pregunta):
+
+                return {
+
+                    "tipo": "identidad",
+
+                    "agente": self.nombre,
+
+                    "respuesta":
+                    "Fui creado por José Luis Falcon Flores, "
+                    "Especialista en Datos Regulatorios del equipo BI."
+
+                }
+
+
+
+            # 2. Buscar documentación
+
+            documento = self.doc_service.buscar(
+                pregunta
+            )
+
+
+
+            if not documento:
+
+
+                return {
+
+                    "tipo": "sin_documentacion",
+
+                    "agente": self.nombre,
+
+                    "respuesta":
+                    "No encontré esa información en la documentación cargada."
+
+                }
+
+
+
+            # 3. Preparar contexto
+
+            contexto = documento.get(
+                "contenido",
+                ""
+            )[:5000]
+
+
+
+            if not contexto:
+
+
+                return {
+
+                    "tipo": "sin_contenido",
+
+                    "agente": self.nombre,
+
+                    "respuesta":
+                    "El documento encontrado no contiene información útil."
+
+                }
+
+
+
+            # 4. Consulta IA con RAG
+
+            respuesta = self.ollama.llamar(
+
+                pregunta=pregunta,
+
+                contexto=contexto,
+
+                memoria=memoria,
+
+                system_prompt=PROMPT_REGULATORIO
+
+            )
+
+
+
+            return {
+
+                "tipo": "respuesta_regulatoria",
+
+                "agente": self.nombre,
+
+                "documento":
+                    documento.get("archivo"),
+
+                "respuesta": respuesta
+
+            }
+
+
+
+        except Exception as e:
+
+
+            print(
+                f"[ERROR AGENTE REGULATORIO] {str(e)}"
+            )
+
+
+            return {
+
+                "tipo": "error",
+
+                "agente": self.nombre,
+
+                "respuesta":
+                f"Error procesando consulta regulatoria: {str(e)}"
+
+            }
+
+
+
+    def es_pregunta_identidad(
+        self,
+        pregunta
+    ):
+
+
+        palabras = [
+
+            "quien te creo",
+
+            "quien es tu creador",
+
+            "quien te hizo",
+
+            "autor"
+
+        ]
+
+
+        pregunta = pregunta.lower()
+
+
+        return any(
+
+            palabra in pregunta
+
+            for palabra in palabras
+
         )

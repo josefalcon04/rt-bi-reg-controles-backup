@@ -1,176 +1,248 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Regulatorio</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat_float.css') }}">
-</head>
-<body>
-    <!-- Barra superior -->
-    <header class="topbar">
-    <img src="{{ url_for('static', filename='img/logo2.png') }}" alt="Logo de la empresa" class="logo" style="width: 95px;">
-    <div class="topbar-title">TABLERO REGULATORIO</div>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Regulatorio</title>
+        <link rel="stylesheet"
+            href="{{ url_for('static', filename='css/styles.css') }}">
+        <link rel="stylesheet"
+            href="{{ url_for('static', filename='css/chat_float.css') }}">
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+        <link rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <!-- 🔔 Campanita de notificaciones -->
-    <div class="notification-container">
-        <div class="notification-bell" id="notificationBell">
-            🔔
-            <span class="notification-count" id="notificationCount">3</span>
-        </div>
+    </head>
+    <body>
+        <!-- Barra superior -->
+        <header class="topbar">
+            <img src="{{ url_for('static', filename='img/logo2.png') }}"
+                alt="Logo de la empresa" class="logo" style="width: 95px;">
+            <div class="topbar-title">TABLERO REGULATORIO</div>
 
-        <!-- Panel desplegable -->
-        <div class="notification-panel hidden" id="notificationPanel">
-            <h4>Notificaciones</h4>
-            <ul id="notificationList">                
-            </ul>
-        </div>
-    </div>
-</header>
+            <!-- 🔔 Campanita de notificaciones -->
+            <div class="notification-container">
+                <div class="notification-bell" id="notificationBell">
+                    🔔
+                    <span class="notification-count"
+                        id="notificationCount">3</span>
+                </div>
 
-    <!-- Botón para mostrar barra -->
-    <div class="menu-toggle hidden" onclick="mostrarSidebar()">☰</div>
-
-    <!-- Zona sensible para hover -->
-    <div class="sidebar-trigger"></div>
-
-    <!-- Contenedor principal -->
-    <div class="main-container">
-        <!-- Barra lateral -->
-        <nav class="sidebar hidden">
-            <div class="sidebar-header">
-                <h2><a href="#" onclick="location.reload();">🏠 Inicio</a></h2>
-            </div>
-            <ul class="sidebar-menu">
-                <li><a href="#" onclick="ocultarSidebar(); cargarContenido('/calendario')">📅 Calendario</a></li>
-
-                <li class="submenu">
-                    <a href="#" class="submenu-toggle">🖥️ Monitoreo</a>
-                    <ul class="submenu-content" style="display: none;">
-                        <li><a href="#" onclick="ocultarSidebar(); cargarContenido('/reportes')">📊 Reportes (NTZ)</a></li>
-                        <li><a href="#" onclick="ocultarSidebar(); cargarContenido('/input')">📊 Inputs (NTZ)</a></li>
-                        <li><a href="#" onclick="ocultarSidebar(); cargarContenido('/monitoreo_tera')">📊 Procesos (DWH)</a></li>
+                <!-- Panel desplegable -->
+                <div class="notification-panel hidden" id="notificationPanel">
+                    <h4>Notificaciones</h4>
+                    <ul id="notificationList">
                     </ul>
-                </li>
-
-                <li class="submenu">
-                    <a href="#" class="submenu-toggle">✅ Calidad del dato</a>
-                    <ul class="submenu-content" style="display: none;">
-                        <li><a href="#" onclick="ocultarSidebar(); cargarContenido('/caracteres')">📍 Datos extraños</a></li>
-                    </ul>
-                </li>
-
-               <li class="submenu">
-    <a href="#" class="submenu-toggle">📈 Tendencias</a>
-
-    <ul class="submenu-content" style="display: none;">
-        <li>
-            <a href="#" onclick="ocultarSidebar(); cargarContenido('/tendencias_plantas')">
-                🌱 Plantas
-            </a>
-        </li>
-
-        <li>
-            <a href="#" onclick="ocultarSidebar(); cargarContenido('/tendencias_reportes')">
-                📄 Reportes
-            </a>
-        </li>
-    </ul>
-</li>
-                <li class="submenu">
-                    <a href="#" class="submenu-toggle"> 📊 Dashboards</a>
-                    <ul class="submenu-content" style="display: none;">                                                
-                        <li><a href="#" onclick="ocultarSidebar(); cargarContenido('/devoluciones')">📍 Devoluciones</a></li>
-                    </ul>
-                </li>                                   
-                
-                <ul class="submenu-content" style="display: none;">
-        <li>
-            <a href="#" onclick="ocultarSidebar(); cargarContenido('/tendencias_plantas')">
-                🌱 Plantas
-            </a>
-        </li>
-
-        <li>
-            <a href="#" onclick="ocultarSidebar(); cargarContenido('/tendencias_reportes')">
-                📄 Reportes
-            </a>
-        </li>
-    </ul>
-            <li class="submenu">
-                <a href="#" class="submenu-toggle">🚀 Pases a prod.</a>
-                <ul class="submenu-content" style="display: none;">                    
-                    <li>
-                        <a href="#" onclick="ocultarSidebar(); cargarContenido('/pases')">🔄 Pases</a>
-                        <a href="https://dj-bi-qsynthetix-qa-nirvana-qa.apps.ocptest.gp.inet/" 
-                                target="_blank" 
-                                rel="noopener noreferrer" 
-                                onclick="ocultarSidebar();">
-                                ⚡ Implementación
-                            </a>                          
-                        <a href="https://integratelperu.atlassian.net/jira/software/c/projects/REGU/boards/156" 
-                                target="_blank" 
-                                rel="noopener noreferrer" 
-                                onclick="ocultarSidebar();">
-                                ✅ Jira
-                            </a> 
-                    </li>
-                </ul>
-            </li>
-            <li class="submenu">
-                <a href="#" class="submenu-toggle">⚙️ Ejecuciones</a>
-                <ul class="submenu-content" style="display: none;">                    
-                    <li>
-                        <a href="https://dj-bi-qsynthetix-dev-nirvana-qa.apps.ocptest.gp.inet/execute/" 
-                                target="_blank" 
-                                rel="noopener noreferrer" 
-                                onclick="ocultarSidebar();">
-                                🤖 Semiautomáticas
-                            </a> 
-                    </li>
-                </ul>
-            </li>
-            <li>
-                    <a href="/documentacion" onclick="ocultarSidebar();">📚 Documentación</a>
-            </li>            
-            <li>
-                    <a href="#" onclick="ocultarSidebar(); cargarContenido('/chatbox')">🤖Chatbox (Pronto)</a>
-            </li>            
-            </ul>
-        </nav>
-
-        <!-- Contenido principal -->
-        <main class="content">
-            <div id="contenido">
-                <h2>Bienvenido al tablero Regulatorio</h2>
-                <p>Explora las diferentes opciones disponibles:</p>
-                <div class="cards-container">
-                    <div class="card" onclick="cargarContenido('/calendario')">
-                        <h3>📅 Calendario</h3>
-                        <p>Consulta fechas clave y eventos importantes.</p>
-                    </div>
-                    <div class="card" onclick="cargarContenido('/reportes')">
-                        <h3>🖥️ Monitoreo</h3>
-                        <p>Supervisa la ejecución de reportes y procesos.</p>
-                    </div>
-                    <div class="card" onclick="cargarContenido('/caracteres')">
-                        <h3> 🧾 Calidad del dato</h3>
-                        <p>Analiza y valida la integridad de los datos.</p>
-                    </div>
-                    <div class="card" onclick="cargarContenido('/tendencias')">
-                        <h3>📈📊 Tendencias</h3>
-                        <p>Analiza las tendencias de los datos.</p>
-                    </div>
                 </div>
             </div>
-        </main>
-    </div>
+            <div class="user-dropdown">
 
-    <!-- Script principal -->
-    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
-    <script>
+                <button
+                    class="user-button"
+                    id="userMenuButton">
+
+                    <div class="avatar">
+                        {{ session["nombre"][0]|upper }}
+                    </div>
+
+                    <div class="user-info">
+
+                        <div class="user-name">
+                            {{ session["nombre"] }}
+                            <i class="fa-solid fa-chevron-down arrow-icon"></i>
+                        </div>
+
+                        <div class="user-role">
+                            {{ session.get("rol_nombre", "Usuario") }}
+                        </div>
+
+                    </div>
+
+                </button> <!-- ← ESTE CIERRE FALTABA -->
+
+                <div class="user-menu" id="userMenu">
+
+                    <a href="#"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalPassword">
+
+                        <i class="fa-solid fa-key"></i>
+
+                        Cambiar contraseña
+
+                    </a>
+
+                    <a href="/logout">
+                        🚪 Cerrar sesión
+                    </a>
+
+                </div>
+
+            </div>
+        </header>
+
+        <!-- Botón para mostrar barra -->
+        <div class="menu-toggle hidden" onclick="mostrarSidebar()">☰</div>
+
+        <!-- Zona sensible para hover -->
+        <div class="sidebar-trigger"></div>
+
+        <!-- Contenedor principal -->
+        <div class="main-container">
+            <!-- Barra lateral -->
+            <nav class="sidebar hidden">
+                <div class="sidebar-header">
+                    <h2><a href="#" onclick="location.reload();">🏠
+                            Inicio</a></h2>
+                </div>
+                <ul class="sidebar-menu">
+                    <li><a href="#"
+                            onclick="ocultarSidebar(); cargarContenido('/calendario')">📅
+                            Calendario</a></li>
+
+                    <li class="submenu">
+                        <a href="#" class="submenu-toggle">🖥️ Monitoreo</a>
+                        <ul class="submenu-content" style="display: none;">
+                            <li><a href="#"
+                                    onclick="ocultarSidebar(); cargarContenido('/reportes')">📊
+                                    Reportes (NTZ)</a></li>
+                            <li><a href="#"
+                                    onclick="ocultarSidebar(); cargarContenido('/input')">📊
+                                    Inputs (NTZ)</a></li>
+                            <li><a href="#"
+                                    onclick="ocultarSidebar(); cargarContenido('/monitoreo_tera')">📊
+                                    Procesos (DWH)</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="submenu">
+                        <a href="#" class="submenu-toggle">✅ Calidad del
+                            dato</a>
+                        <ul class="submenu-content" style="display: none;">
+                            <li><a href="#"
+                                    onclick="ocultarSidebar(); cargarContenido('/caracteres')">📍
+                                    Datos extraños</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="submenu">
+                        <a href="#" class="submenu-toggle">📈 Tendencias</a>
+
+                        <ul class="submenu-content" style="display: none;">
+                            <li>
+                                <a href="#"
+                                    onclick="ocultarSidebar(); cargarContenido('/tendencias_plantas')">
+                                    🌱 Plantas
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#"
+                                    onclick="ocultarSidebar(); cargarContenido('/tendencias_reportes')">
+                                    📄 Reportes
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="submenu">
+                        <a href="#" class="submenu-toggle"> 📊 Dashboards</a>
+                        <ul class="submenu-content" style="display: none;">
+                            <li><a href="#"
+                                    onclick="ocultarSidebar(); cargarContenido('/devoluciones')">📍
+                                    Devoluciones</a></li>
+                        </ul>
+                    </li>                    
+                    <li class="submenu">
+                        <a href="#" class="submenu-toggle">🚀 Pases a prod.</a>
+                        <ul class="submenu-content" style="display: none;">
+                            <li>
+                                <a href="#"
+                                    onclick="ocultarSidebar(); cargarContenido('/pases')">🔄
+                                    Pases</a>
+                                <a
+                                    href="https://dj-bi-qsynthetix-qa-nirvana-qa.apps.ocptest.gp.inet/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onclick="ocultarSidebar();">
+                                    ⚡ Implementación
+                                </a>
+                                <a
+                                    href="https://integratelperu.atlassian.net/jira/software/c/projects/REGU/boards/156"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onclick="ocultarSidebar();">
+                                    ✅ Jira
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="submenu">
+                        <a href="#" class="submenu-toggle">⚙️ Ejecuciones</a>
+                        <ul class="submenu-content" style="display: none;">
+                            <li>
+                                <a
+                                    href="https://dj-bi-qsynthetix-dev-nirvana-qa.apps.ocptest.gp.inet/execute/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onclick="ocultarSidebar();">
+                                    🤖 Semiautomáticas
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/documentacion" onclick="ocultarSidebar();">📚
+                            Documentación</a>
+                    </li>
+                    <!--<li>
+                    <a href="#" onclick="ocultarSidebar(); cargarContenido('/chatbox')">🤖Chatbox (Pronto)</a>
+            </li>-->
+                    <li>
+                        <a href="#"
+                            onclick="ocultarSidebar(); cargarContenido('/agent_flow')">
+                            🔎 Monitor de agentes
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Contenido principal -->
+            <main class="content">
+                <div id="contenido">
+                    <h2>Bienvenido al tablero Regulatorio</h2>
+                    <p>Explora las diferentes opciones disponibles:</p>
+                    <div class="cards-container">
+                        <div class="card"
+                            onclick="cargarContenido('/calendario')">
+                            <h3>📅 Calendario</h3>
+                            <p>Consulta fechas clave y eventos importantes.</p>
+                        </div>
+                        <div class="card"
+                            onclick="cargarContenido('/reportes')">
+                            <h3>🖥️ Monitoreo</h3>
+                            <p>Supervisa la ejecución de reportes y
+                                procesos.</p>
+                        </div>
+                        <div class="card"
+                            onclick="cargarContenido('/caracteres')">
+                            <h3> 🧾 Calidad del dato</h3>
+                            <p>Analiza y valida la integridad de los datos.</p>
+                        </div>
+                        <div class="card"
+                            onclick="cargarContenido('/tendencias')">
+                            <h3>📈📊 Tendencias</h3>
+                            <p>Analiza las tendencias de los datos.</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Script principal -->
+        <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+        <script>
         function ocultarSidebar() {
             $('.sidebar').addClass('hidden');
             $('.menu-toggle').removeClass('hidden');
@@ -220,18 +292,18 @@
             });
         });
     </script>
-    <div id="chat-float-btn">🤖</div>
+        <div id="chat-float-btn">🤖</div>
 
-<div id="chat-window">
-    <div class="chat-header">
-        <span>🤖 BI Assistant</span>
-        <span onclick="toggleChat()">✖</span>
-    </div>
+        <div id="chat-window">
+            <div class="chat-header">
+                <span>🤖 BI Assistant</span>
+                <span onclick="toggleChat()">✖</span>
+            </div>
 
-    <iframe src="/chatbox"></iframe>
-</div>
+            <iframe src="/chatbox"></iframe>
+        </div>
 
-<script>
+        <script>
 function toggleChat() {
     const chat = document.getElementById("chat-window");
 
@@ -243,5 +315,317 @@ function toggleChat() {
 
 document.getElementById("chat-float-btn").addEventListener("click", toggleChat);
 </script>
-</body>
+        <script src="{{ url_for('static', filename='js/topbar.js') }}"></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+        <script
+            src="{{ url_for('static', filename='js/password.js') }}"></script>
+
+        <!-- Modal Cambio de Contraseña -->
+
+        <div class="modal fade"
+            id="modalPassword"
+            tabindex="-1"
+            aria-hidden="true">
+
+            <div class="modal-dialog modal-dialog-centered">
+
+                <div class="modal-content">
+
+                    <div class="modal-header">
+
+                        <h5 class="modal-title">
+
+                            <i class="fa-solid fa-lock"></i>
+
+                            Cambiar contraseña
+
+                        </h5>
+
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal">
+                        </button>
+
+                    </div>
+
+                    <form id="formPassword">
+
+                        <div class="modal-body">
+
+                            <!-- Contraseña actual -->
+
+                            <div class="mb-4">
+
+                                <label class="form-label fw-bold">
+
+                                    Contraseña actual
+
+                                </label>
+
+                                <div class="input-group">
+
+                                    <input
+                                        type="password"
+                                        class="form-control"
+                                        id="password_actual"
+                                        name="password_actual"
+                                        required>
+
+                                    <button
+                                        class="btn btn-outline-secondary toggle-password"
+                                        type="button"
+                                        data-target="password_actual">
+
+                                        <i class="fa-solid fa-eye"></i>
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                            <!-- Nueva contraseña -->
+
+                            <div class="mb-3">
+
+                                <label class="form-label fw-bold">
+
+                                    Nueva contraseña
+
+                                </label>
+
+                                <div class="input-group">
+
+                                    <input
+                                        type="password"
+                                        class="form-control"
+                                        id="password_nueva"
+                                        name="password_nueva"
+                                        autocomplete="new-password"
+                                        required>
+
+                                    <button
+                                        class="btn btn-outline-secondary toggle-password"
+                                        type="button"
+                                        data-target="password_nueva">
+
+                                        <i class="fa-solid fa-eye"></i>
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                            <!-- Barra de seguridad -->
+
+                            <div class="password-strength">
+
+                                <div class="progress">
+
+                                    <div
+                                        id="strengthBar"
+                                        class="progress-bar bg-danger"
+                                        style="width:0%">
+                                    </div>
+
+                                </div>
+
+                                <small
+                                    id="strengthText"
+                                    class="text-muted">
+
+                                    Escriba una contraseña...
+
+                                </small>
+
+                            </div>
+
+                            <!-- Reglas -->
+
+                            <div
+                                class="password-rules"
+                                id="passwordRules">
+
+                                <div id="rule-length">❌ Mínimo 12
+                                    caracteres</div>
+
+                                <div id="rule-upper">❌ Una letra mayúscula</div>
+
+                                <div id="rule-lower">❌ Una letra minúscula</div>
+
+                                <div id="rule-number">❌ Un número</div>
+
+                                <div id="rule-special">❌ Un carácter
+                                    especial</div>
+
+                            </div>
+
+                            <!-- Confirmar -->
+
+                            <div class="mt-4">
+
+                                <label class="form-label fw-bold">
+
+                                    Confirmar contraseña
+
+                                </label>
+
+                                <div class="input-group">
+
+                                    <input
+                                        type="password"
+                                        class="form-control"
+                                        id="password_confirmar"
+                                        name="password_confirmar"
+                                        autocomplete="new-password"
+                                        required>
+
+                                    <button
+                                        class="btn btn-outline-secondary toggle-password"
+                                        type="button"
+                                        data-target="password_confirmar">
+
+                                        <i class="fa-solid fa-eye"></i>
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                            <div
+                                id="matchMessage"
+                                class="mt-2 fw-bold">
+                            </div>
+
+                            <div
+                                id="mensajePassword"
+                                class="mt-3">
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+
+                            <button
+                                type="button"
+                                class="btn btn-secondary"
+                                data-bs-dismiss="modal">
+
+                                Cancelar
+
+                            </button>
+
+                            <button
+                                type="submit"
+                                id="btnGuardarPassword"
+                                class="btn btn-primary"
+                                disabled>
+
+                                Guardar
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ========================================= -->
+        <!-- Modal Advertencia de Sesión -->
+        <!-- ========================================= -->
+
+        <div
+            class="modal fade"
+            id="modalSessionExpired"
+            data-bs-backdrop="static"
+            data-bs-keyboard="false"
+            tabindex="-1">
+
+            <div class="modal-dialog modal-dialog-centered">
+
+                <div class="modal-content">
+
+                    <div class="modal-header bg-warning">
+
+                        <h5 class="modal-title text-dark">
+
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+
+                            Sesión por expirar
+
+                        </h5>
+
+                    </div>
+
+                    <div class="modal-body text-center">
+
+                        <div class="mb-3">
+
+                            <i
+                                class="fa-solid fa-user-clock"
+                                style="font-size:65px;color:#f59e0b">
+                            </i>
+
+                        </div>
+
+                        <h4>
+
+                            Su sesión está por expirar
+
+                        </h4>
+
+                        <p class="text-muted">
+
+                            Por motivos de seguridad, su sesión se cerrará
+                            automáticamente por inactividad.
+
+                        </p>
+
+                        <h1
+                            id="countdown"
+                            class="display-3 text-danger fw-bold">
+
+                            60
+
+                        </h1>
+
+                        <small class="text-muted">
+
+                            segundos restantes
+
+                        </small>
+
+                    </div>
+
+                    <div class="modal-footer justify-content-center">
+
+                        <button
+                            id="btnContinuarSesion"
+                            class="btn btn-primary btn-lg">
+
+                            <i class="fa-solid fa-arrow-rotate-right"></i>
+
+                            Continuar trabajando
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        <script
+            src="{{ url_for('static', filename='js/session_timeout.js') }}"></script>
+    </body>
 </html>

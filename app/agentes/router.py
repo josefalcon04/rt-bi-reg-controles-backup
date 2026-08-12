@@ -1,61 +1,215 @@
-from .agente_monitoreo import AgenteMonitoreo
-from .agente_regulatorio import AgenteRegulatorio
-from .agente_sql import AgenteSQL
-from .agente_alertas import AgenteAlertas
-from .agente_developer import AgenteDeveloper
-from .agente_tendencias import AgenteTendencias
-#from app.servicios.documentacion_service import DocumentacionService
-from app.servicios.ollama_service import llamar_ollama
+# app/agentes/router.py
 
-def clasificar_agente_con_ia(pregunta):
-    system_prompt = """
-    Eres un clasificador de agentes.
-    - Si la pregunta es sobre "quién te creó", "quién es tu autor", o datos de identidad del BI Assistant, clasifícalo como AgenteRegulatorio.
-    - Agentes disponibles: [AgenteSQL, AgenteTendencias, AgenteMonitoreo, AgenteAlertas, AgenteRegulatorio, AgenteDeveloper]
-    """
-    
-    # Llamamos a Ollama con una temperatura muy baja (determinista)
-    # No necesitamos contexto ni memoria para clasificar
-    resultado = llamar_ollama(
-        pregunta=pregunta, 
-        system_prompt=system_prompt
-    )
-    
-    return resultado.strip()
+from .agent_registry import AgentRegistry
+
+
+class Router:
+
+    def __init__(self):
+
+        self.registry = AgentRegistry()
+
+
+    def procesar_consulta(self, consulta, memoria=""):
+
+        agente_nombre = self.detectar_agente(
+            consulta
+        )
+
+        agente = self.registry.get_agent(
+            agente_nombre
+        )
+
+        if not agente:
+
+            return {
+
+                "tipo": "error",
+
+                "respuesta":
+                f"No existe el agente '{agente_nombre}'."
+
+            }
+
+
+        try:
+
+            return agente.execute(
+
+                pregunta=consulta,
+
+                memoria=memoria
+
+            )
+
+
+        except TypeError:
+
+            # Compatibilidad con agentes que no usan memoria
+            return agente.execute(
+                consulta
+            )
+
+
+    def detectar_agente(self, consulta):
+
+        texto = consulta.lower()
+
+
+        # ------------------------
+        # SQL
+        # ------------------------
+
+        if any(x in texto for x in [
+
+            "sql",
+            "query",
+            "select",
+            "from",
+            "join",
+            "where",
+            "group by",
+            "netezza",
+            "teradata",
+            "oracle"
+
+        ]):
+
+            return "sql"
+
+
+        # ------------------------
+        # Tendencias
+        # ------------------------
+
+        if any(x in texto for x in [
+
+            "tendencia",
+            "evolucion",
+            "histórico",
+            "historico",
+            "comparacion",
+            "crecimiento",
+            "comportamiento"
+
+        ]):
+
+            return "tendencias"
+
+
+        # ------------------------
+        # Monitoreo
+        # ------------------------
+
+        if any(x in texto for x in [
+
+            "monitoreo",
+            "proceso",
+            "batch",
+            "control-m",
+            "control m",
+            "schedule",
+            "layout",
+            "ejecucion",
+            "estado"
+
+        ]):
+
+            return "monitoreo"
+
+
+        # ------------------------
+        # Alertas
+        # ------------------------
+
+        if any(x in texto for x in [
+
+            "alerta",
+            "caida",
+            "caída",
+            "fallo",
+            "incidente",
+            "error"
+
+        ]):
+
+            return "alertas"
+
+
+        # ------------------------
+        # Regulatorio
+        # ------------------------
+
+        if any(x in texto for x in [
+
+            "osiptel",
+            "norma",
+            "regulatorio",
+            "reporte",
+            "formato",
+            "nri"
+
+        ]):
+
+            return "regulatorio"
+
+
+        # ------------------------
+        # Documentación
+        # ------------------------
+
+        if any(x in texto for x in [
+
+            "manual",
+            "documentacion",
+            "documentación",
+            "procedimiento",
+            "instructivo",
+            "guía",
+            "guia"
+
+        ]):
+
+            return "documentacion"
+
+
+        # ------------------------
+        # Developer
+        # ------------------------
+
+        if any(x in texto for x in [
+
+            "python",
+            "flask",
+            "api",
+            "codigo",
+            "código",
+            "desarrollo",
+            "arquitectura",
+            "shell",
+            "linux"
+
+        ]):
+
+            return "developer"
+
+
+        # Agente por defecto
+
+        return "developer"
+
+
+router = Router()
+
 
 def obtener_agente(pregunta):
-    p = pregunta.lower().strip()
-    
-    # 1. Bypass para Identidad (Crítico)
-    if any(x in p for x in ["creador", "quien te creo", "quien te hizo"]):
-        return AgenteDeveloper(), None
-    
-    # 2. Prioridad de Monitoreo (Nueva capa obligatoria)
-    # Si detectamos palabras clave de Teradata, forzamos AgenteMonitoreo
-    palabras_monitoreo = ["teradata", "procesos", "log", "finalizaron", "pendiente", "error"]
-    if any(keyword in p for keyword in palabras_monitoreo):
-        print(f"[ROUTER] Prioridad detectada: AgenteMonitoreo por keyword")
-        return AgenteMonitoreo(), None
 
-    # 3. Prioridad: Documentación (Solo si el score es alto)
-    # doc_service = DocumentacionService()
-    # documento = doc_service.buscar(pregunta)
-    # if documento and documento.get('score', 0) > 5: 
-    #     return AgenteRegulatorio(), documento
+    agente_nombre = router.detectar_agente(
+        pregunta
+    )
 
-    # 4. Clasificación mediante LLM (Como respaldo si no es nada de lo anterior)
-    nombre_agente = clasificar_agente_con_ia(pregunta)
-    
-    # 5. Mapeo seguro
-    mapeo = {
-        "AgenteSQL": AgenteSQL(),
-        "AgenteTendencias": AgenteTendencias(),
-        "AgenteMonitoreo": AgenteMonitoreo(),
-        "AgenteAlertas": AgenteAlertas(),
-        "AgenteDeveloper": AgenteDeveloper()
-    }
-    
-    agente_final = mapeo.get(nombre_agente, AgenteDeveloper())
-    print(f"[ROUTER] IA clasificó como: {nombre_agente}")
-    
-    return agente_final, None
+    agente = router.registry.get_agent(
+        agente_nombre
+    )
+
+    return agente, None

@@ -1,0 +1,236 @@
+.calendar-page {
+  width: 100%;
+}
+.contenedor {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+}
+.calendario {
+ display: grid;
+    grid-template-columns: repeat(4, minmax(220px, 1fr));
+    gap: 20px;
+    flex: 1;
+}
+.mes {
+   background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.10);
+    overflow: hidden;
+    min-height: 175px;
+}
+.mes h3 {
+   background: #2563EB;
+    color: #ffffff;
+
+    padding: 12px;
+
+    text-align: center;
+
+    margin: 0;
+
+    font-size: 21px;
+    font-weight: 700;
+}
+.dias {
+   display: flex;
+    flex-wrap: wrap;
+
+    padding: 10px;
+
+    justify-content: center;
+
+    background: #ffffff;
+}
+.dia {
+  width: 40px;
+    min-height: 38px;
+    margin: 3px;
+    padding: 5px;
+    border-radius: 8px;
+    background: #f8fafc;
+    cursor: pointer;
+    text-align: center;
+    font-size: 14px;
+}
+.dia:hover {
+  background: #dbeafe;
+
+    transform: translateY(-1px);
+}
+.frecuencia,
+.leyenda-color {
+  width: 8px;
+  height: 8px;
+  border-radius: 3px;
+  display: inline-block;
+}
+/* ==========================================
+   PANEL LISTA DE REPORTES
+   ========================================== */
+
+.barra-lateral {
+    width: 300px;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 18px 16px;
+    box-shadow: 0 6px 20px rgba(15, 23, 42, 0.10);
+
+    /* Centrado vertical del contenido */
+    align-self: flex-start;
+
+    /* Evita que quede pegado a los meses */
+    margin-top: 2px;
+
+    /* Mantenerlo estable */
+    flex-shrink: 0;
+
+    border: 1px solid #eef2f7;
+}
+
+/* Título */
+
+.barra-lateral h2 {
+    margin: 0 0 12px 0;
+
+    font-size: 22px;
+    font-weight: 700;
+
+    color: #0f172a;
+
+    text-align: center;
+}
+
+/* Buscador */
+
+#busqueda-reporte {
+    width: 100%;
+    height: 38px;
+
+    padding: 0 12px;
+
+    border: 1px solid #d7dee8;
+    border-radius: 8px;
+
+    background: #f8fafc;
+
+    color: #334155;
+
+    font-size: 13px;
+
+    outline: none;
+
+    box-sizing: border-box;
+
+    transition: all .2s ease;
+}
+
+#busqueda-reporte:focus {
+    background: #ffffff;
+
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.10);
+}
+
+/* Lista */
+
+#lista-reportes {
+    margin-top: 12px;
+
+    max-height: 420px;
+
+    overflow-y: auto;
+
+    padding-right: 4px;
+}
+
+/* Cada reporte */
+
+.reporte {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 6px;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #334155;
+    transition:
+        background .2s ease,
+        transform .2s ease;
+}
+
+.reporte:hover {
+    background: #f1f5f9;
+
+    transform: translateX(2px);
+}
+
+/* Punto de color */
+
+.reporte-color {
+    width: 7px;
+    height: 7px;
+
+    min-width: 7px;
+
+    border-radius: 50%;
+
+    display: inline-block;
+}
+
+/* Nombre */
+
+.reporte-nombre {
+    color: #1e3a8a;
+
+    font-weight: 500;
+}
+
+/* Día */
+
+.reporte-dia {
+    color: #64748b;
+    font-size: 13px;
+}
+
+/* Scroll */
+
+#lista-reportes::-webkit-scrollbar {
+    width: 5px;
+}
+
+#lista-reportes::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#lista-reportes::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+
+    border-radius: 10px;
+}
+
+#lista-reportes::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+.leyenda {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 16px 0;
+}
+.leyenda-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+#busqueda-reporte {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}

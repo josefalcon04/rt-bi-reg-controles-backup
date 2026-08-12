@@ -1,120 +1,194 @@
-#import os
-#import re
-#from docx import Document
-#import textract
+# app/servicios/documentacion_service.py
+
+import os
+import re
+from docx import Document
+import textract
 
 
-# class DocumentacionService:
+class DocumentacionService:
 
-#     def __init__(self):
 
-#         self.docs_path = os.path.join(
-#             os.getcwd(),
-#             "documentacion",
-#             "templates",
-#             "documentos"
-#         )
+    def __init__(self):
 
-#         # extensiones soportadas
-#         self.allowed_ext = {
-#             ".md",
-#             ".docx",
-#             ".doc",
-#             ".txt"
-#         }
+        self.docs_path = os.path.join(
+            os.getcwd(),
+            "documentacion",
+            "templates",
+            "documentos"
+        )
 
-#     # =========================
-#     # 📄 LEER DOCX
-#     # =========================
-#     def leer_docx(self, ruta):
 
-#         doc = Document(ruta)
+        self.allowed_ext = {
+            ".md",
+            ".docx",
+            ".doc",
+            ".txt"
+        }
 
-#         return "\n".join(
-#             p.text
-#             for p in doc.paragraphs
-#             if p.text.strip()
-#         )
 
-#     # =========================
-#     # 📄 LEER OTROS WORD (.doc)
-#     # =========================
-#     def leer_doc_legacy(self, ruta):
 
-#         # usa textract para formatos antiguos
-#         texto = textract.process(ruta)
+    # =========================
+    # LEER DOCX
+    # =========================
 
-#         return texto.decode("utf-8", errors="ignore")
+    def leer_docx(self, ruta):
 
-#     # =========================
-#     # 📄 LECTURA UNIFICADA
-#     # =========================
-#     def leer_archivo(self, ruta):
+        doc = Document(ruta)
 
-#         ext = os.path.splitext(ruta)[1].lower()
+        return "\n".join(
+            p.text
+            for p in doc.paragraphs
+            if p.text.strip()
+        )
 
-#         if ext == ".md":
-#             with open(ruta, "r", encoding="utf-8") as f:
-#                 return f.read()
 
-#         if ext == ".docx":
-#             return self.leer_docx(ruta)
 
-#         if ext == ".doc":
-#             return self.leer_doc_legacy(ruta)
+    # =========================
+    # LEER DOC LEGACY
+    # =========================
 
-#         if ext == ".txt":
-#             with open(ruta, "r", encoding="utf-8") as f:
-#                 return f.read()
+    def leer_doc_legacy(self, ruta):
 
-#         return ""
+        texto = textract.process(ruta)
 
-#     # =========================
-#     # 🔎 BUSCAR DOCUMENTOS
-#     # =========================
-#     def buscar(self, pregunta):
+        return texto.decode(
+            "utf-8",
+            errors="ignore"
+        )
 
-#         if not os.path.exists(self.docs_path):
-#             return None
 
-#         palabras = re.findall(r"\w+", pregunta.lower())
 
-#         mejor_doc = None
-#         mejor_score = 0
+    # =========================
+    # LECTURA UNIFICADA
+    # =========================
 
-#         for archivo in os.listdir(self.docs_path):
+    def leer_archivo(self, ruta):
 
-#             if archivo.startswith("~$"):
-#                 continue
+        ext = os.path.splitext(ruta)[1].lower()
 
-#             ext = os.path.splitext(archivo)[1].lower()
 
-#             if ext not in self.allowed_ext:
-#                 continue
+        if ext == ".md" or ext == ".txt":
 
-#             ruta = os.path.join(self.docs_path, archivo)
+            with open(
+                ruta,
+                "r",
+                encoding="utf-8"
+            ) as f:
 
-#             ext = os.path.splitext(archivo)[1].lower()
+                return f.read()
 
-#             if ext not in self.allowed_ext:
-#                 continue
 
-#             contenido = self.leer_archivo(ruta)
 
-#             texto = (archivo.lower() + " " + contenido.lower())
+        if ext == ".docx":
 
-#             score = 0
+            return self.leer_docx(ruta)
 
-#             for palabra in palabras:
-#                 if palabra in texto:
-#                     score += 1
 
-#             if score > mejor_score:
 
-#                 mejor_score = score
-#                 mejor_doc = {
-#                     "archivo": archivo,
-#                     "contenido": contenido
-#                 }
+        if ext == ".doc":
 
-#         return mejor_doc
+            return self.leer_doc_legacy(ruta)
+
+
+
+        return ""
+
+
+
+    # =========================
+    # BUSCAR DOCUMENTOS
+    # =========================
+
+    def buscar(self, pregunta):
+
+
+        if not os.path.exists(
+            self.docs_path
+        ):
+
+            return None
+
+
+
+        palabras = re.findall(
+            r"\w+",
+            pregunta.lower()
+        )
+
+
+
+        mejor_doc = None
+        mejor_score = 0
+
+
+
+        for archivo in os.listdir(
+            self.docs_path
+        ):
+
+
+            if archivo.startswith("~$"):
+
+                continue
+
+
+
+            ext = os.path.splitext(
+                archivo
+            )[1].lower()
+
+
+
+            if ext not in self.allowed_ext:
+
+                continue
+
+
+
+            ruta = os.path.join(
+                self.docs_path,
+                archivo
+            )
+
+
+
+            contenido = self.leer_archivo(
+                ruta
+            )
+
+
+
+            texto = (
+                archivo.lower()
+                + " "
+                + contenido.lower()
+            )
+
+
+
+            score = sum(
+                1
+                for palabra in palabras
+                if palabra in texto
+            )
+
+
+
+            if score > mejor_score:
+
+                mejor_score = score
+
+                mejor_doc = {
+
+                    "archivo": archivo,
+
+                    "contenido": contenido,
+
+                    "score": score
+
+                }
+
+
+
+        return mejor_doc

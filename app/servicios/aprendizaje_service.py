@@ -1,10 +1,19 @@
 # app/servicios/aprendizaje_service.py
 
+
 def buscar_conocimiento(pregunta):
+
     """
-    Busca respuestas similares en IA_CONOCIMIENTO
+    Busca respuestas similares almacenadas.
+
+    Pendiente:
+    - conexión a tabla IA_CONOCIMIENTO
+    - búsqueda semántica
+    - embeddings
     """
-    pass
+
+    return None
+
 
 
 def guardar_conocimiento(
@@ -12,7 +21,12 @@ def guardar_conocimiento(
     respuesta,
     categoria
 ):
+
     """
-    Guarda nuevo conocimiento validado
+    Guarda conocimiento validado.
+
+    Pendiente:
+    - insertar en IA_CONOCIMIENTO
     """
-    pass
+
+    return False

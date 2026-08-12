@@ -1,156 +1,350 @@
-<!DOCTYPE html>
-<html lang="es">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
+{% block contenido %}
 
-    <title>Monitoreo Teradata</title>
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/monitoreo_tera.css') }}">
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/style.css') }}">
+<div class="monitoreo-tera-page">
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/monitoreo_tera.css') }}">
-</head>
+    <!-- ==========================================
+         ENCABEZADO
+    =========================================== -->
 
-<body>
+    <div class="tera-header">
 
-<div class="monitor-container">
+        <div class="tera-header-icon">
+            <i class="fa-solid fa-chart-line"></i>
+        </div>
 
-    <h1>📊 Monitoreo de Schedules Teradata</h1>
+        <div class="tera-header-text">
+
+            <h1>
+                Monitoreo de Schedules Teradata
+            </h1>
+
+            <p>
+                Consulta el estado de ejecución de los procesos DWH.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==========================================
+         CÁLCULO DE KPIs
+    =========================================== -->
 
     {% set total = datos|length %}
-    {% set finalizados = datos|selectattr("DesEstado","equalto","Schedule Finalizado")|list|length %}
-    {% set pendientes = datos|selectattr("DesEstado","equalto","Schedule Pendiente")|list|length %}
 
-    {% set errores = 0 %}
+    {% set finalizados = datos
+        |selectattr("DesEstado", "equalto", "Schedule Finalizado")
+        |list
+        |length
+    %}
+
+    {% set pendientes = datos
+        |selectattr("DesEstado", "equalto", "Schedule Pendiente")
+        |list
+        |length
+    %}
+
+
+    {% set ns = namespace(errores=0) %}
+
     {% for fila in datos %}
+
         {% if 'error' in fila.DesEstado|string|lower %}
-            {% set errores = errores + 1 %}
+
+            {% set ns.errores = ns.errores + 1 %}
+
         {% endif %}
+
     {% endfor %}
 
-    <!-- KPIs -->
 
-    <div class="dashboard">
+    <!-- ==========================================
+         KPIs
+    =========================================== -->
 
-        <div class="card">
-            <h3>Total Schedules</h3>
-            <span>{{ total }}</span>
+    <div class="tera-kpis">
+
+        <!-- TOTAL -->
+
+        <div class="tera-kpi tera-kpi-total">
+
+            <div class="tera-kpi-icon">
+                <i class="fa-solid fa-layer-group"></i>
+            </div>
+
+            <div class="tera-kpi-info">
+
+                <span class="tera-kpi-label">
+                    Total Schedules
+                </span>
+
+                <strong>
+                    {{ total }}
+                </strong>
+
+            </div>
+
         </div>
 
-        <div class="card">
-            <h3>Finalizados</h3>
-            <span class="ok-num">{{ finalizados }}</span>
+
+        <!-- FINALIZADOS -->
+
+        <div class="tera-kpi tera-kpi-ok">
+
+            <div class="tera-kpi-icon">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+
+            <div class="tera-kpi-info">
+
+                <span class="tera-kpi-label">
+                    Finalizados
+                </span>
+
+                <strong>
+                    {{ finalizados }}
+                </strong>
+
+            </div>
+
         </div>
 
-        <div class="card">
-            <h3>Pendientes</h3>
-            <span class="pend-num">{{ pendientes }}</span>
+
+        <!-- PENDIENTES -->
+
+        <div class="tera-kpi tera-kpi-pendiente">
+
+            <div class="tera-kpi-icon">
+                <i class="fa-solid fa-clock"></i>
+            </div>
+
+            <div class="tera-kpi-info">
+
+                <span class="tera-kpi-label">
+                    Pendientes
+                </span>
+
+                <strong>
+                    {{ pendientes }}
+                </strong>
+
+            </div>
+
         </div>
 
-        <div class="card">
-            <h3>Errores</h3>
-            <span class="err-num">{{ errores }}</span>
+
+        <!-- ERRORES -->
+
+        <div class="tera-kpi tera-kpi-error">
+
+            <div class="tera-kpi-icon">
+                <i class="fa-solid fa-circle-exclamation"></i>
+            </div>
+
+            <div class="tera-kpi-info">
+
+                <span class="tera-kpi-label">
+                    Errores
+                </span>
+
+                <strong>
+                    {{ ns.errores }}
+                </strong>
+
+            </div>
+
         </div>
 
     </div>
 
-    <!-- Filtros -->
 
-    <div class="filtros">
+    <!-- ==========================================
+         FILTROS
+    =========================================== -->
 
-        <input
-            type="text"
-            id="filtro"
-            placeholder="🔍 Buscar schedule..."
-            onkeyup="filtrarTabla()">
+    <div class="tera-filtros">
 
-        <select
-            id="estadoFiltro"
-            onchange="filtrarTabla()">
+        <!-- BUSCADOR -->
 
-            <option value="">Todos los estados</option>
-            <option value="finalizado">Finalizado</option>
-            <option value="pendiente">Pendiente</option>
-            <option value="error">Error</option>
+        <div class="tera-search">
 
-        </select>
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input
+                type="text"
+                id="filtro"
+                placeholder="Buscar schedule..."
+                autocomplete="off"
+                onkeyup="filtrarTabla()">
+
+        </div>
+
+
+        <!-- ESTADO -->
+
+        <div class="tera-select">
+
+            <i class="fa-solid fa-filter"></i>
+
+            <select
+                id="estadoFiltro"
+                onchange="filtrarTabla()">
+
+                <option value="">
+                    Todos los estados
+                </option>
+
+                <option value="finalizado">
+                    Finalizado
+                </option>
+
+                <option value="pendiente">
+                    Pendiente
+                </option>
+
+                <option value="error">
+                    Error
+                </option>
+
+            </select>
+
+        </div>
 
     </div>
 
-    <!-- Tabla -->
 
-    <div class="tabla-wrapper">
+    <!-- ==========================================
+         TABLA
+    =========================================== -->
+
+    <div class="tera-table-card">
 
         {% if datos %}
 
-        <table id="tablaDatos">
+        <div class="tera-table-scroll">
 
-            <thead>
-                <tr>
-                    {% for col in datos[0].keys() %}
-                        <th>{{ col }}</th>
+            <table id="tablaDatos">
+
+                <thead>
+
+                    <tr>
+
+                        {% for col in datos[0].keys() %}
+
+                            <th>
+                                {{ col }}
+                            </th>
+
+                        {% endfor %}
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for fila in datos %}
+
+                    <tr>
+
+                        {% for key, valor in fila.items() %}
+
+                            {% if key == 'DesEstado' %}
+
+                                <td class="tera-estado-cell">
+
+                                    {% if 'Finalizado' in valor %}
+
+                                        <span class="tera-estado estado-ok">
+
+                                            <span class="tera-estado-dot"></span>
+
+                                            {{ valor }}
+
+                                        </span>
+
+
+                                    {% elif 'Pendiente' in valor %}
+
+                                        <span class="tera-estado estado-pendiente">
+
+                                            <span class="tera-estado-dot"></span>
+
+                                            {{ valor }}
+
+                                        </span>
+
+
+                                    {% elif 'Error' in valor
+                                          or 'ERROR' in valor
+                                          or 'error' in valor %}
+
+                                        <span class="tera-estado estado-error">
+
+                                            <span class="tera-estado-dot"></span>
+
+                                            {{ valor }}
+
+                                        </span>
+
+
+                                    {% else %}
+
+                                        <span class="tera-estado">
+
+                                            {{ valor }}
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                            {% else %}
+
+                                <td>
+                                    {{ valor }}
+                                </td>
+
+                            {% endif %}
+
+                        {% endfor %}
+
+                    </tr>
+
                     {% endfor %}
-                </tr>
-            </thead>
 
-            <tbody>
+                </tbody>
 
-            {% for fila in datos %}
-                <tr>
+            </table>
 
-                {% for key, valor in fila.items() %}
+        </div>
 
-                    {% if key == 'DesEstado' %}
-
-                        <td>
-
-                        {% if 'Finalizado' in valor %}
-                            <span class="estado-ok">
-                                {{ valor }}
-                            </span>
-
-                        {% elif 'Pendiente' in valor %}
-                            <span class="estado-pendiente">
-                                {{ valor }}
-                            </span>
-
-                        {% elif 'Error' in valor
-                              or 'ERROR' in valor
-                              or 'error' in valor %}
-
-                            <span class="estado-error">
-                                {{ valor }}
-                            </span>
-
-                        {% else %}
-
-                            {{ valor }}
-
-                        {% endif %}
-
-                        </td>
-
-                    {% else %}
-
-                        <td>{{ valor }}</td>
-
-                    {% endif %}
-
-                {% endfor %}
-
-                </tr>
-            {% endfor %}
-
-            </tbody>
-
-        </table>
 
         {% else %}
 
-            <div style="padding:40px;text-align:center;">
-                No existen registros para mostrar
+            <div class="tera-empty">
+
+                <div class="tera-empty-icon">
+                    <i class="fa-solid fa-database"></i>
+                </div>
+
+                <h3>
+                    No existen registros
+                </h3>
+
+                <p>
+                    No se encontraron schedules para mostrar.
+                </p>
+
             </div>
 
         {% endif %}
@@ -159,46 +353,84 @@
 
 </div>
 
+
+<!-- ==========================================
+     JAVASCRIPT
+=========================================== -->
+
 <script>
 
-function filtrarTabla(){
+function filtrarTabla() {
 
-    let texto =
-        document.getElementById("filtro")
-        .value
-        .toLowerCase();
+    const input =
+        document.getElementById("filtro");
 
-    let estado =
-        document.getElementById("estadoFiltro")
-        .value
-        .toLowerCase();
+    const estado =
+        document.getElementById("estadoFiltro");
 
-    let filas =
+    const filtro =
+        input.value.toLowerCase().trim();
+
+    const filtroEstado =
+        estado.value.toLowerCase();
+
+    const filas =
         document.querySelectorAll(
             "#tablaDatos tbody tr"
         );
 
-    filas.forEach(fila => {
 
-        let contenido =
-            fila.textContent.toLowerCase();
+    filas.forEach(function(fila) {
 
-        let mostrar = true;
+        const texto =
+            fila.innerText.toLowerCase();
 
-        if(texto &&
-           !contenido.includes(texto))
-        {
-            mostrar = false;
+        const estadoTexto =
+            fila.innerText.toLowerCase();
+
+
+        let mostrarTexto =
+            texto.includes(filtro);
+
+
+        let mostrarEstado = true;
+
+
+        if (filtroEstado !== "") {
+
+            if (filtroEstado === "finalizado") {
+
+                mostrarEstado =
+                    estadoTexto.includes("finalizado");
+
+            }
+
+            else if (filtroEstado === "pendiente") {
+
+                mostrarEstado =
+                    estadoTexto.includes("pendiente");
+
+            }
+
+            else if (filtroEstado === "error") {
+
+                mostrarEstado =
+                    estadoTexto.includes("error");
+
+            }
+
         }
 
-        if(estado &&
-           !contenido.includes(estado))
-        {
-            mostrar = false;
-        }
 
-        fila.style.display =
-            mostrar ? "" : "none";
+        if (mostrarTexto && mostrarEstado) {
+
+            fila.style.display = "";
+
+        } else {
+
+            fila.style.display = "none";
+
+        }
 
     });
 
@@ -206,6 +438,4 @@ function filtrarTabla(){
 
 </script>
 
-</body>
-
-</html>
+{% endblock %}

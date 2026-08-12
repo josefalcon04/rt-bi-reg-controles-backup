@@ -1,59 +1,126 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Gráficos Planta MTC</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background: #f9f9f9;
-        }
+<!-- =====================================================
+     PLANTA MTC
+     Contenido para insertar dentro de tendencias_plantas
+     ===================================================== -->
 
-        h1 {
-            text-align: center;
-            margin-top: 0;
-            margin-bottom: 20px;
-        }
+<div class="planta-mtc-page">
 
-        /* 🔹 Contenedor principal: dos filas */
-        .grid-container {
-            display: grid;
-            grid-template-rows: auto auto;
-            gap: 20px;
-            width: 100%;
-        }
+    <!-- =================================================
+         ENCABEZADO
+         ================================================= -->
 
-        /* 🔹 Contenedor fila inferior con 2 columnas */
-        .bottom-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
+    <section class="planta-mtc-header">
 
-        .grafico-container img {
-            width: 100%;
-            max-height: 400px;
-            height: auto;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            background: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-    </style>
-</head>
-<body>
-    <h1>PLANTA MTC</h1>
-
-    <div class="grid-container">        
-        <!-- 🔹 Imagen 1 (arriba) -->
-        <div class="grafico-container">
-            <img src="{{ url_for('planta_mtc.imagenes', filename=img1) }}" alt="Gráfico 1">
+        <div class="planta-mtc-header-icon">
+            <i class="fa-solid fa-chart-line"></i>
         </div>
-        <div class="grafico-container">
-            <img src="{{ url_for('planta_mtc.imagenes', filename=img2) }}" alt="Gráfico 2">
-        </div>        
+
+        <div class="planta-mtc-header-info">
+
+            <h1>Planta MTC</h1>
+
+            <p>
+                Evolución y análisis de la planta MTC
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         GRÁFICOS
+         ================================================= -->
+
+    <div class="planta-mtc-grid">
+
+
+        <!-- =================================================
+             GRÁFICO 1
+             ================================================= -->
+
+        <section class="planta-mtc-card">
+
+            <div class="planta-mtc-card-header">
+
+                <div class="planta-mtc-title">
+
+                    <div class="planta-mtc-card-icon">
+                        <i class="fa-solid fa-chart-area"></i>
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Evolución Planta MTC
+                        </h2>
+
+                        <span>
+                            Indicadores de evolución
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="planta-mtc-chart">
+
+                <img
+                    src="{{ url_for('planta_mtc.imagenes', filename=img1) }}"
+                    alt="Gráfico Planta MTC"
+                >
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             GRÁFICO 2
+             ================================================= -->
+
+        <section class="planta-mtc-card">
+
+            <div class="planta-mtc-card-header">
+
+                <div class="planta-mtc-title">
+
+                    <div class="planta-mtc-card-icon">
+                        <i class="fa-solid fa-chart-bar"></i>
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Comparativo Planta MTC
+                        </h2>
+
+                        <span>
+                            Análisis comparativo
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="planta-mtc-chart">
+
+                <img
+                    src="{{ url_for('planta_mtc.imagenes', filename=img2) }}"
+                    alt="Gráfico comparativo Planta MTC"
+                >
+
+            </div>
+
+        </section>
+
+
     </div>
-</body>
-</html>
+
+</div>

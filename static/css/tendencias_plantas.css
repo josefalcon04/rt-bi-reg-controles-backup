@@ -1,232 +1,1191 @@
-/* =========================
-   HEADER
-========================= */
+/* ============================================================
+   TENDENCIAS DE PLANTAS
+   RT BI - Diseño ejecutivo
+   ============================================================ */
 
-.tabs-header {
-    background: #ffffff;
-    border-radius: 18px;
-    padding: 20px;
-    margin-bottom: 20px;
-
-    box-shadow:
-        0 8px 24px rgba(0,0,0,.06);
-
-    border: 1px solid #eef2f7;
+.tendencias-plantas-page {
+    width: calc(100% - 20px);
+    max-width: none;
+    margin: 0 auto;
+    padding: 8px 10px 12px;
+    box-sizing: border-box;
+    color: #172033;
 }
 
 
-.tabs-title h3{
-    margin:0;
-    font-size:22px;
-    font-weight:700;
-    color:#1f2937;
-}
+/* ============================================================
+   HEADER PRINCIPAL
+   ============================================================ */
 
-.tabs-title span{
-    font-size:13px;
-    color:#6b7280;
-}
+.tendencias-header {
+    width: 100%;
+    min-height: 62px;
 
+    display: flex;
+    align-items: center;
 
-/* =========================
-   TABS
-========================= */
+    padding: 9px 15px;
 
-.tabs-tendencias{
+    box-sizing: border-box;
 
-    display:flex;
-    gap:10px;
-
-    flex-wrap:wrap;
-
-    margin-top:18px;
-}
-
-
-.tab-btn{
-
-    background:#f8fafc;
-
-    border:
-        1px solid #e2e8f0;
-
-    border-radius:
-        50px;
-
-    padding:
-        10px 18px;
-
-    cursor:pointer;
-
-    font-size:
-        14px;
-
-    font-weight:
-        600;
-
-    color:
-        #334155;
-
-
-    transition:
-        all .25s;
-}
-
-
-/* hover */
-
-.tab-btn:hover{
-
-    background:
-        #eef2ff;
-
-    border-color:
-        #6366f1;
-
-    transform:
-        translateY(-2px);
-
-}
-
-
-.tab-btn.active{
-
-    background:
-        linear-gradient(
-            135deg,
-            #1e293b,
-            #334155
-        );
-
-    color:
-        white;
-
-    border:
-        none;
-
-    box-shadow:
-        0 6px 18px rgba(
-            30,
-            41,
-            59,
-            .20
-        );
-
-}
-
-
-
-/* =========================
-   CONTENIDO
-========================= */
-
-
-.contenido-tab{
-
-    background:
-        white;
-
-    border-radius:
-        18px;
-
-    padding:
-        18px;
-
-    min-height:
-        650px;
-
-
-    box-shadow:
-        0 8px 24px rgba(
-            0,
-            0,
-            0,
-            .05
-        );
-
-}
-
-
-
-/* =========================
-   LOADER
-========================= */
-
-.loader-tab{
-
-    text-align:
-        center;
-
-    padding:
-        80px;
-
-    color:
-        #64748b;
-
-    font-size:
-        18px;
-
-}
-
-.banner-tendencias{
-
-    margin-top:20px;
-
-    height:140px;
-
-    border-radius:18px;
-
-    background:
-
-    linear-gradient(
-
+    background: linear-gradient(
         135deg,
-
-        rgba(
-            30,
-            41,
-            59,
-            .95
-        ),
-
-        rgba(
-            51,
-            65,
-            85,
-            .80
-        )
-
+        #2563eb 0%,
+        #1d4ed8 100%
     );
 
+    border-radius: 8px;
 
-    display:flex;
+    color: white;
 
-    align-items:center;
+    box-shadow:
+        0 4px 12px rgba(37, 99, 235, 0.16);
 
-    padding:30px;
-
+    margin-bottom: 6px;
 }
 
 
+.tendencias-header-icon {
+    width: 38px;
+    height: 38px;
 
-.banner-texto h4{
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    color:white;
+    background: rgba(255,255,255,0.16);
 
-    margin:0;
+    border-radius: 7px;
 
-    font-size:24px;
+    margin-right: 10px;
 
+    font-size: 18px;
 }
 
 
+.tendencias-header-text h1 {
+    margin: 0;
 
-.banner-texto p{
+    font-size: 18px;
+    font-weight: 700;
 
-    color:#d1d5db;
+    color: #ffffff;
+}
 
-    margin-top:8px;
 
-    font-size:15px;
+.tendencias-header-text p {
+    margin: 2px 0 0;
 
+    font-size: 9px;
+
+    color: rgba(255,255,255,0.88);
+}
+
+
+/* ============================================================
+   TABS
+   ============================================================ */
+
+.tendencias-tabs {
+    display: flex;
+    align-items: center;
+
+    gap: 2px;
+
+    width: 100%;
+
+    padding: 3px;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border: 1px solid #dbe3ef;
+
+    border-radius: 6px;
+
+    box-shadow:
+        0 1px 4px rgba(15,23,42,0.04);
+
+    margin-bottom: 6px;
+}
+
+
+.tendencia-tab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+
+    min-height: 28px;
+
+    padding: 0 11px;
+
+    border: none;
+
+    border-radius: 5px;
+
+    background: transparent;
+
+    color: #475569;
+
+    font-size: 9px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+
+.tendencia-tab i {
+    font-size: 9px;
+}
+
+
+.tendencia-tab:hover {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+
+.tendencia-tab.active {
+    background: #2563eb;
+    color: #ffffff;
+
+    box-shadow:
+        0 2px 6px rgba(37,99,235,0.18);
+}
+
+
+/* ============================================================
+   CONTENIDO
+   ============================================================ */
+
+.tendencias-contenido {
+    width: 100%;
+}
+
+
+.tendencia-panel {
+    display: none;
+}
+
+
+.tendencia-panel.active {
+    display: block;
+}
+
+
+/* ============================================================
+   CABECERA DEL PANEL
+   ============================================================ */
+
+.tendencia-panel-header {
+    min-height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 6px 10px;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border: 1px solid #dbe3ef;
+
+    border-radius: 6px 6px 0 0;
+}
+
+
+.tendencia-panel-header h2 {
+    margin: 0;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    color: #172033;
+}
+
+
+.tendencia-panel-header p {
+    margin: 1px 0 0;
+
+    font-size: 7px;
+
+    color: #64748b;
+}
+
+
+.tendencia-badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 4px 8px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    border-radius: 18px;
+
+    font-size: 6px;
+
+    font-weight: 700;
+}
+
+
+/* ============================================================
+   LAYOUT PRINCIPAL
+   FILTROS IZQUIERDA + GRÁFICOS DERECHA
+   ============================================================ */
+
+.planta-control-layout {
+    display: grid;
+
+    grid-template-columns:
+        205px
+        minmax(0, 1fr);
+
+    gap: 10px;
+
+    align-items: stretch;
+
+    width: 100%;
+
+    padding: 8px;
+
+    box-sizing: border-box;
+
+    background: #f8fafc;
+
+    border: 1px solid #dbe3ef;
+
+    border-top: none;
+
+    border-radius: 0 0 7px 7px;
+}
+
+
+/* ============================================================
+   SIDEBAR FILTROS
+   ============================================================ */
+
+.planta-filtros-sidebar {
+    width: 100%;
+
+    padding: 10px;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border: 1px solid #dbe3ef;
+
+    border-radius: 7px;
+
+    box-shadow:
+        0 1px 4px rgba(15,23,42,0.035);
+
+    align-self: stretch;
+}
+
+
+/* ============================================================
+   CABECERA FILTROS
+   ============================================================ */
+
+.filtros-sidebar-header {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    padding-bottom: 7px;
+
+    margin-bottom: 8px;
+
+    border-bottom: 1px solid #e5eaf1;
+}
+
+
+.filtros-sidebar-icon {
+    width: 28px;
+    height: 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 6px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 12px;
+}
+
+
+.filtros-sidebar-header h3 {
+    margin: 0;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    color: #172033;
+}
+
+
+.filtros-sidebar-header span {
+    display: block;
+
+    margin-top: 1px;
+
+    font-size: 6px;
+
+    color: #94a3b8;
+}
+
+
+/* ============================================================
+   FILTROS
+   ============================================================ */
+
+.filtro-item {
+    margin-bottom: 8px;
+}
+
+
+.filtro-item label {
+    display: flex;
+    align-items: center;
+
+    gap: 3px;
+
+    margin-bottom: 3px;
+
+    font-size: 7px;
+
+    font-weight: 700;
+
+    color: #334155;
+}
+
+
+.filtro-item label i {
+    color: #2563eb;
+
+    font-size: 7px;
+}
+
+
+.filtro-item select {
+    width: 100%;
+
+    height: 29px;
+
+    padding: 0 7px;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 5px;
+
+    color: #334155;
+
+    font-size: 8px;
+
+    outline: none;
+
+    cursor: pointer;
+}
+
+
+.filtro-item select:focus {
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 2px rgba(37,99,235,0.10);
+}
+
+
+/* ============================================================
+   PERÍODO
+   ============================================================ */
+
+.input-periodo {
+    position: relative;
+
+    width: 100%;
+}
+
+
+.input-periodo > i {
+    position: absolute;
+
+    left: 7px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #64748b;
+
+    font-size: 8px;
+
+    pointer-events: none;
+}
+
+
+.input-periodo input {
+    width: 100%;
+
+    height: 29px;
+
+    padding: 0 6px 0 25px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 5px;
+
+    background: #ffffff;
+
+    color: #334155;
+
+    font-size: 8px;
+
+    outline: none;
+}
+
+
+.input-periodo input:focus {
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 2px rgba(37,99,235,0.10);
+}
+
+
+/* ============================================================
+   BOTÓN
+   ============================================================ */
+
+.btn-aplicar-filtros {
+    width: 100%;
+
+    height: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+
+    margin-top: 2px;
+
+    border: none;
+
+    border-radius: 5px;
+
+    background: #2563eb;
+
+    color: #ffffff;
+
+    font-size: 8px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 2px 6px rgba(37,99,235,0.17);
+
+    transition:
+        background 0.2s ease,
+        transform 0.15s ease;
+}
+
+
+.btn-aplicar-filtros:hover {
+    background: #1d4ed8;
+}
+
+
+.btn-aplicar-filtros:active {
+    transform: translateY(1px);
+}
+
+
+/* ============================================================
+   RESUMEN
+   ============================================================ */
+
+.filtros-separador {
+    height: 1px;
+
+    margin: 9px 0;
+
+    background: #e5eaf1;
+}
+
+
+.filtros-resumen-sidebar {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+}
+
+
+.resumen-titulo {
+    display: block;
+
+    margin-bottom: 1px;
+
+    font-size: 6px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.35px;
+
+    color: #94a3b8;
+}
+
+
+.resumen-item {
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 5px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e8edf3;
+
+    border-radius: 5px;
+}
+
+
+.resumen-item > i {
+    width: 20px;
+    height: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 5px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 7px;
+}
+
+
+.resumen-item small {
+    display: block;
+
+    font-size: 5.5px;
+
+    color: #94a3b8;
+}
+
+
+.resumen-item strong {
+    display: block;
+
+    margin-top: 1px;
+
+    font-size: 7px;
+
+    color: #334155;
+
+    word-break: break-word;
+}
+
+
+/* ============================================================
+   ZONA DE COMPARACIÓN
+   ============================================================ */
+
+.plantas-comparacion {
+    min-width: 0;
+
+    width: 100%;
+}
+
+
+/* ============================================================
+   OCULTAR CABECERA "COMPARACIÓN POR TECNOLOGÍA"
+
+   Ya no necesitamos esta franja porque cada gráfico
+   identifica directamente su tecnología.
+   ============================================================ */
+
+.comparacion-header {
+    display: none !important;
+}
+
+
+/* ============================================================
+   LEYENDA
+   ============================================================ */
+
+.comparacion-leyenda {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    white-space: nowrap;
+}
+
+
+.leyenda-comercial,
+.leyenda-control {
+    display: flex;
+
+    align-items: center;
+
+    gap: 3px;
+
+    font-size: 6px;
+
+    font-weight: 600;
+}
+
+
+.leyenda-comercial {
+    color: #f97316;
+}
+
+
+.leyenda-control {
+    color: #64748b;
+}
+
+
+/* ============================================================
+   GRÁFICOS
+   ============================================================ */
+
+.comparacion-graficos {
+    width: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+
+/* ============================================================
+   TARJETAS
+   ============================================================ */
+
+.planta-card {
+    width: 100%;
+
+    min-width: 0;
+
+    background: #ffffff;
+
+    border: 1px solid #dbe3ef;
+
+    border-radius: 7px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 1px 4px rgba(15,23,42,0.035);
+}
+
+
+/* ============================================================
+   CABECERA GRÁFICO
+   ============================================================ */
+
+.planta-card-header {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    min-height: 34px;
+
+    padding: 5px 8px;
+
+    box-sizing: border-box;
+
+    border-bottom: 1px solid #e5eaf1;
+
+    background: #ffffff;
+}
+
+
+.planta-icon {
+    width: 24px;
+    height: 24px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 5px;
+
+    font-size: 10px;
+}
+
+
+.planta-icon.comercial {
+    background: #fff7ed;
+
+    color: #f97316;
+}
+
+
+.planta-icon.control {
+    background: #eff6ff;
+
+    color: #2563eb;
+}
+
+
+.planta-card-header h2 {
+    margin: 0;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    color: #172033;
+}
+
+
+.planta-card-header span {
+    display: block;
+
+    margin-top: 0;
+
+    font-size: 6px;
+
+    color: #94a3b8;
+}
+
+
+/* ============================================================
+   CONTENEDOR DEL GRÁFICO
+   ============================================================ */
+
+.grafico-contenedor {
+    position: relative;
+
+    width: 100%;
+
+    min-height: 255px;
+
+    padding: 2px;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    overflow: hidden;
+}
+
+
+/* ============================================================
+   PLOTLY
+   ============================================================ */
+
+.grafico-planta {
+    width: 100% !important;
+
+    height: 255px !important;
+
+    min-height: 255px;
+
+    max-width: 100%;
+
+    background: #ffffff;
+
+    border-radius: 5px;
+}
+
+
+.grafico-planta .plotly,
+.grafico-planta .plot-container {
+    width: 100% !important;
+
+    height: 100% !important;
+}
+
+
+/* ============================================================
+   LOADING
+   ============================================================ */
+
+.grafico-loading {
+    display: none;
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 5;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 6px;
+
+    background: rgba(255,255,255,0.88);
+
+    color: #64748b;
+
+    text-align: center;
+}
+
+
+.grafico-loading i {
+    font-size: 15px;
+
+    color: #2563eb;
+}
+
+
+.grafico-loading span {
+    font-size: 7px;
+}
+
+
+/* ============================================================
+   PLACEHOLDERS
+   ============================================================ */
+
+.tendencia-placeholder {
+    min-height: 260px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-direction: column;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border: 1px solid #dbe3ef;
+
+    border-top: none;
+
+    border-radius: 0 0 7px 7px;
+
+    text-align: center;
+}
+
+
+.placeholder-icon {
+    width: 45px;
+    height: 45px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 8px;
+
+    border-radius: 50%;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 18px;
+}
+
+
+.tendencia-placeholder h3 {
+    margin: 0;
+
+    font-size: 15px;
+
+    color: #334155;
+}
+
+
+.tendencia-placeholder p {
+    margin: 4px 0 0;
+
+    font-size: 9px;
+
+    color: #94a3b8;
+}
+
+
+/* ============================================================
+   PANTALLAS GRANDES
+   ============================================================ */
+
+@media (min-width: 1600px) {
+
+    .tendencias-plantas-page {
+        width: calc(100% - 24px);
+
+        max-width: none;
+
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+
+    .planta-control-layout {
+        grid-template-columns:
+            215px
+            minmax(0, 1fr);
+
+        gap: 10px;
+    }
+
+
+    .grafico-planta {
+        height: 275px !important;
+
+        min-height: 275px;
+    }
+
+
+    .grafico-contenedor {
+        min-height: 275px;
+    }
+}
+
+
+/* ============================================================
+   PANTALLAS MEDIANAS
+   ============================================================ */
+
+@media (max-width: 1200px) {
+
+    .tendencias-plantas-page {
+        width: calc(100% - 16px);
+
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+
+    .planta-control-layout {
+        grid-template-columns:
+            190px
+            minmax(0, 1fr);
+
+        gap: 8px;
+
+        padding: 7px;
+    }
+
+
+    .grafico-planta {
+        height: 250px !important;
+
+        min-height: 250px;
+    }
+
+
+    .grafico-contenedor {
+        min-height: 250px;
+    }
+}
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+    .planta-control-layout {
+        grid-template-columns: 1fr;
+    }
+
+
+    .planta-filtros-sidebar {
+        width: 100%;
+    }
+
+
+    .filtros-resumen-sidebar {
+        display: grid;
+
+        grid-template-columns:
+            repeat(3, 1fr);
+
+        gap: 6px;
+    }
+
+
+    .resumen-titulo {
+        grid-column: 1 / -1;
+    }
+
+
+    .grafico-planta {
+        height: 260px !important;
+
+        min-height: 260px;
+    }
+}
+
+
+/* ============================================================
+   MÓVIL
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+    .tendencias-plantas-page {
+        width: 100%;
+
+        padding: 6px;
+    }
+
+
+    .tendencias-header {
+        min-height: 58px;
+
+        padding: 8px;
+    }
+
+
+    .tendencias-header-icon {
+        width: 34px;
+        height: 34px;
+
+        font-size: 16px;
+    }
+
+
+    .tendencias-header-text h1 {
+        font-size: 15px;
+    }
+
+
+    .tendencias-header-text p {
+        font-size: 7px;
+    }
+
+
+    .tendencias-tabs {
+        overflow-x: auto;
+
+        white-space: nowrap;
+    }
+
+
+    .tendencia-tab {
+        flex-shrink: 0;
+
+        padding: 0 8px;
+    }
+
+
+    .planta-control-layout {
+        padding: 5px;
+    }
+
+
+    .filtros-resumen-sidebar {
+        grid-template-columns: 1fr;
+    }
+
+
+    .grafico-planta {
+        height: 240px !important;
+
+        min-height: 240px;
+    }
+
+
+    .grafico-contenedor {
+        min-height: 230px;
+    }
+}
+
+
+/* ============================================================
+   INTEGRACIÓN CON BASE.HTML
+   ============================================================ */
+
+.content .tendencias-plantas-page {
+    box-sizing: border-box;
+
+    width: 100%;
+    max-width: none;
+}
+
+
+.tendencias-plantas-page * {
+    box-sizing: border-box;
+}
+
+
+/* ============================================================
+   EVITAR LIMITACIONES EXTERNAS
+   ============================================================ */
+
+.tendencias-plantas-page img {
+    max-width: 100%;
+}
+
+
+/* ============================================================
+   SCROLLBAR TABS
+   ============================================================ */
+
+.tendencias-tabs::-webkit-scrollbar {
+    height: 3px;
+}
+
+
+.tendencias-tabs::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+
+    border-radius: 10px;
+}
+
+
+.tendencias-tabs::-webkit-scrollbar-track {
+    background: transparent;
 }

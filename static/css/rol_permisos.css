@@ -1,0 +1,961 @@
+/* =========================================================
+   PERMISOS DE ROL
+   ========================================================= */
+
+.rol-permisos-page {
+
+    width: 100%;
+
+    max-width: 1200px;
+
+    margin: 0 auto;
+
+    padding: 24px 28px 40px;
+
+    box-sizing: border-box;
+
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.rol-permisos-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 22px 24px;
+
+    margin-bottom: 20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #1d4ed8
+        );
+
+    border-radius: 12px;
+
+    color: white;
+
+    box-shadow:
+        0 8px 20px
+        rgba(37, 99, 235, 0.18);
+
+}
+
+
+.rol-permisos-header-left {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+
+}
+
+
+.rol-permisos-icon {
+
+    width: 52px;
+
+    height: 52px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background:
+        rgba(255,255,255,0.16);
+
+    font-size: 23px;
+
+}
+
+
+.rol-permisos-header h1 {
+
+    margin: 0 0 5px;
+
+    font-size: 23px;
+
+    font-weight: 700;
+
+}
+
+
+.rol-permisos-header p {
+
+    margin: 0;
+
+    font-size: 12px;
+
+    opacity: 0.78;
+
+}
+
+
+/* =========================================================
+   BOTÓN VOLVER
+   ========================================================= */
+
+.btn-back {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 10px 15px;
+
+    border-radius: 8px;
+
+    background:
+        rgba(255,255,255,0.14);
+
+    border:
+        1px solid rgba(255,255,255,0.22);
+
+    color: white;
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+
+}
+
+
+.btn-back:hover {
+
+    background:
+        rgba(255,255,255,0.24);
+
+    transform:
+        translateY(-1px);
+
+}
+
+
+/* =========================================================
+   MENSAJES FLASH
+   ========================================================= */
+
+.flash-container {
+
+    margin-bottom: 16px;
+
+}
+
+
+.flash-message {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 11px 14px;
+
+    border-radius: 8px;
+
+    font-size: 12px;
+
+}
+
+
+.flash-success {
+
+    color: #166534;
+
+    background: #dcfce7;
+
+    border: 1px solid #bbf7d0;
+
+}
+
+
+.flash-error {
+
+    color: #991b1b;
+
+    background: #fee2e2;
+
+    border: 1px solid #fecaca;
+
+}
+
+
+/* =========================================================
+   CARD PRINCIPAL
+   ========================================================= */
+
+.rol-permisos-card {
+
+    background: #ffffff;
+
+    border:
+        1px solid #dbe3ef;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 4px 15px
+        rgba(15,23,42,0.06);
+
+    overflow: hidden;
+
+}
+
+
+/* =========================================================
+   INFORMACIÓN DEL ROL
+   ========================================================= */
+
+.rol-info {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 17px 20px;
+
+    background: #f8fafc;
+
+    border-bottom:
+        1px solid #e2e8f0;
+
+}
+
+
+.rol-info-icon {
+
+    width: 42px;
+
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 9px;
+
+    background: #dbeafe;
+
+    color: #2563eb;
+
+    font-size: 17px;
+
+}
+
+
+.rol-info span {
+
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #94a3b8;
+
+    font-size: 10px;
+
+}
+
+
+.rol-info strong {
+
+    display: block;
+
+    color: #0f172a;
+
+    font-size: 14px;
+
+}
+
+
+/* =========================================================
+   TOOLBAR
+   ========================================================= */
+
+.permisos-toolbar {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 14px 20px;
+
+    border-bottom:
+        1px solid #e2e8f0;
+
+}
+
+
+.toolbar-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: #334155;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+}
+
+
+.toolbar-title i {
+
+    color: #2563eb;
+
+}
+
+
+.toolbar-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+}
+
+
+.btn-toolbar {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 7px 10px;
+
+    border:
+        1px solid #dbe3ef;
+
+    border-radius: 7px;
+
+    background: #ffffff;
+
+    color: #475569;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
+
+}
+
+
+.btn-toolbar:hover {
+
+    background: #eff6ff;
+
+    border-color: #93c5fd;
+
+    color: #2563eb;
+
+}
+
+
+/* =========================================================
+   LISTA DE PERMISOS
+   ========================================================= */
+
+.permisos-list {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 10px;
+
+    padding: 20px;
+
+}
+
+
+/* =========================================================
+   ITEM PERMISO
+   ========================================================= */
+
+.permiso-item {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    min-height: 68px;
+
+    padding: 12px 14px;
+
+    box-sizing: border-box;
+
+    border:
+        1px solid #e2e8f0;
+
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.15s ease;
+
+}
+
+
+.permiso-item:hover {
+
+    background: #f8fbff;
+
+    border-color: #bfdbfe;
+
+    transform:
+        translateY(-1px);
+
+}
+
+
+/* =========================================================
+   ITEM SELECCIONADO
+   ========================================================= */
+
+.permiso-item.seleccionado {
+
+    background: #eff6ff;
+
+    border-color: #60a5fa;
+
+    box-shadow:
+        0 2px 8px
+        rgba(37,99,235,0.08);
+
+}
+
+
+/* =========================================================
+   CHECKBOX
+   ========================================================= */
+
+.permiso-check {
+
+    position: relative;
+
+    width: 22px;
+
+    height: 22px;
+
+    flex-shrink: 0;
+
+}
+
+
+.permiso-check input {
+
+    position: absolute;
+
+    width: 1px;
+
+    height: 1px;
+
+    opacity: 0;
+
+}
+
+
+.checkmark {
+
+    position: absolute;
+
+    top: 0;
+
+    left: 0;
+
+    width: 20px;
+
+    height: 20px;
+
+    box-sizing: border-box;
+
+    border:
+        2px solid #cbd5e1;
+
+    border-radius: 5px;
+
+    background: white;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
+
+}
+
+
+.permiso-check input:checked
++ .checkmark {
+
+    background: #2563eb;
+
+    border-color: #2563eb;
+
+}
+
+
+.permiso-check input:checked
++ .checkmark::after {
+
+    content: "";
+
+    position: absolute;
+
+    left: 5px;
+
+    top: 2px;
+
+    width: 6px;
+
+    height: 10px;
+
+    border:
+        solid white;
+
+    border-width:
+        0 2px 2px 0;
+
+    transform:
+        rotate(45deg);
+
+}
+
+
+/* =========================================================
+   INFORMACIÓN DEL PERMISO
+   ========================================================= */
+
+.permiso-info {
+
+    min-width: 0;
+
+    flex: 1;
+
+}
+
+
+.permiso-codigo {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    margin-bottom: 4px;
+
+    color: #0f172a;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+}
+
+
+.permiso-codigo i {
+
+    color: #7c3aed;
+
+    font-size: 11px;
+
+}
+
+
+.permiso-descripcion {
+
+    color: #64748b;
+
+    font-size: 10px;
+
+    line-height: 1.4;
+
+}
+
+
+/* =========================================================
+   RESUMEN
+   ========================================================= */
+
+.permisos-summary {
+
+    display: flex;
+
+    align-items: center;
+
+    padding:
+        11px 20px;
+
+    background: #f8fafc;
+
+    border-top:
+        1px solid #e2e8f0;
+
+    border-bottom:
+        1px solid #e2e8f0;
+
+    color: #64748b;
+
+    font-size: 11px;
+
+}
+
+
+.permisos-summary i {
+
+    margin-right: 6px;
+
+    color: #2563eb;
+
+}
+
+
+.permisos-summary strong {
+
+    margin-left: 4px;
+
+    color: #2563eb;
+
+    font-weight: 700;
+
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.rol-permisos-footer {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-end;
+
+    gap: 9px;
+
+    padding:
+        14px 20px;
+
+    background: #ffffff;
+
+}
+
+
+/* =========================================================
+   BOTÓN CANCELAR
+   ========================================================= */
+
+.rol-permisos-footer .btn-secondary {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding:
+        9px 16px;
+
+    border:
+        1px solid #cbd5e1;
+
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    color: #475569;
+
+    text-decoration: none;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
+
+}
+
+
+.rol-permisos-footer .btn-secondary:hover {
+
+    background: #f8fafc;
+
+    border-color: #94a3b8;
+
+}
+
+
+/* =========================================================
+   BOTÓN GUARDAR
+   ========================================================= */
+
+.btn-save {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    padding:
+        9px 17px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #2563eb;
+
+    color: white;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.15s ease,
+        box-shadow 0.2s ease;
+
+}
+
+
+.btn-save:hover {
+
+    background: #1d4ed8;
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 5px 12px
+        rgba(37,99,235,0.18);
+
+}
+
+
+/* =========================================================
+   SIN PERMISOS
+   ========================================================= */
+
+.empty-permisos {
+
+    grid-column:
+        1 / -1;
+
+    text-align: center;
+
+    padding:
+        55px 20px;
+
+    color: #94a3b8;
+
+}
+
+
+.empty-permisos > i {
+
+    display: block;
+
+    margin-bottom: 12px;
+
+    color: #cbd5e1;
+
+    font-size: 32px;
+
+}
+
+
+.empty-permisos h3 {
+
+    margin:
+        0 0 6px;
+
+    color: #475569;
+
+    font-size: 14px;
+
+}
+
+
+.empty-permisos p {
+
+    margin: 0;
+
+    font-size: 11px;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 800px) {
+
+    .rol-permisos-page {
+
+        padding:
+            18px 15px 30px;
+
+    }
+
+
+    .rol-permisos-header {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+    }
+
+
+    .rol-permisos-header .btn-back {
+
+        width: 100%;
+
+    }
+
+
+    .permisos-list {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .permisos-toolbar {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+    }
+
+
+    .toolbar-actions {
+
+        width: 100%;
+
+    }
+
+
+    .btn-toolbar {
+
+        flex: 1;
+
+        justify-content: center;
+
+    }
+
+}
+
+
+@media (max-width: 500px) {
+
+    .rol-permisos-header h1 {
+
+        font-size: 19px;
+
+    }
+
+
+    .rol-permisos-footer {
+
+        flex-direction: column-reverse;
+
+    }
+
+
+    .rol-permisos-footer .btn-secondary,
+    .rol-permisos-footer .btn-save {
+
+        width: 100%;
+
+    }
+
+
+    .toolbar-actions {
+
+        flex-direction: column;
+
+    }
+
+
+    .btn-toolbar {
+
+        width: 100%;
+
+    }
+
+}

@@ -1,0 +1,547 @@
+/* ============================================================
+   NRIPO 035
+   Diseño moderno para Tendencias de Reportes
+   Compatible con nripo_035.html actual
+   ============================================================ */
+
+
+/* ============================================================
+   CONTENEDOR PRINCIPAL
+   ============================================================ */
+
+.nripo035-container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 4px 0 30px;
+    box-sizing: border-box;
+}
+
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.nripo035-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    margin-bottom: 18px;
+    padding: 0 4px;
+
+    box-sizing: border-box;
+}
+
+.nripo035-header-content {
+    min-width: 0;
+}
+
+.nripo035-kicker {
+    display: block;
+
+    margin-bottom: 4px;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+.nripo035-header h1 {
+    margin: 0;
+
+    font-size: 34px;
+    line-height: 1.1;
+    font-weight: 800;
+
+    color: #0f172a;
+}
+
+.nripo035-header p {
+    margin: 8px 0 0;
+
+    font-size: 13px;
+    line-height: 1.5;
+
+    color: #64748b;
+}
+
+.nripo035-badge {
+    flex-shrink: 0;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    padding: 8px 12px;
+
+    border-radius: 8px;
+
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+
+    color: #2563eb;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.nripo035-badge i {
+    font-size: 13px;
+}
+
+
+/* ============================================================
+   KPIs
+   ============================================================ */
+
+.nripo035-kpis {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 14px;
+
+    width: 100%;
+
+    margin-bottom: 18px;
+}
+
+.nripo035-kpi {
+    min-width: 0;
+    min-height: 78px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 13px 15px;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border: 1px solid #dbe3ef;
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 2px 8px rgba(15, 23, 42, .04);
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease;
+}
+
+.nripo035-kpi:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 5px 14px rgba(15, 23, 42, .08);
+}
+
+.nripo035-kpi-icon {
+    width: 34px;
+    height: 34px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 8px;
+
+    background: #eff6ff;
+    color: #2563eb;
+
+    font-size: 14px;
+}
+
+.nripo035-kpi-content {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.nripo035-kpi-content span {
+    font-size: 11px;
+    color: #64748b;
+
+    white-space: nowrap;
+}
+
+.nripo035-kpi-content strong {
+    font-size: 17px;
+    font-weight: 700;
+
+    color: #0f172a;
+
+    white-space: nowrap;
+}
+
+
+/* ============================================================
+   TARJETAS DE GRÁFICOS
+   ============================================================ */
+
+.nripo035-card {
+    width: 100%;
+
+    background: #ffffff;
+
+    border: 1px solid #dbe3ef;
+
+    border-radius: 12px;
+
+    box-sizing: border-box;
+
+    box-shadow:
+        0 2px 9px rgba(15, 23, 42, .04);
+
+    overflow: hidden;
+}
+
+
+/* ============================================================
+   HEADER DE TARJETAS
+   ============================================================ */
+
+.nripo035-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 13px 16px 10px;
+
+    box-sizing: border-box;
+}
+
+.nripo035-card-title {
+    min-width: 0;
+}
+
+.nripo035-card-header h2 {
+    margin: 0;
+
+    font-size: 16px;
+    line-height: 1.3;
+
+    font-weight: 700;
+
+    color: #0f172a;
+}
+
+.nripo035-card-header span {
+    display: block;
+
+    margin-top: 3px;
+
+    font-size: 11px;
+
+    color: #64748b;
+}
+
+.nripo035-card-icon {
+    width: 30px;
+    height: 30px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 7px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 13px;
+}
+
+
+/* ============================================================
+   GRÁFICO PRINCIPAL
+   ============================================================ */
+
+.nripo035-card-main {
+    margin-bottom: 18px;
+}
+
+.nripo035-grafico {
+    width: 100%;
+
+    height: 330px;
+    min-height: 280px;
+
+    box-sizing: border-box;
+
+    padding: 0 6px 6px;
+}
+
+.nripo035-grafico-main {
+    height: 360px;
+}
+
+
+/* ============================================================
+   GRID DE GRÁFICOS COMPARATIVOS
+   ============================================================ */
+
+.nripo035-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 18px;
+
+    width: 100%;
+
+    margin-bottom: 18px;
+}
+
+
+/* ============================================================
+   PLOTLY
+   ============================================================ */
+
+.nripo035-grafico .plot-container {
+    width: 100% !important;
+}
+
+.nripo035-grafico .svg-container {
+    width: 100% !important;
+}
+
+.nripo035-grafico .js-plotly-plot {
+    width: 100% !important;
+}
+
+
+/* ============================================================
+   INFORMACIÓN
+   ============================================================ */
+
+.nripo035-info {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 10px;
+
+    width: 100%;
+
+    margin-top: 4px;
+
+    padding: 13px 15px;
+
+    box-sizing: border-box;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 10px;
+}
+
+.nripo035-info-icon {
+    width: 28px;
+    height: 28px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 7px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 13px;
+}
+
+.nripo035-info-content {
+    min-width: 0;
+}
+
+.nripo035-info strong {
+    display: block;
+
+    margin-bottom: 3px;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    color: #0f172a;
+}
+
+.nripo035-info p {
+    margin: 0;
+
+    font-size: 11px;
+    line-height: 1.5;
+
+    color: #64748b;
+}
+
+
+/* ============================================================
+   ESTADO SIN DATOS
+   ============================================================ */
+
+.nripo035-sin-datos {
+    width: 100%;
+    height: 100%;
+    min-height: 250px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+    text-align: center;
+
+    color: #64748b;
+}
+
+.nripo035-sin-datos i {
+    font-size: 30px;
+
+    color: #cbd5e1;
+
+    opacity: .9;
+}
+
+.nripo035-sin-datos strong {
+    font-size: 13px;
+
+    color: #475569;
+}
+
+.nripo035-sin-datos span {
+    font-size: 11px;
+
+    color: #94a3b8;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1200px) {
+
+    .nripo035-header h1 {
+        font-size: 30px;
+    }
+
+    .nripo035-kpis {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .nripo035-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .nripo035-grafico-main {
+        height: 340px;
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    .nripo035-container {
+        padding: 4px 0 20px;
+    }
+
+    .nripo035-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .nripo035-header h1 {
+        font-size: 25px;
+    }
+
+    .nripo035-badge {
+        align-self: flex-start;
+    }
+
+    .nripo035-kpis {
+        grid-template-columns: 1fr;
+
+        gap: 10px;
+    }
+
+    .nripo035-grid {
+        grid-template-columns: 1fr;
+
+        gap: 12px;
+    }
+
+    .nripo035-grafico {
+        height: 300px;
+    }
+
+    .nripo035-grafico-main {
+        height: 320px;
+    }
+
+    .nripo035-card-header {
+        padding: 12px;
+    }
+
+    .nripo035-card-header h2 {
+        font-size: 14px;
+    }
+}
+
+
+/* ============================================================
+   AJUSTE PARA CONTENEDORES DINÁMICOS
+   ============================================================ */
+
+#contenido-tab-reportes .nripo035-container {
+    width: 100%;
+    max-width: none;
+}
+
+#contenido-tab-reportes .nripo035-card,
+#contenido-tab-reportes .nripo035-kpi,
+#contenido-tab-reportes .nripo035-grid,
+#contenido-tab-reportes .nripo035-kpis {
+    max-width: none;
+}
+
+
+/* ============================================================
+   PLOTLY - EVITAR QUE DEJE ESPACIOS EXTRA
+   ============================================================ */
+
+.nripo035-grafico > div {
+    width: 100% !important;
+}
+
+.nripo035-grafico .main-svg {
+    width: 100% !important;
+}

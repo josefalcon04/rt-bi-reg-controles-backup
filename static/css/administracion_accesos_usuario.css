@@ -1,0 +1,1241 @@
+
+/* =========================================================
+   ACCESOS POR USUARIO
+   RT BI - ADMINISTRACIÓN
+   ========================================================= */
+
+
+/* =========================================================
+   CONTENEDOR PRINCIPAL
+   ========================================================= */
+
+.au-container {
+
+    width: 100%;
+
+    max-width: 1500px;
+
+    margin: 0 auto;
+
+    padding: 0 28px 35px;
+
+    box-sizing: border-box;
+
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.au-header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+
+    width: 100%;
+
+    margin-bottom: 20px;
+
+    padding: 20px 24px;
+
+    box-sizing: border-box;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #1d4ed8
+        );
+
+    color: #ffffff;
+
+    box-shadow:
+        0 8px 22px
+        rgba(37, 99, 235, 0.16);
+
+}
+
+
+.au-header-icon {
+
+    width: 52px;
+
+    height: 52px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 11px;
+
+    background:
+        rgba(255,255,255,0.15);
+
+    font-size: 22px;
+
+}
+
+
+.au-header-info {
+
+    flex: 1;
+
+}
+
+
+.au-header-info h1 {
+
+    margin: 0 0 5px;
+
+    font-size: 23px;
+
+    font-weight: 700;
+
+    line-height: 1.2;
+
+}
+
+
+.au-header-info p {
+
+    margin: 0;
+
+    font-size: 12px;
+
+    opacity: 0.82;
+
+}
+
+
+/* =========================================================
+   PANEL
+   ========================================================= */
+
+.au-panel {
+
+    width: 100%;
+
+    margin-bottom: 18px;
+
+    background: #ffffff;
+
+    border:
+        1px solid #dbe3ef;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 4px 15px
+        rgba(15,23,42,0.055);
+
+    overflow: hidden;
+
+}
+
+
+/* =========================================================
+   HEADER DEL PANEL
+   ========================================================= */
+
+.au-panel-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 17px 20px;
+
+    border-bottom:
+        1px solid #e2e8f0;
+
+    background: #ffffff;
+
+}
+
+
+.au-panel-header h2 {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin: 0 0 4px;
+
+    color: #0f172a;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+}
+
+
+.au-panel-header h2 i {
+
+    color: #2563eb;
+
+    font-size: 14px;
+
+}
+
+
+.au-panel-header p {
+
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 10px;
+
+}
+
+
+/* =========================================================
+   SELECTOR DE USUARIO
+   ========================================================= */
+
+.au-selector {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 17px 20px;
+
+    background: #f8fafc;
+
+}
+
+
+.au-selector label {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    min-width: 150px;
+
+    color: #334155;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+}
+
+
+.au-selector label i {
+
+    color: #2563eb;
+
+}
+
+
+.au-select {
+
+    width: 450px;
+
+    max-width: 100%;
+
+    padding:
+        10px 12px;
+
+    border:
+        1px solid #cbd5e1;
+
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    color: #334155;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    outline: none;
+
+    cursor: pointer;
+
+}
+
+
+.au-select:focus {
+
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(37,99,235,0.08);
+
+}
+
+
+/* =========================================================
+   RESUMEN
+   ========================================================= */
+
+.au-summary {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 14px;
+
+    width: 100%;
+
+    margin-bottom: 18px;
+
+}
+
+
+/* =========================================================
+   TARJETAS DEL RESUMEN
+   ========================================================= */
+
+.au-summary-card {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    min-height: 78px;
+
+    padding: 14px;
+
+    box-sizing: border-box;
+
+    border:
+        1px solid #e2e8f0;
+
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 3px 12px
+        rgba(15,23,42,0.045);
+
+}
+
+
+.au-summary-icon {
+
+    width: 42px;
+
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 9px;
+
+    font-size: 15px;
+
+}
+
+
+/* AZUL */
+
+.au-summary-card.blue {
+
+    border-left:
+        3px solid #2563eb;
+
+}
+
+
+.au-summary-card.blue
+.au-summary-icon {
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+}
+
+
+/* MORADO */
+
+.au-summary-card.purple {
+
+    border-left:
+        3px solid #7c3aed;
+
+}
+
+
+.au-summary-card.purple
+.au-summary-icon {
+
+    background: #f5f3ff;
+
+    color: #7c3aed;
+
+}
+
+
+/* NARANJA */
+
+.au-summary-card.orange {
+
+    border-left:
+        3px solid #f59e0b;
+
+}
+
+
+.au-summary-card.orange
+.au-summary-icon {
+
+    background: #fffbeb;
+
+    color: #d97706;
+
+}
+
+
+/* VERDE */
+
+.au-summary-card.green {
+
+    border-left:
+        3px solid #10b981;
+
+}
+
+
+.au-summary-card.green
+.au-summary-icon {
+
+    background: #ecfdf5;
+
+    color: #059669;
+
+}
+
+
+/* =========================================================
+   TEXTO DEL RESUMEN
+   ========================================================= */
+
+.au-summary-card span {
+
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #64748b;
+
+    font-size: 9px;
+
+    font-weight: 600;
+
+}
+
+
+.au-summary-card strong {
+
+    display: block;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+    max-width: 180px;
+
+    color: #1e293b;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+}
+
+
+/* =========================================================
+   ESTADO DE ACCESO
+   ========================================================= */
+
+.au-access-status {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding:
+        6px 10px;
+
+    border:
+        1px solid #a7f3d0;
+
+    border-radius: 7px;
+
+    background: #ecfdf5;
+
+    color: #047857;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+
+}
+
+
+.au-status-dot {
+
+    width: 7px;
+
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #10b981;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(16,185,129,0.12);
+
+}
+
+
+/* =========================================================
+   TABLA
+   ========================================================= */
+
+.au-table-wrapper {
+
+    width: 100%;
+
+    overflow-x: auto;
+
+}
+
+
+.au-table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 950px;
+
+}
+
+
+/* =========================================================
+   CABECERA TABLA
+   ========================================================= */
+
+.au-table thead {
+
+    background: #f8fafc;
+
+}
+
+
+.au-table th {
+
+    padding:
+        11px 13px;
+
+    border-bottom:
+        1px solid #e2e8f0;
+
+    color: #475569;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    text-align: left;
+
+    white-space: nowrap;
+
+}
+
+
+/* =========================================================
+   FILAS
+   ========================================================= */
+
+.au-table tbody tr {
+
+    border-bottom:
+        1px solid #f1f5f9;
+
+    transition:
+        background 0.15s ease;
+
+}
+
+
+.au-table tbody tr:hover {
+
+    background: #f8fbff;
+
+}
+
+
+.au-table td {
+
+    padding:
+        11px 13px;
+
+    color: #475569;
+
+    font-size: 10px;
+
+    vertical-align: middle;
+
+}
+
+
+/* =========================================================
+   NOMBRE DEL MENÚ
+   ========================================================= */
+
+.au-menu-name {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    min-width: 180px;
+
+}
+
+
+.au-menu-icon {
+
+    width: 32px;
+
+    height: 32px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 7px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 11px;
+
+}
+
+
+.au-menu-name strong {
+
+    display: block;
+
+    margin-bottom: 2px;
+
+    color: #1e293b;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+}
+
+
+.au-menu-name span {
+
+    display: block;
+
+    color: #94a3b8;
+
+    font-size: 8px;
+
+}
+
+
+/* =========================================================
+   BADGE TIPO
+   ========================================================= */
+
+.au-type-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding:
+        4px 7px;
+
+    border-radius: 5px;
+
+    font-size: 8px;
+
+    font-weight: 700;
+
+}
+
+
+.au-type-badge.principal {
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+}
+
+
+.au-type-badge.submenu {
+
+    background: #f5f3ff;
+
+    color: #7c3aed;
+
+}
+
+
+/* =========================================================
+   BADGE PERMISO
+   ========================================================= */
+
+.au-permission-badge {
+
+    display: inline-block;
+
+    padding:
+        4px 7px;
+
+    border:
+        1px solid #e2e8f0;
+
+    border-radius: 5px;
+
+    background: #f8fafc;
+
+    color: #475569;
+
+    font-family:
+        "Consolas",
+        "Courier New",
+        monospace;
+
+    font-size: 8px;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+
+}
+
+
+/* =========================================================
+   URL
+   ========================================================= */
+
+.au-table code {
+
+    display: inline-block;
+
+    max-width: 220px;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+    padding:
+        4px 6px;
+
+    border-radius: 4px;
+
+    background: #f8fafc;
+
+    color: #64748b;
+
+    font-family:
+        "Consolas",
+        "Courier New",
+        monospace;
+
+    font-size: 8px;
+
+}
+
+
+/* =========================================================
+   ACCESO PERMITIDO
+   ========================================================= */
+
+.au-access-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    padding:
+        5px 8px;
+
+    border-radius: 6px;
+
+    background: #ecfdf5;
+
+    color: #047857;
+
+    font-size: 8px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+
+}
+
+
+.au-access-badge i {
+
+    font-size: 8px;
+
+}
+
+
+/* =========================================================
+   ESTADO VACÍO
+   ========================================================= */
+
+.au-empty {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-height: 220px;
+
+    padding: 30px;
+
+    color: #94a3b8;
+
+}
+
+
+.au-empty i {
+
+    margin-bottom: 10px;
+
+    color: #cbd5e1;
+
+    font-size: 30px;
+
+}
+
+
+.au-empty strong {
+
+    margin-bottom: 4px;
+
+    color: #64748b;
+
+    font-size: 13px;
+
+}
+
+
+.au-empty span {
+
+    color: #94a3b8;
+
+    font-size: 10px;
+
+}
+
+
+/* =========================================================
+   ÁRBOL DE MENÚS
+   ========================================================= */
+
+.au-tree {
+
+    padding: 20px;
+
+    background: #ffffff;
+
+}
+
+
+.au-tree-parent {
+
+    margin-bottom: 12px;
+
+    border:
+        1px solid #e2e8f0;
+
+    border-radius: 9px;
+
+    overflow: hidden;
+
+}
+
+
+.au-tree-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding:
+        11px 13px;
+
+    background: #f8fafc;
+
+}
+
+
+.au-tree-icon {
+
+    width: 32px;
+
+    height: 32px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 7px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 11px;
+
+}
+
+
+.au-tree-title strong {
+
+    flex: 1;
+
+    color: #1e293b;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+}
+
+
+.au-tree-access {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    padding:
+        4px 7px;
+
+    border-radius: 5px;
+
+    background: #ecfdf5;
+
+    color: #047857;
+
+    font-size: 8px;
+
+    font-weight: 700;
+
+}
+
+
+.au-tree-children {
+
+    padding:
+        8px 13px 10px 55px;
+
+    background: #ffffff;
+
+}
+
+
+.au-tree-child {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    padding:
+        8px 0;
+
+    border-bottom:
+        1px solid #f1f5f9;
+
+    color: #475569;
+
+    font-size: 10px;
+
+}
+
+
+.au-tree-child:last-child {
+
+    border-bottom: none;
+
+}
+
+
+.au-tree-child > i {
+
+    width: 18px;
+
+    color: #64748b;
+
+    text-align: center;
+
+    font-size: 10px;
+
+}
+
+
+.au-tree-child span {
+
+    flex: 1;
+
+}
+
+
+.au-tree-child small {
+
+    padding:
+        3px 6px;
+
+    border-radius: 4px;
+
+    background: #f8fafc;
+
+    color: #94a3b8;
+
+    font-family:
+        "Consolas",
+        "Courier New",
+        monospace;
+
+    font-size: 7px;
+
+}
+
+
+/* =========================================================
+   SCROLLBAR DE TABLA
+   ========================================================= */
+
+.au-table-wrapper::-webkit-scrollbar {
+
+    height: 7px;
+
+}
+
+
+.au-table-wrapper::-webkit-scrollbar-track {
+
+    background: #f8fafc;
+
+}
+
+
+.au-table-wrapper::-webkit-scrollbar-thumb {
+
+    border-radius: 10px;
+
+    background: #cbd5e1;
+
+}
+
+
+.au-table-wrapper::-webkit-scrollbar-thumb:hover {
+
+    background: #94a3b8;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1200px) {
+
+    .au-summary {
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+    }
+
+}
+
+
+@media (max-width: 850px) {
+
+    .au-container {
+
+        padding:
+            0 18px 30px;
+
+    }
+
+
+    .au-selector {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+    }
+
+
+    .au-selector label {
+
+        min-width: auto;
+
+    }
+
+
+    .au-select {
+
+        width: 100%;
+
+    }
+
+
+    .au-panel-header {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+    }
+
+
+    .au-access-status {
+
+        align-self: flex-start;
+
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .au-header {
+
+        align-items: flex-start;
+
+        padding: 17px;
+
+    }
+
+
+    .au-header-icon {
+
+        width: 44px;
+
+        height: 44px;
+
+        font-size: 18px;
+
+    }
+
+
+    .au-header-info h1 {
+
+        font-size: 19px;
+
+    }
+
+
+    .au-header-info p {
+
+        font-size: 10px;
+
+    }
+
+
+    .au-summary {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .au-summary-card strong {
+
+        max-width: 220px;
+
+    }
+
+
+    .au-tree-children {
+
+        padding-left: 25px;
+
+    }
+
+}

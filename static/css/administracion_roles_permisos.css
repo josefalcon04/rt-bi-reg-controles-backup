@@ -1,0 +1,1103 @@
+/* =========================================================
+   ROLES Y PERMISOS
+   RT BI - ADMINISTRACIÓN
+   ========================================================= */
+
+
+/* =========================================================
+   CONTENEDOR PRINCIPAL
+   ========================================================= */
+
+.rp-container {
+
+    width: 100%;
+
+    max-width: 1500px;
+
+    margin: 0 auto;
+
+    padding: 0 28px 35px;
+
+    box-sizing: border-box;
+
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.rp-header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+
+    width: 100%;
+
+    margin-bottom: 20px;
+
+    padding: 20px 24px;
+
+    box-sizing: border-box;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #1d4ed8
+        );
+
+    color: #ffffff;
+
+    box-shadow:
+        0 8px 22px
+        rgba(37, 99, 235, 0.16);
+
+}
+
+
+.rp-header-icon {
+
+    width: 52px;
+
+    height: 52px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 11px;
+
+    background:
+        rgba(255,255,255,0.15);
+
+    font-size: 22px;
+
+}
+
+
+.rp-header-info {
+
+    flex: 1;
+
+}
+
+
+.rp-header-info h1 {
+
+    margin: 0 0 5px;
+
+    font-size: 23px;
+
+    font-weight: 700;
+
+    line-height: 1.2;
+
+}
+
+
+.rp-header-info p {
+
+    margin: 0;
+
+    font-size: 12px;
+
+    opacity: 0.82;
+
+}
+
+
+/* =========================================================
+   PANEL
+   ========================================================= */
+
+.rp-panel {
+
+    width: 100%;
+
+    margin-bottom: 18px;
+
+    background: #ffffff;
+
+    border:
+        1px solid #dbe3ef;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 4px 15px
+        rgba(15,23,42,0.055);
+
+    overflow: hidden;
+
+}
+
+
+/* =========================================================
+   HEADER DEL PANEL
+   ========================================================= */
+
+.rp-panel-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 17px 20px;
+
+    border-bottom:
+        1px solid #e2e8f0;
+
+    background: #ffffff;
+
+}
+
+
+.rp-panel-header h2 {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin: 0 0 4px;
+
+    color: #0f172a;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+}
+
+
+.rp-panel-header h2 i {
+
+    color: #2563eb;
+
+    font-size: 14px;
+
+}
+
+
+.rp-panel-header p {
+
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 10px;
+
+}
+
+
+/* =========================================================
+   SELECTOR DE ROL
+   ========================================================= */
+
+.rp-role-selector {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 17px 20px;
+
+    background: #f8fafc;
+
+}
+
+
+.rp-role-selector label {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    min-width: 150px;
+
+    color: #334155;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+}
+
+
+.rp-role-selector label i {
+
+    color: #2563eb;
+
+}
+
+
+.rp-select {
+
+    width: 350px;
+
+    max-width: 100%;
+
+    padding:
+        10px 12px;
+
+    border:
+        1px solid #cbd5e1;
+
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    color: #334155;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    outline: none;
+
+    cursor: pointer;
+
+}
+
+
+.rp-select:focus {
+
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(37,99,235,0.08);
+
+}
+
+
+/* =========================================================
+   CONTADOR DE PERMISOS
+   ========================================================= */
+
+.rp-permission-counter {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    padding:
+        6px 10px;
+
+    border-radius: 7px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+
+}
+
+
+.rp-permission-counter span {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 20px;
+
+    height: 20px;
+
+    padding: 0 5px;
+
+    border-radius: 5px;
+
+    background: #2563eb;
+
+    color: #ffffff;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+}
+
+
+/* =========================================================
+   TOOLBAR
+   ========================================================= */
+
+.rp-toolbar {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 14px 20px;
+
+    border-bottom:
+        1px solid #e2e8f0;
+
+    background: #f8fafc;
+
+}
+
+
+.rp-search {
+
+    position: relative;
+
+    flex: 1;
+
+    max-width: 430px;
+
+}
+
+
+.rp-search i {
+
+    position: absolute;
+
+    left: 12px;
+
+    top: 50%;
+
+    transform:
+        translateY(-50%);
+
+    color: #94a3b8;
+
+    font-size: 11px;
+
+}
+
+
+.rp-search input {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding:
+        9px
+        11px
+        9px
+        33px;
+
+    border:
+        1px solid #cbd5e1;
+
+    border-radius: 7px;
+
+    outline: none;
+
+    background: #ffffff;
+
+    color: #334155;
+
+    font-family: inherit;
+
+    font-size: 11px;
+
+}
+
+
+.rp-search input:focus {
+
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(37,99,235,0.07);
+
+}
+
+
+/* =========================================================
+   BOTONES TOOLBAR
+   ========================================================= */
+
+.rp-select-all,
+.rp-deselect-all {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 6px;
+
+    padding:
+        9px 11px;
+
+    border-radius: 7px;
+
+    font-family: inherit;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.15s ease;
+
+}
+
+
+.rp-select-all {
+
+    border:
+        1px solid #bfdbfe;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+}
+
+
+.rp-select-all:hover {
+
+    background: #dbeafe;
+
+    border-color: #93c5fd;
+
+    transform:
+        translateY(-1px);
+
+}
+
+
+.rp-deselect-all {
+
+    border:
+        1px solid #e2e8f0;
+
+    background: #ffffff;
+
+    color: #64748b;
+
+}
+
+
+.rp-deselect-all:hover {
+
+    background: #f8fafc;
+
+    border-color: #cbd5e1;
+
+    color: #475569;
+
+}
+
+
+/* =========================================================
+   GRID DE PERMISOS
+   ========================================================= */
+
+.rp-permissions-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 12px;
+
+    padding: 20px;
+
+    background: #ffffff;
+
+}
+
+
+/* =========================================================
+   TARJETA DE PERMISO
+   ========================================================= */
+
+.rp-permission-card {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+    min-height: 75px;
+
+    padding:
+        12px 13px;
+
+    box-sizing: border-box;
+
+    border:
+        1px solid #e2e8f0;
+
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.15s ease;
+
+}
+
+
+.rp-permission-card:hover {
+
+    border-color: #93c5fd;
+
+    background: #f8fbff;
+
+    box-shadow:
+        0 4px 12px
+        rgba(37,99,235,0.08);
+
+    transform:
+        translateY(-1px);
+
+}
+
+
+/* =========================================================
+   CHECKBOX REAL
+   ========================================================= */
+
+.rp-permission-card input {
+
+    position: absolute;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+}
+
+
+/* =========================================================
+   INDICADOR CHECK
+   ========================================================= */
+
+.rp-permission-check {
+
+    width: 20px;
+
+    height: 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border:
+        1.5px solid #cbd5e1;
+
+    border-radius: 5px;
+
+    background: #ffffff;
+
+    color: transparent;
+
+    font-size: 9px;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
+
+}
+
+
+.rp-permission-card
+input:checked
+~ .rp-permission-check {
+
+    border-color: #2563eb;
+
+    background: #2563eb;
+
+    color: #ffffff;
+
+}
+
+
+/* =========================================================
+   ICONO DEL PERMISO
+   ========================================================= */
+
+.rp-permission-icon {
+
+    width: 36px;
+
+    height: 36px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 8px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 13px;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+
+}
+
+
+.rp-permission-card
+input:checked
+~ .rp-permission-icon {
+
+    background: #dbeafe;
+
+    color: #1d4ed8;
+
+}
+
+
+/* =========================================================
+   INFORMACIÓN
+   ========================================================= */
+
+.rp-permission-info {
+
+    min-width: 0;
+
+    flex: 1;
+
+}
+
+
+.rp-permission-info strong {
+
+    display: block;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+    margin-bottom: 3px;
+
+    color: #1e293b;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+}
+
+
+.rp-permission-info span {
+
+    display: block;
+
+    overflow: hidden;
+
+    display: -webkit-box;
+
+    -webkit-line-clamp: 2;
+
+    -webkit-box-orient: vertical;
+
+    color: #64748b;
+
+    font-size: 9px;
+
+    line-height: 1.35;
+
+}
+
+
+/* =========================================================
+   TARJETA SELECCIONADA
+   ========================================================= */
+
+.rp-permission-card input:checked ~ .rp-permission-info {
+    color: #1e293b;
+}
+
+.rp-permission-card:focus-within {
+    border-color: #93c5fd;
+    background:
+        linear-gradient(
+            135deg,
+            #f8fbff,
+            #eff6ff
+        );
+}   
+
+
+/* =========================================================
+   ESTADO VACÍO
+   ========================================================= */
+
+.rp-empty {
+
+    grid-column:
+        1 / -1;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-height: 180px;
+
+    color: #94a3b8;
+
+}
+
+
+.rp-empty i {
+
+    margin-bottom: 10px;
+
+    color: #cbd5e1;
+
+    font-size: 28px;
+
+}
+
+
+.rp-empty p {
+
+    margin: 0;
+
+    font-size: 11px;
+
+}
+
+
+/* =========================================================
+   FOOTER / ACCIONES
+   ========================================================= */
+
+.rp-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding:
+        14px 20px;
+
+    border-top:
+        1px solid #e2e8f0;
+
+    background: #f8fafc;
+
+}
+
+
+.rp-selected-info {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    color: #64748b;
+
+    font-size: 10px;
+
+}
+
+
+.rp-selected-info i {
+
+    color: #2563eb;
+
+    font-size: 11px;
+
+}
+
+
+/* =========================================================
+   BOTÓN GUARDAR
+   ========================================================= */
+
+.rp-btn-save {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    min-width: 155px;
+
+    padding:
+        10px 16px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #2563eb;
+
+    color: #ffffff;
+
+    font-family: inherit;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.15s ease,
+        box-shadow 0.2s ease;
+
+}
+
+
+.rp-btn-save:hover:not(:disabled) {
+
+    background: #1d4ed8;
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 5px 12px
+        rgba(37,99,235,0.18);
+
+}
+
+
+.rp-btn-save:disabled {
+
+    background: #cbd5e1;
+
+    color: #94a3b8;
+
+    cursor: not-allowed;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1200px) {
+
+    .rp-permissions-grid {
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+    }
+
+}
+
+
+@media (max-width: 850px) {
+
+    .rp-container {
+
+        padding:
+            0 18px 30px;
+
+    }
+
+
+    .rp-role-selector {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+    }
+
+
+    .rp-role-selector label {
+
+        min-width: auto;
+
+    }
+
+
+    .rp-select {
+
+        width: 100%;
+
+    }
+
+
+    .rp-toolbar {
+
+        align-items: stretch;
+
+        flex-wrap: wrap;
+
+    }
+
+
+    .rp-search {
+
+        flex-basis: 100%;
+
+        max-width: none;
+
+    }
+
+
+    .rp-permissions-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .rp-actions {
+
+        align-items: stretch;
+
+        flex-direction: column;
+
+    }
+
+
+    .rp-btn-save {
+
+        width: 100%;
+
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .rp-header {
+
+        align-items: flex-start;
+
+        padding: 17px;
+
+    }
+
+
+    .rp-header-icon {
+
+        width: 44px;
+
+        height: 44px;
+
+        font-size: 18px;
+
+    }
+
+
+    .rp-header-info h1 {
+
+        font-size: 19px;
+
+    }
+
+
+    .rp-header-info p {
+
+        font-size: 10px;
+
+    }
+
+
+    .rp-panel-header {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+    }
+
+
+    .rp-permission-counter {
+
+        align-self: flex-start;
+
+    }
+
+
+    .rp-toolbar {
+
+        flex-direction: column;
+
+    }
+
+
+    .rp-select-all,
+    .rp-deselect-all {
+
+        width: 100%;
+
+    }
+
+}
