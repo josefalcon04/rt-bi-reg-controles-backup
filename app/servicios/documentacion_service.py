@@ -2,8 +2,6 @@
 
 import os
 import re
-from docx import Document
-import textract
 
 
 class DocumentacionService:
@@ -34,6 +32,8 @@ class DocumentacionService:
 
     def leer_docx(self, ruta):
 
+        from docx import Document
+
         doc = Document(ruta)
 
         return "\n".join(
@@ -49,6 +49,8 @@ class DocumentacionService:
     # =========================
 
     def leer_doc_legacy(self, ruta):
+
+        import textract
 
         texto = textract.process(ruta)
 
