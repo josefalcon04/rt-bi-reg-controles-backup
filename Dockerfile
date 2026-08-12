@@ -1,25 +1,26 @@
 #FROM default-route-openshift-image-registry.apps.ocptest.gp.inet/nirvana-qa/python311-bi-opd:1.0.0
 FROM telefonicaavillacortal/python311-bi-reg:1.1.0
 
+RUN mkdir -p /app
 
-RUN mkdir /app
 WORKDIR /app
- 
+
 COPY . .
-RUN mkdir -p /app/static/img && chmod -R 777 /app/static/img
 
-RUN mkdir -p /app/documentacion/templates/documentos \
-    && chmod -R 777 /app/documentacion/templates/documentos
+# Directorios con escritura requerida por la aplicación
+RUN mkdir -p /app/static/img \
+    /app/data \
+    /app/app/documentacion/templates/documentos \
+    && chmod -R 777 /app/static/img \
+    && chmod -R 777 /app/data \
+    && chmod -R 777 /app/app/documentacion/templates/documentos
 
-RUN mkdir -p /app/data && chmod -R 777 /app/data
- 
-#RUN pip install --no-cache-dir -r requirements.txt
+# Cache de Matplotlib
+ENV MPLCONFIGDIR=/tmp/matplotlib
 
- # Establecer variable de entorno
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONUNBUFFERED=1
 
 EXPOSE 8082
- 
-# Comando de inicio
+
 ENTRYPOINT ["python"]
 CMD ["run.py"]
