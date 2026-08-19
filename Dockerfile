@@ -9,9 +9,11 @@ COPY . .
 
 # Directorios con escritura requerida por la aplicación
 RUN mkdir -p /app/static/img \
+    /app/static/dashboards \
     /app/data \
     /app/app/documentacion/templates/documentos \
     && chmod -R 777 /app/static/img \
+    && chmod -R 777 /app/static/dashboards \
     && chmod -R 777 /app/data \
     && chmod -R 777 /app/app/documentacion/templates/documentos
 
