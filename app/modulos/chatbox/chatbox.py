@@ -161,6 +161,202 @@ Resultado:
     return respuesta
 
 
+
+def construir_respuesta_dashboard(
+    estado,
+    motor=None,
+    esquema=None,
+    objeto=None,
+    opciones=None,
+    recomendacion=None,
+    dashboard_url=None,
+    dashboard_nombre=None,
+    resultado=None
+):
+    """
+    Construye una respuesta de dashboard clara para el usuario.
+
+    El Chatbox no decide qué dashboard construir.
+    Solo presenta la decisión tomada por AgenteDashboard
+    y, cuando existe, entrega el enlace al HTML generado.
+    """
+
+    opciones = opciones or []
+    resultado = resultado if isinstance(resultado, dict) else {}
+
+    # ------------------------------------------------------------
+    # DATOS GENERALES
+    # ------------------------------------------------------------
+    fuente = objeto or "Fuente no especificada"
+
+    if esquema:
+        fuente_completa = f"{esquema}.{objeto}" if objeto else esquema
+    else:
+        fuente_completa = fuente
+
+    # ------------------------------------------------------------
+    # DASHBOARD GENERADO
+    # ------------------------------------------------------------
+    if estado in (
+        "generado",
+        "construido",
+        "ok",
+        "finalizado",
+        "listo"
+    ) or dashboard_url:
+
+        tipo_dashboard = (
+            resultado.get("tipo_dashboard")
+            or resultado.get("tipo")
+            or resultado.get("nombre")
+            or resultado.get("nombre_dashboard")
+            or dashboard_nombre
+            or "Dashboard"
+        )
+
+        registros = (
+            resultado.get("registros")
+            or resultado.get("filas")
+            or resultado.get("registros_analizados")
+            or resultado.get("total_registros")
+        )
+
+        visualizaciones = (
+            resultado.get("visualizaciones")
+            or resultado.get("cantidad_visualizaciones")
+        )
+
+        lineas = [
+            "📊 DASHBOARD GENERADO",
+            "",
+            f"Fuente: {fuente_completa}",
+        ]
+
+        if motor:
+            lineas.append(f"Motor: {motor}")
+
+        lineas.append(f"Tipo: {tipo_dashboard}")
+
+        if registros is not None:
+            lineas.append(f"Registros analizados: {registros}")
+
+        if visualizaciones is not None:
+            lineas.append(f"Visualizaciones: {visualizaciones}")
+
+        lineas.extend([
+            "",
+            "El dashboard interactivo está listo."
+        ])
+
+        if dashboard_url:
+            # Markdown simple: evita ** y permite que el frontend
+            # lo convierta en un hipervínculo.
+            lineas.extend([
+                "",
+                (
+                    '👉 <a href="'
+                    + str(dashboard_url)
+                    + '" target="_blank" rel="noopener noreferrer">'
+                    + 'Abrir dashboard'
+                    + '</a>'
+                )
+            ])
+
+        return "\n".join(lineas)
+
+    # ------------------------------------------------------------
+    # PROPUESTA / OPCIONES
+    # ------------------------------------------------------------
+    if estado == "opciones":
+
+        lineas = [
+            "📊 PROPUESTA DE DASHBOARD",
+            "",
+            f"Fuente: {fuente_completa}"
+        ]
+
+        if motor:
+            lineas.append(f"Motor: {motor}")
+
+        lineas.extend([
+            "",
+            "Analicé la estructura de la fuente y encontré estas opciones:",
+            ""
+        ])
+
+        for opcion in opciones:
+
+            if not isinstance(opcion, dict):
+                continue
+
+            numero = opcion.get("id")
+            nombre = (
+                opcion.get("nombre")
+                or opcion.get("tipo")
+                or f"Opción {numero}"
+            )
+            descripcion = (
+                opcion.get("descripcion")
+                or ""
+            ).strip()
+
+            elementos = opcion.get("elementos") or []
+
+            lineas.append(
+                f"{numero}. {nombre}"
+            )
+
+            if descripcion:
+                lineas.append(
+                    f"   {descripcion}"
+                )
+
+            if elementos:
+                lineas.append(
+                    f"   Visualizaciones propuestas: {len(elementos)}"
+                )
+
+            lineas.append("")
+
+        if recomendacion is not None:
+            try:
+                recomendada = int(recomendacion)
+                lineas.append(
+                    f"⭐ Recomendada: opción {recomendada}"
+                )
+            except (TypeError, ValueError):
+                lineas.append(
+                    f"⭐ Recomendación: {recomendacion}"
+                )
+
+        lineas.extend([
+            "",
+            "Indícame 1, 2 o 3 para construir la opción que prefieras."
+        ])
+
+        return "\n".join(lineas)
+
+    # ------------------------------------------------------------
+    # ESTADO NO RECONOCIDO
+    # ------------------------------------------------------------
+    respuesta_original = (
+        resultado.get("respuesta")
+        or resultado.get("resultado")
+        or resultado.get("contenido")
+        or ""
+    )
+
+    if respuesta_original:
+        return re.sub(r"\*\*", "", str(respuesta_original))
+
+    return (
+        "📊 No pude determinar el estado de construcción "
+        "del dashboard."
+    )
+
+
+
+
 # ============================================================
 # PÁGINA PRINCIPAL
 # ============================================================
@@ -297,6 +493,18 @@ def ask():
         respuesta_final = ""
 
         procesado_por = "Sistema"
+
+        # ====================================================
+        # DASHBOARD
+        # ====================================================
+        dashboard_estado = None
+        dashboard_url = None
+        dashboard_nombre = None
+        dashboard_motor = None
+        dashboard_esquema = None
+        dashboard_objeto = None
+        dashboard_opciones = []
+        dashboard_recomendacion = None
 
 
         # ====================================================
@@ -617,6 +825,100 @@ def ask():
                 )
 
             # =================================================
+            # RESULTADO ESPECIAL: DASHBOARD
+            # =================================================
+            if (
+                isinstance(resultado_router, dict)
+                and resultado_router.get("agente") == "dashboard"
+            ):
+                # =================================================
+                # DASHBOARD
+                # =================================================
+                # El Router/Agente Dashboard es la fuente de verdad.
+                # El Chatbox solamente transporta la estructura hacia
+                # el frontend y no toma decisiones sobre el dashboard.
+                dashboard_estado = (
+                    resultado_router.get("estado")
+                )
+
+                dashboard_url = (
+                    resultado_router.get("dashboard_url")
+                    or resultado_router.get("url")
+                )
+
+                dashboard_nombre = (
+                    resultado_router.get("nombre_archivo")
+                    or resultado_router.get("archivo")
+                )
+
+                dashboard_plan = (
+                    resultado_router.get("plan")
+                    if isinstance(
+                        resultado_router.get("plan"),
+                        dict
+                    )
+                    else {}
+                )
+
+                dashboard_opciones = (
+                    resultado_router.get("opciones")
+                    or dashboard_plan.get("opciones")
+                    or []
+                )
+
+                dashboard_recomendacion = (
+                    resultado_router.get("recomendacion")
+                    or dashboard_plan.get("recomendacion")
+                )
+
+                dashboard_motor = (
+                    resultado_router.get("motor")
+                )
+
+                dashboard_esquema = (
+                    resultado_router.get("esquema")
+                )
+
+                dashboard_objeto = (
+                    resultado_router.get("objeto")
+                )
+
+                # Datos opcionales del dashboard ya generado.
+                # No se calculan aquí; solamente se transportan.
+                dashboard_resultado = (
+                    resultado_router
+                )
+
+                print(
+                    "[CHATBOX] Resultado Dashboard detectado"
+                )
+
+                print(
+                    f"[CHATBOX] Estado Dashboard: "
+                    f"{dashboard_estado}"
+                )
+
+                print(
+                    f"[CHATBOX] Opciones Dashboard: "
+                    f"{len(dashboard_opciones)}"
+                )
+
+                print(
+                    f"[CHATBOX] Recomendación Dashboard: "
+                    f"{dashboard_recomendacion}"
+                )
+
+                print(
+                    f"[CHATBOX] URL Dashboard: "
+                    f"{dashboard_url}"
+                )
+
+                print(
+                    f"[CHATBOX] Archivo Dashboard: "
+                    f"{dashboard_nombre}"
+                )
+
+            # =================================================
             # NORMALIZAR RESPUESTA DEL ROUTER
             # =================================================
 
@@ -818,10 +1120,40 @@ def ask():
                     )
 
         # ==========================================================
-        # RESULTADO ESTRUCTURADO → RESUMEN EJECUTIVO
+        # RESULTADO DASHBOARD → RESPUESTA DE PRESENTACIÓN
+        # ==========================================================
+        #
+        # El agente Dashboard ya tomó las decisiones.
+        # El Chatbox solamente transforma esa estructura en una
+        # respuesta legible y conserva el enlace cuando existe.
         # ==========================================================
 
-        if isinstance(
+        if dashboard_estado is not None:
+
+            respuesta_final = construir_respuesta_dashboard(
+                estado=dashboard_estado,
+                motor=dashboard_motor,
+                esquema=dashboard_esquema,
+                objeto=dashboard_objeto,
+                opciones=dashboard_opciones,
+                recomendacion=dashboard_recomendacion,
+                dashboard_url=dashboard_url,
+                dashboard_nombre=dashboard_nombre,
+                resultado=(
+                    resultado_router
+                    if isinstance(resultado_router, dict)
+                    else {}
+                )
+            )
+
+            add_event(
+                "LLM_SUMMARY_SKIPPED",
+                {
+                    "motivo": "resultado dashboard"
+                }
+            )
+
+        elif isinstance(
             resultado_estructurado,
             (dict, list, tuple)
         ):
@@ -833,10 +1165,12 @@ def ask():
                     "para resultado estructurado"
                 )
 
-                respuesta_final = generar_resumen_ejecutivo(
-                    resultado_estructurado,
-                    pregunta,
-                    contexto_memoria
+                respuesta_final = (
+                    generar_resumen_ejecutivo(
+                        resultado_estructurado,
+                        pregunta,
+                        contexto_memoria
+                    )
                 )
 
                 if not respuesta_final:
@@ -847,8 +1181,6 @@ def ask():
 
             except Exception as resumen_error:
 
-                # La síntesis nunca debe botar una respuesta que ya
-                # fue obtenida correctamente por el Router.
                 print(
                     "[WARNING] Falló síntesis ejecutiva:",
                     str(resumen_error)
@@ -857,21 +1189,17 @@ def ask():
                 add_event(
                     "LLM_SUMMARY_ERROR",
                     {
-                        "mensaje": str(resumen_error)
+                        "mensaje":
+                            str(resumen_error)
                     },
                     estado="ERROR"
                 )
 
-                # Fallback: nunca perder la respuesta original.
                 respuesta_final = str(
                     respuesta_bruta
                 )
 
         else:
-
-            # ======================================================
-            # RESULTADO YA ES TEXTO → NO LLAMAR AL LLM
-            # ======================================================
 
             respuesta_final = str(
                 respuesta_bruta
@@ -893,6 +1221,14 @@ def ask():
 
             respuesta_final = (
                 "No se pudo generar una respuesta."
+            )
+
+        # El dashboard utiliza una presentación propia sin **.
+        if dashboard_estado is not None:
+            respuesta_final = re.sub(
+                r"\*\*",
+                "",
+                str(respuesta_final)
             )
 
 
@@ -944,11 +1280,11 @@ def ask():
         # META DE RESPUESTA
         # ====================================================
 
+        # Mantener la meta como texto simple para que el frontend
+        # no dependa de una sintaxis Markdown específica.
         respuesta_final_con_meta = (
             f"{respuesta_final}"
-            f"\n\n*Procesado por "
-            f"{procesado_por}"
-            f" en {tiempo_total}s*"
+            f"\n\nProcesado por {procesado_por} en {tiempo_total}s"
         )
 
 
@@ -956,10 +1292,39 @@ def ask():
         # RESPUESTA JSON
         # ====================================================
 
-        return jsonify({
+        respuesta_json = {
             "response":
                 respuesta_final_con_meta
-        })
+        }
+
+        if dashboard_estado is not None:
+            respuesta_json["dashboard"] = {
+                "estado":
+                    dashboard_estado,
+
+                "url":
+                    dashboard_url,
+
+                "nombre_archivo":
+                    dashboard_nombre,
+
+                "motor":
+                    dashboard_motor,
+
+                "esquema":
+                    dashboard_esquema,
+
+                "objeto":
+                    dashboard_objeto,
+
+                "opciones":
+                    dashboard_opciones,
+
+                "recomendacion":
+                    dashboard_recomendacion
+            }
+
+        return jsonify(respuesta_json)
 
 
     except Exception as e:

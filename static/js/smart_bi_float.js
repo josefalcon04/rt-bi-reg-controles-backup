@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    function guardarMensaje(texto, tipo) {
+    function guardarMensaje(texto, tipo, metadata = null) {
 
         const historial =
             obtenerHistorial();
@@ -85,6 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
         historial.push({
             texto: texto,
             tipo: tipo,
+            metadata: metadata || null,
             fecha: new Date().toISOString()
         });
 
@@ -117,7 +118,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             agregarMensajeDOM(
                 mensaje.texto,
-                mensaje.tipo
+                mensaje.tipo,
+                mensaje.metadata || null
             );
 
         });
@@ -416,6 +418,10 @@ document.addEventListener("DOMContentLoaded", function () {
                         data.response ||
                         "No se recibió respuesta.";
 
+                    const dashboard =
+                        data.dashboard ||
+                        null;
+
 
                     /* ========================================
                        MOSTRAR RESPUESTA
@@ -423,7 +429,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     agregarMensaje(
                         respuesta,
-                        "bot"
+                        "bot",
+                        dashboard
                     );
 
 
@@ -459,7 +466,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function agregarMensaje(
         texto,
-        tipo
+        tipo,
+        metadata = null
     ) {
 
         if (!messages) {
@@ -473,7 +481,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         agregarMensajeDOM(
             texto,
-            tipo
+            tipo,
+            metadata
         );
 
 
@@ -486,7 +495,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         guardarMensaje(
             texto,
-            tipo
+            tipo,
+            metadata
         );
 
     }
@@ -535,6 +545,22 @@ function formatearRespuestaChat(texto) {
      * Respuesta normal.
      */
     if (!esMetadata) {
+
+        /*
+         * El backend puede incluir un <a> para representar el dashboard.
+         * No lo renderizamos desde texto libre: el enlace real se construye
+         * de forma segura a partir de data.dashboard.
+         */
+        contenido = contenido.replace(
+            /(?:👉\s*)?<a\b[^>]*>.*?<\/a>/gis,
+            ""
+        ).trim();
+
+        /* Limpiar Markdown básico que no necesitamos mostrar literalmente. */
+        contenido = contenido.replace(
+            /\*\*(.*?)\*\*/g,
+            "$1"
+        );
 
         let html = escaparHTML(
             contenido
@@ -797,7 +823,8 @@ function formatearRespuestaChat(texto) {
 
     function agregarMensajeDOM(
         texto,
-        tipo
+        tipo,
+        metadata = null
     ) {
 
         if (!messages) {
@@ -843,14 +870,69 @@ function formatearRespuestaChat(texto) {
 
         if (tipo === "bot") {
 
-    bubble.innerHTML =
-        formatearRespuestaChat(texto);
+            bubble.innerHTML =
+                formatearRespuestaChat(texto);
 
-} else {
+        } else {
 
-    bubble.textContent =
-        texto;
-}
+            bubble.textContent =
+                texto;
+        }
+
+
+        /* ====================================================
+           ENLACE SEGURO DEL DASHBOARD
+           ==================================================== */
+        if (
+            tipo === "bot" &&
+            metadata &&
+            metadata.url
+        ) {
+            const url = String(
+                metadata.url
+            ).trim();
+
+            const urlValida =
+                url.startsWith("/") ||
+                url.startsWith("https://") ||
+                url.startsWith("http://");
+
+            if (urlValida) {
+                const dashboardContainer =
+                    document.createElement("div");
+
+                dashboardContainer.style.marginTop = "14px";
+
+                const dashboardLink =
+                    document.createElement("a");
+
+                dashboardLink.href = url;
+                dashboardLink.target = "_blank";
+                dashboardLink.rel = "noopener noreferrer";
+                dashboardLink.textContent =
+                    "📊 Abrir dashboard";
+
+                dashboardLink.style.display = "inline-flex";
+                dashboardLink.style.alignItems = "center";
+                dashboardLink.style.gap = "8px";
+                dashboardLink.style.padding = "10px 16px";
+                dashboardLink.style.borderRadius = "10px";
+                dashboardLink.style.background = "#2563eb";
+                dashboardLink.style.color = "#ffffff";
+                dashboardLink.style.textDecoration = "none";
+                dashboardLink.style.fontWeight = "600";
+                dashboardLink.style.fontSize = "14px";
+                dashboardLink.style.cursor = "pointer";
+
+                dashboardContainer.appendChild(
+                    dashboardLink
+                );
+
+                bubble.appendChild(
+                    dashboardContainer
+                );
+            }
+        }
 
 
         message.appendChild(

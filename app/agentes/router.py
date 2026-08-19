@@ -25,11 +25,12 @@ class Router:
 
         1. Fast Path
         2. Guard
-        3. Metadata Teradata
-        4. Intent Gate
-        5. Catálogo maestro
-        6. Agentes
-        7. Respuesta
+        3. Prioridad funcional (Dashboard)
+        4. Metadata Teradata
+        5. Intent Gate
+        6. Catálogo maestro
+        7. Agentes
+        8. Respuesta
 
     PRIORIDAD:
 
@@ -247,6 +248,31 @@ class Router:
                     "frontend",
                     "blueprint"
                 ]
+            },
+            "dashboard": {
+                "peso_alto": [
+                    "dashboard",
+                    "dashboards",
+                    "tablero",
+                    "tablero de control",
+                    "panel",
+                    "panel de control",
+                    "visualización",
+                    "visualizacion",
+                    "gráfico",
+                    "grafico"
+                ],
+
+                "peso_medio": [
+                    "chart",
+                    "charts",
+                    "grafica",
+                    "gráfica",
+                    "reporte visual",
+                    "indicadores",
+                    "kpi",
+                    "kpis"
+                ]
             }
         }
 
@@ -306,7 +332,7 @@ class Router:
                 (
                     "Claro. Puedo ayudarte con SQL, metadata de tablas, "
                     "monitoreo, regulación, alertas, tendencias, "
-                    "documentación y desarrollo."
+                    "dashboards, documentación y desarrollo."
                 ),
 
             "quien eres":
@@ -327,14 +353,14 @@ class Router:
                 (
                     "Puedo ayudarte con SQL, metadata de tablas, "
                     "monitoreo, regulación, alertas, tendencias, "
-                    "documentación y desarrollo."
+                    "dashboards, documentación y desarrollo."
                 ),
 
             "qué puedes hacer":
                 (
                     "Puedo ayudarte con SQL, metadata de tablas, "
                     "monitoreo, regulación, alertas, tendencias, "
-                    "documentación y desarrollo."
+                    "dashboards, documentación y desarrollo."
                 )
         }
 
@@ -487,6 +513,70 @@ class Router:
     # DETECTAR PREGUNTA DE METADATA TERADATA
     # ========================================================
 
+    def _es_solicitud_dashboard(self, consulta):
+        """
+        Detecta una solicitud explícita de construcción de dashboard.
+
+        Esta decisión pertenece al Router porque define la ruta de ejecución:
+        una solicitud explícita de dashboard debe llegar al AgenteDashboard
+        antes de intentar resolver metadata de Teradata o regulación.
+        """
+
+        texto = (
+            str(consulta or "")
+            .lower()
+            .strip()
+        )
+
+        if not texto:
+            return False
+
+        patrones = [
+            r"\bdashboard\b",
+            r"\bdash board\b",
+            r"\btablero(?: de control)?\b",
+            r"\bpanel(?: de control)?\b",
+            r"\bcrear(?:me)?\s+(?:un\s+)?dashboard\b",
+            r"\bgener(?:a|ame|ar)\s+(?:un\s+)?dashboard\b",
+            r"\bconstru(?:ir|ye|yeme)\s+(?:un\s+)?dashboard\b",
+            r"\bhazme\s+(?:un\s+)?dashboard\b",
+            r"\bcrear\s+(?:un\s+)?tablero\b",
+            r"\bgenerar\s+(?:un\s+)?tablero\b"
+        ]
+
+        return any(
+            re.search(patron, texto)
+            for patron in patrones
+        )
+
+    def _dashboard_tiene_contexto_pendiente(self):
+        """
+        Determina si AgenteDashboard está esperando la selección 1, 2 o 3.
+
+        El estado sigue perteneciendo al agente; el Router solo consulta si
+        existe para poder enrutar correctamente la siguiente interacción.
+        """
+
+        agente = self.registry.get_agent("dashboard")
+
+        return bool(
+            agente
+            and getattr(
+                agente,
+                "_contexto_pendiente",
+                None
+            )
+        )
+
+    def _es_opcion_dashboard_pendiente(self, consulta):
+        texto = str(consulta or "").strip()
+
+        return (
+            bool(re.fullmatch(r"[1-3]", texto))
+            and
+            self._dashboard_tiene_contexto_pendiente()
+        )
+
     def _es_metadata_teradata(self, consulta):
 
         texto = (
@@ -494,6 +584,17 @@ class Router:
             .lower()
             .strip()
         )
+
+        # Una solicitud explícita de dashboard tiene prioridad funcional.
+        # No debe caer en la ruta de metadata aunque contenga "tabla",
+        # "campo", un esquema regulatorio o un identificador técnico.
+        if self._es_solicitud_dashboard(consulta):
+            return False
+
+        # Una selección 1/2/3 pertenece a la conversación del dashboard
+        # si existe una propuesta pendiente.
+        if self._es_opcion_dashboard_pendiente(consulta):
+            return False
 
         # ----------------------------------------------------
         # SEÑALES FUERTES
@@ -922,6 +1023,31 @@ class Router:
                 .split()
             )
         )
+
+        # ----------------------------------------------------
+        # PRIORIDAD FUNCIONAL: DASHBOARD
+        # ----------------------------------------------------
+        # El Intent Gate no debe interpretar una tabla regulatoria como
+        # intención "regulatorio" cuando la acción solicitada es crear
+        # un dashboard. Tampoco debe rechazar 1/2/3 cuando corresponden
+        # a una propuesta pendiente del AgenteDashboard.
+        if (
+            self._es_solicitud_dashboard(consulta)
+            or
+            self._es_opcion_dashboard_pendiente(consulta)
+        ):
+            print(
+                "[ROUTER] Intent Gate: DASHBOARD prioritario"
+            )
+
+            return {
+                "estado": "allow",
+                "respuesta": None,
+                "motivo": "flujo_dashboard",
+                "intencion": "dashboard",
+                "score": 3,
+                "umbral": 2
+            }
 
         puntuaciones = {}
 
@@ -2051,7 +2177,7 @@ class Router:
                     consulta
                 )
 
-    # ========================================================
+        # ========================================================
     # DETECTAR AGENTE
     # ========================================================
 
@@ -2059,6 +2185,16 @@ class Router:
         self,
         consulta
     ):
+        """
+        Determina el agente adecuado utilizando
+        un sistema de puntuación.
+
+        REGLA ESPECIAL DASHBOARD:
+        Si el usuario solicita explícitamente
+        crear/generar/construir un dashboard,
+        se prioriza el agente dashboard aunque
+        la tabla pertenezca a un contexto regulatorio.
+        """
 
         texto = (
             str(consulta)
@@ -2068,6 +2204,105 @@ class Router:
 
         if not texto:
             return "developer"
+
+        # ====================================================
+        # PRIORIDAD DASHBOARD
+        # ====================================================
+
+        palabras_dashboard = [
+
+            "dashboard",
+            "dash board",
+            "tablero",
+            "tablero de control",
+
+            "crear dashboard",
+            "creame un dashboard",
+            "créame un dashboard",
+
+            "genera un dashboard",
+            "generame un dashboard",
+            "genérame un dashboard",
+
+            "generar dashboard",
+            "crear un dashboard",
+            "construir dashboard",
+            "construye un dashboard",
+
+            "hazme un dashboard",
+            "hacer un dashboard",
+
+            "crear tablero",
+            "genera un tablero",
+            "generar un tablero"
+        ]
+
+        solicita_dashboard = any(
+            palabra in texto
+            for palabra in palabras_dashboard
+        )
+
+        # ====================================================
+        # SI HAY INTENCIÓN EXPLÍCITA DE DASHBOARD
+        # ====================================================
+
+        if solicita_dashboard:
+
+            print(
+                "[ROUTER] Prioridad explícita: "
+                "DASHBOARD"
+            )
+
+            # Detectamos si además existe una
+            # referencia a tabla/vista.
+            referencias_fuente = [
+
+                "tabla",
+                "tablas",
+                "vista",
+                "view",
+                "esquema",
+                "schema",
+                "..",
+                "prod_",
+                "dbi_"
+            ]
+
+            tiene_fuente = any(
+                palabra in texto
+                for palabra in referencias_fuente
+            )
+
+            if tiene_fuente:
+
+                print(
+                    "[ROUTER] Dashboard asociado "
+                    "a fuente de datos detectada."
+                )
+
+            print(
+                "[ROUTER] Agente forzado: dashboard"
+            )
+
+            return "dashboard"
+
+        # ====================================================
+        # PRIORIDAD FUNCIONAL DASHBOARD
+        # ====================================================
+
+        if (
+            self._es_solicitud_dashboard(consulta)
+            or
+            self._es_opcion_dashboard_pendiente(consulta)
+        ):
+            print(
+                "[ROUTER] Prioridad funcional: DASHBOARD"
+            )
+            return "dashboard"
+
+        # ====================================================
+        # CALCULAR PUNTAJES NORMAL
+        # ====================================================
 
         puntuaciones = {}
 
@@ -2085,6 +2320,7 @@ class Router:
             ):
 
                 if palabra in texto:
+
                     score += 3
 
             # ------------------------------------------------
@@ -2097,11 +2333,16 @@ class Router:
             ):
 
                 if palabra in texto:
+
                     score += 1
 
             puntuaciones[
                 agente
             ] = score
+
+        # ====================================================
+        # ORDENAR
+        # ====================================================
 
         puntuaciones_ordenadas = sorted(
             puntuaciones.items(),
@@ -2113,13 +2354,19 @@ class Router:
             "[ROUTER] Puntuaciones:"
         )
 
-        for agente, score in puntuaciones_ordenadas:
+        for agente, score in (
+            puntuaciones_ordenadas
+        ):
 
             if score > 0:
 
                 print(
                     f"    {agente}: {score}"
                 )
+
+        # ====================================================
+        # MEJOR RESULTADO
+        # ====================================================
 
         mejor_agente = (
             puntuaciones_ordenadas[0][0]
@@ -2129,24 +2376,26 @@ class Router:
             puntuaciones_ordenadas[0][1]
         )
 
-        if mejor_score < 2:
+        # ====================================================
+        # SIN COINCIDENCIAS
+        # ====================================================
+
+        if mejor_score == 0:
 
             print(
                 "[ROUTER] "
-                "Intención insuficiente para "
-                "seleccionar agente "
-                f"(score={mejor_score})."
+                "No se encontró intención específica."
             )
 
             print(
                 "[ROUTER] "
-                "No se asignará ningún agente."
+                "Agente por defecto: developer"
             )
 
-            return None
+            return "developer"
 
         print(
-            "[ROUTER] Mejor intención: "
+            f"[ROUTER] Mejor intención: "
             f"{mejor_agente} "
             f"(score={mejor_score})"
         )

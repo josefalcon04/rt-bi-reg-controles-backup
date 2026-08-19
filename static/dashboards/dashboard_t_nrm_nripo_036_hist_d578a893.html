@@ -1,0 +1,1868 @@
+
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+    Dashboard - T_NRM_NRIPO_036_HIST
+</title>
+
+<script
+    src="https://cdn.plot.ly/plotly-2.35.2.min.js">
+</script>
+
+<style>
+
+
+/* ==========================================================
+   DASHBOARD 
+   ========================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+
+    margin: 0;
+
+    padding: 0;
+
+    font-family:
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    background:
+        #f4f7fb;
+
+    color:
+        #172033;
+}
+
+.dashboard {
+
+    width: 100%;
+
+    min-height: 100vh;
+
+    padding: 24px 30px 40px;
+}
+
+/* ==========================================================
+   HEADER
+   ========================================================== */
+
+.dashboard-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 20px;
+
+    margin-bottom: 22px;
+
+    padding: 22px 26px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #172b4d,
+            #244b78
+        );
+
+    border-radius: 16px;
+
+    color: white;
+
+    box-shadow:
+        0 8px 24px
+        rgba(23, 43, 77, 0.14);
+}
+
+.header-title {
+
+    margin: 0;
+
+    font-size: 25px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.2px;
+}
+
+.header-subtitle {
+
+    margin-top: 6px;
+
+    font-size: 13px;
+
+    opacity: 0.82;
+}
+
+.header-badge {
+
+    padding: 8px 13px;
+
+    border-radius: 20px;
+
+    background:
+        rgba(255,255,255,0.14);
+
+    border:
+        1px solid
+        rgba(255,255,255,0.20);
+
+    font-size: 12px;
+
+    white-space: nowrap;
+}
+
+/* ==========================================================
+   KPI
+   ========================================================== */
+
+.kpi-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            4,
+            minmax(0, 1fr)
+        );
+
+    gap: 16px;
+
+    margin-bottom: 20px;
+}
+
+.kpi-card {
+
+    position: relative;
+
+    background: white;
+
+    border-radius: 14px;
+
+    padding: 20px;
+
+    min-height: 118px;
+
+    border:
+        1px solid
+        #e5eaf1;
+
+    box-shadow:
+        0 5px 18px
+        rgba(30, 55, 90, 0.06);
+
+    overflow: hidden;
+}
+
+.kpi-card::before {
+
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+
+    top: 0;
+
+    bottom: 0;
+
+    width: 4px;
+
+    background:
+        #2f6fed;
+}
+
+.kpi-label {
+
+    color:
+        #718096;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    margin-bottom: 10px;
+}
+
+.kpi-value {
+
+    font-size: 28px;
+
+    font-weight: 700;
+
+    color:
+        #172b4d;
+}
+
+.kpi-detail {
+
+    margin-top: 7px;
+
+    color:
+        #9aa5b5;
+
+    font-size: 11px;
+}
+
+/* ==========================================================
+   FILTROS
+   ========================================================== */
+
+.filters-card {
+
+    background: white;
+
+    border:
+        1px solid
+        #e5eaf1;
+
+    border-radius: 14px;
+
+    padding: 18px;
+
+    margin-bottom: 20px;
+
+    box-shadow:
+        0 5px 18px
+        rgba(30, 55, 90, 0.05);
+}
+
+.filters-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 14px;
+}
+
+.filters-title {
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    color:
+        #253858;
+}
+
+.btn-reset {
+
+    border: none;
+
+    background:
+        #eef3fb;
+
+    color:
+        #2f5f9f;
+
+    padding:
+        7px 12px;
+
+    border-radius:
+        8px;
+
+    cursor: pointer;
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+.btn-reset:hover {
+
+    background:
+        #dfe9f8;
+}
+
+.filters-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            4,
+            minmax(0, 1fr)
+        );
+
+    gap: 12px;
+}
+
+.filter-group label {
+
+    display: block;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    color:
+        #718096;
+
+    margin-bottom: 6px;
+}
+
+.filter-group select {
+
+    width: 100%;
+
+    height: 38px;
+
+    padding:
+        0 10px;
+
+    border:
+        1px solid
+        #dce3ed;
+
+    border-radius:
+        8px;
+
+    background:
+        #fff;
+
+    color:
+        #253858;
+
+    outline: none;
+}
+
+.filter-group select:focus {
+
+    border-color:
+        #5d8ed8;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(93, 142, 216, 0.12);
+}
+
+/* ==========================================================
+   GRID DE GRÁFICOS
+   ========================================================== */
+
+.charts-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 18px;
+
+    margin-bottom: 20px;
+}
+
+.chart-card {
+
+    background: white;
+
+    border:
+        1px solid
+        #e5eaf1;
+
+    border-radius:
+        14px;
+
+    padding:
+        14px 16px 8px;
+
+    box-shadow:
+        0 5px 18px
+        rgba(30, 55, 90, 0.05);
+
+    min-height: 390px;
+}
+
+.chart-card.full {
+
+    grid-column:
+        1 / -1;
+}
+
+.chart-title {
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    color:
+        #253858;
+
+    padding:
+        6px 4px 2px;
+}
+
+.chart-subtitle {
+
+    font-size: 11px;
+
+    color:
+        #8b96a8;
+
+    padding:
+        3px 4px 0;
+}
+
+.chart {
+
+    width: 100%;
+
+    height: 330px;
+}
+
+/* ==========================================================
+   TABLA
+   ========================================================== */
+
+.table-card {
+
+    background: white;
+
+    border:
+        1px solid
+        #e5eaf1;
+
+    border-radius:
+        14px;
+
+    padding:
+        18px;
+
+    box-shadow:
+        0 5px 18px
+        rgba(30, 55, 90, 0.05);
+}
+
+.table-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 14px;
+}
+
+.table-title {
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    color:
+        #253858;
+}
+
+.table-info {
+
+    color:
+        #8b96a8;
+
+    font-size: 11px;
+}
+
+.table-wrapper {
+
+    overflow-x: auto;
+
+    max-height: 420px;
+
+    overflow-y: auto;
+}
+
+table {
+
+    width: 100%;
+
+    border-collapse:
+        collapse;
+
+    font-size: 12px;
+}
+
+thead {
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 2;
+}
+
+th {
+
+    background:
+        #f4f7fb;
+
+    color:
+        #56657a;
+
+    text-align: left;
+
+    padding:
+        11px 10px;
+
+    font-weight: 700;
+
+    border-bottom:
+        1px solid
+        #dfe5ee;
+}
+
+td {
+
+    padding:
+        10px;
+
+    border-bottom:
+        1px solid
+        #edf0f5;
+
+    color:
+        #39475a;
+}
+
+tbody tr:hover {
+
+    background:
+        #f8fbff;
+}
+
+/* ==========================================================
+   FOOTER
+   ========================================================== */
+
+.dashboard-footer {
+
+    margin-top: 18px;
+
+    text-align: right;
+
+    color:
+        #98a2b3;
+
+    font-size: 11px;
+}
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+
+@media (max-width: 1100px) {
+
+    .kpi-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .filters-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 760px) {
+
+    .dashboard {
+
+        padding:
+            14px;
+    }
+
+    .dashboard-header {
+
+        flex-direction:
+            column;
+
+        align-items:
+            flex-start;
+    }
+
+    .kpi-grid {
+
+        grid-template-columns:
+            1fr;
+    }
+
+    .filters-grid {
+
+        grid-template-columns:
+            1fr;
+    }
+
+    .charts-grid {
+
+        grid-template-columns:
+            1fr;
+    }
+
+    .chart-card.full {
+
+        grid-column:
+            auto;
+    }
+}
+
+
+</style>
+
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <!-- ==================================================
+         HEADER
+         ================================================== -->
+
+    <header class="dashboard-header">
+
+        <div>
+
+            <h1 class="header-title">
+                Dashboard - T_NRM_NRIPO_036_HIST
+            </h1>
+
+            <div class="header-subtitle">
+
+                NETEZZA
+                &nbsp;•&nbsp;
+                PROD_REGU_NORMA_DATA
+                &nbsp;•&nbsp;
+                T_NRM_NRIPO_036_HIST
+
+            </div>
+
+        </div>
+
+        <div class="header-badge">
+            Dashboard Ejecutivo
+        </div>
+
+    </header>
+
+
+    <!-- ==================================================
+         KPIs
+         ================================================== -->
+
+    <section
+        id="kpiGrid"
+        class="kpi-grid">
+    </section>
+
+
+    <!-- ==================================================
+         FILTROS
+         ================================================== -->
+
+    <section class="filters-card">
+
+        <div class="filters-header">
+
+            <div class="filters-title">
+                Filtros
+            </div>
+
+            <button
+                id="btnReset"
+                class="btn-reset"
+                type="button"
+            >
+                Limpiar filtros
+            </button>
+
+        </div>
+
+        <div
+            id="filtersGrid"
+            class="filters-grid">
+        </div>
+
+    </section>
+
+
+    <!-- ==================================================
+         GRÁFICOS
+         ================================================== -->
+
+    <section
+        id="chartsGrid"
+        class="charts-grid">
+    </section>
+
+
+    <!-- ==================================================
+         TABLA
+         ================================================== -->
+
+    <section class="table-card">
+
+        <div class="table-header">
+
+            <div class="table-title">
+                Detalle de datos
+            </div>
+
+            <div
+                id="tableInfo"
+                class="table-info">
+            </div>
+
+        </div>
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead id="tableHead">
+                </thead>
+
+                <tbody id="tableBody">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <div class="dashboard-footer">
+
+        Generado automáticamente por Dashboard Builder
+
+    </div>
+
+</div>
+
+
+<script>
+
+
+function formatoNumero(valor) {
+
+    if (
+        valor === null ||
+        valor === undefined ||
+        isNaN(valor)
+    ) {
+        return "0";
+    }
+
+    const numero = Number(valor);
+
+    if (Math.abs(numero) >= 1000000000) {
+
+        return (
+            (numero / 1000000000)
+            .toFixed(1)
+            .replace(/\.0$/, "")
+            + "B"
+        );
+    }
+
+    if (Math.abs(numero) >= 1000000) {
+
+        return (
+            (numero / 1000000)
+            .toFixed(1)
+            .replace(/\.0$/, "")
+            + "M"
+        );
+    }
+
+    if (Math.abs(numero) >= 1000) {
+
+        return (
+            (numero / 1000)
+            .toFixed(1)
+            .replace(/\.0$/, "")
+            + "K"
+        );
+    }
+
+    return numero.toLocaleString(
+        "es-PE",
+        {
+            maximumFractionDigits: 2
+        }
+    );
+}
+
+
+
+/* ==========================================================
+   DATOS
+   ========================================================== */
+
+const DATOS = [{"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 9, "ANIO_MES": 202209, "PERIODO": "III", "TOTAL_ALTAS": 13303, "TOTAL_BAJAS": 67163, "ORDEN": 11}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 9, "ANIO_MES": 202209, "PERIODO": "III", "TOTAL_ALTAS": 284, "TOTAL_BAJAS": 4131, "ORDEN": 12}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 9, "ANIO_MES": 202209, "PERIODO": "III", "TOTAL_ALTAS": 183660, "TOTAL_BAJAS": 113332, "ORDEN": 13}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 9, "ANIO_MES": 202209, "PERIODO": "III", "TOTAL_ALTAS": 117, "TOTAL_BAJAS": 4781, "ORDEN": 14}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 9, "ANIO_MES": 202209, "PERIODO": "III", "TOTAL_ALTAS": 362904, "TOTAL_BAJAS": 423579, "ORDEN": 15}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 7, "ANIO_MES": 202209, "PERIODO": "III", "TOTAL_ALTAS": 81786, "TOTAL_BAJAS": 59255, "ORDEN": 1}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 7, "ANIO_MES": 202209, "PERIODO": "III", "TOTAL_ALTAS": 189, "TOTAL_BAJAS": 3875, "ORDEN": 2}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 7, "ANIO_MES": 202209, "PERIODO": "III", "TOTAL_ALTAS": 121286, "TOTAL_BAJAS": 107855, "ORDEN": 3}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 7, "ANIO_MES": 202209, "PERIODO": "III", "TOTAL_ALTAS": 8, "TOTAL_BAJAS": 4003, "ORDEN": 4}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 7, "ANIO_MES": 202209, "PERIODO": "III", "TOTAL_ALTAS": 443360, "TOTAL_BAJAS": 619792, "ORDEN": 5}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 8, "ANIO_MES": 202209, "PERIODO": "III", "TOTAL_ALTAS": 13787, "TOTAL_BAJAS": 68653, "ORDEN": 6}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 8, "ANIO_MES": 202209, "PERIODO": "III", "TOTAL_ALTAS": 184, "TOTAL_BAJAS": 15199, "ORDEN": 7}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 8, "ANIO_MES": 202209, "PERIODO": "III", "TOTAL_ALTAS": 183586, "TOTAL_BAJAS": 104924, "ORDEN": 8}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 8, "ANIO_MES": 202209, "PERIODO": "III", "TOTAL_ALTAS": 1580, "TOTAL_BAJAS": 1170, "ORDEN": 9}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 8, "ANIO_MES": 202209, "PERIODO": "III", "TOTAL_ALTAS": 382890, "TOTAL_BAJAS": 850377, "ORDEN": 10}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 7, "ANIO_MES": 202509, "PERIODO": "III", "TOTAL_ALTAS": 33763, "TOTAL_BAJAS": 73119, "ORDEN": 1}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 7, "ANIO_MES": 202509, "PERIODO": "III", "TOTAL_ALTAS": 21, "TOTAL_BAJAS": 3953, "ORDEN": 2}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 7, "ANIO_MES": 202509, "PERIODO": "III", "TOTAL_ALTAS": 141367, "TOTAL_BAJAS": 147506, "ORDEN": 3}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 7, "ANIO_MES": 202509, "PERIODO": "III", "TOTAL_ALTAS": 6, "TOTAL_BAJAS": 167, "ORDEN": 4}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 7, "ANIO_MES": 202509, "PERIODO": "III", "TOTAL_ALTAS": 201618, "TOTAL_BAJAS": 415519, "ORDEN": 5}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 9, "ANIO_MES": 202509, "PERIODO": "III", "TOTAL_ALTAS": 33049, "TOTAL_BAJAS": 65392, "ORDEN": 11}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 9, "ANIO_MES": 202509, "PERIODO": "III", "TOTAL_ALTAS": 30, "TOTAL_BAJAS": 943, "ORDEN": 12}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 9, "ANIO_MES": 202509, "PERIODO": "III", "TOTAL_ALTAS": 146357, "TOTAL_BAJAS": 159557, "ORDEN": 13}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 9, "ANIO_MES": 202509, "PERIODO": "III", "TOTAL_ALTAS": 1, "TOTAL_BAJAS": 123, "ORDEN": 14}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 9, "ANIO_MES": 202509, "PERIODO": "III", "TOTAL_ALTAS": 201843, "TOTAL_BAJAS": 404809, "ORDEN": 15}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 8, "ANIO_MES": 202509, "PERIODO": "III", "TOTAL_ALTAS": 33432, "TOTAL_BAJAS": 69802, "ORDEN": 6}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 8, "ANIO_MES": 202509, "PERIODO": "III", "TOTAL_ALTAS": 9, "TOTAL_BAJAS": 2444, "ORDEN": 7}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 8, "ANIO_MES": 202509, "PERIODO": "III", "TOTAL_ALTAS": 147549, "TOTAL_BAJAS": 162532, "ORDEN": 8}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 8, "ANIO_MES": 202509, "PERIODO": "III", "TOTAL_ALTAS": 6, "TOTAL_BAJAS": 405, "ORDEN": 9}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 8, "ANIO_MES": 202509, "PERIODO": "III", "TOTAL_ALTAS": 202412, "TOTAL_BAJAS": 423066, "ORDEN": 10}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 1, "ANIO_MES": 202501, "PERIODO": null, "TOTAL_ALTAS": 61163, "TOTAL_BAJAS": 94500, "ORDEN": 1}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 1, "ANIO_MES": 202501, "PERIODO": null, "TOTAL_ALTAS": 55, "TOTAL_BAJAS": 1005, "ORDEN": 2}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 1, "ANIO_MES": 202501, "PERIODO": null, "TOTAL_ALTAS": 146695, "TOTAL_BAJAS": 136267, "ORDEN": 3}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 1, "ANIO_MES": 202501, "PERIODO": null, "TOTAL_ALTAS": 5, "TOTAL_BAJAS": 1048, "ORDEN": 4}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 1, "ANIO_MES": 202501, "PERIODO": null, "TOTAL_ALTAS": 366038, "TOTAL_BAJAS": 477920, "ORDEN": 5}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 11, "ANIO_MES": 202501, "PERIODO": null, "TOTAL_ALTAS": 69716, "TOTAL_BAJAS": 100235, "ORDEN": 6}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 11, "ANIO_MES": 202501, "PERIODO": null, "TOTAL_ALTAS": 57, "TOTAL_BAJAS": 1573, "ORDEN": 7}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 11, "ANIO_MES": 202501, "PERIODO": null, "TOTAL_ALTAS": 117185, "TOTAL_BAJAS": 138029, "ORDEN": 8}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 11, "ANIO_MES": 202501, "PERIODO": null, "TOTAL_ALTAS": 6, "TOTAL_BAJAS": 1229, "ORDEN": 9}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 11, "ANIO_MES": 202501, "PERIODO": null, "TOTAL_ALTAS": 326991, "TOTAL_BAJAS": 506328, "ORDEN": 10}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 12, "ANIO_MES": 202501, "PERIODO": null, "TOTAL_ALTAS": 62963, "TOTAL_BAJAS": 91829, "ORDEN": 11}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 12, "ANIO_MES": 202501, "PERIODO": null, "TOTAL_ALTAS": 26, "TOTAL_BAJAS": 759, "ORDEN": 12}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 12, "ANIO_MES": 202501, "PERIODO": null, "TOTAL_ALTAS": 126028, "TOTAL_BAJAS": 126808, "ORDEN": 13}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 12, "ANIO_MES": 202501, "PERIODO": null, "TOTAL_ALTAS": 51, "TOTAL_BAJAS": 188, "ORDEN": 14}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 12, "ANIO_MES": 202501, "PERIODO": null, "TOTAL_ALTAS": 348833, "TOTAL_BAJAS": 467960, "ORDEN": 15}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 5, "ANIO_MES": 202406, "PERIODO": "II", "TOTAL_ALTAS": 69766, "TOTAL_BAJAS": 104261, "ORDEN": 6}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 5, "ANIO_MES": 202406, "PERIODO": "II", "TOTAL_ALTAS": 87, "TOTAL_BAJAS": 1679, "ORDEN": 7}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 5, "ANIO_MES": 202406, "PERIODO": "II", "TOTAL_ALTAS": 117790, "TOTAL_BAJAS": 127447, "ORDEN": 8}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 5, "ANIO_MES": 202406, "PERIODO": "II", "TOTAL_ALTAS": 6, "TOTAL_BAJAS": 554, "ORDEN": 9}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 5, "ANIO_MES": 202406, "PERIODO": "II", "TOTAL_ALTAS": 381466, "TOTAL_BAJAS": 422013, "ORDEN": 10}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 4, "ANIO_MES": 202406, "PERIODO": "II", "TOTAL_ALTAS": 66670, "TOTAL_BAJAS": 94655, "ORDEN": 1}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 4, "ANIO_MES": 202406, "PERIODO": "II", "TOTAL_ALTAS": 58, "TOTAL_BAJAS": 3030, "ORDEN": 2}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 4, "ANIO_MES": 202406, "PERIODO": "II", "TOTAL_ALTAS": 109369, "TOTAL_BAJAS": 116628, "ORDEN": 3}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 4, "ANIO_MES": 202406, "PERIODO": "II", "TOTAL_ALTAS": 60, "TOTAL_BAJAS": 298, "ORDEN": 4}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 4, "ANIO_MES": 202406, "PERIODO": "II", "TOTAL_ALTAS": 452004, "TOTAL_BAJAS": 371140, "ORDEN": 5}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 6, "ANIO_MES": 202406, "PERIODO": "II", "TOTAL_ALTAS": 66950, "TOTAL_BAJAS": 104448, "ORDEN": 11}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 6, "ANIO_MES": 202406, "PERIODO": "II", "TOTAL_ALTAS": 156, "TOTAL_BAJAS": 6129, "ORDEN": 12}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 6, "ANIO_MES": 202406, "PERIODO": "II", "TOTAL_ALTAS": 110563, "TOTAL_BAJAS": 122239, "ORDEN": 13}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 6, "ANIO_MES": 202406, "PERIODO": "II", "TOTAL_ALTAS": 3, "TOTAL_BAJAS": 755, "ORDEN": 14}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 6, "ANIO_MES": 202406, "PERIODO": "II", "TOTAL_ALTAS": 413444, "TOTAL_BAJAS": 502432, "ORDEN": 15}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 12, "ANIO_MES": 202212, "PERIODO": "IV", "TOTAL_ALTAS": 19286, "TOTAL_BAJAS": 52047, "ORDEN": 11}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 12, "ANIO_MES": 202212, "PERIODO": "IV", "TOTAL_ALTAS": 509, "TOTAL_BAJAS": 3005, "ORDEN": 12}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 12, "ANIO_MES": 202212, "PERIODO": "IV", "TOTAL_ALTAS": 167965, "TOTAL_BAJAS": 126543, "ORDEN": 13}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 12, "ANIO_MES": 202212, "PERIODO": "IV", "TOTAL_ALTAS": 831, "TOTAL_BAJAS": 708, "ORDEN": 14}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 12, "ANIO_MES": 202212, "PERIODO": "IV", "TOTAL_ALTAS": 385978, "TOTAL_BAJAS": 452127, "ORDEN": 15}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 10, "ANIO_MES": 202212, "PERIODO": "IV", "TOTAL_ALTAS": 22811, "TOTAL_BAJAS": 57096, "ORDEN": 1}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 10, "ANIO_MES": 202212, "PERIODO": "IV", "TOTAL_ALTAS": 931, "TOTAL_BAJAS": 4270, "ORDEN": 2}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 10, "ANIO_MES": 202212, "PERIODO": "IV", "TOTAL_ALTAS": 174596, "TOTAL_BAJAS": 112300, "ORDEN": 3}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 10, "ANIO_MES": 202212, "PERIODO": "IV", "TOTAL_ALTAS": 41, "TOTAL_BAJAS": 771, "ORDEN": 4}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 10, "ANIO_MES": 202212, "PERIODO": "IV", "TOTAL_ALTAS": 392840, "TOTAL_BAJAS": 488790, "ORDEN": 5}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 11, "ANIO_MES": 202212, "PERIODO": "IV", "TOTAL_ALTAS": 19950, "TOTAL_BAJAS": 52671, "ORDEN": 6}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 11, "ANIO_MES": 202212, "PERIODO": "IV", "TOTAL_ALTAS": 211, "TOTAL_BAJAS": 12308, "ORDEN": 7}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 11, "ANIO_MES": 202212, "PERIODO": "IV", "TOTAL_ALTAS": 178420, "TOTAL_BAJAS": 114261, "ORDEN": 8}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 11, "ANIO_MES": 202212, "PERIODO": "IV", "TOTAL_ALTAS": 28, "TOTAL_BAJAS": 803, "ORDEN": 9}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 11, "ANIO_MES": 202212, "PERIODO": "IV", "TOTAL_ALTAS": 410120, "TOTAL_BAJAS": 416054, "ORDEN": 10}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 4, "ANIO_MES": 202506, "PERIODO": "II", "TOTAL_ALTAS": 49451, "TOTAL_BAJAS": 82716, "ORDEN": 1}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 4, "ANIO_MES": 202506, "PERIODO": "II", "TOTAL_ALTAS": 29, "TOTAL_BAJAS": 731, "ORDEN": 2}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 4, "ANIO_MES": 202506, "PERIODO": "II", "TOTAL_ALTAS": 152987, "TOTAL_BAJAS": 144027, "ORDEN": 3}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 4, "ANIO_MES": 202506, "PERIODO": "II", "TOTAL_ALTAS": 3, "TOTAL_BAJAS": 318, "ORDEN": 4}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 4, "ANIO_MES": 202506, "PERIODO": "II", "TOTAL_ALTAS": 390910, "TOTAL_BAJAS": 486978, "ORDEN": 5}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 6, "ANIO_MES": 202506, "PERIODO": "II", "TOTAL_ALTAS": 32461, "TOTAL_BAJAS": 69325, "ORDEN": 11}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 6, "ANIO_MES": 202506, "PERIODO": "II", "TOTAL_ALTAS": 44, "TOTAL_BAJAS": 659, "ORDEN": 12}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 6, "ANIO_MES": 202506, "PERIODO": "II", "TOTAL_ALTAS": 144694, "TOTAL_BAJAS": 138273, "ORDEN": 13}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 6, "ANIO_MES": 202506, "PERIODO": "II", "TOTAL_ALTAS": 4, "TOTAL_BAJAS": 163, "ORDEN": 14}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 6, "ANIO_MES": 202506, "PERIODO": "II", "TOTAL_ALTAS": 202598, "TOTAL_BAJAS": 401586, "ORDEN": 15}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 5, "ANIO_MES": 202506, "PERIODO": "II", "TOTAL_ALTAS": 49780, "TOTAL_BAJAS": 80805, "ORDEN": 6}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 5, "ANIO_MES": 202506, "PERIODO": "II", "TOTAL_ALTAS": 49, "TOTAL_BAJAS": 987, "ORDEN": 7}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 5, "ANIO_MES": 202506, "PERIODO": "II", "TOTAL_ALTAS": 150829, "TOTAL_BAJAS": 150459, "ORDEN": 8}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 5, "ANIO_MES": 202506, "PERIODO": "II", "TOTAL_ALTAS": 54, "TOTAL_BAJAS": 212, "ORDEN": 9}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 5, "ANIO_MES": 202506, "PERIODO": "II", "TOTAL_ALTAS": 278157, "TOTAL_BAJAS": 453974, "ORDEN": 10}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 4, "ANIO_MES": 202306, "PERIODO": "II", "TOTAL_ALTAS": 61387, "TOTAL_BAJAS": 44420, "ORDEN": 1}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 4, "ANIO_MES": 202306, "PERIODO": "II", "TOTAL_ALTAS": 312, "TOTAL_BAJAS": 3922, "ORDEN": 2}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 4, "ANIO_MES": 202306, "PERIODO": "II", "TOTAL_ALTAS": 106487, "TOTAL_BAJAS": 142626, "ORDEN": 3}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 4, "ANIO_MES": 202306, "PERIODO": "II", "TOTAL_ALTAS": 30, "TOTAL_BAJAS": 524, "ORDEN": 4}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 4, "ANIO_MES": 202306, "PERIODO": "II", "TOTAL_ALTAS": 314611, "TOTAL_BAJAS": 462786, "ORDEN": 5}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 6, "ANIO_MES": 202306, "PERIODO": "II", "TOTAL_ALTAS": 131261, "TOTAL_BAJAS": 55322, "ORDEN": 11}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 6, "ANIO_MES": 202306, "PERIODO": "II", "TOTAL_ALTAS": 109, "TOTAL_BAJAS": 3622, "ORDEN": 12}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 6, "ANIO_MES": 202306, "PERIODO": "II", "TOTAL_ALTAS": 59969, "TOTAL_BAJAS": 147490, "ORDEN": 13}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 6, "ANIO_MES": 202306, "PERIODO": "II", "TOTAL_ALTAS": 14, "TOTAL_BAJAS": 333, "ORDEN": 14}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 6, "ANIO_MES": 202306, "PERIODO": "II", "TOTAL_ALTAS": 190431, "TOTAL_BAJAS": 509397, "ORDEN": 15}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 5, "ANIO_MES": 202306, "PERIODO": "II", "TOTAL_ALTAS": 119921, "TOTAL_BAJAS": 49174, "ORDEN": 6}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 5, "ANIO_MES": 202306, "PERIODO": "II", "TOTAL_ALTAS": 261, "TOTAL_BAJAS": 1806, "ORDEN": 7}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 5, "ANIO_MES": 202306, "PERIODO": "II", "TOTAL_ALTAS": 63706, "TOTAL_BAJAS": 145774, "ORDEN": 8}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 5, "ANIO_MES": 202306, "PERIODO": "II", "TOTAL_ALTAS": 4, "TOTAL_BAJAS": 1145, "ORDEN": 9}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 5, "ANIO_MES": 202306, "PERIODO": "II", "TOTAL_ALTAS": 198228, "TOTAL_BAJAS": 498196, "ORDEN": 10}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 7, "ANIO_MES": 202309, "PERIODO": "III", "TOTAL_ALTAS": 137161, "TOTAL_BAJAS": 65432, "ORDEN": 1}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 7, "ANIO_MES": 202309, "PERIODO": "III", "TOTAL_ALTAS": 39, "TOTAL_BAJAS": 3857, "ORDEN": 2}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 7, "ANIO_MES": 202309, "PERIODO": "III", "TOTAL_ALTAS": 64271, "TOTAL_BAJAS": 137965, "ORDEN": 3}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 7, "ANIO_MES": 202309, "PERIODO": "III", "TOTAL_ALTAS": 3721, "TOTAL_BAJAS": 737, "ORDEN": 4}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 7, "ANIO_MES": 202309, "PERIODO": "III", "TOTAL_ALTAS": 229492, "TOTAL_BAJAS": 505256, "ORDEN": 5}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 9, "ANIO_MES": 202309, "PERIODO": "III", "TOTAL_ALTAS": 129777, "TOTAL_BAJAS": 77548, "ORDEN": 11}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 9, "ANIO_MES": 202309, "PERIODO": "III", "TOTAL_ALTAS": 53, "TOTAL_BAJAS": 3410, "ORDEN": 12}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 9, "ANIO_MES": 202309, "PERIODO": "III", "TOTAL_ALTAS": 64412, "TOTAL_BAJAS": 138853, "ORDEN": 13}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 9, "ANIO_MES": 202309, "PERIODO": "III", "TOTAL_ALTAS": 103, "TOTAL_BAJAS": 438, "ORDEN": 14}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 9, "ANIO_MES": 202309, "PERIODO": "III", "TOTAL_ALTAS": 308991, "TOTAL_BAJAS": 408383, "ORDEN": 15}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 8, "ANIO_MES": 202309, "PERIODO": "III", "TOTAL_ALTAS": 140181, "TOTAL_BAJAS": 71310, "ORDEN": 6}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 8, "ANIO_MES": 202309, "PERIODO": "III", "TOTAL_ALTAS": 113, "TOTAL_BAJAS": 1229, "ORDEN": 7}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 8, "ANIO_MES": 202309, "PERIODO": "III", "TOTAL_ALTAS": 67248, "TOTAL_BAJAS": 139499, "ORDEN": 8}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 8, "ANIO_MES": 202309, "PERIODO": "III", "TOTAL_ALTAS": 2750, "TOTAL_BAJAS": 871, "ORDEN": 9}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 8, "ANIO_MES": 202309, "PERIODO": "III", "TOTAL_ALTAS": 264131, "TOTAL_BAJAS": 477204, "ORDEN": 10}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 9, "ANIO_MES": 202211, "PERIODO": null, "TOTAL_ALTAS": 13303, "TOTAL_BAJAS": 67162, "ORDEN": 1}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 9, "ANIO_MES": 202211, "PERIODO": null, "TOTAL_ALTAS": 284, "TOTAL_BAJAS": 4132, "ORDEN": 2}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 9, "ANIO_MES": 202211, "PERIODO": null, "TOTAL_ALTAS": 183660, "TOTAL_BAJAS": 113332, "ORDEN": 3}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 9, "ANIO_MES": 202211, "PERIODO": null, "TOTAL_ALTAS": 117, "TOTAL_BAJAS": 4781, "ORDEN": 4}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 9, "ANIO_MES": 202211, "PERIODO": null, "TOTAL_ALTAS": 362904, "TOTAL_BAJAS": 423579, "ORDEN": 5}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 9, "ANIO_MES": 202210, "PERIODO": null, "TOTAL_ALTAS": 13303, "TOTAL_BAJAS": 67163, "ORDEN": 6}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 9, "ANIO_MES": 202210, "PERIODO": null, "TOTAL_ALTAS": 284, "TOTAL_BAJAS": 4131, "ORDEN": 7}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 9, "ANIO_MES": 202210, "PERIODO": null, "TOTAL_ALTAS": 183660, "TOTAL_BAJAS": 113332, "ORDEN": 8}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 9, "ANIO_MES": 202210, "PERIODO": null, "TOTAL_ALTAS": 117, "TOTAL_BAJAS": 4781, "ORDEN": 9}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 9, "ANIO_MES": 202210, "PERIODO": null, "TOTAL_ALTAS": 362904, "TOTAL_BAJAS": 423579, "ORDEN": 10}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 8, "ANIO_MES": 202210, "PERIODO": null, "TOTAL_ALTAS": 13787, "TOTAL_BAJAS": 68653, "ORDEN": 1}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 8, "ANIO_MES": 202210, "PERIODO": null, "TOTAL_ALTAS": 184, "TOTAL_BAJAS": 15199, "ORDEN": 2}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 8, "ANIO_MES": 202210, "PERIODO": null, "TOTAL_ALTAS": 183586, "TOTAL_BAJAS": 104924, "ORDEN": 3}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 8, "ANIO_MES": 202210, "PERIODO": null, "TOTAL_ALTAS": 1580, "TOTAL_BAJAS": 1170, "ORDEN": 4}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 8, "ANIO_MES": 202210, "PERIODO": null, "TOTAL_ALTAS": 382890, "TOTAL_BAJAS": 850377, "ORDEN": 5}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 1, "ANIO_MES": 202603, "PERIODO": "I", "TOTAL_ALTAS": 22124, "TOTAL_BAJAS": 54080, "ORDEN": 1}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 1, "ANIO_MES": 202603, "PERIODO": "I", "TOTAL_ALTAS": 10, "TOTAL_BAJAS": 933, "ORDEN": 2}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 1, "ANIO_MES": 202603, "PERIODO": "I", "TOTAL_ALTAS": 124168, "TOTAL_BAJAS": 177548, "ORDEN": 3}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 1, "ANIO_MES": 202603, "PERIODO": "I", "TOTAL_ALTAS": 2, "TOTAL_BAJAS": 311, "ORDEN": 4}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 1, "ANIO_MES": 202603, "PERIODO": "I", "TOTAL_ALTAS": 98204, "TOTAL_BAJAS": 274969, "ORDEN": 5}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 2, "ANIO_MES": 202603, "PERIODO": "I", "TOTAL_ALTAS": 20608, "TOTAL_BAJAS": 48001, "ORDEN": 6}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 2, "ANIO_MES": 202603, "PERIODO": "I", "TOTAL_ALTAS": 17, "TOTAL_BAJAS": 887, "ORDEN": 7}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 2, "ANIO_MES": 202603, "PERIODO": "I", "TOTAL_ALTAS": 117783, "TOTAL_BAJAS": 162662, "ORDEN": 8}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 2, "ANIO_MES": 202603, "PERIODO": "I", "TOTAL_ALTAS": 1, "TOTAL_BAJAS": 66, "ORDEN": 9}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 2, "ANIO_MES": 202603, "PERIODO": "I", "TOTAL_ALTAS": 100103, "TOTAL_BAJAS": 253958, "ORDEN": 10}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 3, "ANIO_MES": 202603, "PERIODO": "I", "TOTAL_ALTAS": 19837, "TOTAL_BAJAS": 42648, "ORDEN": 11}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 3, "ANIO_MES": 202603, "PERIODO": "I", "TOTAL_ALTAS": 15, "TOTAL_BAJAS": 372, "ORDEN": 12}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 3, "ANIO_MES": 202603, "PERIODO": "I", "TOTAL_ALTAS": 130485, "TOTAL_BAJAS": 157081, "ORDEN": 13}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 3, "ANIO_MES": 202603, "PERIODO": "I", "TOTAL_ALTAS": 12, "TOTAL_BAJAS": 98, "ORDEN": 14}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 3, "ANIO_MES": 202603, "PERIODO": "I", "TOTAL_ALTAS": 118717, "TOTAL_BAJAS": 266126, "ORDEN": 15}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 8, "ANIO_MES": 202409, "PERIODO": "III", "TOTAL_ALTAS": 78484, "TOTAL_BAJAS": 94208, "ORDEN": 6}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 8, "ANIO_MES": 202409, "PERIODO": "III", "TOTAL_ALTAS": 152, "TOTAL_BAJAS": 3108, "ORDEN": 7}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 8, "ANIO_MES": 202409, "PERIODO": "III", "TOTAL_ALTAS": 105155, "TOTAL_BAJAS": 116068, "ORDEN": 8}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 8, "ANIO_MES": 202409, "PERIODO": "III", "TOTAL_ALTAS": 2, "TOTAL_BAJAS": 282, "ORDEN": 9}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 8, "ANIO_MES": 202409, "PERIODO": "III", "TOTAL_ALTAS": 365286, "TOTAL_BAJAS": 470961, "ORDEN": 10}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 9, "ANIO_MES": 202409, "PERIODO": "III", "TOTAL_ALTAS": 75511, "TOTAL_BAJAS": 96852, "ORDEN": 11}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 9, "ANIO_MES": 202409, "PERIODO": "III", "TOTAL_ALTAS": 60, "TOTAL_BAJAS": 1421, "ORDEN": 12}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 9, "ANIO_MES": 202409, "PERIODO": "III", "TOTAL_ALTAS": 99442, "TOTAL_BAJAS": 120554, "ORDEN": 13}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 9, "ANIO_MES": 202409, "PERIODO": "III", "TOTAL_ALTAS": 19, "TOTAL_BAJAS": 230, "ORDEN": 14}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 9, "ANIO_MES": 202409, "PERIODO": "III", "TOTAL_ALTAS": 370028, "TOTAL_BAJAS": 433733, "ORDEN": 15}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 7, "ANIO_MES": 202409, "PERIODO": "III", "TOTAL_ALTAS": 72559, "TOTAL_BAJAS": 102154, "ORDEN": 1}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 7, "ANIO_MES": 202409, "PERIODO": "III", "TOTAL_ALTAS": 242, "TOTAL_BAJAS": 4302, "ORDEN": 2}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 7, "ANIO_MES": 202409, "PERIODO": "III", "TOTAL_ALTAS": 108246, "TOTAL_BAJAS": 120223, "ORDEN": 3}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 7, "ANIO_MES": 202409, "PERIODO": "III", "TOTAL_ALTAS": 1, "TOTAL_BAJAS": 270, "ORDEN": 4}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 7, "ANIO_MES": 202409, "PERIODO": "III", "TOTAL_ALTAS": 417288, "TOTAL_BAJAS": 521980, "ORDEN": 5}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 3, "ANIO_MES": 202403, "PERIODO": "I", "TOTAL_ALTAS": 62479, "TOTAL_BAJAS": 102671, "ORDEN": 11}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 3, "ANIO_MES": 202403, "PERIODO": "I", "TOTAL_ALTAS": 76, "TOTAL_BAJAS": 1447, "ORDEN": 12}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 3, "ANIO_MES": 202403, "PERIODO": "I", "TOTAL_ALTAS": 106344, "TOTAL_BAJAS": 140180, "ORDEN": 13}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 3, "ANIO_MES": 202403, "PERIODO": "I", "TOTAL_ALTAS": 3, "TOTAL_BAJAS": 208, "ORDEN": 14}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 3, "ANIO_MES": 202403, "PERIODO": "I", "TOTAL_ALTAS": 441027, "TOTAL_BAJAS": 369832, "ORDEN": 15}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 2, "ANIO_MES": 202403, "PERIODO": "I", "TOTAL_ALTAS": 97821, "TOTAL_BAJAS": 96360, "ORDEN": 6}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 2, "ANIO_MES": 202403, "PERIODO": "I", "TOTAL_ALTAS": 67, "TOTAL_BAJAS": 3307, "ORDEN": 7}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 2, "ANIO_MES": 202403, "PERIODO": "I", "TOTAL_ALTAS": 65367, "TOTAL_BAJAS": 123326, "ORDEN": 8}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 2, "ANIO_MES": 202403, "PERIODO": "I", "TOTAL_ALTAS": 1, "TOTAL_BAJAS": 653, "ORDEN": 9}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 2, "ANIO_MES": 202403, "PERIODO": "I", "TOTAL_ALTAS": 359229, "TOTAL_BAJAS": 318405, "ORDEN": 10}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 1, "ANIO_MES": 202403, "PERIODO": "I", "TOTAL_ALTAS": 114223, "TOTAL_BAJAS": 97629, "ORDEN": 1}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 1, "ANIO_MES": 202403, "PERIODO": "I", "TOTAL_ALTAS": 77, "TOTAL_BAJAS": 1697, "ORDEN": 2}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 1, "ANIO_MES": 202403, "PERIODO": "I", "TOTAL_ALTAS": 65383, "TOTAL_BAJAS": 128520, "ORDEN": 3}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 1, "ANIO_MES": 202403, "PERIODO": "I", "TOTAL_ALTAS": 10, "TOTAL_BAJAS": 417, "ORDEN": 4}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 1, "ANIO_MES": 202403, "PERIODO": "I", "TOTAL_ALTAS": 414200, "TOTAL_BAJAS": 306735, "ORDEN": 5}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 5, "ANIO_MES": 202606, "PERIODO": "II", "TOTAL_ALTAS": 17812, "TOTAL_BAJAS": 34000, "ORDEN": 6}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 5, "ANIO_MES": 202606, "PERIODO": "II", "TOTAL_ALTAS": 17, "TOTAL_BAJAS": 403, "ORDEN": 7}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 5, "ANIO_MES": 202606, "PERIODO": "II", "TOTAL_ALTAS": 133872, "TOTAL_BAJAS": 150461, "ORDEN": 8}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 5, "ANIO_MES": 202606, "PERIODO": "II", "TOTAL_ALTAS": 0, "TOTAL_BAJAS": 86, "ORDEN": 9}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 5, "ANIO_MES": 202606, "PERIODO": "II", "TOTAL_ALTAS": 114723, "TOTAL_BAJAS": 240616, "ORDEN": 10}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 4, "ANIO_MES": 202606, "PERIODO": "II", "TOTAL_ALTAS": 17291, "TOTAL_BAJAS": 37653, "ORDEN": 1}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 4, "ANIO_MES": 202606, "PERIODO": "II", "TOTAL_ALTAS": 20, "TOTAL_BAJAS": 989, "ORDEN": 2}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 4, "ANIO_MES": 202606, "PERIODO": "II", "TOTAL_ALTAS": 130815, "TOTAL_BAJAS": 150207, "ORDEN": 3}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 4, "ANIO_MES": 202606, "PERIODO": "II", "TOTAL_ALTAS": 1, "TOTAL_BAJAS": 48, "ORDEN": 4}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 4, "ANIO_MES": 202606, "PERIODO": "II", "TOTAL_ALTAS": 108533, "TOTAL_BAJAS": 251902, "ORDEN": 5}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 6, "ANIO_MES": 202606, "PERIODO": "II", "TOTAL_ALTAS": 15911, "TOTAL_BAJAS": 33370, "ORDEN": 11}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 6, "ANIO_MES": 202606, "PERIODO": "II", "TOTAL_ALTAS": 22, "TOTAL_BAJAS": 713, "ORDEN": 12}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 6, "ANIO_MES": 202606, "PERIODO": "II", "TOTAL_ALTAS": 128579, "TOTAL_BAJAS": 151312, "ORDEN": 13}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 6, "ANIO_MES": 202606, "PERIODO": "II", "TOTAL_ALTAS": 21, "TOTAL_BAJAS": 466, "ORDEN": 14}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 6, "ANIO_MES": 202606, "PERIODO": "II", "TOTAL_ALTAS": 107646, "TOTAL_BAJAS": 184784, "ORDEN": 15}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 12, "ANIO_MES": 202412, "PERIODO": "IV", "TOTAL_ALTAS": 62963, "TOTAL_BAJAS": 91831, "ORDEN": 11}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 12, "ANIO_MES": 202412, "PERIODO": "IV", "TOTAL_ALTAS": 26, "TOTAL_BAJAS": 757, "ORDEN": 12}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 12, "ANIO_MES": 202412, "PERIODO": "IV", "TOTAL_ALTAS": 126028, "TOTAL_BAJAS": 126808, "ORDEN": 13}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 12, "ANIO_MES": 202412, "PERIODO": "IV", "TOTAL_ALTAS": 51, "TOTAL_BAJAS": 188, "ORDEN": 14}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 12, "ANIO_MES": 202412, "PERIODO": "IV", "TOTAL_ALTAS": 348833, "TOTAL_BAJAS": 467960, "ORDEN": 15}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 10, "ANIO_MES": 202412, "PERIODO": "IV", "TOTAL_ALTAS": 81120, "TOTAL_BAJAS": 100078, "ORDEN": 1}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 10, "ANIO_MES": 202412, "PERIODO": "IV", "TOTAL_ALTAS": 151, "TOTAL_BAJAS": 7403, "ORDEN": 2}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 10, "ANIO_MES": 202412, "PERIODO": "IV", "TOTAL_ALTAS": 109380, "TOTAL_BAJAS": 132161, "ORDEN": 3}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 10, "ANIO_MES": 202412, "PERIODO": "IV", "TOTAL_ALTAS": 5, "TOTAL_BAJAS": 190, "ORDEN": 4}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 10, "ANIO_MES": 202412, "PERIODO": "IV", "TOTAL_ALTAS": 386961, "TOTAL_BAJAS": 486459, "ORDEN": 5}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 11, "ANIO_MES": 202412, "PERIODO": "IV", "TOTAL_ALTAS": 69716, "TOTAL_BAJAS": 100235, "ORDEN": 6}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 11, "ANIO_MES": 202412, "PERIODO": "IV", "TOTAL_ALTAS": 57, "TOTAL_BAJAS": 1573, "ORDEN": 7}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 11, "ANIO_MES": 202412, "PERIODO": "IV", "TOTAL_ALTAS": 117185, "TOTAL_BAJAS": 138029, "ORDEN": 8}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 11, "ANIO_MES": 202412, "PERIODO": "IV", "TOTAL_ALTAS": 6, "TOTAL_BAJAS": 1229, "ORDEN": 9}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 11, "ANIO_MES": 202412, "PERIODO": "IV", "TOTAL_ALTAS": 326991, "TOTAL_BAJAS": 506328, "ORDEN": 10}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 12, "ANIO_MES": 202312, "PERIODO": "IV", "TOTAL_ALTAS": 110445, "TOTAL_BAJAS": 92956, "ORDEN": 11}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 12, "ANIO_MES": 202312, "PERIODO": "IV", "TOTAL_ALTAS": 84, "TOTAL_BAJAS": 2331, "ORDEN": 12}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 12, "ANIO_MES": 202312, "PERIODO": "IV", "TOTAL_ALTAS": 63320, "TOTAL_BAJAS": 127288, "ORDEN": 13}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 12, "ANIO_MES": 202312, "PERIODO": "IV", "TOTAL_ALTAS": 2, "TOTAL_BAJAS": 615, "ORDEN": 14}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 12, "ANIO_MES": 202312, "PERIODO": "IV", "TOTAL_ALTAS": 483144, "TOTAL_BAJAS": 314213, "ORDEN": 15}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 10, "ANIO_MES": 202312, "PERIODO": "IV", "TOTAL_ALTAS": 122123, "TOTAL_BAJAS": 80484, "ORDEN": 1}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 10, "ANIO_MES": 202312, "PERIODO": "IV", "TOTAL_ALTAS": 138, "TOTAL_BAJAS": 3644, "ORDEN": 2}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 10, "ANIO_MES": 202312, "PERIODO": "IV", "TOTAL_ALTAS": 64881, "TOTAL_BAJAS": 136627, "ORDEN": 3}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 10, "ANIO_MES": 202312, "PERIODO": "IV", "TOTAL_ALTAS": 52, "TOTAL_BAJAS": 784, "ORDEN": 4}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 10, "ANIO_MES": 202312, "PERIODO": "IV", "TOTAL_ALTAS": 369918, "TOTAL_BAJAS": 399596, "ORDEN": 5}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 11, "ANIO_MES": 202312, "PERIODO": "IV", "TOTAL_ALTAS": 117072, "TOTAL_BAJAS": 85668, "ORDEN": 6}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 11, "ANIO_MES": 202312, "PERIODO": "IV", "TOTAL_ALTAS": 120, "TOTAL_BAJAS": 3041, "ORDEN": 7}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 11, "ANIO_MES": 202312, "PERIODO": "IV", "TOTAL_ALTAS": 61229, "TOTAL_BAJAS": 129539, "ORDEN": 8}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 11, "ANIO_MES": 202312, "PERIODO": "IV", "TOTAL_ALTAS": 2, "TOTAL_BAJAS": 388, "ORDEN": 9}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 11, "ANIO_MES": 202312, "PERIODO": "IV", "TOTAL_ALTAS": 456549, "TOTAL_BAJAS": 400007, "ORDEN": 10}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 7, "ANIO_MES": 202109, "PERIODO": "III", "TOTAL_ALTAS": 10257, "TOTAL_BAJAS": 7110, "ORDEN": 1}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 7, "ANIO_MES": 202109, "PERIODO": "III", "TOTAL_ALTAS": 1185, "TOTAL_BAJAS": 15964, "ORDEN": 2}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 7, "ANIO_MES": 202109, "PERIODO": "III", "TOTAL_ALTAS": 175977, "TOTAL_BAJAS": 145128, "ORDEN": 3}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 7, "ANIO_MES": 202109, "PERIODO": "III", "TOTAL_ALTAS": 907, "TOTAL_BAJAS": 15320, "ORDEN": 4}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 7, "ANIO_MES": 202109, "PERIODO": "III", "TOTAL_ALTAS": 421294, "TOTAL_BAJAS": 498799, "ORDEN": 5}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 9, "ANIO_MES": 202109, "PERIODO": "III", "TOTAL_ALTAS": 12850, "TOTAL_BAJAS": 4539, "ORDEN": 11}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 9, "ANIO_MES": 202109, "PERIODO": "III", "TOTAL_ALTAS": 4103, "TOTAL_BAJAS": 10144, "ORDEN": 12}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 9, "ANIO_MES": 202109, "PERIODO": "III", "TOTAL_ALTAS": 158440, "TOTAL_BAJAS": 147951, "ORDEN": 13}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 9, "ANIO_MES": 202109, "PERIODO": "III", "TOTAL_ALTAS": 30, "TOTAL_BAJAS": 12293, "ORDEN": 14}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 9, "ANIO_MES": 202109, "PERIODO": "III", "TOTAL_ALTAS": 397686, "TOTAL_BAJAS": 400515, "ORDEN": 15}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 8, "ANIO_MES": 202109, "PERIODO": "III", "TOTAL_ALTAS": 8043, "TOTAL_BAJAS": 4442, "ORDEN": 6}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 8, "ANIO_MES": 202109, "PERIODO": "III", "TOTAL_ALTAS": 4545, "TOTAL_BAJAS": 15940, "ORDEN": 7}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 8, "ANIO_MES": 202109, "PERIODO": "III", "TOTAL_ALTAS": 162084, "TOTAL_BAJAS": 134007, "ORDEN": 8}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 8, "ANIO_MES": 202109, "PERIODO": "III", "TOTAL_ALTAS": 93, "TOTAL_BAJAS": 13455, "ORDEN": 9}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 8, "ANIO_MES": 202109, "PERIODO": "III", "TOTAL_ALTAS": 426990, "TOTAL_BAJAS": 456344, "ORDEN": 10}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 6, "ANIO_MES": 202208, "PERIODO": null, "TOTAL_ALTAS": 98502, "TOTAL_BAJAS": 52704, "ORDEN": 1}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 6, "ANIO_MES": 202208, "PERIODO": null, "TOTAL_ALTAS": 183, "TOTAL_BAJAS": 7052, "ORDEN": 2}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 6, "ANIO_MES": 202208, "PERIODO": null, "TOTAL_ALTAS": 91586, "TOTAL_BAJAS": 108104, "ORDEN": 3}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 6, "ANIO_MES": 202208, "PERIODO": null, "TOTAL_ALTAS": 75, "TOTAL_BAJAS": 2932, "ORDEN": 4}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 6, "ANIO_MES": 202208, "PERIODO": null, "TOTAL_ALTAS": 374070, "TOTAL_BAJAS": 545473, "ORDEN": 5}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 2, "ANIO_MES": 202503, "PERIODO": "I", "TOTAL_ALTAS": 56508, "TOTAL_BAJAS": 86980, "ORDEN": 6}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 2, "ANIO_MES": 202503, "PERIODO": "I", "TOTAL_ALTAS": 13, "TOTAL_BAJAS": 2961, "ORDEN": 7}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 2, "ANIO_MES": 202503, "PERIODO": "I", "TOTAL_ALTAS": 131713, "TOTAL_BAJAS": 135074, "ORDEN": 8}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 2, "ANIO_MES": 202503, "PERIODO": "I", "TOTAL_ALTAS": 3, "TOTAL_BAJAS": 214, "ORDEN": 9}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 2, "ANIO_MES": 202503, "PERIODO": "I", "TOTAL_ALTAS": 331483, "TOTAL_BAJAS": 461511, "ORDEN": 10}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 1, "ANIO_MES": 202503, "PERIODO": "I", "TOTAL_ALTAS": 61163, "TOTAL_BAJAS": 94500, "ORDEN": 1}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 1, "ANIO_MES": 202503, "PERIODO": "I", "TOTAL_ALTAS": 55, "TOTAL_BAJAS": 1005, "ORDEN": 2}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 1, "ANIO_MES": 202503, "PERIODO": "I", "TOTAL_ALTAS": 146695, "TOTAL_BAJAS": 136267, "ORDEN": 3}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 1, "ANIO_MES": 202503, "PERIODO": "I", "TOTAL_ALTAS": 5, "TOTAL_BAJAS": 1048, "ORDEN": 4}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 1, "ANIO_MES": 202503, "PERIODO": "I", "TOTAL_ALTAS": 366038, "TOTAL_BAJAS": 477920, "ORDEN": 5}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 3, "ANIO_MES": 202503, "PERIODO": "I", "TOTAL_ALTAS": 55624, "TOTAL_BAJAS": 91444, "ORDEN": 11}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 3, "ANIO_MES": 202503, "PERIODO": "I", "TOTAL_ALTAS": 19, "TOTAL_BAJAS": 1787, "ORDEN": 12}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 3, "ANIO_MES": 202503, "PERIODO": "I", "TOTAL_ALTAS": 159161, "TOTAL_BAJAS": 144532, "ORDEN": 13}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 3, "ANIO_MES": 202503, "PERIODO": "I", "TOTAL_ALTAS": 452, "TOTAL_BAJAS": 223, "ORDEN": 14}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 3, "ANIO_MES": 202503, "PERIODO": "I", "TOTAL_ALTAS": 392387, "TOTAL_BAJAS": 446297, "ORDEN": 15}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 12, "ANIO_MES": 202502, "PERIODO": null, "TOTAL_ALTAS": 62963, "TOTAL_BAJAS": 91829, "ORDEN": 11}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 12, "ANIO_MES": 202502, "PERIODO": null, "TOTAL_ALTAS": 26, "TOTAL_BAJAS": 759, "ORDEN": 12}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 12, "ANIO_MES": 202502, "PERIODO": null, "TOTAL_ALTAS": 126028, "TOTAL_BAJAS": 126808, "ORDEN": 13}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 12, "ANIO_MES": 202502, "PERIODO": null, "TOTAL_ALTAS": 51, "TOTAL_BAJAS": 188, "ORDEN": 14}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 12, "ANIO_MES": 202502, "PERIODO": null, "TOTAL_ALTAS": 348833, "TOTAL_BAJAS": 467960, "ORDEN": 15}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 1, "ANIO_MES": 202502, "PERIODO": null, "TOTAL_ALTAS": 61163, "TOTAL_BAJAS": 94500, "ORDEN": 1}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 1, "ANIO_MES": 202502, "PERIODO": null, "TOTAL_ALTAS": 55, "TOTAL_BAJAS": 1005, "ORDEN": 2}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 1, "ANIO_MES": 202502, "PERIODO": null, "TOTAL_ALTAS": 146695, "TOTAL_BAJAS": 136267, "ORDEN": 3}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 1, "ANIO_MES": 202502, "PERIODO": null, "TOTAL_ALTAS": 5, "TOTAL_BAJAS": 1048, "ORDEN": 4}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 1, "ANIO_MES": 202502, "PERIODO": null, "TOTAL_ALTAS": 366038, "TOTAL_BAJAS": 477920, "ORDEN": 5}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 2, "ANIO_MES": 202502, "PERIODO": null, "TOTAL_ALTAS": 56508, "TOTAL_BAJAS": 86980, "ORDEN": 6}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 2, "ANIO_MES": 202502, "PERIODO": null, "TOTAL_ALTAS": 13, "TOTAL_BAJAS": 2961, "ORDEN": 7}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 2, "ANIO_MES": 202502, "PERIODO": null, "TOTAL_ALTAS": 131713, "TOTAL_BAJAS": 135074, "ORDEN": 8}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 2, "ANIO_MES": 202502, "PERIODO": null, "TOTAL_ALTAS": 3, "TOTAL_BAJAS": 214, "ORDEN": 9}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 2, "ANIO_MES": 202502, "PERIODO": null, "TOTAL_ALTAS": 331483, "TOTAL_BAJAS": 461511, "ORDEN": 10}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 10, "ANIO_MES": 202411, "PERIODO": null, "TOTAL_ALTAS": 81120, "TOTAL_BAJAS": 100082, "ORDEN": 6}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 10, "ANIO_MES": 202411, "PERIODO": null, "TOTAL_ALTAS": 151, "TOTAL_BAJAS": 7399, "ORDEN": 7}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 10, "ANIO_MES": 202411, "PERIODO": null, "TOTAL_ALTAS": 109380, "TOTAL_BAJAS": 132166, "ORDEN": 8}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 10, "ANIO_MES": 202411, "PERIODO": null, "TOTAL_ALTAS": 5, "TOTAL_BAJAS": 185, "ORDEN": 9}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 10, "ANIO_MES": 202411, "PERIODO": null, "TOTAL_ALTAS": 386961, "TOTAL_BAJAS": 486459, "ORDEN": 10}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 9, "ANIO_MES": 202411, "PERIODO": null, "TOTAL_ALTAS": 75511, "TOTAL_BAJAS": 96850, "ORDEN": 1}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 9, "ANIO_MES": 202411, "PERIODO": null, "TOTAL_ALTAS": 60, "TOTAL_BAJAS": 1423, "ORDEN": 2}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 9, "ANIO_MES": 202411, "PERIODO": null, "TOTAL_ALTAS": 99442, "TOTAL_BAJAS": 120554, "ORDEN": 3}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 9, "ANIO_MES": 202411, "PERIODO": null, "TOTAL_ALTAS": 19, "TOTAL_BAJAS": 230, "ORDEN": 4}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 9, "ANIO_MES": 202411, "PERIODO": null, "TOTAL_ALTAS": 370028, "TOTAL_BAJAS": 433733, "ORDEN": 5}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 11, "ANIO_MES": 202411, "PERIODO": null, "TOTAL_ALTAS": 69716, "TOTAL_BAJAS": 100235, "ORDEN": 11}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 11, "ANIO_MES": 202411, "PERIODO": null, "TOTAL_ALTAS": 57, "TOTAL_BAJAS": 1573, "ORDEN": 12}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 11, "ANIO_MES": 202411, "PERIODO": null, "TOTAL_ALTAS": 117185, "TOTAL_BAJAS": 138029, "ORDEN": 13}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 11, "ANIO_MES": 202411, "PERIODO": null, "TOTAL_ALTAS": 6, "TOTAL_BAJAS": 1229, "ORDEN": 14}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 11, "ANIO_MES": 202411, "PERIODO": null, "TOTAL_ALTAS": 326991, "TOTAL_BAJAS": 506328, "ORDEN": 15}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 10, "ANIO_MES": 202512, "PERIODO": "IV", "TOTAL_ALTAS": 28191, "TOTAL_BAJAS": 59704, "ORDEN": 1}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 10, "ANIO_MES": 202512, "PERIODO": "IV", "TOTAL_ALTAS": 28, "TOTAL_BAJAS": 884, "ORDEN": 2}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 10, "ANIO_MES": 202512, "PERIODO": "IV", "TOTAL_ALTAS": 136920, "TOTAL_BAJAS": 173549, "ORDEN": 3}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 10, "ANIO_MES": 202512, "PERIODO": "IV", "TOTAL_ALTAS": 11, "TOTAL_BAJAS": 273, "ORDEN": 4}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 10, "ANIO_MES": 202512, "PERIODO": "IV", "TOTAL_ALTAS": 176990, "TOTAL_BAJAS": 439767, "ORDEN": 5}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 12, "ANIO_MES": 202512, "PERIODO": "IV", "TOTAL_ALTAS": 22712, "TOTAL_BAJAS": 54552, "ORDEN": 11}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 12, "ANIO_MES": 202512, "PERIODO": "IV", "TOTAL_ALTAS": 17, "TOTAL_BAJAS": 856, "ORDEN": 12}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 12, "ANIO_MES": 202512, "PERIODO": "IV", "TOTAL_ALTAS": 114789, "TOTAL_BAJAS": 174841, "ORDEN": 13}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 12, "ANIO_MES": 202512, "PERIODO": "IV", "TOTAL_ALTAS": 57, "TOTAL_BAJAS": 90, "ORDEN": 14}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 12, "ANIO_MES": 202512, "PERIODO": "IV", "TOTAL_ALTAS": 96935, "TOTAL_BAJAS": 323969, "ORDEN": 15}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 11, "ANIO_MES": 202512, "PERIODO": "IV", "TOTAL_ALTAS": 25249, "TOTAL_BAJAS": 58386, "ORDEN": 6}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 11, "ANIO_MES": 202512, "PERIODO": "IV", "TOTAL_ALTAS": 13, "TOTAL_BAJAS": 536, "ORDEN": 7}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 11, "ANIO_MES": 202512, "PERIODO": "IV", "TOTAL_ALTAS": 125385, "TOTAL_BAJAS": 173551, "ORDEN": 8}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 11, "ANIO_MES": 202512, "PERIODO": "IV", "TOTAL_ALTAS": 6, "TOTAL_BAJAS": 173, "ORDEN": 9}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 11, "ANIO_MES": 202512, "PERIODO": "IV", "TOTAL_ALTAS": 106857, "TOTAL_BAJAS": 459245, "ORDEN": 10}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 10, "ANIO_MES": 202410, "PERIODO": null, "TOTAL_ALTAS": 81120, "TOTAL_BAJAS": 100082, "ORDEN": 11}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 10, "ANIO_MES": 202410, "PERIODO": null, "TOTAL_ALTAS": 151, "TOTAL_BAJAS": 7399, "ORDEN": 12}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 10, "ANIO_MES": 202410, "PERIODO": null, "TOTAL_ALTAS": 109380, "TOTAL_BAJAS": 132166, "ORDEN": 13}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 10, "ANIO_MES": 202410, "PERIODO": null, "TOTAL_ALTAS": 5, "TOTAL_BAJAS": 185, "ORDEN": 14}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 10, "ANIO_MES": 202410, "PERIODO": null, "TOTAL_ALTAS": 386961, "TOTAL_BAJAS": 486459, "ORDEN": 15}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 8, "ANIO_MES": 202410, "PERIODO": null, "TOTAL_ALTAS": 78484, "TOTAL_BAJAS": 94208, "ORDEN": 1}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 8, "ANIO_MES": 202410, "PERIODO": null, "TOTAL_ALTAS": 152, "TOTAL_BAJAS": 3108, "ORDEN": 2}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 8, "ANIO_MES": 202410, "PERIODO": null, "TOTAL_ALTAS": 105155, "TOTAL_BAJAS": 116068, "ORDEN": 3}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 8, "ANIO_MES": 202410, "PERIODO": null, "TOTAL_ALTAS": 2, "TOTAL_BAJAS": 282, "ORDEN": 4}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 8, "ANIO_MES": 202410, "PERIODO": null, "TOTAL_ALTAS": 365286, "TOTAL_BAJAS": 470961, "ORDEN": 5}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 9, "ANIO_MES": 202410, "PERIODO": null, "TOTAL_ALTAS": 75511, "TOTAL_BAJAS": 96850, "ORDEN": 6}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 9, "ANIO_MES": 202410, "PERIODO": null, "TOTAL_ALTAS": 60, "TOTAL_BAJAS": 1423, "ORDEN": 7}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 9, "ANIO_MES": 202410, "PERIODO": null, "TOTAL_ALTAS": 99442, "TOTAL_BAJAS": 120554, "ORDEN": 8}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 9, "ANIO_MES": 202410, "PERIODO": null, "TOTAL_ALTAS": 19, "TOTAL_BAJAS": 230, "ORDEN": 9}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 9, "ANIO_MES": 202410, "PERIODO": null, "TOTAL_ALTAS": 370028, "TOTAL_BAJAS": 433733, "ORDEN": 10}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 2, "ANIO_MES": 202303, "PERIODO": "I", "TOTAL_ALTAS": 17632, "TOTAL_BAJAS": 44113, "ORDEN": 6}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 2, "ANIO_MES": 202303, "PERIODO": "I", "TOTAL_ALTAS": 222, "TOTAL_BAJAS": 4286, "ORDEN": 7}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 2, "ANIO_MES": 202303, "PERIODO": "I", "TOTAL_ALTAS": 138381, "TOTAL_BAJAS": 132884, "ORDEN": 8}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 2, "ANIO_MES": 202303, "PERIODO": "I", "TOTAL_ALTAS": 35, "TOTAL_BAJAS": 478, "ORDEN": 9}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 2, "ANIO_MES": 202303, "PERIODO": "I", "TOTAL_ALTAS": 264905, "TOTAL_BAJAS": 515112, "ORDEN": 10}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 1, "ANIO_MES": 202303, "PERIODO": "I", "TOTAL_ALTAS": 21105, "TOTAL_BAJAS": 50937, "ORDEN": 1}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 1, "ANIO_MES": 202303, "PERIODO": "I", "TOTAL_ALTAS": 193, "TOTAL_BAJAS": 2481, "ORDEN": 2}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 1, "ANIO_MES": 202303, "PERIODO": "I", "TOTAL_ALTAS": 161109, "TOTAL_BAJAS": 137599, "ORDEN": 3}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 1, "ANIO_MES": 202303, "PERIODO": "I", "TOTAL_ALTAS": 13, "TOTAL_BAJAS": 2105, "ORDEN": 4}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 1, "ANIO_MES": 202303, "PERIODO": "I", "TOTAL_ALTAS": 334971, "TOTAL_BAJAS": 403200, "ORDEN": 5}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 3, "ANIO_MES": 202303, "PERIODO": "I", "TOTAL_ALTAS": 16291, "TOTAL_BAJAS": 45493, "ORDEN": 11}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 3, "ANIO_MES": 202303, "PERIODO": "I", "TOTAL_ALTAS": 325, "TOTAL_BAJAS": 4139, "ORDEN": 12}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 3, "ANIO_MES": 202303, "PERIODO": "I", "TOTAL_ALTAS": 159868, "TOTAL_BAJAS": 142807, "ORDEN": 13}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 3, "ANIO_MES": 202303, "PERIODO": "I", "TOTAL_ALTAS": 2692, "TOTAL_BAJAS": 393, "ORDEN": 14}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 3, "ANIO_MES": 202303, "PERIODO": "I", "TOTAL_ALTAS": 288248, "TOTAL_BAJAS": 491294, "ORDEN": 15}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 10, "ANIO_MES": 202112, "PERIODO": "IV", "TOTAL_ALTAS": 88727, "TOTAL_BAJAS": 7364, "ORDEN": 1}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 10, "ANIO_MES": 202112, "PERIODO": "IV", "TOTAL_ALTAS": 3091, "TOTAL_BAJAS": 10246, "ORDEN": 2}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 10, "ANIO_MES": 202112, "PERIODO": "IV", "TOTAL_ALTAS": 93310, "TOTAL_BAJAS": 146455, "ORDEN": 3}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 10, "ANIO_MES": 202112, "PERIODO": "IV", "TOTAL_ALTAS": 74, "TOTAL_BAJAS": 14722, "ORDEN": 4}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 10, "ANIO_MES": 202112, "PERIODO": "IV", "TOTAL_ALTAS": 442644, "TOTAL_BAJAS": 480231, "ORDEN": 5}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 12, "ANIO_MES": 202112, "PERIODO": "IV", "TOTAL_ALTAS": 106514, "TOTAL_BAJAS": 18927, "ORDEN": 11}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 12, "ANIO_MES": 202112, "PERIODO": "IV", "TOTAL_ALTAS": 318, "TOTAL_BAJAS": 4985, "ORDEN": 12}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 12, "ANIO_MES": 202112, "PERIODO": "IV", "TOTAL_ALTAS": 82439, "TOTAL_BAJAS": 139367, "ORDEN": 13}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 12, "ANIO_MES": 202112, "PERIODO": "IV", "TOTAL_ALTAS": 343, "TOTAL_BAJAS": 5733, "ORDEN": 14}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 12, "ANIO_MES": 202112, "PERIODO": "IV", "TOTAL_ALTAS": 447206, "TOTAL_BAJAS": 456833, "ORDEN": 15}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Residencial", "MES": 11, "ANIO_MES": 202112, "PERIODO": "IV", "TOTAL_ALTAS": 98249, "TOTAL_BAJAS": 14894, "ORDEN": 6}, {"MODALIDAD": "Postpago", "SEGM_METOD_OLD": "Comercial", "MES": 11, "ANIO_MES": 202112, "PERIODO": "IV", "TOTAL_ALTAS": 653, "TOTAL_BAJAS": 7807, "ORDEN": 7}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Residencial", "MES": 11, "ANIO_MES": 202112, "PERIODO": "IV", "TOTAL_ALTAS": 88118, "TOTAL_BAJAS": 167004, "ORDEN": 8}, {"MODALIDAD": "Control", "SEGM_METOD_OLD": "Comercial", "MES": 11, "ANIO_MES": 202112, "PERIODO": "IV", "TOTAL_ALTAS": 151, "TOTAL_BAJAS": 22703, "ORDEN": 9}, {"MODALIDAD": "Prepago", "SEGM_METOD_OLD": "Residencial", "MES": 11, "ANIO_MES": 202112, "PERIODO": "IV", "TOTAL_ALTAS": 438017, "TOTAL_BAJAS": 462298, "ORDEN": 10}];
+
+const COLUMNAS = ["MODALIDAD", "SEGM_METOD_OLD", "MES", "ANIO_MES", "PERIODO", "TOTAL_ALTAS", "TOTAL_BAJAS", "ORDEN"];
+
+const DIMENSIONES = ["MODALIDAD", "SEGM_METOD_OLD"];
+
+const FECHAS = ["MES", "ANIO_MES", "PERIODO"];
+
+const METRICA = "TOTAL_ALTAS";
+
+const FILTROS = [{"campo": "MODALIDAD", "valores": ["Control", "Postpago", "Prepago"]}, {"campo": "SEGM_METOD_OLD", "valores": ["Comercial", "Residencial"]}, {"campo": "MES", "valores": ["1", "10", "11", "12", "2", "3", "4", "5", "6", "7", "8", "9"]}, {"campo": "ANIO_MES", "valores": ["202109", "202112", "202208", "202209", "202210", "202211", "202212", "202303", "202306", "202309", "202312", "202403", "202406", "202409", "202410", "202411", "202412", "202501", "202502", "202503", "202506", "202509", "202512", "202603", "202606"]}, {"campo": "PERIODO", "valores": ["I", "II", "III", "IV"]}];
+const ELEMENTOS = [];
+const METRICAS = ["TOTAL_ALTAS", "TOTAL_BAJAS", "ORDEN"];
+
+
+/* ==========================================================
+   ESTADO
+   ========================================================== */
+
+let datosFiltrados = [...DATOS];
+
+
+/* ==========================================================
+   CONFIGURACIÓN PLOTLY
+   ========================================================== */
+
+const CONFIG_PLOTLY = {
+
+    responsive: true,
+
+    displaylogo: false,
+
+    modeBarButtonsToRemove: [
+        "lasso2d",
+        "select2d"
+    ]
+};
+
+
+const LAYOUT_BASE = {
+
+    paper_bgcolor: "#ffffff",
+
+    plot_bgcolor: "#ffffff",
+
+    font: {
+
+        family:
+            "Segoe UI, Arial, sans-serif",
+
+        color:
+            "#536174"
+    },
+
+    margin: {
+
+        l: 55,
+
+        r: 20,
+
+        t: 15,
+
+        b: 55
+    },
+
+    hovermode:
+        "x unified",
+
+    xaxis: {
+
+        gridcolor:
+            "#edf1f6",
+
+        zerolinecolor:
+            "#edf1f6"
+    },
+
+    yaxis: {
+
+        gridcolor:
+            "#edf1f6",
+
+        zerolinecolor:
+            "#edf1f6"
+    }
+};
+
+
+/* ==========================================================
+   CONVERTIR VALOR
+   ========================================================== */
+
+function numero(valor) {
+
+    if (
+        valor === null ||
+        valor === undefined
+    ) {
+
+        return 0;
+    }
+
+    const n = Number(valor);
+
+    return isNaN(n)
+        ? 0
+        : n;
+}
+
+
+/* ==========================================================
+   AGRUPAR
+   ========================================================== */
+
+function agrupar(
+    datos,
+    campo,
+    metrica
+) {
+
+    const mapa = {};
+
+    datos.forEach(
+        function (fila) {
+
+            const clave =
+                String(
+                    fila[campo] ?? "Sin dato"
+                );
+
+            const valor =
+                numero(
+                    fila[metrica]
+                );
+
+            if (
+                !mapa[clave]
+            ) {
+
+                mapa[clave] = 0;
+            }
+
+            mapa[clave] += valor;
+
+        }
+    );
+
+    return Object.entries(
+        mapa
+    );
+}
+
+
+/* ==========================================================
+   CREAR FILTROS
+   ========================================================== */
+
+function crearFiltros() {
+
+    const contenedor =
+        document.getElementById(
+            "filtersGrid"
+        );
+
+    contenedor.innerHTML = "";
+
+    FILTROS.forEach(
+        function (filtro) {
+
+            const grupo =
+                document.createElement(
+                    "div"
+                );
+
+            grupo.className =
+                "filter-group";
+
+            const label =
+                document.createElement(
+                    "label"
+                );
+
+            label.textContent =
+                filtro.campo;
+
+            const select =
+                document.createElement(
+                    "select"
+                );
+
+            select.dataset.campo =
+                filtro.campo;
+
+            const todos =
+                document.createElement(
+                    "option"
+                );
+
+            todos.value = "";
+
+            todos.textContent =
+                "Todos";
+
+            select.appendChild(
+                todos
+            );
+
+            filtro.valores.forEach(
+                function (valor) {
+
+                    const option =
+                        document.createElement(
+                            "option"
+                        );
+
+                    option.value =
+                        valor;
+
+                    option.textContent =
+                        valor;
+
+                    select.appendChild(
+                        option
+                    );
+                }
+            );
+
+            select.addEventListener(
+                "change",
+                aplicarFiltros
+            );
+
+            grupo.appendChild(
+                label
+            );
+
+            grupo.appendChild(
+                select
+            );
+
+            contenedor.appendChild(
+                grupo
+            );
+
+        }
+    );
+}
+
+
+/* ==========================================================
+   APLICAR FILTROS
+   ========================================================== */
+
+function aplicarFiltros() {
+
+    const selects =
+        document.querySelectorAll(
+            "#filtersGrid select"
+        );
+
+    const activos = {};
+
+    selects.forEach(
+        function (select) {
+
+            if (select.value) {
+
+                activos[
+                    select.dataset.campo
+                ] = select.value;
+
+            }
+
+        }
+    );
+
+    datosFiltrados =
+        DATOS.filter(
+            function (fila) {
+
+                return Object.entries(
+                    activos
+                ).every(
+                    function ([campo, valor]) {
+
+                        return String(
+                            fila[campo]
+                        ) === valor;
+
+                    }
+                );
+
+            }
+        );
+
+    actualizarDashboard();
+}
+
+
+/* ==========================================================
+   RESET
+   ========================================================== */
+
+document
+    .getElementById(
+        "btnReset"
+    )
+    .addEventListener(
+        "click",
+        function () {
+
+            document
+                .querySelectorAll(
+                    "#filtersGrid select"
+                )
+                .forEach(
+                    function (select) {
+
+                        select.value = "";
+
+                    }
+                );
+
+            datosFiltrados =
+                [...DATOS];
+
+            actualizarDashboard();
+
+        }
+    );
+
+
+/* ==========================================================
+   KPIs
+   ========================================================== */
+
+function generarKPIs() {
+    const contenedor =
+        document.getElementById("kpiGrid");
+
+    contenedor.innerHTML = "";
+
+    const metricasDisponibles =
+        METRICAS.length
+            ? METRICAS
+            : (METRICA ? [METRICA] : []);
+
+    metricasDisponibles
+        .slice(0, 4)
+        .forEach(function(campo) {
+            const total =
+                datosFiltrados.reduce(
+                    function(suma, fila) {
+                        return suma +
+                            numero(
+                                fila[campo]
+                            );
+                    },
+                    0
+                );
+
+            const card =
+                document.createElement("div");
+
+            card.className =
+                "kpi-card";
+
+            card.innerHTML = `
+                <div class="kpi-label">
+                    ${tituloCampo(campo)}
+                </div>
+                <div class="kpi-value">
+                    ${formatoNumero(total)}
+                </div>
+                <div class="kpi-detail">
+                    Total calculado sobre los datos filtrados
+                </div>
+            `;
+
+            contenedor.appendChild(card);
+        });
+}
+
+/* ==========================================================
+   GRÁFICOS DINÁMICOS SEGÚN PLANNER
+   ========================================================== */
+
+function tituloCampo(campo) {
+    if (!campo) return "";
+    return String(campo)
+        .replace(/_/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+}
+
+function crearTarjetaGrafico(indice, elemento) {
+    const grid = document.getElementById("chartsGrid");
+
+    const card = document.createElement("div");
+    card.className = "chart-card";
+
+    const titulo = document.createElement("div");
+    titulo.className = "chart-title";
+    titulo.textContent =
+        elemento.titulo ||
+        (
+            tituloCampo(
+                elemento.eje_y ||
+                elemento.valor ||
+                elemento.metrica ||
+                METRICA
+            ) +
+            (
+                elemento.eje_x
+                    ? " por " + tituloCampo(elemento.eje_x)
+                    : ""
+            )
+        ) ||
+        "Visualización";
+
+    const subtitulo = document.createElement("div");
+    subtitulo.className = "chart-subtitle";
+    subtitulo.textContent =
+        elemento.tipo
+            ? "Tipo: " + elemento.tipo
+            : "Visualización generada automáticamente";
+
+    const chart = document.createElement("div");
+    chart.className = "chart";
+    chart.id = "chartDynamic_" + indice;
+
+    card.appendChild(titulo);
+    card.appendChild(subtitulo);
+    card.appendChild(chart);
+    grid.appendChild(card);
+
+    return chart;
+}
+
+function agruparTriple(datos, campoX, campoY, metrica) {
+    const mapa = {};
+
+    datos.forEach(function(fila) {
+        const x = String(fila[campoX] ?? "Sin dato");
+        const y = String(fila[campoY] ?? "Sin dato");
+        const clave = x + "|||" + y;
+
+        if (!mapa[clave]) {
+            mapa[clave] = 0;
+        }
+
+        mapa[clave] += numero(fila[metrica]);
+    });
+
+    return Object.entries(mapa).map(function(par) {
+        const partes = par[0].split("|||");
+        return {
+            x: partes[0],
+            y: partes[1],
+            valor: par[1]
+        };
+    });
+}
+
+function renderBarAgrupado(
+    contenedor,
+    campoX,
+    agrupacion,
+    metrica
+) {
+    const mapa = {};
+
+    datosFiltrados.forEach(function(fila) {
+        const x = String(fila[campoX] ?? "Sin dato");
+        const grupo = String(fila[agrupacion] ?? "Sin dato");
+
+        if (!mapa[grupo]) {
+            mapa[grupo] = {};
+        }
+
+        if (!mapa[grupo][x]) {
+            mapa[grupo][x] = 0;
+        }
+
+        mapa[grupo][x] += numero(fila[metrica]);
+    });
+
+    const categorias = [
+        ...new Set(
+            Object.values(mapa)
+                .flatMap(function(obj) {
+                    return Object.keys(obj);
+                })
+        )
+    ].slice(0, 20);
+
+    const traces = Object.keys(mapa).map(function(grupo) {
+        return {
+            x: categorias,
+            y: categorias.map(function(categoria) {
+                return mapa[grupo][categoria] || 0;
+            }),
+            type: "bar",
+            name: grupo
+        };
+    });
+
+    Plotly.react(
+        contenedor,
+        traces,
+        {
+            ...LAYOUT_BASE,
+            barmode: "group",
+            xaxis: {
+                automargin: true,
+                tickangle: -30
+            },
+            yaxis: {
+                title: metrica,
+                tickformat: ",.2s"
+            }
+        },
+        CONFIG_PLOTLY
+    );
+}
+
+function renderGrafico(elemento, contenedor) {
+    if (!elemento || !contenedor) return;
+
+    const tipo = String(
+        elemento.tipo || "bar"
+    ).toLowerCase();
+
+    const campoX =
+        elemento.eje_x ||
+        elemento.dimension ||
+        elemento.campo;
+
+    const campoY =
+        elemento.eje_y ||
+        elemento.metrica ||
+        elemento.valor ||
+        METRICA;
+
+    const agrupacion =
+        elemento.agrupacion;
+
+    if (
+        tipo === "kpi" ||
+        tipo === "table"
+    ) {
+        return;
+    }
+
+    if (
+        tipo === "heatmap"
+    ) {
+        const ejeX = elemento.eje_x;
+        const ejeY = elemento.eje_y;
+        const valor = elemento.valor || METRICA;
+
+        if (!ejeX || !ejeY || !valor) {
+            contenedor.innerHTML =
+                "<p style='padding:20px'>No hay campos suficientes para el mapa.</p>";
+            return;
+        }
+
+        const filas = agruparTriple(
+            datosFiltrados,
+            ejeX,
+            ejeY,
+            valor
+        );
+
+        const xValues = [
+            ...new Set(
+                filas.map(function(item) {
+                    return item.x;
+                })
+            )
+        ];
+
+        const yValues = [
+            ...new Set(
+                filas.map(function(item) {
+                    return item.y;
+                })
+            )
+        ];
+
+        const z = yValues.map(function(y) {
+            return xValues.map(function(x) {
+                const encontrado = filas.find(function(item) {
+                    return (
+                        item.x === x &&
+                        item.y === y
+                    );
+                });
+
+                return encontrado
+                    ? encontrado.valor
+                    : 0;
+            });
+        });
+
+        Plotly.react(
+            contenedor,
+            [{
+                x: xValues,
+                y: yValues,
+                z: z,
+                type: "heatmap",
+                hovertemplate:
+                    ejeX + ": %{x}<br>" +
+                    ejeY + ": %{y}<br>" +
+                    valor + ": %{z:,.0f}" +
+                    "<extra></extra>"
+            }],
+            {
+                ...LAYOUT_BASE,
+                xaxis: {
+                    automargin: true
+                },
+                yaxis: {
+                    automargin: true
+                }
+            },
+            CONFIG_PLOTLY
+        );
+
+        return;
+    }
+
+    if (!campoX) {
+        contenedor.innerHTML =
+            "<p style='padding:20px'>No existe una dimensión para esta visualización.</p>";
+        return;
+    }
+
+    if (
+        tipo === "line" &&
+        (!FECHAS.length ||
+         FECHAS.indexOf(campoX) === -1)
+    ) {
+        contenedor.innerHTML =
+            "<p style='padding:20px'>No se generó tendencia porque no existe un campo temporal válido.</p>";
+        return;
+    }
+
+    const agrupado = agrupar(
+        datosFiltrados,
+        campoX,
+        campoY
+    );
+
+    agrupado.sort(function(a, b) {
+        return b[1] - a[1];
+    });
+
+    const top = agrupado.slice(0, 20);
+
+    if (
+        tipo === "donut" ||
+        tipo === "pie"
+    ) {
+        Plotly.react(
+            contenedor,
+            [{
+                labels: top.map(function(item) {
+                    return item[0];
+                }),
+                values: top.map(function(item) {
+                    return item[1];
+                }),
+                type: "pie",
+                hole:
+                    tipo === "donut"
+                        ? 0.58
+                        : 0,
+                textinfo: "label+percent",
+                hovertemplate:
+                    "%{label}<br>" +
+                    campoY +
+                    ": %{value:,.0f}<br>" +
+                    "%{percent}<extra></extra>"
+            }],
+            {
+                ...LAYOUT_BASE,
+                showlegend: true,
+                legend: {
+                    orientation: "h",
+                    y: -0.08
+                }
+            },
+            CONFIG_PLOTLY
+        );
+
+        return;
+    }
+
+    if (tipo === "line") {
+        top.sort(function(a, b) {
+            return String(a[0]).localeCompare(
+                String(b[0]),
+                undefined,
+                { numeric: true }
+            );
+        });
+
+        Plotly.react(
+            contenedor,
+            [{
+                x: top.map(function(item) {
+                    return item[0];
+                }),
+                y: top.map(function(item) {
+                    return item[1];
+                }),
+                type: "scatter",
+                mode: "lines+markers",
+                line: {
+                    width: 3,
+                    shape: "spline"
+                },
+                marker: {
+                    size: 7
+                },
+                hovertemplate:
+                    "%{x}<br>" +
+                    campoY +
+                    ": %{y:,.0f}<extra></extra>"
+            }],
+            {
+                ...LAYOUT_BASE,
+                showlegend: false
+            },
+            CONFIG_PLOTLY
+        );
+
+        return;
+    }
+
+    if (
+        agrupacion &&
+        agrupacion !== campoX
+    ) {
+        renderBarAgrupado(
+            contenedor,
+            campoX,
+            agrupacion,
+            campoY
+        );
+        return;
+    }
+
+    Plotly.react(
+        contenedor,
+        [{
+            x: top.map(function(item) {
+                return item[0];
+            }),
+            y: top.map(function(item) {
+                return item[1];
+            }),
+            type: "bar",
+            hovertemplate:
+                "%{x}<br>" +
+                campoY +
+                ": %{y:,.0f}<extra></extra>"
+        }],
+        {
+            ...LAYOUT_BASE,
+            showlegend: false,
+            xaxis: {
+                automargin: true,
+                tickangle: -30
+            },
+            yaxis: {
+                title: campoY,
+                tickformat: ",.2s"
+            }
+        },
+        CONFIG_PLOTLY
+    );
+}
+
+function generarGraficos() {
+    const grid =
+        document.getElementById("chartsGrid");
+
+    grid.innerHTML = "";
+
+    const elementosGraficos =
+        ELEMENTOS.filter(function(elemento) {
+            const tipo =
+                String(
+                    elemento.tipo || ""
+                ).toLowerCase();
+
+            return (
+                tipo !== "kpi" &&
+                tipo !== "table"
+            );
+        });
+
+    if (elementosGraficos.length) {
+        elementosGraficos.forEach(
+            function(elemento, indice) {
+                const contenedor =
+                    crearTarjetaGrafico(
+                        indice,
+                        elemento
+                    );
+
+                renderGrafico(
+                    elemento,
+                    contenedor
+                );
+            }
+        );
+
+        return;
+    }
+
+    // Fallback mínimo: solamente si el Planner no entregó
+    // elementos visuales. Nunca crea una tendencia sin fechas.
+    if (
+        DIMENSIONES.length &&
+        METRICA
+    ) {
+        const elemento = {
+            tipo: "bar",
+            eje_x: DIMENSIONES[0],
+            eje_y: METRICA,
+            titulo:
+                tituloCampo(METRICA) +
+                " por " +
+                tituloCampo(DIMENSIONES[0])
+        };
+
+        const contenedor =
+            crearTarjetaGrafico(
+                0,
+                elemento
+            );
+
+        renderGrafico(
+            elemento,
+            contenedor
+        );
+    }
+}
+
+/* ==========================================================
+   TABLA
+   ========================================================== */
+
+function generarTabla() {
+
+    const head =
+        document.getElementById(
+            "tableHead"
+        );
+
+    const body =
+        document.getElementById(
+            "tableBody"
+        );
+
+    const info =
+        document.getElementById(
+            "tableInfo"
+        );
+
+    head.innerHTML = "";
+
+    body.innerHTML = "";
+
+    const filaHead =
+        document.createElement(
+            "tr"
+        );
+
+    const columnasTabla =
+        [...DIMENSIONES, ...METRICAS]
+            .filter(function(valor, indice, arreglo) {
+                return (
+                    valor &&
+                    arreglo.indexOf(valor) === indice
+                );
+            });
+
+    const columnasMostrar =
+        columnasTabla.length
+            ? columnasTabla
+            : COLUMNAS;
+
+    columnasMostrar.forEach(
+        function (columna) {
+
+            const th =
+                document.createElement(
+                    "th"
+                );
+
+            th.textContent =
+                columna;
+
+            filaHead.appendChild(
+                th
+            );
+
+        }
+    );
+
+    head.appendChild(
+        filaHead
+    );
+
+
+    /*
+     * Mostramos máximo 100 registros
+     * en la vista inicial.
+     */
+
+    const filas =
+        datosFiltrados.slice(
+            0,
+            100
+        );
+
+    filas.forEach(
+        function (fila) {
+
+            const tr =
+                document.createElement(
+                    "tr"
+                );
+
+            const columnasTabla =
+        [...DIMENSIONES, ...METRICAS]
+            .filter(function(valor, indice, arreglo) {
+                return (
+                    valor &&
+                    arreglo.indexOf(valor) === indice
+                );
+            });
+
+    const columnasMostrar =
+        columnasTabla.length
+            ? columnasTabla
+            : COLUMNAS;
+
+    columnasMostrar.forEach(
+                function (columna) {
+
+                    const td =
+                        document.createElement(
+                            "td"
+                        );
+
+                    const valor =
+                        fila[columna];
+
+                    if (
+                        typeof valor ===
+                        "number"
+                    ) {
+
+                        td.textContent =
+                            valor.toLocaleString(
+                                "es-PE",
+                                {
+                                    maximumFractionDigits: 2
+                                }
+                            );
+
+                    }
+                    else {
+
+                        td.textContent =
+                            valor ?? "";
+
+                    }
+
+                    tr.appendChild(
+                        td
+                    );
+
+                }
+            );
+
+            body.appendChild(
+                tr
+            );
+
+        }
+    );
+
+    info.textContent =
+        "Mostrando " +
+        filas.length +
+        " de " +
+        datosFiltrados.length +
+        " registros";
+}
+
+
+/* ==========================================================
+   ACTUALIZAR TODO
+   ========================================================== */
+
+function actualizarDashboard() {
+
+    generarKPIs();
+
+    generarGraficos();
+
+    generarTabla();
+}
+
+
+/* ==========================================================
+   INICIO
+   ========================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        crearFiltros();
+
+        actualizarDashboard();
+
+    }
+);
+
+</script>
+
+</body>
+
+</html>

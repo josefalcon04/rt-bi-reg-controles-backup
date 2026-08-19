@@ -41,7 +41,39 @@ from app.servicios.dashboard_builder import DashboardBuilder
 
 
 class AgenteDashboard:
+        # ========================================================
+    # INTERFAZ ESTÁNDAR DEL ROUTER
+    # ========================================================
 
+    def execute(
+        self,
+        pregunta=None,
+        memoria=None,
+        consulta=None
+    ):
+        """
+        Punto de entrada estándar utilizado por Router.
+        
+        AgenteDashboard mantiene su lógica interna en
+        procesar(), por lo que execute() funciona como
+        adaptador para mantener compatibilidad con todos
+        los agentes del sistema.
+        """
+
+        # El Router normalmente enviará pregunta=
+        texto = pregunta
+
+        # Compatibilidad si algún flujo utiliza consulta=
+        if texto is None:
+            texto = consulta
+
+        if texto is None:
+            texto = ""
+
+        return self.procesar(
+            texto
+        )
+    
     # ========================================================
     # INIT
     # ========================================================
