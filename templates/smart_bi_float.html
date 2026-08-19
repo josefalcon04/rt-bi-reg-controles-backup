@@ -1,0 +1,170 @@
+<!-- ============================================================
+     SMART BI ASSISTANT - FLOAT INDEPENDIENTE
+     ============================================================ -->
+
+<div id="smartBiFloat" class="sbia-root">
+
+    <!-- BOTÓN FLOTANTE -->
+    <button
+        id="sbiaButton"
+        class="sbia-button"
+        type="button"
+        title="Abrir Smart BI Assistant"
+        aria-label="Abrir Smart BI Assistant"
+    >
+        🤖
+    </button>
+
+
+    <!-- VENTANA DEL CHAT -->
+    <section
+        id="sbiaWindow"
+        class="sbia-window"
+        aria-hidden="true"
+    >
+
+        <!-- HEADER -->
+        <header class="sbia-header">
+
+            <div class="sbia-brand">
+
+                <div class="sbia-avatar">
+                    🤖
+                </div>
+
+                <div class="sbia-brand-text">
+
+                    <strong>
+                        Smart BI Assistant
+                    </strong>
+
+                    <span>
+                        Asistente Inteligente BI
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="sbia-actions">
+
+                <button
+                    id="sbiaMinimize"
+                    class="sbia-header-button"
+                    type="button"
+                    title="Minimizar"
+                >
+                    −
+                </button>
+
+                <button
+                    id="sbiaMaximize"
+                    class="sbia-header-button"
+                    type="button"
+                    title="Maximizar"
+                >
+                    □
+                </button>
+
+                <button
+                    id="sbiaClose"
+                    class="sbia-header-button sbia-close"
+                    type="button"
+                    title="Cerrar"
+                >
+                    ×
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- SUBTÍTULO -->
+        <div class="sbia-subtitle">
+            Documentación · Reportes · Inputs · SQL · IA
+        </div>
+
+
+        <!-- MENSAJES -->
+        <main
+            id="sbiaMessages"
+            class="sbia-messages"
+        >
+
+            <div class="sbia-message sbia-message-bot">
+
+                <div class="sbia-message-avatar">
+                    🤖
+                </div>
+
+                <div class="sbia-bubble">
+
+                    👋 Hola, soy tu
+                    <strong>Smart BI Assistant</strong>.
+
+                    <br><br>
+
+                    Puedo ayudarte con:
+
+                    <ul>
+                        <li>📚 Documentación</li>
+                        <li>📊 Reportes</li>
+                        <li>📥 Inputs</li>
+                        <li>🗄️ Consultas SQL</li>
+                        <li>📈 Dashboards</li>
+                        <li>🤖 Inteligencia Artificial</li>
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </main>
+
+
+        <!-- ESTADO -->
+        <div
+            id="sbiaStatus"
+            class="sbia-status"
+        >
+            <span class="sbia-status-dot"></span>
+            Listo para ayudarte
+        </div>
+
+
+        <!-- INPUT -->
+        <form
+            id="sbiaForm"
+            class="sbia-input-area"
+        >
+
+            <textarea
+                id="sbiaInput"
+                rows="1"
+                maxlength="4000"
+                placeholder="Escribe tu consulta..."
+                autocomplete="off"
+            ></textarea>
+
+            <button
+                id="sbiaSend"
+                class="sbia-send"
+                type="submit"
+                title="Enviar"
+            >
+                ➤
+            </button>
+
+        </form>
+
+
+        <!-- FOOTER -->
+        <footer class="sbia-footer">
+            Enter para enviar · Shift + Enter para nueva línea
+        </footer>
+
+    </section>
+
+</div>

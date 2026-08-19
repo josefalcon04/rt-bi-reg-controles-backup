@@ -1,102 +1,173 @@
-# app/servicios/ollama_service.py
+# ============================================================
+# SERVICIO OLLAMA
+# ============================================================
 
 import os
 import requests
 
 
-OLLAMA_URL = os.getenv(
-    "OLLAMA_URL",
-    "http://localhost:11434/api/generate"
-)
-
-MODELO = os.getenv(
-    "OLLAMA_MODEL",
-    "qwen2.5-coder:7b"
-)
-
-
-PROMPT_BASE = """
-Eres BI Assistant Senior.
-
-Fuiste creado por Jose Luis Falcon Flores.
-
-Especialidades:
-
-- Netezza
-- Oracle SQL
-- Shell Unix
-- Python
-- Flask
-- ETL
-- Data Warehouse
-- BI
-- Reportes regulatorios
-
-Reglas:
-
-- Responde siempre en español.
-- Sé claro y profesional.
-- Usa únicamente el contexto proporcionado cuando exista.
-- Si la respuesta no aparece en el contexto, indícalo explícitamente.
-"""
-
-
 class OllamaService:
 
-
     def __init__(self):
-        self.url = OLLAMA_URL
-        self.modelo = MODELO
 
+        self.url = os.getenv(
+            "OLLAMA_URL",
+            "http://localhost:11434/api/generate"
+        )
+
+        self.modelo = os.getenv(
+            "OLLAMA_MODEL",
+            "qwen2.5-coder:7b"
+            #"granite3.3:8b"
+            #"qwen2.5-coder:3b"
+        )
+
+        self.timeout = int(
+            os.getenv(
+                "OLLAMA_TIMEOUT",
+                "180"
+            )
+        )
+
+    # ============================================================
+    # LLAMAR A OLLAMA
+    # ============================================================
 
     def llamar(
         self,
         pregunta,
         contexto="",
-        memoria="",
-        conocimiento="",
-        system_prompt=PROMPT_BASE
+        system_prompt="",
+        modelo=None
     ):
 
-        prompt = f"""
-{system_prompt}
+        # Si se especifica un modelo para esta llamada,
+        # se utiliza ese modelo.
+        # Si no, se mantiene el modelo principal.
+        modelo_usar = modelo or self.modelo
 
-=== MEMORIA ===
-{memoria}
+        prompt = self._construir_prompt(
+            pregunta=pregunta,
+            contexto=contexto,
+            system_prompt=system_prompt
+        )
 
-=== CONOCIMIENTO ===
-{conocimiento}
+        print(
+            f"[OLLAMA] Modelo: {modelo_usar}"
+        )
 
-=== CONTEXTO ===
-{contexto}
+        print(
+            f"[OLLAMA] Prompt: {len(prompt)} caracteres"
+        )
 
-=== PREGUNTA ===
-{pregunta}
-"""
+        payload = {
+            "model": modelo_usar,
+            "prompt": prompt,
+            "stream": False
+        }
 
+        try:
 
-        print(f"[OLLAMA] Modelo: {self.modelo}")
-        print(f"[OLLAMA] Prompt: {len(prompt)} caracteres")
+            response = requests.post(
+                self.url,
+                json=payload,
+                timeout=self.timeout
+            )
 
+            response.raise_for_status()
 
-        r = requests.post(
-            self.url,
-            json={
-                "model": self.modelo,
-                "prompt": prompt,
-                "stream": False,
-                "keep_alive": "15m",
-                "options": {
-                    "num_predict": 150,
-                    "temperature": 0.1,
-                    "top_p": 0.9,
-                    "num_ctx": 4096
-                }
-            },
-            timeout=300
+            data = response.json()
+
+            respuesta = data.get(
+                "response",
+                ""
+            )
+
+            if respuesta is None:
+                respuesta = ""
+
+            return str(
+                respuesta
+            ).strip()
+
+        except requests.exceptions.Timeout:
+
+            print(
+                "[OLLAMA ERROR] Timeout esperando respuesta de Ollama"
+            )
+
+            raise Exception(
+                "Ollama tardó demasiado en responder."
+            )
+
+        except requests.exceptions.ConnectionError:
+
+            print(
+                "[OLLAMA ERROR] No se pudo conectar con Ollama"
+            )
+
+            raise Exception(
+                "No se pudo conectar con Ollama. "
+                "Verifica que el servicio esté ejecutándose."
+            )
+
+        except requests.exceptions.HTTPError as e:
+
+            print(
+                f"[OLLAMA ERROR] Error HTTP: {e}"
+            )
+
+            raise Exception(
+                f"Error HTTP de Ollama: {e}"
+            )
+
+        except Exception as e:
+
+            print(
+                f"[OLLAMA ERROR] {str(e)}"
+            )
+
+            raise
+
+    # ============================================================
+    # CONSTRUIR PROMPT
+    # ============================================================
+
+    def _construir_prompt(
+        self,
+        pregunta,
+        contexto="",
+        system_prompt=""
+    ):
+
+        partes = []
+
+        if system_prompt:
+
+            partes.append(
+                "INSTRUCCIONES DEL SISTEMA:\n"
+                + str(system_prompt).strip()
+            )
+
+        if contexto:
+
+            partes.append(
+                "CONTEXTO:\n"
+                + str(contexto).strip()
+            )
+
+        partes.append(
+            "PREGUNTA:\n"
+            + str(pregunta).strip()
+        )
+
+        return "\n\n".join(
+            partes
         )
 
 
-        r.raise_for_status()
+# ============================================================
+# INSTANCIA GLOBAL
+# ============================================================
 
-        return r.json().get("response", "")
+ollama_service = OllamaService()

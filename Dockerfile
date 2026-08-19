@@ -15,6 +15,8 @@ RUN mkdir -p /app/static/img \
     && chmod -R 777 /app/data \
     && chmod -R 777 /app/app/documentacion/templates/documentos
 
+#RUN pip install --no-cache-dir -r requirements.txt
+
 # Cache de Matplotlib
 ENV MPLCONFIGDIR=/tmp/matplotlib
 

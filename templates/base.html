@@ -65,12 +65,15 @@
 
 
     <!-- =====================================================
-         CSS CHATBOX FLOTANTE
+         SMART BI ASSISTANT
+         NUEVO CHAT FLOTANTE INDEPENDIENTE
          ===================================================== -->
 
     <link rel="stylesheet"
-        href="{{ url_for('static', filename='css/chat_float.css') }}">
+        href="{{ url_for('static', filename='css/smart_bi_float.css') }}">
 
+    <link rel="stylesheet"
+      href="{{ url_for('static', filename='css/agent_flow.css') }}">    
 
     <!-- =====================================================
          CSS ESPECÍFICOS DE MÓDULOS
@@ -80,9 +83,6 @@
 
     <link rel="stylesheet"
         href="{{ url_for('static', filename='css/devoluciones.css') }}">
-
-    <link rel="stylesheet"
-        href="{{ url_for('static', filename='css/agent_flow.css') }}">
 
     {% endblock %}
 
@@ -657,41 +657,23 @@
 
 </div>
 
+
 <!-- =========================================================
      SMART BI ASSISTANT
-     CHAT FLOTANTE
+     NUEVO CHAT FLOTANTE
      ========================================================= -->
 
 {% set permisos_usuario = session.get("permisos", []) %}
 
 {% if "CHAT" in permisos_usuario %}
 
-<div id="smartBiChat" class="smart-bi-chat">
-
-    {% include 'chatbox.html' %}
-
-</div>
-
-
-<button
-    type="button"
-    id="chatOpenButton"
-    class="chat-open-button"
-    title="Abrir Smart BI Assistant"
->
-    🤖
-</button>
-
-
-<!-- =========================================================
-     JAVASCRIPT SMART BI ASSISTANT
-     ========================================================= -->
-
-<script
-    src="{{ url_for('static', filename='js/chat_float.js') }}?v=10">
-</script>
+    {% include 'smart_bi_float.html' %}
 
 {% endif %}
+
+<script
+    src="{{ url_for('static', filename='js/agent_flow.js') }}">
+</script>
 
 <!-- =========================================================
      JAVASCRIPT PRINCIPAL
@@ -715,6 +697,20 @@
 <script
     src="{{ url_for('static', filename='js/password.js') }}">
 </script>
+
+
+<!-- =========================================================
+     SMART BI ASSISTANT
+     JAVASCRIPT INDEPENDIENTE
+     ========================================================= -->
+
+{% if "CHAT" in permisos_usuario %}
+
+<script
+    src="{{ url_for('static', filename='js/smart_bi_float.js') }}">
+</script>
+
+{% endif %}
 
 
 <!-- =========================================================
@@ -1051,14 +1047,11 @@
 
                 <h5 class="modal-title text-dark">
 
-
                     <i
                         class="fa-solid fa-triangle-exclamation"
                     ></i>
 
-
                     Sesión por expirar
-
 
                 </h5>
 
@@ -1071,7 +1064,6 @@
 
                 <div class="mb-3">
 
-
                     <i
                         class="fa-solid fa-user-clock"
                         style="
@@ -1079,7 +1071,6 @@
                             color:#f59e0b
                         "
                     ></i>
-
 
                 </div>
 

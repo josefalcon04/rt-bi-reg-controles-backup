@@ -11,6 +11,7 @@ class DocumentacionService:
 
         self.docs_path = os.path.join(
             os.getcwd(),
+            "app",
             "documentacion",
             "templates",
             "documentos"
