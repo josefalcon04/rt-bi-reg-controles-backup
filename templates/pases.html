@@ -1,183 +1,417 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pases - Regulatorio</title>
+{% extends "base.html" %}
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/pases.css') }}">
-</head>
+{% block contenido %}
+<style>
+    /* --- ESTILOS DE CABECERA Y BARRA LATERAL --- */
+    .page-title {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 24px;
+        color: #333;
+    }
 
-<body>
+    .contenedor-principal {
+        display: flex;
+        gap: 20px;
+        width: 100%;
+        align-items: flex-start;
+    }
 
-<!-- 🔥 IMPORTANTE: CONTENEDOR LIMPIO -->
-<div class="content">
+    .contenido-tabla {
+        flex: 3;
+    }
+        /* --- ESTILO DE TABLA ADAPTATIVO Y LEGIBLE --- */
+        .tabla-contenedor {
+            width: 100%;
+            overflow-x: auto;
+            background: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            margin-bottom: 15px;
+        }
 
-    <!-- WRAPPER INTERNO (evita desplazamientos raros) -->
-    <div class="pases-page">
+        #tablaPases {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            table-layout: auto; /* Permite que se distribuya mejor el espacio */
+        }
 
-        <h1 class="page-title">⚡ Gestión de Pases</h1>
+        #tablaPases thead th {
+            background: #f8f9fa;
+            color: #333;
+            padding: 12px 10px;
+            font-weight: 600;
+            border-bottom: 2px solid #dee2e6;
+            border-right: 1px solid #e9ecef;
+            text-align: left;
+            position: relative;
+            user-select: none;
+            vertical-align: middle;
+        }
 
-        <!-- BARRA DE ACCIONES -->
-        <div class="actions-bar">
+        #tablaPases tbody td {
+            padding: 10px 10px;
+            border-bottom: 1px solid #e9ecef;
+            border-right: 1px solid #f1f3f5;
+            color: #333;
+            vertical-align: middle;
+            word-break: break-word; /* Permite que el texto baje ordenadamente sin romper la tabla */
+        }
 
-            <div class="actions-left">                
+        #tablaPases tbody tr:hover {
+            background-color: #f8f9fa;
+        }
 
-                <a href="#" class="btn-action btn-new" onclick="cargarContenido('/pases/form')">➕ Nuevo</a>
+        /* Anchos específicos recomendados para ver toda la info cómodamente */
+        #tablaPases th:nth-child(1), #tablaPases td:nth-child(1) { width: 90px; }   /* ID */
+        #tablaPases th:nth-child(2), #tablaPases td:nth-child(2) { width: 110px; }  /* Fecha Sistema */
+        #tablaPases th:nth-child(3), #tablaPases td:nth-child(3) { width: 90px; }   /* Fecha */
+        #tablaPases th:nth-child(4), #tablaPases td:nth-child(4) { width: 140px; }  /* Proceso */
+        #tablaPases th:nth-child(5), #tablaPases td:nth-child(5) { width: 180px; }  /* Nombre Proceso */
+        #tablaPases th:nth-child(6), #tablaPases td:nth-child(6) { width: 100px; }  /* CTI */
+        #tablaPases th:nth-child(7), #tablaPases td:nth-child(7) { width: 90px; }   /* Tinkuy */
+        #tablaPases th:nth-child(8), #tablaPases td:nth-child(8) { width: 110px; }  /* Documentacion */
+        #tablaPases th:nth-child(9), #tablaPases td:nth-child(9) { width: 95px; }   /* Tipo */
+        #tablaPases th:nth-child(10), #tablaPases td:nth-child(10) { width: 110px; } /* Desarrollador BI */
+        #tablaPases th:nth-child(11), #tablaPases td:nth-child(11) { width: 100px; } /* Lider */
+        #tablaPases th:nth-child(12), #tablaPases td:nth-child(12) { width: 100px; } /* Responsable */
+        #tablaPases th:nth-child(13), #tablaPases td:nth-child(13) { width: 120px; text-align: center; } /* Acciones */
 
-                <a href="/pases/exportar/csv" class="btn-action btn-csv">⬇ CSV</a>
+        /* --- ESTILOS EJECUTIVOS PARA LOS BOTONES SUPERIORES --- */
+    .actions-left {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
 
-                <a href="/pases/exportar/excel" class="btn-action btn-excel">📊 Excel</a>
+    .btn-exec {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 6px 12px;
+        font-size: 12px;
+        font-weight: 500;
+        border-radius: 4px;
+        color: #fff !important;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        transition: opacity 0.2s, background-color 0.2s;
+    }
 
-                <form action="/pases/importar" method="POST" enctype="multipart/form-data" class="import-form">
-                    <input type="file" name="file" id="fileInput" hidden onchange="this.form.submit()">
-                    <button type="button" class="btn-action btn-import"
-                        onclick="document.getElementById('fileInput').click()">
-                        📤 Importar
-                    </button>
-                </form>
+    .btn-exec:hover {
+        opacity: 0.88;
+    }
 
+    .btn-exec-new { background-color: #0d6efd; }    /* Verde ejecutivo */
+    .btn-exec-csv { background-color: #1ded8c; color: #000 !important; } /* Celeste claro */
+    .btn-exec-excel { background-color: #065d43; }  /* Verde agua */
+    .btn-exec-import { background-color: #6c757d; } /* Gris plomo */
+
+    /* --- ESTILOS MODERNOS PARA LOS BOTONES DE ACCIÓN (ESTILO IMAGEN) --- */
+    .acciones {
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    .btn-edit-modern, .btn-delete-modern {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 5px 10px;
+        font-size: 11px;
+        font-weight: 500;
+        border-radius: 4px;
+        color: #fff !important;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        transition: opacity 0.2s;
+    }
+
+    .btn-edit-modern {
+        background-color: #0d6efd; /* Azul de la imagen */
+    }
+
+    .btn-delete-modern {
+        background-color: #dc3545; /* Rojo de la imagen */
+    }
+
+    .btn-edit-modern:hover, .btn-delete-modern:hover {
+        opacity: 0.85;
+    }
+
+        /* --- MANEJADOR PARA REDIMENSIONAR COLUMNAS --- */
+        .resizer {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+            cursor: col-resize;
+            user-select: none;
+            touch-action: none;
+        }
+
+        .resizer:hover, .resizing {
+            background-color: #0d6efd;
+        }
+    </style>
+
+<div class="pases-page">
+
+    <!-- CABECERA ESTILIZADA -->
+    <h5 class="page-title">⚡Gestión de Pases - Regulatorio</h5>
+
+    <div class="contenedor-principal">
+
+        <!-- CONTENIDO PRINCIPAL (Tabla y Acciones) -->
+        <div class="contenido-tabla">
+
+            <div class="actions-bar" style="margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                <div class="actions-left">                
+                    <!-- <a href="#" class="btn-exec btn-exec-new" onclick="cargarContenido('/pases/form'); return false;">🚀 Nuevo</a> -->
+                    <a href="#" class="btn-exec btn-exec-new" onclick="window.irFormulario('/pases/form'); return false;">🚀 Nuevo</a>
+                    <a href="/pases/exportar/csv" class="btn-exec btn-exec-csv">⬇ CSV</a>
+                    <a href="/pases/exportar/excel" class="btn-exec btn-exec-excel">📊 Excel</a>
+                    <form action="/pases/importar" method="POST" enctype="multipart/form-data" class="import-form" style="display:inline; margin:0;">
+                        <input type="file" name="file" id="fileInput" hidden onchange="this.form.submit()">
+                        <button type="button" class="btn-exec btn-exec-import" onclick="document.getElementById('fileInput').click()">
+                            📤 Importar
+                        </button>
+                    </form>
+                </div>
+
+                <div class="actions-right" style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                    <input type="text" id="filtroNombre" placeholder="🔍 Proceso..." onkeyup="filtrarTabla()" style="padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
+                    <input type="text" id="filtroDesarrollador" placeholder="💻 Desarrollador..." onkeyup="filtrarTabla()" style="padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
+                    <input type="text" id="filtroCTI" placeholder="CTI..." onkeyup="filtrarTabla()" style="padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
+
+                    <select id="filtroTipo" onchange="filtrarTabla()" style="padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
+                        <option value="">TODOS</option>
+                        <option value="OPTIMIZADO">OPTIMIZADO</option>
+                        <option value="REGULAR">REGULAR</option>
+                        <option value="INCIDENCIA">INCIDENCIA</option>
+                    </select>
+                </div>
             </div>
 
-            <div class="actions-right">
-
-                <input type="text" id="filtroNombre" placeholder="🔍 Proceso..." onkeyup="filtrarTabla()">
-
-                <input type="text" id="filtroCTI" placeholder="CTI..." onkeyup="filtrarTabla()">
-
-                <select id="filtroTipo" onchange="filtrarTabla()">
-                    <option value="">Todos</option>
-                    <option value="OPTIMIZADO">OPTIMIZADO</option>
-                    <option value="REGULAR">REGULAR</option>
-                </select>
-
+            <!-- TABLA -->
+            <div class="tabla-contenedor">
+                <table id="tablaPases">
+                    <thead>
+                        <tr>
+                            <th onclick="ordenarTabla(0)" style="cursor: pointer;">ID </th>
+                            <th onclick="ordenarTabla(1)" style="cursor: pointer;">Fecha Sistema </th>
+                            <th onclick="ordenarTabla(2)" style="cursor: pointer;">Fecha </th>
+                            <th onclick="ordenarTabla(3)" style="cursor: pointer;">Proceso </th>
+                            <th onclick="ordenarTabla(4)" style="cursor: pointer;">Nombre </th>
+                            <th onclick="ordenarTabla(5)" style="cursor: pointer;">CTI </th>
+                            <th onclick="ordenarTabla(6)" style="cursor: pointer;">Tinkuy </th>
+                            <th onclick="ordenarTabla(7)" style="cursor: pointer;">Documentacion PaP </th>
+                            <th onclick="ordenarTabla(8)" style="cursor: pointer;">Tipo </th>
+                            <th onclick="ordenarTabla(9)" style="cursor: pointer;">Desarrollador BI </th>
+                            <th onclick="ordenarTabla(10)" style="cursor: pointer;">Lider Integratel </th>
+                            <th onclick="ordenarTabla(11)" style="cursor: pointer;">Responsable PaP </th>
+                            <th style="text-align: center;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in lista_pases %}
+                        <tr>
+                            <td>{{ p.id }}</td>
+                            <td>{{ p.fecha_sistema | default('N/A', true) }}</td>
+                            <td>{{ p.fecha }}</td>
+                            <td>{{ p.proceso }}</td>
+                            <td>{{ p.name_proceso }}</td>
+                            <td>
+                                {% if p.cti and p.cti != 'DEFAULT' %}
+                                    <a href="{{ generar_url(p.cti) }}" target="_blank">{{ p.cti }}</a>
+                                {% else %}
+                                    {{ p.cti }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if p.tinkuy and p.tinkuy != 'DEFAULT' %}
+                                    <a href="{{ generar_url(p.tinkuy) }}" target="_blank">{{ p.tinkuy }}</a>
+                                {% else %}
+                                    {{ p.tinkuy }}
+                                {% endif %}
+                            </td>
+                            <td>{% if p.link_sharepoint %}<a href="{{ p.link_sharepoint }}" target="_blank">{{ p.documentacion }}</a>{% else %}{{ p.documentacion }}{% endif %}</td>
+                            <td>{{ p.tipo }}</td>
+                            <td>{{ p.desarrolladorbi }}</td>
+                            <td>{{ p.liderintegratel }}</td>
+                            <td>{{ p.responsablepap }}</td>
+                            <td class="acciones">
+                                <a href="#" class="btn-edit-modern" onclick="window.irFormulario('/pases/form/{{ loop.index0 }}'); return false;">
+                                    ✏️ Editar
+                                </a>
+                                <a href="#" class="btn-delete-modern" onclick="window.eliminarPase('{{ p.id }}'); return false;">
+                                    🗑️ Eliminar
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
 
         </div>
 
-        <!-- TABLA -->
-        <div class="tabla-contenedor">
 
-            <table id="tablaPases">
-
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Fecha</th>
-                        <th>Proceso</th>
-                        <th>Nombre</th>
-                        <th>CTI</th>
-                        <th>Tinkuy</th>
-                        <th>Tipo</th>
-                        <th>Responsable</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {% for p in lista_pases %}
-                    <tr>
-                        <td>{{ p.id }}</td>
-                        <td>{{ p.fecha }}</td>
-                        <td>{{ p.proceso }}</td>
-                        <td>{{ p.name_proceso }}</td>
-                        <td>{{ p.cti }}</td>
-                        <td>{{ p.tinkuy }}</td>
-                        <td>{{ p.tipo }}</td>
-                        <td>{{ p.responsablepap }}</td>
-
-                        <td class="acciones">
-
-    <a href="#"
-       class="btn-edit"
-       onclick="cargarContenido('/pases/form/{{ loop.index0 }}'); return false;">
-       Editar
-    </a>
-
-    <a href="#"
-       class="btn-delete"
-       onclick="eliminarPase('{{ p.id }}'); return false;">
-       Eliminar
-    </a>
-
-</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-
-            </table>
-
-        </div>
 
     </div>
 
 </div>
 
-<!-- FILTRO JS -->
+<!-- SCRIPT DE FILTRO Y ORDENAMIENTO -->
 <script>
-function filtrarTabla() {
+document.addEventListener("DOMContentLoaded", function () {
+    filtrarTabla();
+    inicializarRedimensionador();
+});
 
-    const nombre = document.getElementById("filtroNombre").value.toLowerCase();
-    const cti = document.getElementById("filtroCTI").value.toLowerCase();
-    const tipo = document.getElementById("filtroTipo").value.toLowerCase();
+// Por si se carga mediante la función AJAX `cargarContenido` del sistema principal
+if (document.readyState === "complete" || document.readyState === "interactive") {
+    setTimeout(() => {
+        filtrarTabla();
+        inicializarRedimensionador();
+    }, 10);
+}
+
+window.irFormulario = function(url) {
+    if (typeof cargarContenido === "function") {
+        cargarContenido(url);
+    } else {
+        window.location.href = url;
+    }
+};
+
+function filtrarTabla() {
+    const nombre = document.getElementById("filtroNombre").value.toLowerCase().trim();
+    const desarrolladorbi = document.getElementById("filtroDesarrollador").value.toLowerCase().trim();
+    const cti = document.getElementById("filtroCTI").value.toLowerCase().trim();
+    const tipo = document.getElementById("filtroTipo").value.toLowerCase().trim();
 
     const filas = document.querySelectorAll("#tablaPases tbody tr");
 
     filas.forEach(fila => {
-
-        const proceso = fila.children[2].textContent.toLowerCase();
-        const nombreProc = fila.children[3].textContent.toLowerCase();
-        const ctiVal = fila.children[4].textContent.toLowerCase();
-        const tipoVal = fila.children[6].textContent.toLowerCase();
+        const proceso = fila.children[3].textContent.toLowerCase();
+        const nombreProc = fila.children[4].textContent.toLowerCase();
+        const desarrolladorbiVal = fila.children[9].textContent.toLowerCase();
+        const ctiVal = fila.children[5].textContent.toLowerCase();
+        const tipoVal = fila.children[8].textContent.toLowerCase();
 
         let show = true;
-
         if (nombre && !proceso.includes(nombre) && !nombreProc.includes(nombre)) show = false;
+        if (desarrolladorbi && !desarrolladorbiVal.includes(desarrolladorbi)) show = false;
         if (cti && !ctiVal.includes(cti)) show = false;
-        if (tipo && tipoVal !== tipo) show = false;
+        if (tipo && tipo !== "" && !tipoVal.includes(tipo)) show = false;
 
         fila.style.display = show ? "" : "none";
     });
 }
 
-async function eliminarPase(id) {
-
+window.eliminarPase = async function(id) {
     if (!confirm(`¿Desea eliminar el pase ${id}?`)) {
         return;
     }
 
     try {
-
         const response = await fetch(`/pases/eliminar/${id}`, {
             method: "POST",
-            headers: {
-                "X-Requested-With": "XMLHttpRequest"
-            }
+            headers: { "X-Requested-With": "XMLHttpRequest" }
         });
 
-        if (!response.ok) {
-            throw new Error("Error del servidor");
-        }
+        if (!response.ok) throw new Error("Error del servidor");
 
         const data = await response.json();
 
         if (data.ok) {
-            paginaActual = null;
-
-            setTimeout(() => {
-                cargarContenido('/pases');
-            }, 50);
+            window.irFormulario('/pases');
         }
-
     } catch (error) {
-
         console.error(error);
         alert("Error al eliminar el registro");
-
     }
+};
+
+// -------------------------
+// ORDENAMIENTO DE TABLA
+// -------------------------
+let direccionOrden = {};
+
+function ordenarTabla(columnaIndex) {
+    const tabla = document.getElementById("tablaPases");
+    const tbody = tabla.tBodies[0];
+    const filas = Array.from(tbody.querySelectorAll("tr"));
+    
+    // Alternar dirección de orden (ascendente / descendente)
+    direccionOrden[columnaIndex] = !direccionOrden[columnaIndex];
+    const esAscendente = direccionOrden[columnaIndex];
+
+    filas.sort((a, b) => {
+        let celdaA = a.children[columnaIndex].textContent.trim();
+        let celdaB = b.children[columnaIndex].textContent.trim();
+
+        // Evaluar si los valores son numéricos o texto para un ordenamiento correcto
+        let valorA = isNaN(celdaA) ? celdaA.toLowerCase() : parseFloat(celdaA);
+        let valorB = isNaN(celdaB) ? celdaB.toLowerCase() : parseFloat(celdaB);
+
+        if (valorA < valorB) return esAscendente ? -1 : 1;
+        if (valorA > valorB) return esAscendente ? 1 : -1;
+        return 0;
+    });
+
+    // Reordenar las filas en el DOM
+    filas.forEach(fila => tbody.appendChild(fila));
+    
+    // Reaplicar filtros después de ordenar por si hay búsquedas activas
+    filtrarTabla();
+}
+
+// -------------------------
+// SCRIPT PARA REDIMENSIONAR COLUMNAS
+// -------------------------
+function inicializarRedimensionador() {
+    const tabla = document.getElementById("tablaPases");
+    const columnas = tabla.querySelectorAll("th");
+
+    columnas.forEach((col, index) => {
+        if (index === columnas.length - 1) return;
+
+        const resizer = document.createElement("div");
+        resizer.classList.add("resizer");
+        col.appendChild(resizer);
+
+        let x = 0;
+        let w = 0;
+
+        resizer.addEventListener("mousedown", function (e) {
+            x = e.clientX;
+            w = col.offsetWidth;
+            resizer.classList.add("resizing");
+
+            function mouseMoveHandler(e) {
+                const dx = e.clientX - x;
+                col.style.width = `${w + dx}px`;
+            }
+
+            function mouseUpHandler() {
+                resizer.classList.remove("resizing");
+                document.removeEventListener("mousemove", mouseMoveHandler);
+                document.removeEventListener("mouseup", mouseUpHandler);
+            }
+
+            document.addEventListener("mousemove", mouseMoveHandler);
+            document.addEventListener("mouseup", mouseUpHandler);
+        });
+    });
 }
 </script>
-
-</body>
-</html>
+{% endblock %}

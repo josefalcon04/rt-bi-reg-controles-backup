@@ -1,24 +1,120 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Pase</title>
+{% extends "base.html" %}
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+{% block contenido %}
+<style>
+    /* --- ESTILOS PROPIOS DEL FORMULARIO PARA ASEGURAR EL DISEÑO DE 3 COLUMNAS --- */
+    .page {
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+    }
 
-    <!-- CSS propio -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/pases_from.css') }}">
-</head>
+    .form-container {
+        width: 100%;
+        max-width: 1200px;
+        background: #fff;
+        padding: 25px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
 
-<body>
+    .form-header {
+        margin-bottom: 20px;
+        border-bottom: 1px solid #dee2e6;
+        padding-bottom: 10px;
+    }
+
+    .form-header h2 {
+        font-size: 20px;
+        color: #333;
+        margin: 0;
+    }
+
+    .form-header p {
+        color: #666;
+        font-size: 13px;
+        margin: 5px 0 0;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+        .grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .col {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .field {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .field label {
+        font-size: 12px;
+        font-weight: 600;
+        color: #444;
+    }
+
+    .field input, .field select {
+        padding: 8px;
+        font-size: 12px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        width: 100%;
+        background-color: #fff;
+    }
+
+    .actions {
+        margin-top: 25px;
+        display: flex;
+        gap: 10px;
+        justify-content: flex-start;
+    }
+
+    .btn-save {
+        background-color: #198754;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        font-size: 13px;
+        cursor: pointer;
+        font-weight: 500;
+    }
+
+    .btn-cancel {
+        background-color: #6c757d;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        font-size: 13px;
+        cursor: pointer;
+        font-weight: 500;
+    }
+
+    .btn-save:hover, .btn-cancel:hover {
+        opacity: 0.9;
+    }
+</style>
 
 <div class="page">
 
     <div class="form-container">
 
         <div class="form-header">
-            <h2>{{ '✏️ Editar Pase' if pase else '➕ Nuevo Pase' }}</h2>
+            <h2>{{ '✏️ Editar Pase - Regulatorio' if pase else '🚀 Nuevo Pase - Regulatorio' }}</h2>
             <p>Complete la información del pase</p>
         </div>
 
@@ -40,7 +136,48 @@
                     <div class="field">
                         <label>Proceso</label>
                         <select name="proceso" required>
-                            {% for dev in ['RTSRA','RTSVN','TRAFICO'] %}
+                            {% for dev in ['RTSRA-RENTESEG-REGISTRO DE ABONADOS',
+                                                        'RTSVN-RENTESEG-VINCULACIONES', 
+                                                        'RTSEXL-RENTESEG-LISTA DE EXCEPCION', 
+                                                        'RTSCLN-RENTESEG-CLONADOS',
+                                                        'RTSCDR-RENTESEG-GESTION DE CDR',                                    
+                                                        'TRAFICO',
+                                                        'SONDIF-SONDAS FIJAS',
+                                                        'SONDIM-SONDAS MÓVILES',
+                                                        'DEVOLM-DEVOLUCIONES MÓVILES',
+                                                        'ANTARQSEGSCOR-ANTARQUI',
+                                                        'ANTARQGENLEY-GENERALES DE LEY',
+                                                        'USPROH-REPORTE UPS',
+                                                        'SGMPLAREPPLAN-SEGMENTACION DE PLANES',
+                                                        'LLAMALISN-LLAMALI',
+                                                        'GDCDATCNSDATO-GRAFICA DE CONSUMO DE DATOS POR RECIBO',
+                                                        'CTRTRFCUR-CONTROL DE TRAFICO CURSADO MOVIL Y FIJA',
+                                                        'ABOSMS-EXTRACCION MOVIL ABONADOS SMS',
+                                                        'GSMTUPRUR-TUPS GSM RURAL',
+                                                        'IDNIMSI-IDENTIFICACION DE IMSI',
+                                                        'FWKLOG-FRAMEWORK DE LOGS',
+                                                        'ALERTAAGRALT-MONITOREO DE NUEVAS ALTAS',
+                                                        'RTSTRI-F1 CDR',
+                                                        'RTSTRIRAF1-F2 SISTEMA COMERCIAL REGISTRO DE ABONADOS',                                                   
+                                                        'PSWUNQ-REPORTE CONTRASEÑA UNICA TRIMESTRAL',
+                                                        'AGRTRFDATOSM-AGREGADO DE TRAFICO DE DATOS MENSUAL',
+                                                        'REPSAR-REPORTE SAR',
+                                                        'OPELDI-REPORTES DE OPERADORES DE LARGA DISTANCIA INTERNACIONAL (PREPAGO-POSTAPGO)',
+                                                        'ADQTDP-ADQUISICIÓN DE EQUIPOS EN TDP',
+                                                        'ALTDEP-CONTRATOS CORTOS|ALTAS POR DEPARTAMENTOS',
+                                                        'NIFI-PROCESOS NIFI',
+                                                        'INPUT-SRVINPLTTAC-PLANTA TAC',
+                                                        'INPUT-CARGA DE FUENTES ALDM',
+                                                        'INPUT-INPSIVADAC-SIVADAC ORACLE',
+                                                        'INPUT-ALDMLISTAQA-LISTAQA',
+                                                        'INPUT-SRVINLGTIMER-LOG TIMER',
+                                                        'INPUT-VISORWHLIST-WHITELIST',
+                                                        'INPUT-VISORDETLOG-DETALLE DE BLACKLISTLOG',
+                                                        'INPUT-VISORLIBBLQ-DETALLE LIBERACIÓN-BLOQUEO DE IMEI',
+                                                        'INPUT-SRVINCATCEL-CATALOGO DE CELDAS',
+                                                        'INPUT-SRVINTKPORT-TOKEN PORTABILIDAD',
+                                                        'TISACTRLS-CONTROLES PLANTA TISA',
+                                                        ] %}
                             <option value="{{ dev }}" {% if pase and pase.proceso == dev %}selected{% endif %}>{{ dev }}</option>
                             {% endfor %}
                         </select>
@@ -93,7 +230,7 @@
                     <div class="field">
                         <label>Desarrollador BI</label>
                         <select name="desarrolladorbi" required>
-                            {% for dev in ['DEFAULT','OSCAR CAPARO','JOSE FALCON'] %}
+                            {% for dev in ['DEFAULT','OSCAR CAPARO', 'EDWIN GARCÍA', 'HIMBHER LAZO', 'CHARLES MIRANDA', 'RICHARD CORREA','KARLA MEJIA', 'JOSE FALCON'] %}
                             <option value="{{ dev }}" {% if pase and pase.desarrolladorbi == dev %}selected{% endif %}>{{ dev }}</option>
                             {% endfor %}
                         </select>
@@ -102,7 +239,7 @@
                     <div class="field">
                         <label>Líder Integratel</label>
                         <select name="liderintegratel" required>
-                            {% for dev in ['DEFAULT','PEDRO MORENO','JOSE FALCON'] %}
+                            {% for dev in ['DEFAULT','PEDRO MORENO','BACILIO GONZALES', 'JOSE FALCON', 'KARLA MEJIA'] %}
                             <option value="{{ dev }}" {% if pase and pase.liderintegratel == dev %}selected{% endif %}>{{ dev }}</option>
                             {% endfor %}
                         </select>
@@ -122,11 +259,11 @@
             </div>
 
             <div class="actions">
-                <button type="button" class="btn-save" onclick="guardarPase()">
+                <button type="button" class="btn-save" onclick="window.guardarPase()">
                     💾 Guardar
                 </button>
 
-                <button type="button" class="btn-cancel" id="btnCancelar" onclick="cargarContenido('/pases')" >
+                <button type="button" class="btn-cancel" id="btnCancelar" onclick="window.irFormulario('/pases')">
                     ❌ Cancelar
                 </button>
             </div>
@@ -138,65 +275,92 @@
 </div>
 
 <script>
-const form = document.getElementById("pasesForm");
+// const form = document.getElementById("pasesForm");
 
-form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+// form.addEventListener("submit", async (e) => {
+//     e.preventDefault();
 
-    try {
+//     try {
 
-        const res = await fetch("/pases/guardar", {
-            method: "POST",
-            body: new FormData(form)
-        });
+//         const res = await fetch("/pases/guardar", {
+//             method: "POST",
+//             body: new FormData(form)
+//         });
 
-        const data = await res.json();
+//         const data = await res.json();
 
-        console.log(data);
+//         // console.log(data);
 
-        if (data.ok) {
-            paginaActual = null;
-            setTimeout(() => {
-                cargarContenido('/pases', true);
-            }, 50);} 
-        else {
-            alert(data.message || "Error al guardar");
-        }
+//         if (data.ok) {
+//             paginaActual = null;
+//             setTimeout(() => {
+//                 cargarContenido('/pases', true);
+//             }, 50);
+//         } else {
+//             alert(data.message || "Error al guardar");
+//         }
 
-    } catch (err) {
+//     } catch (err) {
 
-        console.error(err);
-        alert("Error al guardar");
+//         console.error(err);
+//         alert("Error al guardar");
 
-    }
-});
-function guardarPase() {
+//     }
+// });
+// function guardarPase() {
 
+//     const form = document.getElementById("pasesForm");
+
+//     fetch("/pases/guardar", {
+//         method: "POST",
+//         body: new FormData(form)
+//     })
+//     .then(r => r.json())
+//     .then(data => {
+
+//         if (data.ok) {
+
+//             paginaActual = null;
+//             cargarContenido('/pases', true);
+
+//         } else {
+//             alert(data.message || "Error al guardar");
+//         }
+
+//     })
+//     .catch(err => {
+//         console.error(err);
+//         alert("Error al guardar");
+//     });
+// }
+window.guardarPase = function() {
     const form = document.getElementById("pasesForm");
+    const formData = new FormData(form);
 
     fetch("/pases/guardar", {
         method: "POST",
-        body: new FormData(form)
+        body: formData
     })
     .then(r => r.json())
     .then(data => {
-
         if (data.ok) {
-
-            paginaActual = null;
-            cargarContenido('/pases', true);
-
+            window.irFormulario('/pases');
         } else {
             alert(data.message || "Error al guardar");
         }
-
     })
     .catch(err => {
         console.error(err);
         alert("Error al guardar");
     });
-}
-</script>
+};
 
-</body>
-</html>
+window.irFormulario = function(url) {
+    if (typeof cargarContenido === "function") {
+        cargarContenido(url);
+    } else {
+        window.location.href = url;
+    }
+};
+</script>
+{% endblock %}
