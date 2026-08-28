@@ -24,7 +24,7 @@ if not os.path.exists(DATA_DIR):
 COLUMNAS_ORDENADAS = [
     'id', 'fecha_sistema', 'fecha',
     'proceso', 'name_proceso', 'cti', 'tinkuy',
-    'documentacion', 'link_sharepoint', 'tipo',
+    'documentacion', 'link_sharepoint', 'idinterno', 'tipo',
     'desarrolladorbi', 'liderintegratel', 'responsablepap'
 ]
 
@@ -108,6 +108,7 @@ def guardar():
             "tinkuy": request.form.get("tinkuy"),
             "documentacion": request.form.get("documentacion"),
             "link_sharepoint": request.form.get("link_sharepoint"),
+            "idinterno": request.form.get("idinterno"),
             "tipo": request.form.get("tipo"),
             "desarrolladorbi": request.form.get("desarrolladorbi"),
             "liderintegratel": request.form.get("liderintegratel"),
@@ -196,6 +197,7 @@ def importar():
                 "tinkuy": clean(row.get('tinkuy')),
                 "documentacion": clean(row.get('documentacion')),
                 "link_sharepoint": clean(row.get('link_sharepoint')),
+                "idinterno": clean(row.get('idinterno')),
                 "tipo": clean(row.get('tipo')),
                 "desarrolladorbi": clean(row.get('desarrolladorbi')),
                 "liderintegratel": clean(row.get('liderintegratel')),

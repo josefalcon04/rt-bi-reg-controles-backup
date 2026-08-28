@@ -73,11 +73,12 @@
         #tablaPases th:nth-child(6), #tablaPases td:nth-child(6) { width: 100px; }  /* CTI */
         #tablaPases th:nth-child(7), #tablaPases td:nth-child(7) { width: 90px; }   /* Tinkuy */
         #tablaPases th:nth-child(8), #tablaPases td:nth-child(8) { width: 110px; }  /* Documentacion */
-        #tablaPases th:nth-child(9), #tablaPases td:nth-child(9) { width: 95px; }   /* Tipo */
-        #tablaPases th:nth-child(10), #tablaPases td:nth-child(10) { width: 110px; } /* Desarrollador BI */
-        #tablaPases th:nth-child(11), #tablaPases td:nth-child(11) { width: 100px; } /* Lider */
-        #tablaPases th:nth-child(12), #tablaPases td:nth-child(12) { width: 100px; } /* Responsable */
-        #tablaPases th:nth-child(13), #tablaPases td:nth-child(13) { width: 120px; text-align: center; } /* Acciones */
+        #tablaPases th:nth-child(9), #tablaPases td:nth-child(9) { width: 95px; }   /* ID Interno */
+        #tablaPases th:nth-child(10), #tablaPases td:nth-child(10) { width: 95px; }  /* Tipo */
+        #tablaPases th:nth-child(11), #tablaPases td:nth-child(11) { width: 110px; } /* Desarrollador BI */
+        #tablaPases th:nth-child(12), #tablaPases td:nth-child(12) { width: 100px; } /* Lider */
+        #tablaPases th:nth-child(13), #tablaPases td:nth-child(13) { width: 100px; } /* Responsable */
+        #tablaPases th:nth-child(14), #tablaPases td:nth-child(14) { width: 120px; text-align: center; } /* Acciones */
 
         /* --- ESTILOS EJECUTIVOS PARA LOS BOTONES SUPERIORES --- */
     .actions-left {
@@ -213,10 +214,11 @@
                             <th onclick="ordenarTabla(5)" style="cursor: pointer;">CTI </th>
                             <th onclick="ordenarTabla(6)" style="cursor: pointer;">Tinkuy </th>
                             <th onclick="ordenarTabla(7)" style="cursor: pointer;">Documentacion PaP </th>
-                            <th onclick="ordenarTabla(8)" style="cursor: pointer;">Tipo </th>
-                            <th onclick="ordenarTabla(9)" style="cursor: pointer;">Desarrollador BI </th>
-                            <th onclick="ordenarTabla(10)" style="cursor: pointer;">Lider Integratel </th>
-                            <th onclick="ordenarTabla(11)" style="cursor: pointer;">Responsable PaP </th>
+                            <th onclick="ordenarTabla(8)" style="cursor: pointer;">ID Interno </th>
+                            <th onclick="ordenarTabla(9)" style="cursor: pointer;">Tipo </th>
+                            <th onclick="ordenarTabla(10)" style="cursor: pointer;">Desarrollador BI </th>
+                            <th onclick="ordenarTabla(11)" style="cursor: pointer;">Lider Integratel </th>
+                            <th onclick="ordenarTabla(12)" style="cursor: pointer;">Responsable PaP </th>
                             <th style="text-align: center;">Acciones</th>
                         </tr>
                     </thead>
@@ -243,6 +245,7 @@
                                 {% endif %}
                             </td>
                             <td>{% if p.link_sharepoint %}<a href="{{ p.link_sharepoint }}" target="_blank">{{ p.documentacion }}</a>{% else %}{{ p.documentacion }}{% endif %}</td>
+                            <td>{{ p.idinterno }}</td>
                             <td>{{ p.tipo }}</td>
                             <td>{{ p.desarrolladorbi }}</td>
                             <td>{{ p.liderintegratel }}</td>
@@ -303,9 +306,9 @@ function filtrarTabla() {
     filas.forEach(fila => {
         const proceso = fila.children[3].textContent.toLowerCase();
         const nombreProc = fila.children[4].textContent.toLowerCase();
-        const desarrolladorbiVal = fila.children[9].textContent.toLowerCase();
+        const desarrolladorbiVal = fila.children[10].textContent.toLowerCase();
         const ctiVal = fila.children[5].textContent.toLowerCase();
-        const tipoVal = fila.children[8].textContent.toLowerCase();
+        const tipoVal = fila.children[9].textContent.toLowerCase();
 
         let show = true;
         if (nombre && !proceso.includes(nombre) && !nombreProc.includes(nombre)) show = false;
