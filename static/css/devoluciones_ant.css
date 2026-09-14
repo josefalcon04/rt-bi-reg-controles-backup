@@ -1,0 +1,900 @@
+/* =========================================================
+   DASHBOARD DEVOLUCIONES
+   ESTILO RT BI - MODERNO
+   ========================================================= */
+
+/* =========================================================
+   CONTENEDOR PRINCIPAL
+   ========================================================= */
+
+.devoluciones-page {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 22px 24px 35px;
+    box-sizing: border-box;
+    color: #172033;
+}
+
+/* Evita que el dashboard genere scroll horizontal */
+.devoluciones-page,
+.devoluciones-page * {
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   ENCABEZADO
+   ========================================================= */
+
+.devoluciones-header {
+    width: 100%;
+    min-height: 78px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 16px;
+
+    padding: 15px 20px;
+
+    margin-bottom: 14px;
+
+    background: linear-gradient(
+        135deg,
+        #2563eb 0%,
+        #1d4ed8 100%
+    );
+
+    border-radius: 10px;
+
+    color: white;
+
+    box-shadow:
+        0 4px 12px rgba(37, 99, 235, 0.18);
+}
+
+
+/* Icono */
+
+.devoluciones-header-icon {
+    width: 48px;
+    height: 48px;
+
+    flex: 0 0 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(255,255,255,0.16);
+
+    border-radius: 8px;
+
+    font-size: 22px;
+}
+
+
+/* Información */
+
+.devoluciones-header-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.devoluciones-header-info h1 {
+    margin: 0;
+
+    font-size: 23px;
+    line-height: 1.2;
+
+    font-weight: 700;
+
+    color: #ffffff;
+}
+
+.devoluciones-header-info p {
+    margin: 4px 0 0;
+
+    font-size: 11px;
+
+    color: rgba(255,255,255,0.90);
+}
+
+
+/* =========================================================
+   FILTROS
+   ========================================================= */
+
+.devoluciones-filtros {
+
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(6, minmax(130px, 1fr))
+        auto;
+
+    align-items: end;
+
+    gap: 10px;
+
+    padding: 14px;
+
+    margin-bottom: 14px;
+
+    background: #ffffff;
+
+    border: 1px solid #dce4f0;
+
+    border-radius: 9px;
+
+    box-shadow:
+        0 2px 7px rgba(15, 23, 42, 0.05);
+}
+
+
+/* Cada filtro */
+
+.filtro-item {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 5px;
+}
+
+.filtro-item label {
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    color: #475569;
+}
+
+
+/* Select */
+
+.filtro-item select {
+
+    width: 100%;
+
+    height: 34px;
+
+    padding: 5px 9px;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 6px;
+
+    background: #ffffff;
+
+    color: #334155;
+
+    font-size: 11px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s;
+}
+
+.filtro-item select:focus {
+
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 2px rgba(37,99,235,0.10);
+}
+
+
+/* =========================================================
+   BOTONES FILTROS
+   ========================================================= */
+
+.filtro-actions {
+
+    display: flex;
+
+    gap: 7px;
+
+    align-items: center;
+
+    white-space: nowrap;
+}
+
+.btn-aplicar,
+.btn-limpiar {
+
+    height: 34px;
+
+    padding: 0 13px;
+
+    border-radius: 6px;
+
+    border: none;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 6px;
+
+    transition:
+        transform 0.15s,
+        box-shadow 0.15s,
+        background 0.15s;
+}
+
+
+/* Aplicar */
+
+.btn-aplicar {
+
+    background: #2563eb;
+
+    color: white;
+
+    box-shadow:
+        0 2px 5px rgba(37,99,235,0.20);
+}
+
+.btn-aplicar:hover {
+
+    background: #1d4ed8;
+
+    transform: translateY(-1px);
+}
+
+
+/* Limpiar */
+
+.btn-limpiar {
+
+    background: #eef2f7;
+
+    color: #475569;
+
+    border: 1px solid #d8e0eb;
+}
+
+.btn-limpiar:hover {
+
+    background: #e2e8f0;
+}
+
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.devoluciones-loading {
+
+    width: 100%;
+
+    min-height: 80px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    margin-bottom: 12px;
+
+    background: #ffffff;
+
+    border: 1px solid #dce4f0;
+
+    border-radius: 9px;
+
+    color: #2563eb;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   KPIs
+   ========================================================= */
+
+.devoluciones-page .kpis {
+
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, minmax(0, 1fr));
+
+    gap: 12px;
+
+    margin-bottom: 14px;
+}
+
+
+/* Tarjeta KPI */
+
+.devoluciones-page .card {
+
+    min-width: 0;
+
+    min-height: 112px;
+
+    padding: 15px;
+
+    background: #ffffff;
+
+    border: 1px solid #dce4f0;
+
+    border-radius: 9px;
+
+    box-shadow:
+        0 2px 7px rgba(15, 23, 42, 0.05);
+
+    text-align: left;
+
+    overflow: hidden;
+
+    transition:
+        transform 0.15s,
+        box-shadow 0.15s;
+}
+
+.devoluciones-page .card:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 5px 14px rgba(15,23,42,0.08);
+}
+
+
+/* Título KPI */
+
+.devoluciones-page .card h4 {
+
+    margin: 0 0 8px;
+
+    color: #64748b;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.3px;
+}
+
+
+/* Número */
+
+.devoluciones-page .card h2 {
+
+    margin: 0;
+
+    color: #172033;
+
+    font-size: 24px;
+
+    font-weight: 750;
+
+    line-height: 1.15;
+}
+
+
+/* Texto pequeño */
+
+.devoluciones-page .card small {
+
+    display: block;
+
+    margin-top: 6px;
+
+    color: #64748b;
+
+    font-size: 10px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   KPI CANDIDATOS
+   ========================================================= */
+
+.kpi-card .kpi-split {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    align-items: center;
+
+    gap: 8px;
+
+    width: 100%;
+}
+
+.kpi-main {
+
+    font-size: 23px;
+
+    font-weight: 800;
+
+    line-height: 1;
+
+    white-space: nowrap;
+}
+
+.kpi-main.ok,
+.ok {
+
+    color: #16a34a;
+}
+
+.nok {
+
+    color: #dc2626 !important;
+}
+
+
+/* Detalle */
+
+.kpi-detail {
+
+    min-width: 0;
+
+    color: #475569;
+
+    font-size: 10px;
+
+    line-height: 1.5;
+
+    text-align: left;
+}
+
+.kpi-detail strong {
+
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   SUCCESS / REJECT
+   ========================================================= */
+
+.sr-row {
+
+    display: grid;
+
+    grid-template-columns: 70px minmax(0, 1fr);
+
+    align-items: center;
+
+    gap: 7px;
+
+    margin-bottom: 8px;
+
+    font-size: 10px;
+}
+
+.sr-row:last-child {
+
+    margin-bottom: 0;
+}
+
+.success-label {
+
+    color: #16a34a;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+.reject-label {
+
+    color: #dc2626;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+.sr-value {
+
+    min-width: 0;
+
+    text-align: right;
+
+    color: #334155;
+
+    font-size: 9px;
+
+    white-space: nowrap;
+}
+
+.sr-value b {
+
+    font-weight: 700;
+}
+
+.sr-value small {
+
+    display: inline;
+
+    margin-left: 3px;
+
+    font-size: 9px;
+
+    color: #64748b;
+}
+
+
+/* =========================================================
+   REINTENTOS
+   ========================================================= */
+
+.reintentos-card {
+
+    width: 100%;
+
+    margin: 0 0 14px;
+
+    padding: 14px;
+
+    background: #ffffff;
+
+    border: 1px solid #dce4f0;
+
+    border-radius: 9px;
+
+    box-shadow:
+        0 2px 7px rgba(15,23,42,0.05);
+}
+
+
+/* Título sección */
+
+.section-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 12px;
+}
+
+.section-title-icon {
+
+    width: 32px;
+    height: 32px;
+
+    flex: 0 0 32px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    border-radius: 7px;
+
+    font-size: 13px;
+}
+
+.section-title h3 {
+
+    margin: 0;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    color: #172033;
+}
+
+.section-title span {
+
+    display: block;
+
+    margin-top: 2px;
+
+    font-size: 9px;
+
+    color: #94a3b8;
+}
+
+
+/* =========================================================
+   TABLA
+   ========================================================= */
+
+.tabla-wrapper {
+
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+.tabla-reintentos {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    table-layout: fixed;
+}
+
+.tabla-reintentos th {
+
+    padding: 9px 8px;
+
+    background: #f1f5f9;
+
+    color: #475569;
+
+    border-bottom: 1px solid #dce4f0;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    text-align: center;
+}
+
+.tabla-reintentos td {
+
+    padding: 9px 8px;
+
+    color: #334155;
+
+    border-bottom: 1px solid #edf2f7;
+
+    font-size: 10px;
+
+    text-align: center;
+}
+
+.tabla-reintentos tbody tr:hover {
+
+    background: #f8fafc;
+}
+
+.tabla-reintentos tbody tr:last-child td {
+
+    border-bottom: none;
+}
+
+
+/* =========================================================
+   GRÁFICOS
+   ========================================================= */
+
+.devoluciones-page .charts {
+
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 14px;
+
+    margin-top: 0;
+}
+
+
+/* Tarjeta gráfico */
+
+.devoluciones-page .chart-card {
+
+    min-width: 0;
+
+    width: 100%;
+
+    min-height: 390px;
+
+    padding: 8px;
+
+    background: #ffffff;
+
+    border: 1px solid #dce4f0;
+
+    border-radius: 9px;
+
+    box-shadow:
+        0 2px 7px rgba(15,23,42,0.05);
+
+    overflow: hidden;
+}
+
+
+/* Plotly */
+
+.devoluciones-page .plotly-graph-div {
+
+    width: 100% !important;
+
+    max-width: 100% !important;
+}
+
+
+/* Contenedores */
+
+#resultado_pie,
+#producto_pie,
+#comentario_bar,
+#line {
+
+    width: 100% !important;
+
+    max-width: 100% !important;
+
+    min-height: 360px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1400px) {
+
+    .devoluciones-page {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+
+    .devoluciones-page .kpis {
+
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+    }
+
+    .devoluciones-filtros {
+
+        grid-template-columns:
+            repeat(3, minmax(150px, 1fr));
+    }
+
+    .filtro-actions {
+
+        grid-column: span 3;
+
+        justify-content: flex-end;
+    }
+}
+
+
+@media (max-width: 1000px) {
+
+    .devoluciones-page .charts {
+
+        grid-template-columns: 1fr;
+    }
+
+    .devoluciones-page .kpis {
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .devoluciones-filtros {
+
+        grid-template-columns:
+            repeat(2, minmax(150px, 1fr));
+    }
+
+    .filtro-actions {
+
+        grid-column: span 2;
+
+        justify-content: flex-start;
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    .devoluciones-page {
+
+        padding: 12px;
+    }
+
+    .devoluciones-header {
+
+        min-height: 65px;
+
+        padding: 12px 14px;
+    }
+
+    .devoluciones-header-icon {
+
+        width: 40px;
+        height: 40px;
+
+        flex-basis: 40px;
+
+        font-size: 18px;
+    }
+
+    .devoluciones-header-info h1 {
+
+        font-size: 18px;
+    }
+
+    .devoluciones-filtros {
+
+        grid-template-columns: 1fr;
+    }
+
+    .filtro-actions {
+
+        grid-column: auto;
+
+        width: 100%;
+    }
+
+    .btn-aplicar,
+    .btn-limpiar {
+
+        flex: 1;
+    }
+
+    .devoluciones-page .kpis {
+
+        grid-template-columns: 1fr;
+    }
+
+    .devoluciones-page .chart-card {
+
+        min-height: 350px;
+    }
+}
+
+
+/* =========================================================
+   EVITAR SCROLL HORIZONTAL
+   ========================================================= */
+
+html,
+body {
+
+    max-width: 100%;
+
+    overflow-x: hidden;
+}
+
+.devoluciones-page img,
+.devoluciones-page canvas,
+.devoluciones-page svg {
+
+    max-width: 100%;
+}

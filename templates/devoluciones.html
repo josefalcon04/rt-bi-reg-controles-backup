@@ -2,193 +2,482 @@
 
 {% block contenido %}
 
+<link rel="stylesheet" href="{{ url_for('static', filename='css/devoluciones.css') }}">
+
 <div class="devoluciones-page">
 
-    <!-- =====================================================
-         ENCABEZADO
-         ===================================================== -->
-
-    <section class="devoluciones-header">
-
-        <div class="devoluciones-header-icon">
-            <i class="fas fa-undo-alt"></i>
-        </div>
-
-        <div class="devoluciones-header-info">
-
-            <h1>Dashboard de Devoluciones</h1>
-
-            <p>
-                Análisis y seguimiento de devoluciones
-            </p>
-
-        </div>
-
-    </section>
-
-
-    <!-- =====================================================
-         FILTROS
-         ===================================================== -->
-
-    <section class="devoluciones-filtros">
-
-        <div class="filtro-item">
-            <label>Año</label>
-            <select id="year"></select>
-        </div>
-
-        <div class="filtro-item">
-            <label>Mes</label>
-            <select id="month">
-                <option value="">Mes</option>
-            </select>
-        </div>
-
-        <div class="filtro-item">
-            <label>Día</label>
-            <select id="day">
-                <option value="">Día</option>
-            </select>
-        </div>
-
-        <div class="filtro-item">
-            <label>Producto</label>
-            <select id="producto">
-                <option value="">Producto</option>
-            </select>
-        </div>
-
-        <div class="filtro-item">
-            <label>Comentario</label>
-            <select id="comentario">
-                <option value="">Comentario</option>
-            </select>
-        </div>
-
-        <div class="filtro-item">
-            <label>Resultado</label>
-            <select id="resultado">
-                <option value="">Resultado</option>
-            </select>
-        </div>
-
-        <div class="filtro-actions">
-
-            <button
-                type="button"
-                class="btn-aplicar"
-                onclick="cargar()">
-                <i class="fas fa-filter"></i>
-                Filtrar
-            </button>
-
-            <button
-                type="button"
-                class="btn-limpiar"
-                onclick="resetFiltros()">
-                <i class="fas fa-eraser"></i>
-                Limpiar
-            </button>
-
-        </div>
-
-    </section>
-
-
-    <!-- =====================================================
-         LOADING
-         ===================================================== -->
-
-    <div
-        id="loading"
-        class="devoluciones-loading"
-        style="display:none;">
-
-        <i class="fas fa-spinner fa-spin"></i>
-
-        <span>Cargando dashboard...</span>
-
-    </div>
-
-
-    <!-- =====================================================
-         KPIs
-         ===================================================== -->
-
-    <section
-        class="kpis"
-        id="kpis">
-    </section>
-
-
-    <!-- =====================================================
-         REINTENTOS
-         ===================================================== -->
-
-    <section class="reintentos-card">
-
-        <div class="section-title">
-
-            <div class="section-title-icon">
-                <i class="fas fa-sync-alt"></i>
+    <!-- =========================================================
+         HERO
+         ========================================================= -->
+    <section class="dev-hero">
+        <div class="dev-hero-left">
+            <div class="dev-title-icon">
+                <i class="fas fa-undo-alt"></i>
             </div>
 
             <div>
-                <h3>Reintentos</h3>
-                <span>Detalle de reintentos por resultado</span>
+                <p class="dev-kicker">Regulación · Business Intelligence</p>
+                <h1>Dashboard de Devoluciones</h1>
+                <p>Monitoreo dinámico de candidatos, resultados, reintentos y flujo del proceso.</p>
+            </div>
+        </div>
+
+        <div class="dev-hero-right">
+            <span class="dev-live">LIVE DATA</span>
+        </div>
+    </section>
+
+
+    <!-- =========================================================
+         FILTROS
+         ========================================================= -->
+    <section class="dev-filter-card">
+
+        <div class="dev-filter-head">
+            <div>
+                <div class="dev-filter-title">
+                    <i class="fas fa-sliders-h"></i>
+                    Filtros de análisis
+                </div>
+                <div class="dev-filter-subtitle">
+                    La fecha seleccionada controla también la consulta de la TABLA 020.
+                </div>
+            </div>
+
+            <div id="active-filters" class="active-filters"></div>
+        </div>
+
+        <div class="filters-grid">
+
+            <div class="filter-group">
+                <label for="year">Año</label>
+                <select id="year">
+                    <option value="">Todos</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="month">Mes</label>
+                <select id="month">
+                    <option value="">Todos</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="day">Día</label>
+                <select id="day">
+                    <option value="">Todos</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="producto">Producto</label>
+                <select id="producto">
+                    <option value="">Todos</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="comentario">Comentario</label>
+                <select id="comentario">
+                    <option value="">Todos</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="resultado">Resultado</label>
+                <select id="resultado">
+                    <option value="">Todos</option>
+                </select>
+            </div>
+
+            <div class="filter-actions">
+                <button type="button" class="btn-filter" onclick="cargar()">
+                    <i class="fas fa-filter"></i>
+                    Filtrar
+                </button>
+
+                <button type="button" class="btn-reset" onclick="resetFiltros()">
+                    <i class="fas fa-eraser"></i>
+                    Limpiar
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- =========================================================
+         LOADING
+         ========================================================= -->
+    <div id="loading" class="dashboard-loading" style="display:none;">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <span>Actualizando información...</span>
+        </div>
+    </div>
+<!-- =========================================================
+         TABLA 020 — RESUMEN POST / PRE
+         ========================================================= -->
+    <section class="dev-section-card" id="producto-summary-section" style="margin-bottom:18px;">
+
+        <div class="dev-section-head">
+            <div>
+                <p class="section-kicker">TABLA 020</p>
+                <h3 class="section-title">Resumen por producto</h3>
+                <p class="section-description">
+                    Cantidad y monto en soles de Postpago y Prepago.
+                </p>
+            </div>
+
+            <div class="section-badge">
+                <i class="fas fa-database"></i>
+                FECHA_REPORTE - 1 DÍA
+            </div>
+        </div>
+
+        <div id="producto-summary" class="product-summary"></div>
+    </section>
+
+
+    <!-- =========================================================
+         PROCESO ABONADOS
+         ========================================================= -->
+    <section class="abonados-process-card">
+
+        <div class="abonados-process-head">
+            <div>                
+                <h3 class="section-title">PROCESO ABONADOS (LUNES A VIERNES - HORARIOS 11,16,18 y 22HRS)</h3>
+                <p id="abonados-date" class="section-description">
+                    Selecciona un día para consultar el rango.
+                </p>
+            </div>
+
+            <div class="section-badge abonados-badge">
+                <i class="fas fa-users"></i>
+                ABONADOS
+            </div>
+        </div>
+
+        <div id="abonados-content" class="abonados-content"></div>
+
+    </section>
+
+
+    <!-- =========================================================
+         FLUJO TABLA 020 — CATEGORÍAS
+         ========================================================= -->
+    <section class="cycle-card">
+
+        <div class="cycle-header">
+            <div>                
+                <h3 class="section-title">PROCESO DE FACTURACIÓN (LUNES 9:30AM)</h3>
+                <p id="cycle-date" class="section-description">
+                    Selecciona un día para consultar el rango.
+                </p>
+            </div>
+        </div>
+
+        <div class="cycle-products-box">
+
+            <div class="cycle-product-column cycle-postpago-column">
+                <div class="cycle-product-heading">
+                    <span class="cycle-product-dot cycle-product-dot-post"></span>
+                    <span>POSTPAGO</span>
+                </div>
+                <div id="cycle-flow-postpago" class="cycle-flow cycle-flow-postpago"></div>
+            </div>
+
+            <div class="cycle-product-divider"></div>
+
+            <div class="cycle-product-column cycle-prepago-column">
+                <div class="cycle-product-heading">
+                    <span class="cycle-product-dot cycle-product-dot-pre"></span>
+                    <span>PREPAGO</span>
+                </div>
+                <div id="cycle-flow-prepago" class="cycle-flow cycle-flow-prepago"></div>
+            </div>
+
+        </div>
+
+        <div class="cycle-legend">
+            <span class="cycle-legend-item cycle-legend-candidate">
+                <span class="cycle-legend-square"></span>
+                CANDIDATOS
+            </span>
+            <span class="cycle-legend-item cycle-legend-next">
+                <span class="cycle-legend-square"></span>
+                PRÓXIMA SEMANA
+            </span>
+            <span class="cycle-legend-item cycle-legend-closed">
+                <span class="cycle-legend-square"></span>
+                CERRADAS
+            </span>
+        </div>
+    </section>
+
+
+    <!-- =========================================================
+         AVERÍAS PROCESADAS EN FARECO — TABLA 019
+         ========================================================= -->
+    <section class="retries-card fareco-card">
+
+        <div class="retries-header">
+            <div>
+                <p class="section-kicker">TABLA 019</p>
+                <h3 class="section-title">Averías procesadas en FARECO</h3>
+                <p class="section-description">
+                    Resumen de averías procesadas por resultado, ciclo y motivo.
+                </p>
+            </div>
+
+            <div class="fareco-date-card">
+                <div class="fareco-date-icon">
+                    <i class="far fa-calendar-alt"></i>
+                </div>
+                <div>
+                    <span>FECHA SELECCIONADA</span>
+                    <strong id="fareco-date-value">-- --- ----</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="fareco-layout">
+
+            <!-- =================================================
+                 RESUMEN POR RESULTADO
+                 ================================================= -->
+            <div class="fareco-summary-panel">
+
+                <div class="fareco-panel-title">
+                    <div class="fareco-panel-icon fareco-icon-blue">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <div>
+                        <h4>Resumen por resultado</h4>
+                        <p>Cantidad y monto de averías procesadas en FARECO.</p>
+                    </div>
+                </div>
+
+                <div class="fareco-result-grid">
+
+                    <div class="fareco-result-card fareco-success">
+                        <div class="fareco-result-top">
+                            <div class="fareco-status-icon">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <span>SUCCESS</span>
+                        </div>
+
+                        <div id="fareco-success-count" class="fareco-result-count">
+                            0
+                        </div>
+
+                        <small>Registros</small>
+
+                        <div class="fareco-money-divider"></div>
+
+                        <div class="fareco-money-label">MONTO TOTAL</div>
+                        <strong id="fareco-success-money" class="fareco-money">
+                            S/ 0.00
+                        </strong>
+
+                        <div class="fareco-progress">
+                            <span id="fareco-success-progress"></span>
+                        </div>
+
+                        <div id="fareco-success-percent" class="fareco-percent">
+                            0.0% del total
+                        </div>
+                    </div>
+
+
+                    <div class="fareco-result-card fareco-reject">
+                        <div class="fareco-result-top">
+                            <div class="fareco-status-icon">
+                                <i class="fas fa-times"></i>
+                            </div>
+                            <span>REJECT</span>
+                        </div>
+
+                        <div id="fareco-reject-count" class="fareco-result-count">
+                            0
+                        </div>
+
+                        <small>Registros</small>
+
+                        <div class="fareco-money-divider"></div>
+
+                        <div class="fareco-money-label">MONTO TOTAL</div>
+                        <strong id="fareco-reject-money" class="fareco-money">
+                            S/ 0.00
+                        </strong>
+
+                        <div class="fareco-progress">
+                            <span id="fareco-reject-progress"></span>
+                        </div>
+
+                        <div id="fareco-reject-percent" class="fareco-percent">
+                            0.0% del total
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!-- =================================================
+                 DISTRIBUCIÓN POR RESULTADO Y CICLO
+                 ================================================= -->
+            <div class="fareco-cycle-panel">
+
+                <div class="fareco-panel-title">
+                    <div class="fareco-panel-icon fareco-icon-violet">
+                        <i class="fas fa-chart-simple"></i>
+                    </div>
+
+                    <div>
+                        <h4>Distribución por resultado y ciclo</h4>
+                        <p>
+                            Cantidad de averías por estado de ciclo, mostrando SUCCESS y REJECT.
+                        </p>
+                    </div>
+
+                    <div class="fareco-legend">
+                        <span>
+                            <i class="fareco-dot fareco-dot-success"></i>
+                            SUCCESS
+                        </span>
+                        <span>
+                            <i class="fareco-dot fareco-dot-reject"></i>
+                            REJECT
+                        </span>
+                    </div>
+                </div>
+
+                <div class="fareco-cycle-cards" id="fareco-cycle-body"></div>
+
             </div>
 
         </div>
 
 
-        <div class="tabla-wrapper">
+        <!-- =================================================
+             PRINCIPALES MOTIVOS DE REJECT
+             ================================================= -->
+        <div class="fareco-motivos-panel">
 
-            <table class="tabla-reintentos">
+            <div class="fareco-panel-title fareco-motivos-header">
 
-                <thead>
+                <div class="fareco-panel-icon fareco-icon-blue">
+                    <i class="far fa-file-alt"></i>
+                </div>
 
-                    <tr>
-                        <th>RESULTADO</th>
-                        <th>TOTAL</th>
-                        <th>R1</th>
-                        <th>R2</th>
-                        <th>R3</th>
-                        <th>R4</th>
-                    </tr>
+                <div>
+                    <h4>Principales motivos de REJECT</h4>
+                    <p>
+                        Detalle de motivos de rechazo ordenado por cantidad.
+                    </p>
+                </div>
 
-                </thead>
+                <div class="fareco-motivos-total">
+                    <span>Total de motivos</span>
+                    <strong id="fareco-motivos-total">0</strong>
+                </div>
 
-                <tbody id="reintentos-body">
-                </tbody>
+            </div>
 
-            </table>
+            <div class="fareco-motivos-table-wrapper">
+
+                <table class="fareco-motivos-table">
+
+                    <thead>
+                        <tr>
+                            <th>N°</th>
+                            <th>Cód. Motivo</th>
+                            <th>Descripción</th>
+                            <th>Cantidad</th>
+                            <th>Monto (S/)</th>
+                            <th>% del total REJECT</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="fareco-motivos-body"></tbody>
+
+                </table>
+
+            </div>
+
+            <div class="fareco-motivos-footer">
+                <span id="fareco-motivos-footer-text">
+                    Mostrando los principales motivos de REJECT.
+                </span>
+
+                <span class="fareco-footer-total">
+                    Total REJECT:
+                    <strong id="fareco-footer-reject-count">0</strong>
+                </span>
+            </div>
 
         </div>
 
     </section>
 
 
-    <!-- =====================================================
+    <!-- =========================================================
          GRÁFICOS
-         ===================================================== -->
-
-    <section class="charts">
+         ========================================================= -->
+    <section class="charts-grid">
 
         <div class="chart-card">
-            <div id="line"></div>
+            <div class="chart-header">
+                <div>
+                    <p class="section-kicker">EVOLUTION</p>
+                    <h3 class="chart-title">Evolución de devoluciones</h3>
+                    <p class="chart-subtitle">Cantidad y monto por fecha.</p>
+                </div>
+                <div class="section-badge">TENDENCIA</div>
+            </div>
+            <div id="line" class="plot-container"></div>
         </div>
 
-        <div class="chart-card">
-            <div id="resultado_pie"></div>
-        </div>
 
         <div class="chart-card">
-            <div id="producto_pie"></div>
+            <div class="chart-header">
+                <div>
+                    <p class="section-kicker">DISTRIBUTION</p>
+                    <h3 class="chart-title">Resultado</h3>
+                    <p class="chart-subtitle">Distribución de montos por resultado.</p>
+                </div>
+                <div class="section-badge">MONTO</div>
+            </div>
+            <div id="resultado_pie" class="plot-container"></div>
         </div>
 
+
         <div class="chart-card">
-            <div id="comentario_bar"></div>
+            <div class="chart-header">
+                <div>
+                    <p class="section-kicker">PRODUCT MIX</p>
+                    <h3 class="chart-title">Por producto</h3>
+                    <p class="chart-subtitle">Participación de Postpago y Prepago.</p>
+                </div>
+                <div class="section-badge">PRODUCTO</div>
+            </div>
+            <div id="producto_pie" class="plot-container"></div>
+        </div>
+
+
+        <div class="chart-card">
+            <div class="chart-header">
+                <div>
+                    <p class="section-kicker">ANALYTICS</p>
+                    <h3 class="chart-title">Comentarios</h3>
+                    <p class="chart-subtitle">Principales motivos asociados a las devoluciones.</p>
+                </div>
+                <div class="section-badge">DETALLE</div>
+            </div>
+            <div id="comentario_bar" class="plot-container"></div>
         </div>
 
     </section>
@@ -196,980 +485,1879 @@
 </div>
 
 
-<!-- =====================================================
+<!-- =========================================================
      PLOTLY
-     ===================================================== -->
-
+     ========================================================= -->
 <script src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
 
 
-<!-- =====================================================
-     JAVASCRIPT ACTUAL
-     ===================================================== -->
-
 <script>
+/* =============================================================
+   CONFIGURACIÓN VISUAL
+   ============================================================= */
 
-// =========================================================
-// FILTROS FECHA
-// =========================================================
+const PLOT_CONFIG = {
+    responsive: true,
+    displaylogo: false,
+    modeBarButtonsToRemove: [
+        "lasso2d",
+        "select2d",
+        "autoScale2d"
+    ]
+};
 
-async function cargarFiltros(){
+const PLOT_FONT = {
+    family: "Inter, Arial, sans-serif",
+    color: "#475569",
+    size: 10
+};
 
-    let res = await fetch("/devoluciones/filtros");
-    let data = await res.json();
+const PLOT_LAYOUT_BASE = {
+    paper_bgcolor: "rgba(0,0,0,0)",
+    plot_bgcolor: "rgba(0,0,0,0)",
+    font: PLOT_FONT,
+    margin: {
+        l: 48,
+        r: 24,
+        t: 22,
+        b: 45
+    },
+    hoverlabel: {
+        bgcolor: "#172033",
+        bordercolor: "#334155",
+        font: {
+            color: "#ffffff",
+            size: 10
+        }
+    },
+    transition: {
+        duration: 450,
+        easing: "cubic-in-out"
+    }
+};
 
-    let yearSelect = document.getElementById("year");
 
-    yearSelect.innerHTML = "";
+/* =============================================================
+   UTILIDADES
+   ============================================================= */
 
-    data.years.forEach(y => {
-        yearSelect.add(new Option(y, y));
+function esc(value) {
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+function numero(value) {
+    return Number(value || 0);
+}
+
+function formatNumero(value) {
+    return numero(value).toLocaleString("es-PE", {
+        maximumFractionDigits: 0
     });
+}
 
-    yearSelect.onchange = async () => {
+function formatMonto(value) {
+    return numero(value).toLocaleString("es-PE", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+}
+
+function emptyChart(id, mensaje = "Sin información disponible") {
+    const el = document.getElementById(id);
+
+    if (!el) return;
+
+    el.innerHTML = `
+        <div class="chart-empty">
+            <i class="fas fa-chart-line"></i>
+            <strong>${esc(mensaje)}</strong>
+            <span>Los datos aparecerán al aplicar filtros.</span>
+        </div>
+    `;
+}
+
+function setLoading(show) {
+    document.getElementById("loading").style.display =
+        show ? "flex" : "none";
+}
+
+
+/* =============================================================
+   FILTROS
+   ============================================================= */
+
+async function cargarFiltros() {
+
+    try {
+
+        const res = await fetch("/devoluciones/filtros");
+        const data = await res.json();
+
+        const year = document.getElementById("year");
+
+        year.innerHTML = `<option value="">Todos</option>`;
+
+        (data.years || []).forEach(y => {
+            year.add(new Option(y, y));
+        });
+
+        year.onchange = async () => {
+            await cargarMeses();
+            cargar();
+        };
 
         await cargarMeses();
-        await cargar();
 
-    };
-
-    await cargarMeses();
+    } catch (error) {
+        console.error("Error cargando filtros:", error);
+    }
 }
 
 
-// =========================================================
-// MESES
-// =========================================================
+async function cargarMeses() {
 
-async function cargarMeses(){
+    const year = document.getElementById("year").value;
 
-    let year = document.getElementById("year").value;
+    const url = year
+        ? `/devoluciones/meses?year=${encodeURIComponent(year)}`
+        : `/devoluciones/meses`;
 
-    let res = await fetch(
-        `/devoluciones/meses?year=${year}`
-    );
+    try {
 
-    let data = await res.json();
+        const res = await fetch(url);
+        const data = await res.json();
 
-    let monthSelect =
-        document.getElementById("month");
+        const month = document.getElementById("month");
 
-    monthSelect.innerHTML =
-        `<option value="">Mes</option>`;
+        month.innerHTML = `<option value="">Todos</option>`;
 
-    data.months.forEach(m => {
+        (data.months || []).forEach(m => {
+            month.add(new Option(m, m));
+        });
 
-        monthSelect.add(
-            new Option(m, m)
-        );
-
-    });
-
-    monthSelect.onchange = async () => {
+        month.onchange = async () => {
+            await cargarDias();
+            cargar();
+        };
 
         await cargarDias();
-        await cargar();
 
+    } catch (error) {
+        console.error("Error cargando meses:", error);
+    }
+}
+
+
+async function cargarDias() {
+
+    const year = document.getElementById("year").value;
+    const month = document.getElementById("month").value;
+
+    const params = new URLSearchParams();
+
+    if (year) params.set("year", year);
+    if (month) params.set("month", month);
+
+    try {
+
+        const res = await fetch(
+            `/devoluciones/dias?${params.toString()}`
+        );
+
+        const data = await res.json();
+
+        const day = document.getElementById("day");
+
+        day.innerHTML = `<option value="">Todos</option>`;
+
+        (data.days || []).forEach(d => {
+            day.add(new Option(d, d));
+        });
+
+        day.onchange = cargar;
+
+    } catch (error) {
+        console.error("Error cargando días:", error);
+    }
+}
+
+
+/* =============================================================
+   CATÁLOGOS
+   ============================================================= */
+
+async function cargarCatalogos() {
+
+    try {
+
+        const res = await fetch("/devoluciones/data_full");
+        const data = await res.json();
+
+        const producto = document.getElementById("producto");
+        const comentario = document.getElementById("comentario");
+        const resultado = document.getElementById("resultado");
+
+        producto.innerHTML = `<option value="">Todos</option>`;
+        comentario.innerHTML = `<option value="">Todos</option>`;
+        resultado.innerHTML = `<option value="">Todos</option>`;
+
+        const productos = [...new Set(
+            data
+                .map(x => x.PRODUCTO)
+                .filter(x => x !== null && x !== undefined && String(x).trim() !== "")
+        )];
+
+        const comentarios = [...new Set(
+            data
+                .map(x => x.COMENTARIO)
+                .filter(x => x !== null && x !== undefined && String(x).trim() !== "")
+        )];
+
+        const resultados = [...new Set(
+            data
+                .map(x => x.RESULTADO_NC)
+                .filter(x => x !== null && x !== undefined && String(x).trim() !== "")
+        )];
+
+        productos.sort().forEach(x => {
+            producto.add(new Option(x, x));
+        });
+
+        comentarios.sort().forEach(x => {
+            comentario.add(new Option(x, x));
+        });
+
+        resultados.sort().forEach(x => {
+            resultado.add(new Option(x, x));
+        });
+
+        producto.onchange = cargar;
+        comentario.onchange = cargar;
+        resultado.onchange = cargar;
+
+    } catch (error) {
+        console.error("Error cargando catálogos:", error);
+    }
+}
+
+
+/* =============================================================
+   FILTROS ACTIVOS
+   ============================================================= */
+
+function actualizarFiltrosActivos() {
+
+    const campos = [
+        ["Año", "year"],
+        ["Mes", "month"],
+        ["Día", "day"],
+        ["Producto", "producto"],
+        ["Comentario", "comentario"],
+        ["Resultado", "resultado"]
+    ];
+
+    const contenedor = document.getElementById("active-filters");
+
+    const activos = campos
+        .map(([label, id]) => {
+            const value = document.getElementById(id).value;
+            return value
+                ? `<span class="filter-chip">${label}: <strong>${esc(value)}</strong></span>`
+                : "";
+        })
+        .filter(Boolean);
+
+    contenedor.innerHTML = activos.join("");
+}
+
+
+/* =============================================================
+   CARGA PRINCIPAL
+   ============================================================= */
+
+let cargaActual = 0;
+
+async function cargar() {
+
+    const cargaId = ++cargaActual;
+
+    setLoading(true);
+    actualizarFiltrosActivos();
+
+    const year = document.getElementById("year").value;
+    const month = document.getElementById("month").value;
+    const day = document.getElementById("day").value;
+    const producto = document.getElementById("producto").value;
+    const comentario = document.getElementById("comentario").value;
+    const resultado = document.getElementById("resultado").value;
+
+    const params = new URLSearchParams();
+
+    if (year) params.set("year", year);
+    if (month) params.set("month", month);
+    if (day) params.set("day", day);
+    if (producto) params.set("producto", producto);
+    if (comentario) params.set("comentario", comentario);
+    if (resultado) params.set("resultado", resultado);
+
+    try {
+
+        const res = await fetch(
+            `/devoluciones/data?${params.toString()}`
+        );
+
+        if (!res.ok) {
+            throw new Error(`HTTP ${res.status}`);
+        }
+
+        const data = await res.json();
+
+        if (cargaId !== cargaActual) return;
+
+        renderProductoSummary(data);
+        renderAbonados(data);
+        renderCycle(data);
+        renderAveriasFareco(data);
+        renderCharts(data);
+
+    } catch (error) {
+
+        console.error("Error cargando dashboard:", error);
+
+        renderProductoSummary({
+            ciclo: {
+                resumen_producto: []
+            }
+        });
+
+        renderAbonados({
+            abonados: {
+                fecha_inicio: null,
+                fecha_fin: null,
+                total: 0,
+                items: []
+            }
+        });
+
+        renderCycle({
+            ciclo: {
+                items: [],
+                items_postpago: [],
+                items_prepago: [],
+                fecha_reporte: null,
+                fecha_seleccionada: null
+            }
+        });
+
+        emptyChart("line", "No se pudo cargar la tendencia");
+        emptyChart("resultado_pie", "No se pudo cargar el resultado");
+        emptyChart("producto_pie", "No se pudo cargar el producto");
+        emptyChart("comentario_bar", "No se pudo cargar comentarios");
+
+    } finally {
+
+        if (cargaId === cargaActual) {
+            setLoading(false);
+        }
+    }
+}
+
+/* =============================================================
+   RESUMEN POSTPAGO / PREPAGO
+   IMPORTANTE:
+   Los valores vienen directamente de TMP_JFF_FEATDEVO_2_020.
+   ============================================================= */
+
+function renderProductoSummary(data) {
+
+    const ciclo = data.ciclo || {};
+    const resumen = Array.isArray(ciclo.resumen_producto)
+        ? ciclo.resumen_producto
+        : [];
+
+    let post = {
+        registros: 0,
+        monto: 0
     };
 
-    await cargarDias();
-}
+    let pre = {
+        registros: 0,
+        monto: 0
+    };
 
+    resumen.forEach(item => {
 
-// =========================================================
-// DÍAS
-// =========================================================
+        const tipo = String(
+            item.TIPO_PRODUCTO || item.PRODUCTO || ""
+        ).toUpperCase();
 
-async function cargarDias(){
-
-    let year =
-        document.getElementById("year").value;
-
-    let month =
-        document.getElementById("month").value;
-
-    let res = await fetch(
-        `/devoluciones/dias?year=${year}&month=${month}`
-    );
-
-    let data = await res.json();
-
-    let daySelect =
-        document.getElementById("day");
-
-    daySelect.innerHTML =
-        `<option value="">Día</option>`;
-
-    data.days.forEach(d => {
-
-        daySelect.add(
-            new Option(d, d)
+        const registros = numero(
+            item.REGISTROS ?? item.CANTIDAD
         );
 
+        const monto = numero(
+            item.MONTO ?? item.MONTO_SOLES
+        );
+
+        if (tipo.includes("POST")) {
+            post.registros += registros;
+            post.monto += monto;
+        }
+
+        if (tipo.includes("PRE")) {
+            pre.registros += registros;
+            pre.monto += monto;
+        }
     });
 
-    daySelect.onchange = cargar;
-}
+    document.getElementById("producto-summary").innerHTML = `
 
+        <div class="product-summary-card product-summary-post">
 
-// =========================================================
-// CATÁLOGOS
-// =========================================================
-
-async function cargarCatalogos(){
-
-    let res =
-        await fetch("/devoluciones/data_full");
-
-    let data =
-        await res.json();
-
-    let productoSel =
-        document.getElementById("producto");
-
-    let comentarioSel =
-        document.getElementById("comentario");
-
-    let resultadoSel =
-        document.getElementById("resultado");
-
-
-    productoSel.innerHTML =
-        `<option value="">Producto</option>`;
-
-    comentarioSel.innerHTML =
-        `<option value="">Comentario</option>`;
-
-    resultadoSel.innerHTML =
-        `<option value="">Resultado</option>`;
-
-
-    [...new Set(
-        data.map(x => x.PRODUCTO)
-    )].forEach(x => {
-
-        productoSel.add(
-            new Option(x, x)
-        );
-
-    });
-
-
-    [...new Set(
-        data.map(x => x.COMENTARIO)
-    )].forEach(x => {
-
-        comentarioSel.add(
-            new Option(x, x)
-        );
-
-    });
-
-
-    [...new Set(
-        data.map(x => x.RESULTADO_NC)
-    )].forEach(x => {
-
-        resultadoSel.add(
-            new Option(x, x)
-        );
-
-    });
-
-
-    productoSel.onchange = cargar;
-    comentarioSel.onchange = cargar;
-    resultadoSel.onchange = cargar;
-
-}
-
-
-// =========================================================
-// CARGAR DASHBOARD
-// =========================================================
-
-async function cargar(){
-
-    document.getElementById(
-        "loading"
-    ).style.display = "flex";
-
-
-    document.getElementById(
-        "kpis"
-    ).style.display = "none";
-
-
-    document.querySelector(
-        ".charts"
-    ).style.display = "none";
-
-
-    let year =
-        document.getElementById("year").value;
-
-    let month =
-        document.getElementById("month").value;
-
-    let day =
-        document.getElementById("day").value;
-
-    let producto =
-        document.getElementById("producto").value;
-
-    let comentario =
-        document.getElementById("comentario").value;
-
-    let resultado =
-        document.getElementById("resultado").value;
-
-
-    let res = await fetch(
-        `/devoluciones/data?year=${year}` +
-        `&month=${month}` +
-        `&day=${day}` +
-        `&producto=${producto}` +
-        `&comentario=${comentario}` +
-        `&resultado=${resultado}`
-    );
-
-
-    let data =
-        await res.json();
-
-
-    // =====================================================
-    // KPIs
-    // =====================================================
-
-    let total =
-        data.kpis.total_registros || 0;
-
-    let monto =
-        data.kpis.total_monto || 0;
-
-    let ok =
-        data.kpis.ok || 0;
-
-    let nok =
-        data.kpis.nok || 0;
-
-    let pctOK =
-        data.kpis.porc_ok || 0;
-
-    let pctNOK =
-        data.kpis.porc_nok || 0;
-
-
-    // =====================================================
-    // SUCCESS - MONTO
-    // =====================================================
-
-    let successMonto =
-        data.resultado
-
-        .filter(x =>
-            String(x.RESULTADO_NC)
-            .toUpperCase()
-            .includes("SUCCESS")
-        )
-
-        .reduce(
-            (a, b) =>
-                a + Number(
-                    b.MONTO_SOLES || 0
-                ),
-            0
-        );
-
-
-    // =====================================================
-    // REJECT - MONTO
-    // =====================================================
-
-    let rejectMonto =
-        data.resultado
-
-        .filter(x =>
-            String(x.RESULTADO_NC)
-            .toUpperCase()
-            .includes("REJECT")
-        )
-
-        .reduce(
-            (a, b) =>
-                a + Number(
-                    b.MONTO_SOLES || 0
-                ),
-            0
-        );
-
-
-    // =====================================================
-    // SUCCESS - CANTIDAD
-    // =====================================================
-
-    let successCant =
-        data.resultado
-
-        .filter(x =>
-            String(x.RESULTADO_NC)
-            .toUpperCase()
-            .includes("SUCCESS")
-        )
-
-        .reduce(
-            (a, b) =>
-                a + Number(
-                    b.TOT_CANT_REGISTROS || 0
-                ),
-            0
-        );
-
-
-    // =====================================================
-    // REJECT - CANTIDAD
-    // =====================================================
-
-    let rejectCant =
-        data.resultado
-
-        .filter(x =>
-            String(x.RESULTADO_NC)
-            .toUpperCase()
-            .includes("REJECT")
-        )
-
-        .reduce(
-            (a, b) =>
-                a + Number(
-                    b.TOT_CANT_REGISTROS || 0
-                ),
-            0
-        );
-
-
-    let totalSRCant =
-        successCant + rejectCant;
-
-
-    let pctSuccess =
-        totalSRCant
-            ? ((successCant / totalSRCant) * 100)
-                .toFixed(1)
-            : 0;
-
-
-    let pctReject =
-        totalSRCant
-            ? ((rejectCant / totalSRCant) * 100)
-                .toFixed(1)
-            : 0;
-
-
-    // =====================================================
-    // POSTPAGO / PREPAGO
-    // =====================================================
-
-    let candidatosOK =
-        Array.isArray(data.pie)
-            ? data.pie
-            : [];
-
-
-    let postpago =
-        candidatosOK
-
-        .filter(x =>
-            String(x.PRODUCTO || "")
-            .toUpperCase()
-            .includes("POST")
-        )
-
-        .reduce(
-            (a,b) =>
-                a + Number(
-                    b.TOT_CANT_REGISTROS || 0
-                ),
-            0
-        );
-
-
-    let prepago =
-        candidatosOK
-
-        .filter(x =>
-            String(x.PRODUCTO || "")
-            .toUpperCase()
-            .includes("PRE")
-        )
-
-        .reduce(
-            (a,b) =>
-                a + Number(
-                    b.TOT_CANT_REGISTROS || 0
-                ),
-            0
-        );
-
-
-    // =====================================================
-    // REINTENTOS
-    // =====================================================
-
-    let reintentos =
-        Array.isArray(data.reintentos)
-            ? data.reintentos
-            : [];
-
-
-    let body =
-        document.getElementById(
-            "reintentos-body"
-        );
-
-
-    body.innerHTML =
-        reintentos.map(r => `
-
-            <tr>
-
-                <td>${r.RESULTADO ?? ""}</td>
-
-                <td>
-                    ${Number(
-                        r.TOTAL || 0
-                    ).toLocaleString()}
-                </td>
-
-                <td>
-                    ${Number(
-                        r.R1 || 0
-                    ).toLocaleString()}
-                </td>
-
-                <td>
-                    ${Number(
-                        r.R2 || 0
-                    ).toLocaleString()}
-                </td>
-
-                <td>
-                    ${Number(
-                        r.R3 || 0
-                    ).toLocaleString()}
-                </td>
-
-                <td>
-                    ${Number(
-                        r.R4 || 0
-                    ).toLocaleString()}
-                </td>
-
-            </tr>
-
-        `).join("");
-
-
-    // =====================================================
-    // KPIs HTML
-    // =====================================================
-
-    document.getElementById(
-        "kpis"
-    ).innerHTML = `
-
-        <div class="card kpi-card">
-            <h4>TOTAL</h4>
-            <h2>
-                ${total.toLocaleString()}
-            </h2>
-        </div>
-
-
-        <div class="card kpi-card">
-            <h4>MONTO (S/.)</h4>
-            <h2>
-                S/ ${monto.toLocaleString()}
-            </h2>
-        </div>
-
-
-        <div class="card kpi-card">
-
-            <h4>CANDIDATOS</h4>
-
-            <div class="kpi-split">
-
-                <div class="kpi-main ok">
-                    ${ok.toLocaleString()}
-                </div>
-
-                <div class="kpi-detail">
-
-                    <div>
-                        <strong>
-                            Postpago:
-                            ${postpago.toLocaleString()}
-                        </strong>
-                    </div>
-
-                    <div>
-                        <strong>
-                            Prepago:
-                            ${prepago.toLocaleString()}
-                        </strong>
-                    </div>
-
-                </div>
-
+            <div class="product-summary-label">
+                POSTPAGO
             </div>
 
-            <small>${pctOK}%</small>
-
-        </div>
-
-
-        <div class="card kpi-card">
-
-            <h4>
-                CANDIDATOS POSTPAGO
-            </h4>
-
-            <div class="sr-row">
-
-                <span class="success-label">
-                    ✔ Success
-                </span>
-
-                <span class="sr-value">
-
-                    <b>
-                        ${successCant.toLocaleString()}
-                        reg |
-                        S/ ${successMonto.toLocaleString()}
-                    </b>
-
-                    <small>
-                        (${pctSuccess}%)
-                    </small>
-
-                </span>
-
+            <div class="product-summary-value">
+                ${formatNumero(post.registros)}
             </div>
 
-
-            <div class="sr-row">
-
-                <span class="reject-label">
-                    ✖ Reject
-                </span>
-
-                <span class="sr-value">
-
-                    <b>
-                        ${rejectCant.toLocaleString()}
-                        reg |
-                        S/ ${rejectMonto.toLocaleString()}
-                    </b>
-
-                    <small>
-                        (${pctReject}%)
-                    </small>
-
-                </span>
-
+            <div class="product-summary-money">
+                S/ <strong>${formatMonto(post.monto)}</strong>
             </div>
 
         </div>
 
 
-        <div class="card kpi-card">
+        <div class="product-summary-card product-summary-pre">
 
-            <h4>
-                EXCLUIDO POR CRITERIOS
-            </h4>
+            <div class="product-summary-label">
+                PREPAGO
+            </div>
 
-            <h2 class="nok">
-                ${nok.toLocaleString()}
-            </h2>
+            <div class="product-summary-value">
+                ${formatNumero(pre.registros)}
+            </div>
 
-            <small>
-                ${pctNOK}%
-            </small>
+            <div class="product-summary-money">
+                S/ <strong>${formatMonto(pre.monto)}</strong>
+            </div>
 
         </div>
 
     `;
+}
 
 
-    // =====================================================
-    // GRÁFICO TENDENCIA
-    // =====================================================
+/* =============================================================
+   PROCESO ABONADOS
+   ============================================================= */
 
-    let tendencia =
-        Array.isArray(data.tendencia)
-            ? data.tendencia
-            : [];
+function renderAbonados(data) {
 
+    const info = data.abonados || {};
+    const items = Array.isArray(info.items) ? info.items : [];
 
-    if (tendencia.length <= 1) {
+    const dateLabel = document.getElementById("abonados-date");
+    const container = document.getElementById("abonados-content");
 
-        Plotly.react(
-            "line",
-            [{
-                x: tendencia.map(
-                    x => x.FECHA_STR
-                ),
+    if (info.fecha_inicio && info.fecha_fin) {
 
-                y: tendencia.map(
-                    x => Number(
-                        x.TOT_CANT_REGISTROS || 0
-                    )
-                ),
-
-                type: "bar",
-
-                text: tendencia.map(
-                    x =>
-                        Number(
-                            x.TOT_CANT_REGISTROS || 0
-                        ).toLocaleString()
-                ),
-
-                textposition: "auto",
-
-                customdata:
-                    tendencia.map(x => [
-                        Number(
-                            x.MONTO_SOLES || 0
-                        ).toLocaleString()
-                    ]),
-
-                hovertemplate:
-                    "<b>Fecha: %{x}</b><br>" +
-                    "Cantidad: %{y}<br>" +
-                    "Monto: S/ %{customdata[0]}" +
-                    "<extra></extra>"
-            }],
-            {
-                title: "Tendencia de Candidatos",
-                yaxis: {
-                    title: "Cantidad de Registros"
-                },
-                xaxis: {
-                    title: "Fecha"
-                }
-            }
-        );
+        dateLabel.innerHTML =
+            `Rango consultado: <strong>${esc(info.fecha_inicio)}</strong>` +
+            ` al ` +
+            `<strong>${esc(info.fecha_fin)}</strong>`;
 
     } else {
 
-        Plotly.react(
-            "line",
-            [{
-                x: tendencia.map(
-                    x => x.FECHA_STR
-                ),
+        dateLabel.textContent =
+            "Selecciona un día para consultar el rango.";
+    }
 
-                y: tendencia.map(
-                    x => Number(
-                        x.TOT_CANT_REGISTROS || 0
-                    )
-                ),
+    if (!items.length) {
 
-                type: "scatter",
+        container.innerHTML = `
+            <div class="abonados-empty">
+                <i class="fas fa-users"></i>
+                <strong>Sin información de abonados</strong>
+                <span>
+                    No se encontraron abonados para el rango seleccionado.
+                </span>
+            </div>
+        `;
 
-                mode: "lines+markers+text",
+        return;
+    }
 
-                text: tendencia.map(
-                    x =>
-                        Number(
-                            x.TOT_CANT_REGISTROS || 0
-                        ).toLocaleString()
-                ),
+    const getCantidad = (nombre) => {
 
-                textposition: "top center",
+        const normalizado = String(nombre || "")
+            .toUpperCase()
+            .replace(/\s+/g, "")
+            .replace(/-/g, "");
 
-                customdata:
-                    tendencia.map(x => [
-                        Number(
-                            x.MONTO_SOLES || 0
-                        ).toLocaleString()
-                    ]),
+        const item = items.find(x => {
 
-                hovertemplate:
-                    "<b>Fecha: %{x}</b><br>" +
-                    "Cantidad: %{y}<br>" +
-                    "Monto: S/ %{customdata[0]}" +
-                    "<extra></extra>"
-            }],
-            {
-                title: "Tendencia de Candidatos",
+            const p = String(x.PRODUCTO || "")
+                .toUpperCase()
+                .replace(/\s+/g, "")
+                .replace(/-/g, "");
 
-                yaxis: {
-                    title: "Cantidad de Registros"
-                },
+            return p === normalizado;
+        });
 
-                xaxis: {
-                    title: "Fecha"
-                },
+        return item ? numero(item.CANTIDAD) : 0;
+    };
 
-                hovermode: "x unified"
-            }
-        );
+    const post = getCantidad("POSTPAGO");
+    const pre = getCantidad("PREPAGO");
+    const total = numero(info.total);
+
+    container.innerHTML = `
+        <div class="abonados-total">
+            <div class="abonados-total-label">
+                TOTAL ABONADOS
+            </div>
+            <div class="abonados-total-value">
+                ${formatNumero(total)}
+            </div>
+        </div>
+
+        <div class="abonados-products">
+
+            <div class="abonados-product abonados-post">
+                <div class="abonados-product-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div>
+                    <span class="abonados-product-label">POSTPAGO</span>
+                    <strong>${formatNumero(post)}</strong>
+                    <small>abonados</small>
+                </div>
+            </div>
+
+            <div class="abonados-product abonados-pre">
+                <div class="abonados-product-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <div>
+                    <span class="abonados-product-label">PREPAGO</span>
+                    <strong>${formatNumero(pre)}</strong>
+                    <small>abonados</small>
+                </div>
+            </div>
+
+        </div>
+    `;
+}
+
+
+/* =============================================================
+   FLUJO TABLA 020
+   ============================================================= */
+
+function renderCycle(data) {
+
+    const ciclo = data.ciclo || {};
+
+    const itemsPost = Array.isArray(ciclo.items_postpago)
+        ? ciclo.items_postpago
+        : [];
+
+    const itemsPre = Array.isArray(ciclo.items_prepago)
+        ? ciclo.items_prepago
+        : [];
+
+    const fechaReporte = ciclo.fecha_reporte;
+    const fechaSeleccionada = ciclo.fecha_seleccionada;
+
+    const dateLabel = document.getElementById("cycle-date");
+    const contenedorPost = document.getElementById("cycle-flow-postpago");
+    const contenedorPre = document.getElementById("cycle-flow-prepago");
+
+    if (fechaReporte && fechaSeleccionada) {
+
+        /*
+         * Fecha final = fecha seleccionada - 1 día.
+         *
+         * Ejemplo:
+         * seleccionada 2026-09-07
+         * fecha TABLA 020 2026-09-06
+         *
+         * Para mostrar 7 días calendario:
+         * inicio = fecha final - 6 días.
+         */
+        const fechaFin = new Date(`${fechaSeleccionada}T00:00:00`);
+        fechaFin.setDate(fechaFin.getDate() - 1);
+
+        const fechaInicio = new Date(fechaFin);
+        fechaInicio.setDate(fechaInicio.getDate() - 6);
+
+        const formatearFecha = (fecha) => {
+            const y = fecha.getFullYear();
+            const m = String(fecha.getMonth() + 1).padStart(2, "0");
+            const d = String(fecha.getDate()).padStart(2, "0");
+            return `${y}-${m}-${d}`;
+        };
+
+        dateLabel.innerHTML =
+            `Rango de la semana <strong>${esc(fechaSeleccionada)}</strong>` +
+            ` corresponde del ` +
+            `<strong>${formatearFecha(fechaInicio)}</strong>` +
+            ` al ` +
+            `<strong>${formatearFecha(fechaFin)}</strong>`;
+
+    } else {
+
+        dateLabel.textContent =
+            "Selecciona un día para consultar la TABLA 020.";
 
     }
 
+    if (!fechaReporte) {
 
-    // =====================================================
-    // RESULTADO
-    // =====================================================
+        const empty = `
+            <div class="cycle-empty">
+                <i class="fas fa-calendar-day"></i>
+                <strong>Selecciona una fecha</strong>
+                <span>
+                    El flujo de la TABLA 020 se consulta con la fecha seleccionada menos 1 día.
+                </span>
+            </div>
+        `;
 
-    let resultadoAjustes =
-        data.resultado
+        contenedorPost.innerHTML = empty;
+        contenedorPre.innerHTML = empty;
+        return;
+    }
 
-        .filter(
-            x =>
-                String(
-                    x.RESULTADO_NC || ""
-                ).trim() !== ""
-        );
+    function renderProductFlow(contenedor, items, nombreProducto) {
 
+        if (!items.length) {
+            contenedor.innerHTML = `
+                <div class="cycle-empty">
+                    <i class="fas fa-database"></i>
+                    <strong>Sin información de ${esc(nombreProducto)}</strong>
+                    <span>
+                        No se encontraron registros de ${esc(nombreProducto)}
+                        para ${esc(fechaReporte)}.
+                    </span>
+                </div>
+            `;
+            return;
+        }
+
+        const priority = {
+            "AVERIAS SEMANA ANT.": 1,
+            "AVERIAS SEMANA": 2,
+            "REJECT 1": 3,
+            "REJECT 2": 4,
+            "REJECT 3": 5,
+            "REJECT 4": 6,
+            "SEMANA EN CURSO": 7,
+            "PRÓXIMA SEMANA": 8,
+            "CERRADAS": 9
+        };
+
+        let itemsRender = [...items];
+
+        // POSTPAGO: siempre mostrar los 6 componentes de
+        // SEMANA EN CURSO, aunque alguno tenga 0 registros.
+        if (nombreProducto === "POSTPAGO") {
+            const estadosSemana = [
+                "AVERIAS SEMANA ANT.",
+                "AVERIAS SEMANA",
+                "REJECT 1",
+                "REJECT 2",
+                "REJECT 3",
+                "REJECT 4"
+            ];
+
+            const existentes = new Map(
+                itemsRender.map(item => [
+                    String(item.CATEGORIA || "").trim().toUpperCase(),
+                    item
+                ])
+            );
+
+            const componentes = estadosSemana.map(estado => {
+                const encontrado = existentes.get(estado);
+
+                return encontrado || {
+                    CATEGORIA: estado,
+                    CANTIDAD: 0,
+                    MONTO_SOLES: 0,
+                    PORCENTAJE_CICLO: 0
+                };
+            });
+
+            const otros = itemsRender.filter(item => {
+                const cat = String(item.CATEGORIA || "")
+                    .trim()
+                    .toUpperCase();
+
+                return !estadosSemana.includes(cat);
+            });
+
+            itemsRender = [...componentes, ...otros];
+        }
+
+        const ordered = [...itemsRender].sort((a, b) => {
+
+            const categoriaA = String(a.CATEGORIA || "")
+                .trim()
+                .toUpperCase();
+
+            const categoriaB = String(b.CATEGORIA || "")
+                .trim()
+                .toUpperCase();
+
+            return (
+                (priority[categoriaA] || 99) -
+                (priority[categoriaB] || 99)
+            );
+        });
+
+        let html = "";
+
+        ordered.forEach((item, index) => {
+
+            const categoria = String(
+                item.CATEGORIA || "SIN CATEGORIA"
+            ).trim();
+
+            const categoriaUpper = categoria.toUpperCase();
+
+            let clase = "cycle-default";
+            let icono = "fa-circle";
+
+            if ([
+                "AVERIAS SEMANA ANT.",
+                "AVERIAS SEMANA",
+                "REJECT 1",
+                "REJECT 2",
+                "REJECT 3",
+                "REJECT 4",
+                "SEMANA EN CURSO"
+            ].includes(categoriaUpper)) {
+                clase = "cycle-candidate";
+                icono = "fa-user-check";
+
+            } else if (categoriaUpper === "PRÓXIMA SEMANA") {
+                clase = "cycle-next";
+                icono = "fa-calendar-week";
+
+            } else if (categoriaUpper === "CERRADAS") {
+                clase = "cycle-closed";
+                icono = "fa-lock";
+            }
+
+            const cantidad = numero(item.CANTIDAD);
+            const monto = numero(item.MONTO_SOLES);
+            const porcentaje = numero(item.PORCENTAJE_CICLO);
+
+            html += `
+                <div class="cycle-node ${clase}">
+
+                    <div class="cycle-node-header">
+                        <span class="cycle-node-icon">
+                            <i class="fas ${icono}"></i>
+                        </span>
+
+                        <span class="cycle-node-step">
+                            ${String(index + 1).padStart(2, "0")}
+                        </span>
+                    </div>
+
+                    <div class="cycle-node-title">
+                        ${esc(categoria)}
+                    </div>
+
+                    <div class="cycle-node-value">
+                        ${formatNumero(cantidad)}
+                    </div>
+
+                    <div class="cycle-node-money">
+                        S/ ${formatMonto(monto)}
+                    </div>
+
+                    <div class="cycle-node-percent">
+                        ${porcentaje.toFixed(1)}% del ${esc(nombreProducto.toLowerCase())}
+                    </div>
+
+                </div>
+            `;
+
+            if (index < ordered.length - 1) {
+                html += `<div class="cycle-connector"></div>`;
+            }
+
+        });
+
+        contenedor.innerHTML = html;
+    }
+
+    renderProductFlow(
+        contenedorPost,
+        itemsPost,
+        "POSTPAGO"
+    );
+
+    renderProductFlow(
+        contenedorPre,
+        itemsPre,
+        "PREPAGO"
+    );
+}
+
+
+/* =============================================================
+   TABLA 019
+   AVERÍAS PROCESADAS EN FARECO
+   ============================================================= */
+
+function renderAveriasFareco(data) {
+
+    const rows = Array.isArray(data?.averias_fareco)
+        ? data.averias_fareco
+        : [];
+
+    const dateValue = document.getElementById("fareco-date-value");
+
+    const successCount = document.getElementById("fareco-success-count");
+    const successMoney = document.getElementById("fareco-success-money");
+    const successProgress = document.getElementById("fareco-success-progress");
+    const successPercent = document.getElementById("fareco-success-percent");
+
+    const rejectCount = document.getElementById("fareco-reject-count");
+    const rejectMoney = document.getElementById("fareco-reject-money");
+    const rejectProgress = document.getElementById("fareco-reject-progress");
+    const rejectPercent = document.getElementById("fareco-reject-percent");
+
+    const cycleBody = document.getElementById("fareco-cycle-body");
+    const motivosBody = document.getElementById("fareco-motivos-body");
+    const motivosTotal = document.getElementById("fareco-motivos-total");
+    const footerRejectCount = document.getElementById("fareco-footer-reject-count");
+    const footerText = document.getElementById("fareco-motivos-footer-text");
+
+    const money = value =>
+        "S/ " + numero(value).toLocaleString("es-PE", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+
+    const percent = value =>
+        numero(value).toLocaleString("es-PE", {
+            minimumFractionDigits: 1,
+            maximumFractionDigits: 1
+        }) + "%";
+
+    /*
+     * ============================================================
+     * NORMALIZACIÓN
+     *
+     * Netezza entrega:
+     *   Success
+     *   Rejection
+     *
+     * y:
+     *   AVERIAS SEMANA
+     *   REJECT 1
+     *   REJECT 2
+     *   REJECT 3
+     *   REJECT 4
+     * ============================================================
+     */
+    const resultadoKey = value => {
+        const v = String(value ?? "")
+            .trim()
+            .toUpperCase();
+
+        if (v === "SUCCESS") return "SUCCESS";
+        if (v === "REJECTION") return "REJECT";
+        if (v === "REJECT") return "REJECT";
+
+        return v;
+    };
+
+    const cicloKey = value => {
+        const v = String(value ?? "")
+            .trim()
+            .toUpperCase();
+
+        if (v === "AVERIAS SEMANA") return "SEMANA";
+        return v;
+    };
+
+    /* ============================================================
+       FECHA
+       ============================================================ */
+    if (dateValue) {
+
+        const y = document.getElementById("year")?.value;
+        const m = document.getElementById("month")?.value;
+        const d = document.getElementById("day")?.value;
+
+        if (y && m && d) {
+
+            const fecha = new Date(
+                Number(y),
+                Number(m) - 1,
+                Number(d)
+            );
+
+            const meses = [
+                "ene.", "feb.", "mar.", "abr.", "may.", "jun.",
+                "jul.", "ago.", "sep.", "oct.", "nov.", "dic."
+            ];
+
+            dateValue.textContent =
+                `${String(fecha.getDate()).padStart(2, "0")} ` +
+                `${meses[fecha.getMonth()]} ` +
+                `${fecha.getFullYear()}`;
+        }
+    }
+
+    /* ============================================================
+       SIN DATOS
+       ============================================================ */
+    if (!rows.length) {
+
+        successCount.textContent = "0";
+        successMoney.textContent = "S/ 0.00";
+        successProgress.style.width = "0%";
+        successPercent.textContent = "0.0% del total";
+
+        rejectCount.textContent = "0";
+        rejectMoney.textContent = "S/ 0.00";
+        rejectProgress.style.width = "0%";
+        rejectPercent.textContent = "0.0% del total";
+
+        cycleBody.innerHTML = `
+            <div class="fareco-empty-cell">
+                <i class="fas fa-tools"></i>
+                <strong>No hay averías procesadas en FARECO</strong>
+                <span>para la fecha seleccionada.</span>
+            </div>
+        `;
+
+        motivosBody.innerHTML = `
+            <tr>
+                <td colspan="6" class="fareco-empty-cell">
+                    No existen motivos de REJECT para la fecha seleccionada.
+                </td>
+            </tr>
+        `;
+
+        motivosTotal.textContent = "0";
+        footerRejectCount.textContent = "0";
+        footerText.textContent =
+            "Sin motivos de REJECT para la fecha seleccionada.";
+
+        return;
+    }
+
+    /* ============================================================
+       RESUMEN SUCCESS / REJECT
+       ============================================================ */
+    let totalSuccess = 0;
+    let totalReject = 0;
+    let montoSuccess = 0;
+    let montoReject = 0;
+
+    rows.forEach(r => {
+
+        const resultado = resultadoKey(r.RESULTADO);
+        const cantidad = numero(r.CANTIDAD);
+        const monto = numero(r.MONTO);
+
+        if (resultado === "SUCCESS") {
+            totalSuccess += cantidad;
+            montoSuccess += monto;
+        }
+
+        if (resultado === "REJECT") {
+            totalReject += cantidad;
+            montoReject += monto;
+        }
+    });
+
+    const totalResultados = totalSuccess + totalReject;
+
+    const porcSuccess = totalResultados
+        ? (totalSuccess / totalResultados) * 100
+        : 0;
+
+    const porcReject = totalResultados
+        ? (totalReject / totalResultados) * 100
+        : 0;
+
+    successCount.textContent = formatNumero(totalSuccess);
+    successMoney.textContent = money(montoSuccess);
+    successProgress.style.width = `${porcSuccess}%`;
+    successPercent.textContent =
+        `${percent(porcSuccess)} del total`;
+
+    rejectCount.textContent = formatNumero(totalReject);
+    rejectMoney.textContent = money(montoReject);
+    rejectProgress.style.width = `${porcReject}%`;
+    rejectPercent.textContent =
+        `${percent(porcReject)} del total`;
+
+    /* ============================================================
+       DISTRIBUCIÓN POR CICLO
+       PRIORIDAD:
+       1. AVERIAS SEMANA
+       2. REJECT 1
+       3. REJECT 2
+       4. REJECT 3
+       5. REJECT 4
+       ============================================================ */
+
+    const cycleOrder = [
+        "SEMANA",
+        "REJECT 1",
+        "REJECT 2",
+        "REJECT 3",
+        "REJECT 4"
+    ];
+
+    const cycleData = {};
+
+    cycleOrder.forEach(ciclo => {
+        cycleData[ciclo] = {
+            SUCCESS: 0,
+            REJECT: 0,
+            TOTAL: 0
+        };
+    });
+
+    rows.forEach(r => {
+
+        const ciclo = cicloKey(r.ESTADO_CICLO);
+        const resultado = resultadoKey(r.RESULTADO);
+        const cantidad = numero(r.CANTIDAD);
+
+        if (!cycleData[ciclo]) return;
+
+        if (
+            resultado !== "SUCCESS" &&
+            resultado !== "REJECT"
+        ) {
+            return;
+        }
+
+        cycleData[ciclo][resultado] += cantidad;
+        cycleData[ciclo].TOTAL += cantidad;
+    });
+
+    const maxTotal = Math.max(
+        ...cycleOrder.map(c => cycleData[c].TOTAL),
+        1
+    );
+
+    cycleBody.innerHTML = cycleOrder.map(ciclo => {
+
+        const item = cycleData[ciclo];
+
+        const success = item.SUCCESS;
+        const reject = item.REJECT;
+        const total = item.TOTAL;
+
+        /*
+         * La barra utiliza el máximo ciclo como referencia visual,
+         * pero los porcentajes se calculan sobre el total del ciclo.
+         */
+        const successBar =
+            (success / maxTotal) * 100;
+
+        const rejectBar =
+            (reject / maxTotal) * 100;
+
+        const successPct =
+            total ? (success / total) * 100 : 0;
+
+        const rejectPct =
+            total ? (reject / total) * 100 : 0;
+        const cycleClass = ciclo === "SEMANA" ? "fareco-cycle-week" : "fareco-cycle-reject";
+        const cycleIcon = ciclo === "SEMANA" ? "fa-calendar-week" : "fa-rotate-right";
+
+        return `
+            <div class="fareco-cycle-card ${cycleClass}">
+                <div class="fareco-cycle-card-head">
+                    <div class="fareco-cycle-title-wrap">
+                        <span class="fareco-cycle-icon"><i class="fas ${cycleIcon}"></i></span>
+                        <div>
+                            <div class="fareco-cycle-name">${esc(ciclo)}</div>
+                            <div class="fareco-cycle-subtitle">Estado de procesamiento</div>
+                        </div>
+                    </div>
+                    <div class="fareco-cycle-total">
+                        <span>Total</span>
+                        <strong>${formatNumero(total)}</strong>
+                    </div>
+                </div>
+
+                <div class="fareco-cycle-distribution">
+                    <div class="fareco-cycle-line">
+                        <div class="fareco-cycle-label">
+                            <span class="fareco-cycle-dot success"></span>
+                            <span>SUCCESS</span>
+                            <strong>${formatNumero(success)}</strong>
+                        </div>
+                        <span class="fareco-cycle-pct success">${percent(successPct)}</span>
+                    </div>
+                    <div class="fareco-cycle-track">
+                        <span class="fareco-cycle-fill success" style="width:${successPct}%;"></span>
+                    </div>
+
+                    <div class="fareco-cycle-line">
+                        <div class="fareco-cycle-label">
+                            <span class="fareco-cycle-dot reject"></span>
+                            <span>REJECT</span>
+                            <strong>${formatNumero(reject)}</strong>
+                        </div>
+                        <span class="fareco-cycle-pct reject">${percent(rejectPct)}</span>
+                    </div>
+                    <div class="fareco-cycle-track">
+                        <span class="fareco-cycle-fill reject" style="width:${rejectPct}%;"></span>
+                    </div>
+                </div>
+
+                <div class="fareco-cycle-summary">
+                    <span>Participación del ciclo</span>
+                    <strong>${totalResultados ? percent((total / totalResultados) * 100) : "0.0%"}</strong>
+                </div>
+            </div>
+        `;
+    }).join("");
+
+    /* ============================================================
+       MOTIVOS DE REJECT
+       AGRUPADOS POR CODMOT + DESCRIPCIÓN
+       ============================================================ */
+
+    const motivos = {};
+
+    rows.forEach(r => {
+
+        if (resultadoKey(r.RESULTADO) !== "REJECT") {
+            return;
+        }
+
+        const codigo = String(
+            r.CODMOT ?? ""
+        ).trim() || "-";
+
+        const descripcion = String(
+            r.DESCRIPCION ?? ""
+        ).trim() || "Sin descripción";
+
+        const key = `${codigo}|${descripcion}`;
+
+        if (!motivos[key]) {
+            motivos[key] = {
+                CODMOT: codigo,
+                DESCRIPCION: descripcion,
+                CANTIDAD: 0,
+                MONTO: 0
+            };
+        }
+
+        motivos[key].CANTIDAD += numero(r.CANTIDAD);
+        motivos[key].MONTO += numero(r.MONTO);
+    });
+
+    const motivosArray = Object.values(motivos)
+        .sort((a, b) => b.CANTIDAD - a.CANTIDAD);
+
+    motivosTotal.textContent =
+        formatNumero(motivosArray.length);
+
+    footerRejectCount.textContent =
+        formatNumero(totalReject);
+
+    footerText.textContent =
+        `Mostrando ${formatNumero(motivosArray.length)} motivos de REJECT.`;
+
+    if (!motivosArray.length) {
+
+        motivosBody.innerHTML = `
+            <tr>
+                <td colspan="6" class="fareco-empty-cell">
+                    No existen motivos de REJECT para la fecha seleccionada.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+    motivosBody.innerHTML = motivosArray.map((m, index) => {
+
+        const pct = totalReject
+            ? (m.CANTIDAD / totalReject) * 100
+            : 0;
+
+        return `
+            <tr>
+
+                <td>
+                    ${index + 1}
+                </td>
+
+                <td>
+                    <strong>${esc(m.CODMOT)}</strong>
+                </td>
+
+                <td>
+                    ${esc(m.DESCRIPCION)}
+                </td>
+
+                <td>
+                    <strong>
+                        ${formatNumero(m.CANTIDAD)}
+                    </strong>
+                </td>
+
+                <td>
+                    ${money(m.MONTO)}
+                </td>
+
+                <td>
+                    ${percent(pct)}
+                </td>
+
+            </tr>
+        `;
+    }).join("");
+}
+
+
+/* =============================================================
+   GRÁFICOS
+   ============================================================= */
+
+function renderCharts(data) {
+
+    renderTrend(data);
+    renderResultado(data);
+    renderProducto(data);
+    renderComentario(data);
+}
+
+
+/* =============================================================
+   TENDENCIA
+   ============================================================= */
+
+function renderTrend(data) {
+
+    const tendencia = Array.isArray(data.tendencia)
+        ? data.tendencia
+        : [];
+
+    if (!tendencia.length) {
+        emptyChart("line", "Sin datos para la tendencia");
+        return;
+    }
+
+    const fechas = tendencia.map(x => x.FECHA_STR);
+    const cantidades = tendencia.map(
+        x => numero(x.TOT_CANT_REGISTROS)
+    );
+    const montos = tendencia.map(
+        x => numero(x.MONTO_SOLES)
+    );
+
+    const traces = [
+        {
+            x: fechas,
+            y: cantidades,
+            type: "scatter",
+            mode: "lines+markers",
+            name: "Registros",
+            line: {
+                width: 3,
+                color: "#2563eb",
+                shape: "spline"
+            },
+            marker: {
+                size: 7,
+                color: "#2563eb"
+            },
+            fill: "tozeroy",
+            fillcolor: "rgba(37,99,235,.08)",
+            hovertemplate:
+                "<b>%{x}</b><br>" +
+                "Registros: %{y:,}" +
+                "<extra></extra>"
+        },
+        {
+            x: fechas,
+            y: montos,
+            type: "scatter",
+            mode: "lines+markers",
+            name: "Monto",
+            yaxis: "y2",
+            line: {
+                width: 2,
+                color: "#f59e0b",
+                shape: "spline"
+            },
+            marker: {
+                size: 6,
+                color: "#f59e0b"
+            },
+            hovertemplate:
+                "<b>%{x}</b><br>" +
+                "Monto: S/ %{y:,.2f}" +
+                "<extra></extra>"
+        }
+    ];
+
+    Plotly.react(
+        "line",
+        traces,
+        {
+            ...PLOT_LAYOUT_BASE,
+            margin: {
+                l: 52,
+                r: 55,
+                t: 12,
+                b: 42
+            },
+            legend: {
+                orientation: "h",
+                x: 0,
+                y: 1.08,
+                font: {
+                    size: 9,
+                    color: "#64748b"
+                }
+            },
+            xaxis: {
+                gridcolor: "#edf2f7",
+                zeroline: false,
+                tickfont: {
+                    size: 9,
+                    color: "#94a3b8"
+                }
+            },
+            yaxis: {
+                title: "Registros",
+                gridcolor: "#edf2f7",
+                zeroline: false,
+                tickfont: {
+                    size: 9,
+                    color: "#94a3b8"
+                }
+            },
+            yaxis2: {
+                title: "S/",
+                overlaying: "y",
+                side: "right",
+                showgrid: false,
+                tickfont: {
+                    size: 9,
+                    color: "#94a3b8"
+                }
+            }
+        },
+        PLOT_CONFIG
+    );
+}
+
+
+/* =============================================================
+   RESULTADO
+   ============================================================= */
+
+function renderResultado(data) {
+
+    const rows = (Array.isArray(data.resultado)
+        ? data.resultado
+        : []
+    ).filter(x =>
+        String(x.RESULTADO_NC || "").trim() !== ""
+    );
+
+    if (!rows.length) {
+        emptyChart("resultado_pie", "Sin resultados");
+        return;
+    }
 
     Plotly.react(
         "resultado_pie",
         [{
-            labels:
-                resultadoAjustes.map(
-                    x => x.RESULTADO_NC
-                ),
-
-            values:
-                resultadoAjustes.map(
-                    x =>
-                        Number(
-                            x.MONTO_SOLES || 0
-                        )
-                ),
-
-            customdata:
-                resultadoAjustes.map(x => [
-                    Number(
-                        x.TOT_CANT_REGISTROS || 0
-                    ).toLocaleString()
-                ]),
-
+            labels: rows.map(x => x.RESULTADO_NC),
+            values: rows.map(x => numero(x.MONTO_SOLES)),
+            customdata: rows.map(x => [
+                numero(x.TOT_CANT_REGISTROS)
+            ]),
             type: "pie",
-
-            hole: 0.4,
-
+            hole: .58,
+            textinfo: "percent",
+            textposition: "inside",
             hovertemplate:
                 "<b>%{label}</b><br>" +
-                "Cantidad: %{customdata[0]}<br>" +
+                "Registros: %{customdata[0]:,}<br>" +
                 "Monto: S/ %{value:,.2f}<br>" +
-                "Porcentaje: %{percent}" +
-                "<extra></extra>"
+                "Participación: %{percent}" +
+                "<extra></extra>",
+            marker: {
+                line: {
+                    color: "#ffffff",
+                    width: 3
+                }
+            }
         }],
         {
-            title: "CANDIDATOS AJUSTES"
-        }
+            ...PLOT_LAYOUT_BASE,
+            margin: {
+                l: 15,
+                r: 15,
+                t: 12,
+                b: 35
+            },
+            showlegend: true,
+            legend: {
+                orientation: "h",
+                x: .5,
+                xanchor: "center",
+                y: -.05,
+                font: {
+                    size: 9
+                }
+            }
+        },
+        PLOT_CONFIG
     );
+}
 
 
-    // =====================================================
-    // PRODUCTO
-    // =====================================================
+/* =============================================================
+   PRODUCTO
+   ============================================================= */
+
+function renderProducto(data) {
+
+    const rows = Array.isArray(data.producto)
+        ? data.producto
+        : [];
+
+    if (!rows.length) {
+        emptyChart("producto_pie", "Sin productos");
+        return;
+    }
 
     Plotly.react(
         "producto_pie",
         [{
-            labels:
-                data.producto.map(
-                    x => x.PRODUCTO
-                ),
-
-            values:
-                data.producto.map(
-                    x =>
-                        Number(
-                            x.MONTO_SOLES || 0
-                        )
-                ),
-
-            customdata:
-                data.producto.map(x => [
-                    Number(
-                        x.TOT_CANT_REGISTROS || 0
-                    ).toLocaleString()
-                ]),
-
+            labels: rows.map(x => x.PRODUCTO),
+            values: rows.map(x => numero(x.MONTO_SOLES)),
+            customdata: rows.map(x => [
+                numero(x.TOT_CANT_REGISTROS)
+            ]),
             type: "pie",
-
+            hole: .55,
+            textinfo: "percent",
+            textposition: "inside",
             hovertemplate:
                 "<b>%{label}</b><br>" +
-                "Cantidad: %{customdata[0]}<br>" +
+                "Registros: %{customdata[0]:,}<br>" +
                 "Monto: S/ %{value:,.2f}<br>" +
-                "Porcentaje: %{percent}" +
-                "<extra></extra>"
+                "Participación: %{percent}" +
+                "<extra></extra>",
+            marker: {
+                line: {
+                    color: "#ffffff",
+                    width: 3
+                }
+            }
         }],
         {
-            title: "Producto"
-        }
+            ...PLOT_LAYOUT_BASE,
+            margin: {
+                l: 15,
+                r: 15,
+                t: 12,
+                b: 35
+            },
+            showlegend: true,
+            legend: {
+                orientation: "h",
+                x: .5,
+                xanchor: "center",
+                y: -.05,
+                font: {
+                    size: 9
+                }
+            }
+        },
+        PLOT_CONFIG
     );
+}
 
 
-    // =====================================================
-    // COMENTARIOS
-    // =====================================================
+/* =============================================================
+   COMENTARIOS
+   ============================================================= */
 
-    let comentarios =
-        Array.isArray(data.comentario)
-            ? [...data.comentario]
-            : [];
+function renderComentario(data) {
 
+    const rows = Array.isArray(data.comentario)
+        ? data.comentario
+        : [];
 
-    comentarios.sort(
-        (a,b) =>
-            Number(
-                b.TOT_CANT_REGISTROS || 0
-            ) -
-            Number(
-                a.TOT_CANT_REGISTROS || 0
-            )
-    );
+    if (!rows.length) {
+        emptyChart("comentario_bar", "Sin comentarios");
+        return;
+    }
 
+    const ordenados = [...rows]
+        .sort(
+            (a,b) =>
+                numero(b.TOT_CANT_REGISTROS) -
+                numero(a.TOT_CANT_REGISTROS)
+        )
+        .slice(0, 12);
 
     Plotly.react(
         "comentario_bar",
         [{
-            y:
-                comentarios.map(
-                    x =>
-                        String(
-                            x.COMENTARIO || ""
-                        )
-                ),
-
-            x:
-                comentarios.map(
-                    x =>
-                        Number(
-                            x.TOT_CANT_REGISTROS || 0
-                        )
-                ),
-
+            x: ordenados.map(
+                x => numero(x.TOT_CANT_REGISTROS)
+            ),
+            y: ordenados.map(
+                x => x.COMENTARIO
+            ),
+            customdata: ordenados.map(
+                x => [numero(x.MONTO_SOLES)]
+            ),
             type: "bar",
-
             orientation: "h",
-
-            text:
-                comentarios.map(
-                    x =>
-                        `${Number(
-                            x.TOT_CANT_REGISTROS || 0
-                        ).toLocaleString()} | S/ ${
-                            Number(
-                                x.MONTO_SOLES || 0
-                            ).toLocaleString()
-                        }`
-                ),
-
-            textposition: "auto",
-
+            marker: {
+                color: "#2563eb",
+                line: {
+                    color: "#1d4ed8",
+                    width: 1
+                }
+            },
             hovertemplate:
                 "<b>%{y}</b><br>" +
-                "Cantidad: %{x}<extra></extra>"
+                "Registros: %{x:,}<br>" +
+                "Monto: S/ %{customdata[0]:,.2f}" +
+                "<extra></extra>"
         }],
         {
-            title: "Comentarios",
-
+            ...PLOT_LAYOUT_BASE,
             margin: {
-                l: 280,
-                r: 40,
-                t: 50,
-                b: 50
+                l: 155,
+                r: 25,
+                t: 12,
+                b: 42
             },
-
             xaxis: {
-                title: "Cantidad"
+                title: "Registros",
+                gridcolor: "#edf2f7",
+                zeroline: false,
+                tickfont: {
+                    size: 9,
+                    color: "#94a3b8"
+                }
             },
-
             yaxis: {
-                automargin: true
-            },
-
-            height:
-                Math.max(
-                    400,
-                    comentarios.length * 45
-                )
-        }
+                autorange: "reversed",
+                tickfont: {
+                    size: 8,
+                    color: "#64748b"
+                }
+            }
+        },
+        PLOT_CONFIG
     );
-
-
-    document.getElementById(
-        "loading"
-    ).style.display = "none";
-
-
-    document.getElementById(
-        "kpis"
-    ).style.display = "grid";
-
-
-    document.querySelector(
-        ".charts"
-    ).style.display = "grid";
-
 }
 
 
-// =========================================================
-// LIMPIAR
-// =========================================================
+/* =============================================================
+   RESET
+   ============================================================= */
 
-function resetFiltros(){
+async function resetFiltros() {
 
-    document
-        .querySelectorAll(
-            ".devoluciones-page select"
-        )
-        .forEach(
-            s => s.selectedIndex = 0
-        );
+    document.getElementById("year").value = "";
+    document.getElementById("month").value = "";
+    document.getElementById("day").value = "";
+    document.getElementById("producto").value = "";
+    document.getElementById("comentario").value = "";
+    document.getElementById("resultado").value = "";
+
+    await cargarMeses();
+
+    actualizarFiltrosActivos();
 
     cargar();
 }
 
 
-// =========================================================
-// INIT
-// =========================================================
+/* =============================================================
+   INICIO
+   ============================================================= */
 
-(async () => {
-
-    document.getElementById(
-        "loading"
-    ).style.display = "flex";
-
-    document.getElementById(
-        "kpis"
-    ).style.display = "none";
-
-    document.querySelector(
-        ".charts"
-    ).style.display = "none";
-
+document.addEventListener("DOMContentLoaded", async () => {
 
     await cargarFiltros();
-
     await cargarCatalogos();
 
-    await cargar();
+    actualizarFiltrosActivos();
 
-})();
+    await cargar();
+});
 
 </script>
 
 {% endblock %}
+<style>
+/* TABLA 020: seis componentes verdes de SEMANA EN CURSO */
+.cycle-postpago-column .cycle-flow {
+    gap: 10px !important;
+}
+
+.cycle-postpago-column .cycle-flow .cycle-node {
+    min-width: 135px !important;
+    width: 135px !important;
+}
+
+.cycle-postpago-column .cycle-flow .cycle-node.cycle-candidate {
+    border-top-color: #16a34a !important;
+}
+
+.cycle-postpago-column .cycle-flow .cycle-node.cycle-candidate .cycle-node-percent {
+    color: #16a34a !important;
+}
+</style>
+
+<style>
+/* ============================================================
+   TABLA 020 - PRESENTACIÓN FINAL
+   ============================================================ */
+
+/* Ya no mostramos el identificador "TABLA 020" en el encabezado. */
+
+/* PREPAGO también es candidato: verde, no amarillo. */
+.cycle-prepago-column .cycle-node,
+.cycle-prepago-column .cycle-node.cycle-candidate {
+    border-top-color: #16a34a !important;
+    border-color: #dbe4f0 !important;
+    background: #ffffff !important;
+}
+
+.cycle-prepago-column .cycle-node::before {
+    background: #16a34a !important;
+}
+
+.cycle-prepago-column .cycle-node-icon {
+    color: #16a34a !important;
+    background: #ecfdf3 !important;
+}
+
+.cycle-prepago-column .cycle-node-percent {
+    color: #16a34a !important;
+}
+
+/* Leyenda por tipo de ciclo:
+   verde = candidatos
+   celeste = próxima semana
+   morado = cerradas
+*/
+.cycle-legend {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 18px !important;
+    padding: 10px 21px 20px !important;
+}
+
+.cycle-legend-item {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+    color: #475569 !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+}
+
+.cycle-legend-square {
+    display: inline-block !important;
+    width: 9px !important;
+    min-width: 9px !important;
+    height: 9px !important;
+    min-height: 9px !important;
+    border-radius: 3px !important;
+    border: 0 !important;
+    box-sizing: border-box !important;
+    opacity: 1 !important;
+}
+
+.cycle-legend-candidate .cycle-legend-square {
+    background-color: #16a34a !important;
+}
+
+.cycle-legend-next .cycle-legend-square {
+    background-color: #06b6d4 !important;
+}
+
+.cycle-legend-closed .cycle-legend-square {
+    background-color: #7c3aed !important;
+}
+
+/* El texto conserva un color neutro; el cuadrado identifica la categoría. */
+.cycle-legend-candidate,
+.cycle-legend-next,
+.cycle-legend-closed {
+    color: #475569 !important;
+}
+</style>
+
+<style>
+/* ============================================================
+   CORRECCIÓN FINAL - TABLA 020
+   El título del proceso va arriba.
+   POSTPAGO/PREPAGO ocupan todo el ancho debajo.
+   ============================================================ */
+
+.cycle-card > .cycle-header{
+    display:flex !important;
+    width:100% !important;
+    box-sizing:border-box !important;
+}
+
+.cycle-card > .cycle-products-box{
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) 1px 270px !important;
+    width:calc(100% - 42px) !important;
+    margin:14px 21px 0 !important;
+    box-sizing:border-box !important;
+}
+
+.cycle-card > .cycle-products-box .cycle-product-column{
+    min-width:0 !important;
+}
+
+.cycle-card > .cycle-products-box .cycle-flow{
+    display:flex !important;
+    flex-direction:row !important;
+    flex-wrap:nowrap !important;
+    justify-content:flex-start !important;
+    width:100% !important;
+    min-width:0 !important;
+    overflow-x:auto !important;
+}
+
+@media (min-width:701px){
+    .cycle-card > .cycle-products-box{
+        grid-template-columns:minmax(0,1fr) 1px 270px !important;
+    }
+}
+</style>
+
+<style>
+/* ============================================================
+   LEYENDA - CORRECCIÓN DEFINITIVA
+   Usamos ::before para que el indicador de color sea visible
+   independientemente de otros estilos aplicados a los <span>.
+   ============================================================ */
+
+.cycle-legend {
+    display: flex !important;
+    align-items: center !important;
+    gap: 20px !important;
+    flex-wrap: wrap !important;
+    padding: 10px 8px 18px !important;
+}
+
+.cycle-legend-item {
+    display: inline-flex !important;
+    align-items: center !important;
+    position: relative !important;
+    gap: 7px !important;
+    color: #475569 !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    line-height: 14px !important;
+}
+
+/* Indicadores visibles */
+.cycle-legend-item::before {
+    content: "" !important;
+    display: inline-block !important;
+    width: 9px !important;
+    height: 9px !important;
+    min-width: 9px !important;
+    border-radius: 3px !important;
+    box-sizing: border-box !important;
+}
+
+.cycle-legend-candidate::before {
+    background: #16a34a !important;
+}
+
+.cycle-legend-next::before {
+    background: #06b6d4 !important;
+}
+
+.cycle-legend-closed::before {
+    background: #7c3aed !important;
+}
+
+
+</style>
+
+<style>
+/* LEYENDA TABLA 020 - cuadrados reales */
+.cycle-legend {
+    display: flex !important;
+    align-items: center !important;
+    gap: 18px !important;
+    flex-wrap: wrap !important;
+}
+
+.cycle-legend-item {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+    color: #475569 !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+}
+
+.cycle-legend-item .cycle-legend-square {
+    display: inline-block !important;
+    width: 9px !important;
+    height: 9px !important;
+    min-width: 9px !important;
+    min-height: 9px !important;
+    flex: 0 0 9px !important;
+    border-radius: 2px !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.cycle-legend-candidate .cycle-legend-square {
+    background: #16a34a !important;
+}
+
+.cycle-legend-next .cycle-legend-square {
+    background: #06b6d4 !important;
+}
+
+.cycle-legend-closed .cycle-legend-square {
+    background: #7c3aed !important;
+}
+</style>
