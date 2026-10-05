@@ -1,0 +1,2792 @@
+/* ============================================================
+   IA OBSERVABILIDAD
+   DARK 3D OBSERVABILITY INTERFACE
+   ============================================================ */
+
+:root {
+
+    --bg: #020812;
+
+    --panel: rgba(3, 17, 29, 0.92);
+
+    --panel-2: rgba(4, 21, 35, 0.88);
+
+    --border: rgba(28, 137, 194, 0.42);
+
+    --border-soft: rgba(28, 137, 194, 0.18);
+
+    --text: #eaf5fb;
+
+    --muted: #69869b;
+
+    --cyan: #28a9ff;
+
+    --green: #22e58a;
+
+    --yellow: #ffc857;
+
+    --red: #ff315f;
+
+    --blue: #28a9ff;
+
+    --unknown: #8b98a8;
+
+}
+
+
+/* ============================================================
+   RESET / APP - gestionados por base.html al integrarse
+   ============================================================ */
+
+.app-shell {
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    padding: 15px 17px 17px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow: hidden;
+}
+
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.top-header {
+
+    height: 63px;
+
+    flex: 0 0 63px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding:
+        0
+        25px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 16px;
+
+    background:
+
+        linear-gradient(
+            90deg,
+            rgba(6, 27, 43, 0.95),
+            rgba(3, 17, 29, 0.92)
+        );
+
+    box-shadow:
+
+        inset
+        0 1px
+        rgba(255,255,255,0.025),
+
+        0 0 22px
+        rgba(0, 80, 130, 0.05);
+
+}
+
+
+.brand {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+
+}
+
+
+.brand-orbit {
+
+    width: 43px;
+
+    height: 43px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border:
+        1px solid
+        rgba(40,169,255,0.65);
+
+    border-radius: 50%;
+
+    box-shadow:
+        0 0 17px
+        rgba(40,169,255,0.15);
+
+}
+
+
+.brand-dot {
+
+    width: 13px;
+
+    height: 13px;
+
+    border-radius: 50%;
+
+    background:
+        var(--cyan);
+
+    box-shadow:
+        0 0 12px
+        rgba(40,169,255,0.8);
+
+}
+
+
+.brand-title {
+
+    font-size: 19px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+}
+
+
+.brand-subtitle {
+
+    margin-top: 3px;
+
+    font-size: 8px;
+
+    letter-spacing: 2px;
+
+    color: #54768c;
+
+}
+
+
+.system-status {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: #7191a5;
+
+    font-size: 9px;
+
+    letter-spacing: 1.4px;
+
+}
+
+
+.system-dot,
+.live-dot {
+
+    width: 7px;
+
+    height: 7px;
+
+    border-radius: 50%;
+
+    background:
+        var(--green);
+
+    box-shadow:
+        0 0 9px
+        rgba(34,229,138,0.8);
+
+}
+
+
+.system-time {
+
+    margin-left: 18px;
+
+    color: #9db1be;
+
+    letter-spacing: 1px;
+
+}
+
+
+/* ============================================================
+   KPI
+   ============================================================ */
+
+.top-kpis {
+
+    height: 78px;
+
+    flex: 0 0 78px;
+
+    display: flex;
+
+    gap: 10px;
+
+}
+
+
+.kpi-card {
+
+    width: 158px;
+
+    padding:
+        12px
+        16px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 13px;
+
+    background:
+
+        linear-gradient(
+            145deg,
+            rgba(5, 25, 40, 0.96),
+            rgba(3, 16, 27, 0.88)
+        );
+
+}
+
+
+.kpi-label {
+
+    color: #54819a;
+
+    font-size: 8px;
+
+    letter-spacing: 1.6px;
+
+}
+
+
+.kpi-value {
+
+    margin-top: 5px;
+
+    color: #e9f4f9;
+
+    font-size: 25px;
+
+    line-height: 1;
+
+    font-weight: 700;
+
+}
+
+
+.kpi-description {
+
+    margin-top: 7px;
+
+    color: #557386;
+
+    font-size: 8px;
+
+}
+
+
+.kpi-green {
+    color: var(--green);
+}
+
+
+.kpi-yellow {
+    color: var(--yellow);
+}
+
+
+.kpi-red {
+    color: var(--red);
+}
+
+
+.kpi-blue {
+    color: var(--blue);
+}
+
+
+/* ============================================================
+   MAIN
+   ============================================================ */
+
+.main-layout {
+
+    min-height: 0;
+
+    flex: 1;
+
+    display: grid;
+
+    grid-template-columns:
+
+        294px
+
+        minmax(0, 1fr)
+
+        326px;
+
+    gap: 14px;
+
+}
+
+
+/* ============================================================
+   PANELS
+   ============================================================ */
+
+.left-panel,
+.world-panel,
+.right-panel {
+
+    min-width: 0;
+
+    min-height: 0;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 16px;
+
+    background:
+
+        linear-gradient(
+            145deg,
+            rgba(3, 19, 31, 0.93),
+            rgba(2, 11, 20, 0.91)
+        );
+
+    overflow: hidden;
+
+}
+
+
+/* ============================================================
+   LEFT PANEL
+   ============================================================ */
+
+.left-panel {
+
+    padding:
+        17px
+        18px;
+
+    overflow-y: auto;
+
+}
+
+
+.left-panel::-webkit-scrollbar {
+
+    width: 6px;
+
+}
+
+
+.left-panel::-webkit-scrollbar-track {
+
+    background:
+        transparent;
+
+}
+
+
+.left-panel::-webkit-scrollbar-thumb {
+
+    background:
+        rgba(40,169,255,0.35);
+
+    border-radius: 10px;
+
+}
+
+
+.panel-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+}
+
+
+.panel-title {
+
+    color: #dcebf3;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+}
+
+
+.panel-subtitle {
+
+    margin-top: 5px;
+
+    color: #45677c;
+
+    font-size: 7px;
+
+    letter-spacing: 1.6px;
+
+}
+
+
+.panel-online-dot {
+
+    width: 8px;
+
+    height: 8px;
+
+    margin-top: 4px;
+
+    border-radius: 50%;
+
+    background:
+        var(--cyan);
+
+    box-shadow:
+        0 0 11px
+        rgba(40,169,255,0.8);
+
+}
+
+
+/* ============================================================
+   SUMMARY
+   ============================================================ */
+
+.ecosystem-summary {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
+    gap: 9px;
+
+    margin-top: 25px;
+
+}
+
+
+.summary-card {
+
+    padding: 13px;
+
+    border:
+        1px solid
+        rgba(28,137,194,0.28);
+
+    border-radius: 9px;
+
+    background:
+        rgba(5,27,43,0.55);
+
+}
+
+
+.summary-value {
+
+    color: #e7f1f6;
+
+    font-size: 22px;
+
+    font-weight: 700;
+
+}
+
+
+.summary-label {
+
+    margin-top: 5px;
+
+    color: #58778a;
+
+    font-size: 8px;
+
+    letter-spacing: 1px;
+
+}
+
+
+/* ============================================================
+   FILTERS
+   ============================================================ */
+
+.filter-title,
+.legend-title {
+
+    margin-top: 20px;
+
+    margin-bottom: 12px;
+
+    color: #47768e;
+
+    font-size: 8px;
+
+    letter-spacing: 1.5px;
+
+}
+
+
+.filter-label {
+
+    display: block;
+
+    margin:
+        11px
+        0
+        7px;
+
+    color: #52778d;
+
+    font-size: 7px;
+
+    letter-spacing: 1.2px;
+
+}
+
+
+.filter-select,
+.filter-input,
+.search-box {
+
+    width: 100%;
+
+    height: 42px;
+
+    border:
+        1px solid
+        rgba(28,137,194,0.3);
+
+    border-radius: 9px;
+
+    background:
+        rgba(2,17,28,0.9);
+
+    color: #cfe0e9;
+
+    outline: none;
+
+}
+
+
+.filter-select,
+.filter-input {
+
+    padding:
+        0
+        12px;
+
+    font-size: 11px;
+
+}
+
+
+.filter-select:focus,
+.filter-input:focus,
+.search-box:focus-within {
+
+    border-color:
+        rgba(40,169,255,0.65);
+
+    box-shadow:
+        0 0 14px
+        rgba(40,169,255,0.07);
+
+}
+
+
+.search-box {
+
+    display: flex;
+
+    align-items: center;
+
+    padding:
+        0
+        10px;
+
+}
+
+
+.search-icon {
+
+    color: #557f95;
+
+    font-size: 16px;
+
+    margin-right: 7px;
+
+}
+
+
+.search-box input {
+
+    width: 100%;
+
+    border: none;
+
+    outline: none;
+
+    background:
+        transparent;
+
+    color: #cfe0e9;
+
+    font-size: 10px;
+
+}
+
+
+.search-box input::placeholder {
+
+    color: #506b7b;
+
+}
+
+
+/* ============================================================
+   LEGEND
+   ============================================================ */
+
+.legend-section {
+
+    margin-top: 20px;
+
+}
+
+
+.legend-item {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    margin: 11px 0;
+
+    color: #91a8b6;
+
+    font-size: 9px;
+
+}
+
+
+.legend-node {
+
+    width: 11px;
+
+    height: 11px;
+
+    display: inline-block;
+
+}
+
+
+.legend-node.process {
+
+    border-radius: 50%;
+
+    background:
+        var(--green);
+
+    box-shadow:
+        0 0 9px
+        rgba(34,229,138,0.7);
+
+}
+
+
+.legend-node.input {
+
+    border-radius: 2px;
+
+    background:
+        var(--blue);
+
+    box-shadow:
+        0 0 9px
+        rgba(40,169,255,0.7);
+
+}
+
+
+.legend-node.report {
+
+    border-radius: 50%;
+
+    background:
+        var(--yellow);
+
+    box-shadow:
+        0 0 9px
+        rgba(255,200,87,0.7);
+
+}
+
+
+.status-dot {
+
+    width: 7px;
+
+    height: 7px;
+
+    border-radius: 50%;
+
+}
+
+
+.status-ok {
+
+    background:
+        var(--green);
+
+    box-shadow:
+        0 0 8px
+        rgba(34,229,138,0.7);
+
+}
+
+
+.status-error {
+
+    background:
+        var(--red);
+
+    box-shadow:
+        0 0 8px
+        rgba(255,49,95,0.7);
+
+}
+
+
+.status-warning {
+
+    background:
+        var(--yellow);
+
+    box-shadow:
+        0 0 8px
+        rgba(255,200,87,0.7);
+
+}
+
+
+.status-running {
+
+    background:
+        var(--blue);
+
+    box-shadow:
+        0 0 8px
+        rgba(40,169,255,0.7);
+
+}
+
+
+.status-unknown {
+
+    background:
+        var(--unknown);
+
+}
+
+
+/* ============================================================
+   3D WORLD
+   ============================================================ */
+
+.world-panel {
+
+    position: relative;
+
+}
+
+
+.graph-container {
+
+    position: absolute;
+
+    inset: 0;
+
+    overflow: hidden;
+
+}
+
+
+/* ============================================================
+   WORLD HEADER
+   ============================================================ */
+
+.world-header {
+
+    position: absolute;
+
+    top: 17px;
+
+    left: 20px;
+
+    z-index: 20;
+
+    display: flex;
+
+    gap: 10px;
+
+    color: #7697a9;
+
+    font-size: 8px;
+
+    letter-spacing: 1.5px;
+
+    pointer-events: none;
+
+}
+
+
+.world-separator {
+
+    color: #36596c;
+
+}
+
+
+/* ============================================================
+   CONTROL CENTRAR
+   ============================================================ */
+
+.world-controls {
+
+    position: absolute;
+
+    top: 15px;
+
+    right: 15px;
+
+    z-index: 50;
+
+    display: flex;
+
+    align-items: center;
+
+    pointer-events: auto;
+
+}
+
+
+.world-control {
+
+    height: 32px;
+
+    padding:
+        0
+        13px;
+
+    border:
+        1px solid
+        rgba(40,169,255,0.35);
+
+    border-radius: 7px;
+
+    background:
+        rgba(3,14,24,0.88);
+
+    color:
+        #9cc7db;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    font-size: 8px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+
+    backdrop-filter:
+        blur(8px);
+
+    box-shadow:
+
+        0 0 15px
+        rgba(40,169,255,0.08),
+
+        inset
+        0 1px
+        rgba(255,255,255,0.03);
+
+    transition:
+        all 0.2s ease;
+
+}
+
+
+.world-control:hover {
+
+    color:
+        var(--cyan);
+
+    border-color:
+        rgba(40,169,255,0.75);
+
+    background:
+        rgba(40,169,255,0.10);
+
+    box-shadow:
+
+        0 0 20px
+        rgba(40,169,255,0.18);
+
+    transform:
+        translateY(-1px);
+
+}
+
+
+.world-control:active {
+
+    transform:
+        scale(0.96);
+
+}
+
+
+/* ============================================================
+   NAVIGATION HELP
+   ============================================================ */
+
+.navigation-help {
+
+    position: absolute;
+
+    bottom: 12px;
+
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+    z-index: 20;
+
+    display: flex;
+
+    gap: 9px;
+
+    padding:
+        9px
+        13px;
+
+    border:
+        1px solid
+        rgba(40,169,255,0.2);
+
+    border-radius: 7px;
+
+    background:
+        rgba(3,14,24,0.82);
+
+    color: #668598;
+
+    font-size: 8px;
+
+    letter-spacing: 1px;
+
+    pointer-events: none;
+
+}
+
+
+/* ============================================================
+   LIVE MONITOR
+   ============================================================ */
+
+.live-monitor {
+
+    position: absolute;
+
+    right: 12px;
+
+    bottom: 12px;
+
+    z-index: 20;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding:
+        8px
+        12px;
+
+    border:
+        1px solid
+        rgba(34,229,138,0.35);
+
+    border-radius: 8px;
+
+    background:
+        rgba(3,18,26,0.88);
+
+    color: #82a0ae;
+
+    font-size: 8px;
+
+    letter-spacing: 1px;
+
+}
+
+
+.live-monitor span:last-child {
+
+    color: #527385;
+
+}
+
+
+/* ============================================================
+   UPDATE MESSAGE
+   ============================================================ */
+
+.update-message {
+
+    position: absolute;
+
+    left: 50%;
+
+    top: 58px;
+
+    transform:
+        translateX(-50%);
+
+    z-index: 30;
+
+    padding:
+        8px
+        14px;
+
+    border:
+        1px solid
+        rgba(255,200,87,0.4);
+
+    border-radius: 7px;
+
+    background:
+        rgba(35,28,7,0.92);
+
+    color:
+        var(--yellow);
+
+    font-size: 9px;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition:
+        opacity .2s ease;
+
+}
+
+
+.update-message.visible {
+
+    opacity: 1;
+
+}
+
+
+/* ============================================================
+   RIGHT PANEL
+   ============================================================ */
+
+.right-panel {
+
+    position: relative;
+
+}
+
+
+.node-detail {
+
+    width: 100%;
+
+    height: 100%;
+
+    padding:
+        21px
+        18px;
+
+    overflow-y: auto;
+
+}
+
+
+.node-detail::-webkit-scrollbar {
+
+    width: 5px;
+
+}
+
+
+.node-detail::-webkit-scrollbar-track {
+
+    background:
+        transparent;
+
+}
+
+
+.node-detail::-webkit-scrollbar-thumb {
+
+    background:
+        rgba(40,169,255,0.28);
+
+    border-radius: 10px;
+
+}
+
+
+/* ============================================================
+   DETAIL EMPTY
+   ============================================================ */
+
+.detail-empty {
+
+    min-height: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    padding: 25px;
+
+}
+
+
+.detail-empty-icon {
+
+    width: 58px;
+
+    height: 58px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border:
+        1px solid
+        rgba(40,169,255,0.35);
+
+    border-radius: 50%;
+
+    color:
+        var(--cyan);
+
+    font-size: 22px;
+
+    box-shadow:
+        0 0 25px
+        rgba(40,169,255,0.1);
+
+}
+
+
+.detail-empty h2 {
+
+    margin:
+        17px
+        0
+        8px;
+
+    color:
+        #e6f1f6;
+
+    font-size: 16px;
+
+}
+
+
+.detail-empty p {
+
+    max-width: 235px;
+
+    margin: 0;
+
+    color:
+        #617d8f;
+
+    font-size: 10px;
+
+    line-height: 1.7;
+
+}
+
+
+/* ============================================================
+   DETAIL HEADER
+   ============================================================ */
+
+.detail-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 12px;
+
+}
+
+
+.detail-type {
+
+    color:
+        #4e7d95;
+
+    font-size: 8px;
+
+    letter-spacing: 1.6px;
+
+    margin-bottom: 6px;
+
+}
+
+
+.detail-title {
+
+    color:
+        #eef6fa;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    line-height: 1.25;
+
+    word-break: break-word;
+
+}
+
+
+.detail-status {
+
+    flex-shrink: 0;
+
+    padding:
+        6px
+        10px;
+
+    border:
+        1px solid;
+
+    border-radius: 14px;
+
+    background:
+        rgba(3,15,25,0.75);
+
+    font-size: 8px;
+
+    font-weight: 700;
+
+    letter-spacing: .7px;
+
+}
+
+
+/* ============================================================
+   DETAIL
+   ============================================================ */
+
+.detail-divider {
+
+    height: 1px;
+
+    margin:
+        17px
+        0;
+
+    background:
+
+        linear-gradient(
+            90deg,
+            rgba(40,169,255,.32),
+            transparent
+        );
+
+}
+
+
+.detail-section-title {
+
+    margin-bottom: 10px;
+
+    color:
+        #4e7d95;
+
+    font-size: 8px;
+
+    letter-spacing: 1.4px;
+
+}
+
+
+.detail-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
+    border-top:
+        1px solid
+        rgba(40,120,160,0.12);
+
+}
+
+
+.detail-item {
+
+    min-width: 0;
+
+    padding:
+        11px
+        6px;
+
+    border-bottom:
+        1px solid
+        rgba(40,120,160,0.12);
+
+}
+
+
+.detail-item:nth-child(odd) {
+
+    padding-left: 0;
+
+    border-right:
+        1px solid
+        rgba(40,120,160,0.12);
+
+}
+
+
+.detail-item:nth-child(even) {
+
+    padding-left: 12px;
+
+}
+
+
+.detail-item span {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color:
+        #4d748b;
+
+    font-size: 7px;
+
+    letter-spacing: 1.1px;
+
+}
+
+
+.detail-item strong {
+
+    display: block;
+
+    color:
+        #d8e7ef;
+
+    font-size: 10px;
+
+    font-weight: 500;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+}
+
+
+.detail-full {
+
+    grid-column:
+        1 / -1;
+
+    padding-left:
+        0 !important;
+
+    border-right:
+        none !important;
+
+}
+
+
+/* ============================================================
+   AI DETAIL
+   ============================================================ */
+
+.detail-ai {
+
+    margin-top: 17px;
+
+    padding: 13px;
+
+    border:
+        1px solid
+        rgba(40,169,255,0.27);
+
+    border-radius: 9px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            rgba(8,35,52,0.64),
+            rgba(3,15,25,0.75)
+        );
+
+}
+
+
+.detail-ai-header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 9px;
+
+    color:
+        var(--cyan);
+
+    font-size: 8px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.2px;
+
+}
+
+
+.ai-icon {
+
+    width: 18px;
+
+    height: 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border:
+        1px solid
+        rgba(40,169,255,0.45);
+
+    border-radius: 5px;
+
+    font-size: 9px;
+
+}
+
+
+.detail-ai-text {
+
+    color:
+        #8ba5b4;
+
+    font-size: 9px;
+
+    line-height: 1.65;
+
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1200px) {
+
+    .main-layout {
+
+        grid-template-columns:
+            260px
+            minmax(0, 1fr)
+            290px;
+
+    }
+
+
+    .kpi-card {
+
+        width: 145px;
+
+    }
+
+}
+
+
+@media (max-width: 950px) {
+
+    body {
+
+        overflow: auto;
+
+    }
+
+
+    .app-shell {
+
+        min-height: 100vh;
+
+        height: auto;
+
+    }
+
+
+    .main-layout {
+
+        grid-template-columns:
+            1fr;
+
+        grid-template-rows:
+            320px
+            650px
+            420px;
+
+    }
+
+
+    .top-kpis {
+
+        flex-wrap: wrap;
+
+        height: auto;
+
+        flex: none;
+
+    }
+
+
+    .kpi-card {
+
+        flex: 1;
+
+        min-width: 130px;
+
+    }
+
+
+    .world-panel {
+
+        min-height: 650px;
+
+    }
+
+
+    .world-controls {
+
+        top: 13px;
+
+        right: 13px;
+
+    }
+
+
+    .world-control {
+
+        height: 30px;
+
+        padding:
+            0
+            11px;
+
+    }
+
+}
+
+/* ============================================================
+   AI OBSERVABILITY - 3D OPERATIONAL MAP
+   Mejora visual sobre el esqueleto existente
+   ============================================================ */
+
+.graph-container {
+    background:
+        radial-gradient(circle at 50% 50%, rgba(16,67,94,.10), transparent 45%),
+        radial-gradient(circle at 20% 80%, rgba(0,111,160,.06), transparent 35%);
+}
+
+.world-header {
+    z-index: 30;
+    background: linear-gradient(90deg, rgba(2,12,21,.88), rgba(2,12,21,.18), transparent);
+    padding-right: 170px;
+}
+
+.world-header::after {
+    content: "OPERATIONAL 3D MAP";
+    margin-left: 12px;
+    padding-left: 12px;
+    border-left: 1px solid rgba(40,169,255,.22);
+    color: #3f718b;
+    font-size: 7px;
+    letter-spacing: 1.3px;
+}
+
+.world-controls {
+    z-index: 40;
+}
+
+.world-control {
+    border-color: rgba(40,169,255,.38);
+    background: rgba(3,16,27,.78);
+    box-shadow: 0 0 18px rgba(40,169,255,.05);
+}
+
+.navigation-help {
+    border-color: rgba(40,169,255,.18);
+    background: rgba(2,12,21,.78);
+    backdrop-filter: blur(6px);
+}
+
+/* ============================================================
+   DETAIL MODERNO
+   ============================================================ */
+
+#node-detail .detail-modern {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    height: 100%;
+    overflow-y: auto;
+    padding: 2px 1px 8px;
+}
+
+#node-detail .detail-modern::-webkit-scrollbar { width: 4px; }
+#node-detail .detail-modern::-webkit-scrollbar-thumb {
+    background: rgba(40,169,255,.28);
+    border-radius: 10px;
+}
+
+#node-detail .detail-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+#node-detail .detail-kicker {
+    color: #6b94a9;
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 1.6px;
+    margin-bottom: 6px;
+}
+
+#node-detail .detail-name {
+    color: #f1f7fa;
+    font-size: 21px;
+    line-height: 1.08;
+    font-weight: 800;
+    word-break: break-word;
+}
+
+#node-detail .detail-subtitle {
+    margin-top: 5px;
+    color: #54768a;
+    font-size: 8px;
+    letter-spacing: 1px;
+}
+
+#node-detail .detail-status-modern {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 9px;
+    border: 1px solid;
+    border-radius: 999px;
+    background: rgba(2,11,19,.78);
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+#node-detail .detail-section {
+    border-top: 1px solid rgba(50,137,177,.18);
+    padding-top: 12px;
+}
+
+#node-detail .detail-section-title {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 9px;
+    color: #638aa0;
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 1.4px;
+}
+
+#node-detail .detail-section-title::before {
+    content: "";
+    width: 3px;
+    height: 10px;
+    border-radius: 3px;
+    background: var(--cyan);
+    box-shadow: 0 0 8px rgba(40,169,255,.45);
+}
+
+#node-detail .detail-grid-modern {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+#node-detail .detail-card {
+    min-width: 0;
+    padding: 10px;
+    border: 1px solid rgba(39,117,154,.22);
+    border-radius: 8px;
+    background: linear-gradient(135deg, rgba(7,25,38,.74), rgba(3,13,22,.82));
+}
+
+#node-detail .detail-card-label {
+    display: block;
+    margin-bottom: 6px;
+    color: #557387;
+    font-size: 7px;
+    font-weight: 800;
+    letter-spacing: 1.15px;
+}
+
+#node-detail .detail-card-value {
+    display: block;
+    color: #e9f3f8;
+    font-size: 11px;
+    line-height: 1.25;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+#node-detail .detail-state {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 11px;
+    border: 1px solid;
+    border-radius: 8px;
+    background: rgba(4,17,28,.72);
+}
+
+#node-detail .detail-state-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex: 0 0 auto;
+    box-shadow: 0 0 10px currentColor;
+}
+
+#node-detail .detail-state-value {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .5px;
+}
+
+#node-detail .detail-state-caption {
+    margin-top: 3px;
+    color: #617b8b;
+    font-size: 8px;
+    line-height: 1.45;
+}
+
+#node-detail .detail-code {
+    padding: 10px;
+    border: 1px solid rgba(39,117,154,.22);
+    border-radius: 8px;
+    background: rgba(2,11,19,.72);
+    color: #bfe8ff;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 9px;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+}
+
+#node-detail .detail-insight {
+    position: relative;
+    padding: 11px 11px 11px 13px;
+    border: 1px solid rgba(40,169,255,.20);
+    border-radius: 8px;
+    background: linear-gradient(135deg, rgba(9,39,57,.58), rgba(3,15,25,.78));
+    overflow: hidden;
+}
+
+#node-detail .detail-insight::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--cyan);
+    box-shadow: 0 0 12px rgba(40,169,255,.55);
+}
+
+#node-detail .detail-insight-title {
+    margin-bottom: 6px;
+    color: var(--cyan);
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 1.3px;
+}
+
+#node-detail .detail-insight-text {
+    color: #91adbc;
+    font-size: 9px;
+    line-height: 1.5;
+}
+
+@media (max-width: 1050px) {
+    .main-layout { grid-template-columns: 260px minmax(0,1fr) 300px; }
+}
+
+@media (max-width: 850px) {
+    #node-detail .detail-grid-modern { grid-template-columns: 1fr; }
+}
+
+
+/* ============================================================
+   RT BI ASSISTANT - INTEGRACIÓN DE AI OBSERVABILITY
+   ============================================================ */
+
+/* No modificar el body/layout global del proyecto.
+   Observabilidad vive dentro de .contenido-body. */
+
+.observability-page {
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+    background: #020812;
+    color: #eaf5fb;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.observability-page .app-shell {
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    padding: 15px 17px 17px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow: hidden;
+}
+
+/* El contenido-body de la aplicación principal no debe
+   generar un segundo scroll alrededor del universo 3D. */
+.contenido-body:has(.observability-page) {
+    padding: 0 !important;
+    overflow: hidden !important;
+}
+
+/* Evita que reglas genéricas del proyecto interfieran
+   con el área 3D. */
+.observability-page *,
+.observability-page *::before,
+.observability-page *::after {
+    box-sizing: border-box;
+}
+
+@media (max-width: 950px) {
+    .contenido-body:has(.observability-page) {
+        overflow: auto !important;
+    }
+
+    .observability-page {
+        min-height: 100%;
+        height: auto;
+        overflow: visible;
+    }
+
+    .observability-page .app-shell {
+        min-height: 100%;
+        height: auto;
+        overflow: visible;
+    }
+}
+
+
+/* ============================================================
+   RT BI — AI OBSERVABILITY
+   INTEGRACION FINAL CON base.html / styles_v2.css
+
+   Objetivos:
+   1. Cero fondo blanco dentro del modulo.
+   2. No modificar sidebar/topbar globales.
+   3. El modulo ocupa exactamente el espacio disponible.
+   4. KPI en una fila estable.
+   5. Laterales estables y centro 3D flexible.
+   6. Al maximizar, crece el centro y no se deforman los paneles.
+   7. Al contraer el sidebar, Observabilidad se reajusta automaticamente.
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   1) CONTENEDOR DE PAGINA
+   ------------------------------------------------------------ */
+
+html,
+body {
+    background: #020812;
+}
+
+.contenido-body:has(.observability-page) {
+    background: #020812 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    scrollbar-width: none;
+}
+
+.contenido-body:has(.observability-page)::-webkit-scrollbar {
+    display: none;
+}
+
+.observability-page {
+    --obs-bg: #020812;
+    --obs-bg-2: #06131f;
+    --obs-panel: #061521;
+    --obs-panel-2: #081b29;
+    --obs-border: rgba(31, 155, 214, .32);
+
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+
+    margin: 0;
+    padding: 0;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            ellipse at 50% 45%,
+            rgba(9, 62, 89, .20) 0%,
+            rgba(3, 22, 35, .10) 42%,
+            #020812 78%
+        );
+
+    color: #eaf5fb;
+    font-family: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+.observability-page .app-shell {
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+
+    display: grid;
+    grid-template-rows: 60px 82px minmax(0, 1fr);
+
+    gap: 10px;
+
+    padding: 10px 11px 11px;
+
+    overflow: hidden;
+
+    background: transparent;
+}
+
+.observability-page .app-shell > * {
+    min-width: 0;
+    min-height: 0;
+}
+
+/* ------------------------------------------------------------
+   2) HEADER
+   ------------------------------------------------------------ */
+
+.observability-page .top-header {
+    min-width: 0;
+    height: 60px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 18px;
+
+    border: 1px solid var(--obs-border);
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            105deg,
+            rgba(4, 27, 43, .98),
+            rgba(4, 18, 29, .94)
+        );
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.025),
+        0 0 20px rgba(0, 120, 180, .05);
+}
+
+.observability-page .brand-title {
+    font-size: clamp(17px, 1.15vw, 21px);
+    line-height: 1;
+}
+
+.observability-page .brand-subtitle {
+    font-size: 8px;
+    letter-spacing: 1.8px;
+}
+
+.observability-page .system-status {
+    font-size: 9px;
+}
+
+/* ------------------------------------------------------------
+   3) KPI
+   ------------------------------------------------------------ */
+
+.observability-page .top-kpis {
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+
+    height: 82px;
+
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+
+    gap: 9px;
+
+    flex: none !important;
+
+    overflow: hidden;
+}
+
+.observability-page .kpi-card {
+    width: auto !important;
+    min-width: 0 !important;
+    height: 82px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    padding: 10px 14px;
+
+    border: 1px solid var(--obs-border);
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(7, 31, 47, .96),
+            rgba(3, 17, 28, .96)
+        );
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.018);
+}
+
+.observability-page .kpi-label {
+    font-size: 9px;
+    letter-spacing: 1.6px;
+}
+
+.observability-page .kpi-value {
+    margin-top: 5px;
+    font-size: clamp(23px, 1.65vw, 30px);
+    line-height: 1;
+}
+
+.observability-page .kpi-description {
+    margin-top: 6px;
+    font-size: 9px;
+}
+
+/* ------------------------------------------------------------
+   4) AREA PRINCIPAL
+   ------------------------------------------------------------ */
+
+.observability-page .main-layout {
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+
+    display: grid !important;
+
+    grid-template-columns:
+        clamp(250px, 17vw, 285px)
+        minmax(0, 1fr)
+        clamp(285px, 19vw, 325px);
+
+    gap: 10px;
+
+    flex: none !important;
+
+    overflow: hidden;
+}
+
+/* Los tres paneles SIEMPRE caben en el alto disponible. */
+.observability-page .left-panel,
+.observability-page .world-panel,
+.observability-page .right-panel {
+    width: 100%;
+    height: 100%;
+
+    min-width: 0;
+    min-height: 0;
+
+    border: 1px solid var(--obs-border);
+    border-radius: 15px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(5, 25, 39, .97),
+            rgba(2, 13, 23, .98)
+        );
+
+    overflow: hidden;
+}
+
+/* ------------------------------------------------------------
+   5) PANEL IZQUIERDO
+   ------------------------------------------------------------ */
+
+.observability-page .left-panel {
+    padding: 15px;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    scrollbar-width: thin;
+    scrollbar-color: rgba(55,155,205,.38) transparent;
+}
+
+.observability-page .left-panel::-webkit-scrollbar {
+    width: 5px;
+}
+
+.observability-page .left-panel::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.observability-page .left-panel::-webkit-scrollbar-thumb {
+    background: rgba(55,155,205,.38);
+    border-radius: 10px;
+}
+
+.observability-page .panel-title {
+    font-size: 14px;
+}
+
+.observability-page .panel-subtitle {
+    font-size: 7px;
+}
+
+.observability-page .ecosystem-summary {
+    margin-top: 17px;
+    gap: 7px;
+}
+
+.observability-page .summary-card {
+    padding: 11px;
+}
+
+.observability-page .summary-value {
+    font-size: 21px;
+}
+
+.observability-page .summary-label {
+    font-size: 8px;
+}
+
+.observability-page .filter-title,
+.observability-page .legend-title {
+    margin-top: 17px;
+    margin-bottom: 9px;
+    font-size: 8px;
+}
+
+.observability-page .filter-label {
+    margin: 9px 0 5px;
+    font-size: 8px;
+}
+
+.observability-page .filter-select,
+.observability-page .filter-input,
+.observability-page .search-box {
+    height: 38px;
+}
+
+.observability-page .filter-select,
+.observability-page .filter-input,
+.observability-page .search-box input {
+    font-size: 11px;
+}
+
+.observability-page .legend-item {
+    margin: 7px 0;
+    font-size: 9px;
+}
+
+/* ------------------------------------------------------------
+   6) CENTRO 3D
+   ------------------------------------------------------------ */
+
+.observability-page .world-panel {
+    position: relative;
+    isolation: isolate;
+}
+
+.observability-page .graph-container {
+    position: absolute;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    min-width: 0;
+    min-height: 0;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 50% 50%,
+            rgba(16, 67, 94, .13),
+            transparent 46%
+        ),
+        radial-gradient(
+            circle at 20% 80%,
+            rgba(0, 111, 160, .07),
+            transparent 35%
+        ),
+        #020c15;
+}
+
+.observability-page .graph-container canvas {
+    display: block;
+
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* No permitir que controles del 3D cambien el tamaño del panel. */
+.observability-page .world-header {
+    z-index: 20;
+}
+
+.observability-page .world-controls {
+    z-index: 30;
+}
+
+.observability-page .navigation-help,
+.observability-page .live-monitor {
+    z-index: 25;
+}
+
+/* ------------------------------------------------------------
+   7) PANEL DERECHO
+   ------------------------------------------------------------ */
+
+.observability-page .right-panel {
+    position: relative;
+}
+
+.observability-page .node-detail {
+    width: 100%;
+    height: 100%;
+
+    min-width: 0;
+    min-height: 0;
+
+    padding: 16px;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    scrollbar-width: thin;
+    scrollbar-color: rgba(55,155,205,.38) transparent;
+}
+
+.observability-page .node-detail::-webkit-scrollbar {
+    width: 5px;
+}
+
+.observability-page .node-detail::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.observability-page .node-detail::-webkit-scrollbar-thumb {
+    background: rgba(55,155,205,.38);
+    border-radius: 10px;
+}
+
+.observability-page #node-detail .detail-modern {
+    min-width: 0;
+}
+
+.observability-page #node-detail .detail-name {
+    font-size: clamp(19px, 1.3vw, 24px);
+}
+
+.observability-page #node-detail .detail-kicker,
+.observability-page #node-detail .detail-section-title {
+    font-size: 8px;
+    letter-spacing: 1.35px;
+}
+
+.observability-page #node-detail .detail-subtitle {
+    font-size: 9px;
+}
+
+.observability-page #node-detail .detail-card-value {
+    font-size: 11px;
+}
+
+.observability-page #node-detail .detail-state-value {
+    font-size: 11px;
+}
+
+.observability-page #node-detail .detail-state-caption,
+.observability-page #node-detail .detail-insight-text {
+    font-size: 9px;
+}
+
+/* ------------------------------------------------------------
+   8) ELIMINAR CUALQUIER "BLANCO" PROVOCADO POR ELEMENTOS
+   ------------------------------------------------------------ */
+
+.observability-page input,
+.observability-page select,
+.observability-page textarea {
+    color-scheme: dark;
+}
+
+.observability-page input,
+.observability-page select {
+    background-color: #041522 !important;
+    color: #d9edf7 !important;
+    border-color: rgba(31,155,214,.30) !important;
+}
+
+.observability-page input::placeholder {
+    color: #527084 !important;
+}
+
+.observability-page option {
+    background: #061521;
+    color: #d9edf7;
+}
+
+.observability-page button {
+    color-scheme: dark;
+}
+
+/* ------------------------------------------------------------
+   9) SIDEBAR CONTRAIDO / EXPANDIDO
+   El módulo no necesita conocer el ancho del sidebar.
+   .contenido ya recalcula automáticamente el espacio.
+   ------------------------------------------------------------ */
+
+.observability-page,
+.observability-page .app-shell,
+.observability-page .main-layout {
+    max-width: none;
+}
+
+/* ------------------------------------------------------------
+   10) MONITORES GRANDES
+   ------------------------------------------------------------ */
+
+@media (min-width: 1600px) {
+
+    .observability-page .app-shell {
+        grid-template-rows: 62px 86px minmax(0,1fr);
+        gap: 11px;
+        padding: 11px 12px 12px;
+    }
+
+    .observability-page .top-header {
+        height: 62px;
+    }
+
+    .observability-page .top-kpis,
+    .observability-page .kpi-card {
+        height: 86px;
+    }
+
+    .observability-page .main-layout {
+        grid-template-columns:
+            285px
+            minmax(0,1fr)
+            325px;
+
+        gap: 11px;
+    }
+
+    .observability-page .left-panel,
+    .observability-page .node-detail {
+        padding: 17px;
+    }
+}
+
+/* ------------------------------------------------------------
+   11) VENTANA MEDIANA
+   ------------------------------------------------------------ */
+
+@media (max-width: 1250px) and (min-width: 851px) {
+
+    .observability-page .app-shell {
+        padding: 8px;
+        gap: 8px;
+    }
+
+    .observability-page .main-layout {
+        grid-template-columns:
+            235px
+            minmax(0,1fr)
+            275px;
+
+        gap: 8px;
+    }
+
+    .observability-page .left-panel,
+    .observability-page .node-detail {
+        padding: 12px;
+    }
+
+    .observability-page .kpi-card {
+        padding: 9px 11px;
+    }
+}
+
+/* ------------------------------------------------------------
+   12) PANTALLA PEQUEÑA
+   No comprimimos tres columnas hasta hacerlas ilegibles.
+   Pasamos a una columna y permitimos scroll interno.
+   ------------------------------------------------------------ */
+
+@media (max-width: 850px) {
+
+    .contenido-body:has(.observability-page) {
+        overflow: auto !important;
+    }
+
+    .observability-page {
+        height: auto;
+        min-height: 100%;
+        overflow: visible;
+    }
+
+    .observability-page .app-shell {
+        height: auto;
+        min-height: 100%;
+        overflow: visible;
+
+        grid-template-rows: auto auto auto;
+
+        padding: 8px;
+    }
+
+    .observability-page .top-header {
+        min-height: 58px;
+        height: 58px;
+    }
+
+    .observability-page .top-kpis {
+        height: auto;
+        grid-template-columns: repeat(2, minmax(0,1fr)) !important;
+        overflow: visible;
+    }
+
+    .observability-page .kpi-card {
+        height: 78px;
+    }
+
+    .observability-page .main-layout {
+        height: auto;
+
+        grid-template-columns: 1fr !important;
+
+        grid-template-rows:
+            auto
+            minmax(520px, 65vh)
+            auto;
+
+        overflow: visible;
+    }
+
+    .observability-page .left-panel {
+        max-height: 430px;
+    }
+
+    .observability-page .world-panel {
+        min-height: 520px;
+    }
+
+    .observability-page .right-panel {
+        min-height: 430px;
+    }
+}
+
+
+/* ============================================================
+   V3 — AJUSTE FINAL DE ALTURA Y CENTRADO VISUAL
+   ============================================================ */
+
+/* Los KPI necesitaban unos píxeles extra para mostrar
+   etiqueta + valor + descripción completos. */
+.observability-page .app-shell {
+    grid-template-rows: 60px 96px minmax(0, 1fr);
+}
+
+.observability-page .top-kpis,
+.observability-page .kpi-card {
+    height: 96px;
+}
+
+.observability-page .kpi-card {
+    padding: 11px 14px;
+}
+
+.observability-page .kpi-description {
+    margin-top: 7px;
+    line-height: 1.2;
+}
+
+/* El panel 3D nunca debe dejar un "área blanca" alrededor. */
+body:has(.observability-page),
+body:has(.observability-page) .layout,
+body:has(.observability-page) .contenido,
+body:has(.observability-page) .contenido-body {
+    background: #020812 !important;
+}
+
+/*
+   El topbar pertenece a base.html. Solo en Observabilidad
+   lo pasamos al mismo lenguaje visual oscuro, sin afectar
+   los demás módulos.
+*/
+body:has(.observability-page) .topbar {
+    background: #06111d !important;
+    border-bottom-color: rgba(31,155,214,.18) !important;
+}
+
+body:has(.observability-page) .contenido {
+    background: #020812 !important;
+}
+
+/* En monitores grandes, conservar el KPI completo. */
+@media (min-width: 1600px) {
+    .observability-page .app-shell {
+        grid-template-rows: 62px 100px minmax(0,1fr);
+    }
+
+    .observability-page .top-kpis,
+    .observability-page .kpi-card {
+        height: 100px;
+    }
+}
+
+/* Ventana mediana */
+@media (max-width: 1250px) and (min-width: 851px) {
+    .observability-page .app-shell {
+        grid-template-rows: 58px 92px minmax(0,1fr);
+    }
+
+    .observability-page .top-kpis,
+    .observability-page .kpi-card {
+        height: 92px;
+    }
+}
+
+
+/* ============================================================
+   V4 — AJUSTE SOLO DE LOS CUADROS DE RESUMEN (KPI)
+   No modifica topología, panel izquierdo ni panel derecho.
+   ============================================================ */
+
+.observability-page .app-shell {
+    grid-template-rows: 60px 84px minmax(0, 1fr);
+}
+
+.observability-page .top-kpis,
+.observability-page .kpi-card {
+    height: 84px;
+}
+
+.observability-page .kpi-card {
+    padding: 9px 13px;
+}
+
+.observability-page .kpi-label {
+    font-size: 10px;
+    line-height: 1.1;
+}
+
+.observability-page .kpi-value {
+    font-size: 26px;
+    line-height: 1;
+    margin-top: 5px;
+}
+
+.observability-page .kpi-description {
+    font-size: 8px;
+    line-height: 1.15;
+    margin-top: 5px;
+}
+
+/* Pantallas grandes: un poco más de espacio, sin volver
+   al tamaño anterior de 96-100px. */
+@media (min-width: 1600px) {
+    .observability-page .app-shell {
+        grid-template-rows: 62px 88px minmax(0, 1fr);
+    }
+
+    .observability-page .top-kpis,
+    .observability-page .kpi-card {
+        height: 88px;
+    }
+}
+
+/* Ventanas medianas */
+@media (max-width: 1250px) and (min-width: 851px) {
+    .observability-page .app-shell {
+        grid-template-rows: 58px 82px minmax(0, 1fr);
+    }
+
+    .observability-page .top-kpis,
+    .observability-page .kpi-card {
+        height: 82px;
+    }
+}
+
+
+/* ============================================================
+   V5 — KPI MUY COMPACTOS
+   SOLO modifica los 5 cuadros de resumen superiores.
+   No modifica topología, filtros ni panel de detalle.
+   ============================================================ */
+
+.observability-page .app-shell {
+    grid-template-rows: 54px 68px minmax(0, 1fr) !important;
+}
+
+.observability-page .top-kpis {
+    height: 68px !important;
+    min-height: 68px !important;
+    gap: 8px !important;
+}
+
+.observability-page .kpi-card {
+    height: 68px !important;
+    min-height: 68px !important;
+    padding: 7px 11px !important;
+    border-radius: 12px !important;
+}
+
+.observability-page .kpi-label {
+    font-size: 8px !important;
+    line-height: 1 !important;
+    letter-spacing: 1.2px !important;
+}
+
+.observability-page .kpi-value {
+    font-size: 22px !important;
+    line-height: 1 !important;
+    margin-top: 4px !important;
+}
+
+.observability-page .kpi-description {
+    font-size: 7px !important;
+    line-height: 1 !important;
+    margin-top: 3px !important;
+}
+
+/* En pantallas grandes mantenemos el mismo tamaño compacto. */
+@media (min-width: 1600px) {
+    .observability-page .app-shell {
+        grid-template-rows: 56px 70px minmax(0, 1fr) !important;
+    }
+
+    .observability-page .top-kpis,
+    .observability-page .kpi-card {
+        height: 70px !important;
+        min-height: 70px !important;
+    }
+}
+
+/* Ventanas medianas */
+@media (max-width: 1250px) and (min-width: 851px) {
+    .observability-page .app-shell {
+        grid-template-rows: 52px 66px minmax(0, 1fr) !important;
+    }
+
+    .observability-page .top-kpis,
+    .observability-page .kpi-card {
+        height: 66px !important;
+        min-height: 66px !important;
+    }
+}

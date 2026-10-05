@@ -195,6 +195,105 @@
 
     </div>
 
+    <div class="nripo-validacion-card">
+        <div class="nripo-validacion-header">
+            <div class="nripo-validacion-title">
+                <div class="nripo-validacion-icon"><i class="fa-solid fa-table"></i></div>
+                <div>
+                    <h3>Validación de cantidades NRIPO 033 vs NRIPO 034</h3>
+                    <span>Comparación mensual por departamento</span>
+                </div>
+            </div>
+            <div class="nripo-anio-form">
+                <label for="anio_validacion">Año</label>
+                <select id="anio_validacion"
+                        data-url="{{ url_for('NRIPO_033_034.validaciones_nripo_033_034') }}"
+                        onchange='(async function(el){
+                            const mes=document.getElementById("mes_validacion");
+                            const body=document.getElementById("nripo-validacion-body");
+                            body.innerHTML="<div class=\"nripo-sin-datos\"><i class=\"fa-solid fa-spinner fa-spin\"></i> Consultando "+el.value+"...</div>";
+                            el.disabled=true; mes.disabled=true;
+                            try{
+                                const r=await fetch(el.dataset.url+"?anio="+encodeURIComponent(el.value)+"&mes="+encodeURIComponent(mes.value),{headers:{"X-Requested-With":"XMLHttpRequest"},cache:"no-store"});
+                                if(!r.ok) throw new Error("HTTP "+r.status);
+                                const d=await r.json(), meses=d.meses||[], rows=d.rows||[];
+                                if(!meses.length||!rows.length){body.innerHTML="<div class=\"nripo-sin-datos\"><i class=\"fa-solid fa-circle-info\"></i> No existen datos de validación para el período seleccionado.</div>";return;}
+                                const esc=v=>String(v==null?"":v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;");
+                                const est=v=>v==="OK"?"<span class=\"estado-ok\"><i class=\"fa-solid fa-check\"></i> OK</span>":v==="NOK"?"<span class=\"estado-nok\"><i class=\"fa-solid fa-xmark\"></i> NOK</span>":"<span class=\"estado-sin-dato\">-</span>";
+                                let html="<div class=\"nripo-tabla-scroll\"><table class=\"nripo-validacion-table\"><thead><tr><th>AÑO</th><th>DEPARTAMENTO</th>";
+                                meses.forEach(m=>html+="<th>"+esc(m)+"-VALI</th>");
+                                html+="</tr></thead><tbody>";
+                                rows.forEach(row=>{html+="<tr><td>"+esc(row.ANIO)+"</td><td class=\"departamento\">"+esc(row.DEPARTAMENTO)+"</td>";meses.forEach(m=>html+="<td>"+est(row[m+"-VALI"]||row[m])+
+                                "</td>");html+="</tr>";});
+                                body.innerHTML=html+"</tbody></table></div>";
+                            }catch(e){console.error(e);body.innerHTML="<div class=\"nripo-sin-datos\" style=\"color:#dc2626\"><i class=\"fa-solid fa-triangle-exclamation\"></i> Error al consultar la validación.</div>";}
+                            finally{el.disabled=false;mes.disabled=false;}
+                        })(this)'>
+                    {% for anio in anios_disponibles %}
+                    <option value="{{ anio }}" {% if anio|string == validaciones.anio|string %}selected{% endif %}>{{ anio }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="mes_validacion">Mes</label>
+                <select id="mes_validacion"
+                        onchange='(async function(el){
+                            const anio=document.getElementById("anio_validacion");
+                            const body=document.getElementById("nripo-validacion-body");
+                            body.innerHTML="<div class=\"nripo-sin-datos\"><i class=\"fa-solid fa-spinner fa-spin\"></i> Consultando "+anio.value+"...</div>";
+                            anio.disabled=true; el.disabled=true;
+                            try{
+                                const r=await fetch(anio.dataset.url+"?anio="+encodeURIComponent(anio.value)+"&mes="+encodeURIComponent(el.value),{headers:{"X-Requested-With":"XMLHttpRequest"},cache:"no-store"});
+                                if(!r.ok) throw new Error("HTTP "+r.status);
+                                const d=await r.json(), meses=d.meses||[], rows=d.rows||[];
+                                if(!meses.length||!rows.length){body.innerHTML="<div class=\"nripo-sin-datos\"><i class=\"fa-solid fa-circle-info\"></i> No existen datos de validación para el período seleccionado.</div>";return;}
+                                const esc=v=>String(v==null?"":v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;");
+                                const est=v=>v==="OK"?"<span class=\"estado-ok\"><i class=\"fa-solid fa-check\"></i> OK</span>":v==="NOK"?"<span class=\"estado-nok\"><i class=\"fa-solid fa-xmark\"></i> NOK</span>":"<span class=\"estado-sin-dato\">-</span>";
+                                let html="<div class=\"nripo-tabla-scroll\"><table class=\"nripo-validacion-table\"><thead><tr><th>AÑO</th><th>DEPARTAMENTO</th>";
+                                meses.forEach(m=>html+="<th>"+esc(m)+"-VALI</th>");
+                                html+="</tr></thead><tbody>";
+                                rows.forEach(row=>{html+="<tr><td>"+esc(row.ANIO)+"</td><td class=\"departamento\">"+esc(row.DEPARTAMENTO)+"</td>";meses.forEach(m=>html+="<td>"+est(row[m+"-VALI"]||row[m])+"</td>");html+="</tr>";});
+                                body.innerHTML=html+"</tbody></table></div>";
+                            }catch(e){console.error(e);body.innerHTML="<div class=\"nripo-sin-datos\" style=\"color:#dc2626\"><i class=\"fa-solid fa-triangle-exclamation\"></i> Error al consultar la validación.</div>";}
+                            finally{anio.disabled=false;el.disabled=false;}
+                        })(this)'>
+                    <option value="">Todos</option>
+                    <option value="1">Enero</option>
+                    <option value="2">Febrero</option>
+                    <option value="3">Marzo</option>
+                    <option value="4">Abril</option>
+                    <option value="5">Mayo</option>
+                    <option value="6">Junio</option>
+                    <option value="7">Julio</option>
+                    <option value="8">Agosto</option>
+                    <option value="9">Septiembre</option>
+                    <option value="10">Octubre</option>
+                    <option value="11">Noviembre</option>
+                    <option value="12">Diciembre</option>
+                </select>
+            </div>
+        </div>
+        <div class="nripo-validacion-body" id="nripo-validacion-body">
+            {% if validaciones.rows %}
+            <div class="nripo-tabla-scroll">
+                <table class="nripo-validacion-table">
+                    <thead><tr><th>AÑO</th><th>DEPARTAMENTO</th>
+                    {% for mes in validaciones.meses %}<th>{{ mes }}-VALI</th>{% endfor %}
+                    </tr></thead>
+                    <tbody>
+                    {% for row in validaciones.rows %}
+                    <tr><td>{{ row['ANIO'] }}</td><td class="departamento">{{ row['DEPARTAMENTO'] }}</td>
+                    {% for mes in validaciones.meses %}
+                        {% set valor = row[mes ~ '-VALI'] %}
+                        <td>{% if valor == 'OK' %}<span class="estado-ok"><i class="fa-solid fa-check"></i> OK</span>{% elif valor == 'NOK' %}<span class="estado-nok"><i class="fa-solid fa-xmark"></i> NOK</span>{% else %}<span class="estado-sin-dato">—</span>{% endif %}</td>
+                    {% endfor %}</tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}<div class="nripo-sin-datos"><i class="fa-solid fa-circle-info"></i> No existen datos de validación para el año seleccionado.</div>{% endif %}
+        </div>
+    </div>
+
 </div>
 
 
@@ -558,5 +657,15 @@
     }
 
 }
+
+
+/* VALIDACIÓN 033 VS 034 */
+.nripo-validacion-card{width:100%;margin-top:12px;background:#fff;border:1px solid #dbe3ef;border-radius:7px;overflow:hidden;box-shadow:0 1px 4px rgba(15,23,42,.04)}
+.nripo-validacion-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:7px 10px;border-bottom:1px solid #e5eaf1}
+.nripo-validacion-title{display:flex;align-items:center;gap:8px}.nripo-validacion-icon{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:5px;background:#eff6ff;color:#2563eb;font-size:11px}.nripo-validacion-title h3{margin:0;font-size:10px;font-weight:700;color:#172033}.nripo-validacion-title span{display:block;margin-top:1px;font-size:6.5px;color:#94a3b8}
+.nripo-anio-form{display:flex;align-items:center;gap:6px}.nripo-anio-form label{font-size:8px;font-weight:700;color:#64748b}.nripo-anio-form select{min-width:82px;padding:5px 8px;border:1px solid #cbd5e1;border-radius:5px;background:#fff;color:#172033;font-size:8px;font-weight:600;cursor:pointer}
+.nripo-validacion-body{width:100%;padding:8px;box-sizing:border-box}.nripo-tabla-scroll{width:100%;overflow-x:auto}.nripo-validacion-table{width:100%;min-width:650px;border-collapse:collapse;font-size:8px}.nripo-validacion-table th{padding:7px 8px;background:#f8fafc;border-bottom:1px solid #dbe3ef;color:#475569;font-size:7px;font-weight:700;text-align:center;white-space:nowrap}.nripo-validacion-table th:first-child,.nripo-validacion-table th:nth-child(2){text-align:left}.nripo-validacion-table td{padding:6px 8px;border-bottom:1px solid #eef2f7;color:#334155;text-align:center;white-space:nowrap}.nripo-validacion-table td.departamento{text-align:left;font-weight:700;color:#172033}.nripo-validacion-table tbody tr:hover{background:#f8fafc}
+.estado-ok,.estado-nok,.estado-sin-dato{display:inline-flex;align-items:center;justify-content:center;min-width:40px;padding:3px 7px;border-radius:12px;font-size:7px;font-weight:700}.estado-ok{background:#dcfce7;color:#15803d}.estado-nok{background:#fee2e2;color:#dc2626}.estado-sin-dato{background:#f1f5f9;color:#94a3b8}.nripo-sin-datos{padding:18px;text-align:center;color:#64748b;font-size:8px}
+@media(max-width:600px){.nripo-validacion-header{align-items:flex-start;flex-direction:column}.nripo-anio-form{width:100%;justify-content:flex-end;flex-wrap:wrap}}
 
 </style>

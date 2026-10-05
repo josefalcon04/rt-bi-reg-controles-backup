@@ -25,6 +25,7 @@ from app.modulos.administracion.permisos import permisos_bp
 from app.modulos.administracion.menus import menus_bp
 from app.modulos.administracion.roles_permisos import roles_permisos_bp
 from app.modulos.administracion.accesos_usuario import accesos_usuario_bp
+from app.modulos.ia_observabilidad.ia_observabilidad import ia_observabilidad_bp
 
 # Registra los blueprints
 def register_blueprints(app):
@@ -55,3 +56,4 @@ def register_blueprints(app):
     app.register_blueprint(menus_bp)
     app.register_blueprint(roles_permisos_bp)
     app.register_blueprint(accesos_usuario_bp)
+    app.register_blueprint(ia_observabilidad_bp)

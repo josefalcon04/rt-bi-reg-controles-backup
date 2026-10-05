@@ -1,0 +1,1868 @@
+
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+    Dashboard - VW_NRM_NRIPO_002_FRK
+</title>
+
+<script
+    src="https://cdn.plot.ly/plotly-2.35.2.min.js">
+</script>
+
+<style>
+
+
+/* ==========================================================
+   DASHBOARD 
+   ========================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+
+    margin: 0;
+
+    padding: 0;
+
+    font-family:
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    background:
+        #f4f7fb;
+
+    color:
+        #172033;
+}
+
+.dashboard {
+
+    width: 100%;
+
+    min-height: 100vh;
+
+    padding: 24px 30px 40px;
+}
+
+/* ==========================================================
+   HEADER
+   ========================================================== */
+
+.dashboard-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 20px;
+
+    margin-bottom: 22px;
+
+    padding: 22px 26px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #172b4d,
+            #244b78
+        );
+
+    border-radius: 16px;
+
+    color: white;
+
+    box-shadow:
+        0 8px 24px
+        rgba(23, 43, 77, 0.14);
+}
+
+.header-title {
+
+    margin: 0;
+
+    font-size: 25px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.2px;
+}
+
+.header-subtitle {
+
+    margin-top: 6px;
+
+    font-size: 13px;
+
+    opacity: 0.82;
+}
+
+.header-badge {
+
+    padding: 8px 13px;
+
+    border-radius: 20px;
+
+    background:
+        rgba(255,255,255,0.14);
+
+    border:
+        1px solid
+        rgba(255,255,255,0.20);
+
+    font-size: 12px;
+
+    white-space: nowrap;
+}
+
+/* ==========================================================
+   KPI
+   ========================================================== */
+
+.kpi-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            4,
+            minmax(0, 1fr)
+        );
+
+    gap: 16px;
+
+    margin-bottom: 20px;
+}
+
+.kpi-card {
+
+    position: relative;
+
+    background: white;
+
+    border-radius: 14px;
+
+    padding: 20px;
+
+    min-height: 118px;
+
+    border:
+        1px solid
+        #e5eaf1;
+
+    box-shadow:
+        0 5px 18px
+        rgba(30, 55, 90, 0.06);
+
+    overflow: hidden;
+}
+
+.kpi-card::before {
+
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+
+    top: 0;
+
+    bottom: 0;
+
+    width: 4px;
+
+    background:
+        #2f6fed;
+}
+
+.kpi-label {
+
+    color:
+        #718096;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    margin-bottom: 10px;
+}
+
+.kpi-value {
+
+    font-size: 28px;
+
+    font-weight: 700;
+
+    color:
+        #172b4d;
+}
+
+.kpi-detail {
+
+    margin-top: 7px;
+
+    color:
+        #9aa5b5;
+
+    font-size: 11px;
+}
+
+/* ==========================================================
+   FILTROS
+   ========================================================== */
+
+.filters-card {
+
+    background: white;
+
+    border:
+        1px solid
+        #e5eaf1;
+
+    border-radius: 14px;
+
+    padding: 18px;
+
+    margin-bottom: 20px;
+
+    box-shadow:
+        0 5px 18px
+        rgba(30, 55, 90, 0.05);
+}
+
+.filters-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 14px;
+}
+
+.filters-title {
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    color:
+        #253858;
+}
+
+.btn-reset {
+
+    border: none;
+
+    background:
+        #eef3fb;
+
+    color:
+        #2f5f9f;
+
+    padding:
+        7px 12px;
+
+    border-radius:
+        8px;
+
+    cursor: pointer;
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+.btn-reset:hover {
+
+    background:
+        #dfe9f8;
+}
+
+.filters-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            4,
+            minmax(0, 1fr)
+        );
+
+    gap: 12px;
+}
+
+.filter-group label {
+
+    display: block;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    color:
+        #718096;
+
+    margin-bottom: 6px;
+}
+
+.filter-group select {
+
+    width: 100%;
+
+    height: 38px;
+
+    padding:
+        0 10px;
+
+    border:
+        1px solid
+        #dce3ed;
+
+    border-radius:
+        8px;
+
+    background:
+        #fff;
+
+    color:
+        #253858;
+
+    outline: none;
+}
+
+.filter-group select:focus {
+
+    border-color:
+        #5d8ed8;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(93, 142, 216, 0.12);
+}
+
+/* ==========================================================
+   GRID DE GRÁFICOS
+   ========================================================== */
+
+.charts-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 18px;
+
+    margin-bottom: 20px;
+}
+
+.chart-card {
+
+    background: white;
+
+    border:
+        1px solid
+        #e5eaf1;
+
+    border-radius:
+        14px;
+
+    padding:
+        14px 16px 8px;
+
+    box-shadow:
+        0 5px 18px
+        rgba(30, 55, 90, 0.05);
+
+    min-height: 390px;
+}
+
+.chart-card.full {
+
+    grid-column:
+        1 / -1;
+}
+
+.chart-title {
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    color:
+        #253858;
+
+    padding:
+        6px 4px 2px;
+}
+
+.chart-subtitle {
+
+    font-size: 11px;
+
+    color:
+        #8b96a8;
+
+    padding:
+        3px 4px 0;
+}
+
+.chart {
+
+    width: 100%;
+
+    height: 330px;
+}
+
+/* ==========================================================
+   TABLA
+   ========================================================== */
+
+.table-card {
+
+    background: white;
+
+    border:
+        1px solid
+        #e5eaf1;
+
+    border-radius:
+        14px;
+
+    padding:
+        18px;
+
+    box-shadow:
+        0 5px 18px
+        rgba(30, 55, 90, 0.05);
+}
+
+.table-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 14px;
+}
+
+.table-title {
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    color:
+        #253858;
+}
+
+.table-info {
+
+    color:
+        #8b96a8;
+
+    font-size: 11px;
+}
+
+.table-wrapper {
+
+    overflow-x: auto;
+
+    max-height: 420px;
+
+    overflow-y: auto;
+}
+
+table {
+
+    width: 100%;
+
+    border-collapse:
+        collapse;
+
+    font-size: 12px;
+}
+
+thead {
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 2;
+}
+
+th {
+
+    background:
+        #f4f7fb;
+
+    color:
+        #56657a;
+
+    text-align: left;
+
+    padding:
+        11px 10px;
+
+    font-weight: 700;
+
+    border-bottom:
+        1px solid
+        #dfe5ee;
+}
+
+td {
+
+    padding:
+        10px;
+
+    border-bottom:
+        1px solid
+        #edf0f5;
+
+    color:
+        #39475a;
+}
+
+tbody tr:hover {
+
+    background:
+        #f8fbff;
+}
+
+/* ==========================================================
+   FOOTER
+   ========================================================== */
+
+.dashboard-footer {
+
+    margin-top: 18px;
+
+    text-align: right;
+
+    color:
+        #98a2b3;
+
+    font-size: 11px;
+}
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+
+@media (max-width: 1100px) {
+
+    .kpi-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .filters-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 760px) {
+
+    .dashboard {
+
+        padding:
+            14px;
+    }
+
+    .dashboard-header {
+
+        flex-direction:
+            column;
+
+        align-items:
+            flex-start;
+    }
+
+    .kpi-grid {
+
+        grid-template-columns:
+            1fr;
+    }
+
+    .filters-grid {
+
+        grid-template-columns:
+            1fr;
+    }
+
+    .charts-grid {
+
+        grid-template-columns:
+            1fr;
+    }
+
+    .chart-card.full {
+
+        grid-column:
+            auto;
+    }
+}
+
+
+</style>
+
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <!-- ==================================================
+         HEADER
+         ================================================== -->
+
+    <header class="dashboard-header">
+
+        <div>
+
+            <h1 class="header-title">
+                Dashboard - VW_NRM_NRIPO_002_FRK
+            </h1>
+
+            <div class="header-subtitle">
+
+                NETEZZA
+                &nbsp;•&nbsp;
+                PROD_REGU_NORMA_DATA
+                &nbsp;•&nbsp;
+                VW_NRM_NRIPO_002_FRK
+
+            </div>
+
+        </div>
+
+        <div class="header-badge">
+            Dashboard Ejecutivo
+        </div>
+
+    </header>
+
+
+    <!-- ==================================================
+         KPIs
+         ================================================== -->
+
+    <section
+        id="kpiGrid"
+        class="kpi-grid">
+    </section>
+
+
+    <!-- ==================================================
+         FILTROS
+         ================================================== -->
+
+    <section class="filters-card">
+
+        <div class="filters-header">
+
+            <div class="filters-title">
+                Filtros
+            </div>
+
+            <button
+                id="btnReset"
+                class="btn-reset"
+                type="button"
+            >
+                Limpiar filtros
+            </button>
+
+        </div>
+
+        <div
+            id="filtersGrid"
+            class="filters-grid">
+        </div>
+
+    </section>
+
+
+    <!-- ==================================================
+         GRÁFICOS
+         ================================================== -->
+
+    <section
+        id="chartsGrid"
+        class="charts-grid">
+    </section>
+
+
+    <!-- ==================================================
+         TABLA
+         ================================================== -->
+
+    <section class="table-card">
+
+        <div class="table-header">
+
+            <div class="table-title">
+                Detalle de datos
+            </div>
+
+            <div
+                id="tableInfo"
+                class="table-info">
+            </div>
+
+        </div>
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead id="tableHead">
+                </thead>
+
+                <tbody id="tableBody">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <div class="dashboard-footer">
+
+        Generado automáticamente por Dashboard Builder
+
+    </div>
+
+</div>
+
+
+<script>
+
+
+function formatoNumero(valor) {
+
+    if (
+        valor === null ||
+        valor === undefined ||
+        isNaN(valor)
+    ) {
+        return "0";
+    }
+
+    const numero = Number(valor);
+
+    if (Math.abs(numero) >= 1000000000) {
+
+        return (
+            (numero / 1000000000)
+            .toFixed(1)
+            .replace(/\.0$/, "")
+            + "B"
+        );
+    }
+
+    if (Math.abs(numero) >= 1000000) {
+
+        return (
+            (numero / 1000000)
+            .toFixed(1)
+            .replace(/\.0$/, "")
+            + "M"
+        );
+    }
+
+    if (Math.abs(numero) >= 1000) {
+
+        return (
+            (numero / 1000)
+            .toFixed(1)
+            .replace(/\.0$/, "")
+            + "K"
+        );
+    }
+
+    return numero.toLocaleString(
+        "es-PE",
+        {
+            maximumFractionDigits: 2
+        }
+    );
+}
+
+
+
+/* ==========================================================
+   DATOS
+   ========================================================== */
+
+const DATOS = [{"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "NA", "COMBINACION_DE_SERVICIOS": "SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 85}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "LORETO", "COMBINACION_DE_SERVICIOS": "SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 177797}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LORETO", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 8}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LORETO", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 634}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "LORETO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 44}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LORETO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 154}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "LORETO", "COMBINACION_DE_SERVICIOS": "IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 672}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LORETO", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 71}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "LORETO", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 377}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LORETO", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 14}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LORETO", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 27}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "TUMBES", "COMBINACION_DE_SERVICIOS": "SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 70273}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "TUMBES", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 291}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "TUMBES", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 8}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "TUMBES", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 114}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "TUMBES", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 309}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "TUMBES", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 21}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "TUMBES", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 83}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "TUMBES", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 39}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "TUMBES", "COMBINACION_DE_SERVICIOS": "IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1201}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "TUMBES", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 275}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "TUMBES", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 167}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "PUNO", "COMBINACION_DE_SERVICIOS": "SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 251328}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "PUNO", "COMBINACION_DE_SERVICIOS": "IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 8410}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "PUNO", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 236}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "PUNO", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1726}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "PUNO", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 651}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "PUNO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 657}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "PUNO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 316}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "PUNO", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 338}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "PUNO", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 8}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "PUNO", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 10}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "PUNO", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 222}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "MADRE DE DIOS", "COMBINACION_DE_SERVICIOS": "SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 19886}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "MADRE DE DIOS", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 29}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "MADRE DE DIOS", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 317}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "MADRE DE DIOS", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 278}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "MADRE DE DIOS", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 111}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "MADRE DE DIOS", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 94}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "MADRE DE DIOS", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 101}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "MADRE DE DIOS", "COMBINACION_DE_SERVICIOS": "IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1202}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "MADRE DE DIOS", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 26}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "MADRE DE DIOS", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "ÁNCASH", "COMBINACION_DE_SERVICIOS": "SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 323291}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 445642}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 4588}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 529}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 7775}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2104}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 28716}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 4565}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 3806}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 577}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 3306}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "TFA+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 328}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "SGC", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 269}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "SGC", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 4958}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "SGC", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 915}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 463027}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1478}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 9091}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 183}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 763}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 223}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2554}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "TFA+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1332}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 4063}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1472}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 604}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "ÁNCASH", "COMBINACION_DE_SERVICIOS": "SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 313634}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "APURIMAC", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 102}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "APURIMAC", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 92}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "APURIMAC", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 590}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "APURIMAC", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 98}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "APURIMAC", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 42}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "APURIMAC", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "APURIMAC", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 211}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "APURIMAC", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 376}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "APURIMAC", "COMBINACION_DE_SERVICIOS": "IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2142}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "APURIMAC", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 7}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "TFA+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 236}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 4111}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2038}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1407}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 26006}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 398}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2717}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 3543}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 678}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 8398}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 549216}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANUCO", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 17}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANUCO", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 87}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANUCO", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 672}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANUCO", "COMBINACION_DE_SERVICIOS": "IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 3593}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANUCO", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 171}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANUCO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 548}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANUCO", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 334}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANUCO", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 6}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANUCO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 249}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANUCO", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 957}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "APURÍMAC", "COMBINACION_DE_SERVICIOS": "SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 93548}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "JUNÍN", "COMBINACION_DE_SERVICIOS": "SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 401472}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "MOQUEGUA", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 56}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "MOQUEGUA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 197}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "MOQUEGUA", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 459}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "MOQUEGUA", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 165}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "MOQUEGUA", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 218}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "MOQUEGUA", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 24}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "MOQUEGUA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 480}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "MOQUEGUA", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 15}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "MOQUEGUA", "COMBINACION_DE_SERVICIOS": "IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2250}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "MOQUEGUA", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 531}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "MOQUEGUA", "COMBINACION_DE_SERVICIOS": "SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 70753}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "APURIMAC", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 94}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "APURIMAC", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 366}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "APURIMAC", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 4}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "APURIMAC", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 44}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "APURIMAC", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 7}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "APURIMAC", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 580}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "APURIMAC", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 101}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "APURIMAC", "COMBINACION_DE_SERVICIOS": "IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2149}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "APURIMAC", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 87}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "APURIMAC", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 197}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "SAN MARTIN", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 128}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "SAN MARTIN", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 212}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "SAN MARTIN", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 227}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "SAN MARTIN", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 472}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "SAN MARTIN", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 17}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "SAN MARTIN", "COMBINACION_DE_SERVICIOS": "IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 6087}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "SAN MARTIN", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 828}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "SAN MARTIN", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 13}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "SAN MARTIN", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 312}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "SAN MARTIN", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1127}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "AYACUCHO", "COMBINACION_DE_SERVICIOS": "SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 156164}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "AYACUCHO", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 148}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "AYACUCHO", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 897}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "AYACUCHO", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 481}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "AYACUCHO", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 245}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "AYACUCHO", "COMBINACION_DE_SERVICIOS": "IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 4344}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "AYACUCHO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 447}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "AYACUCHO", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 16}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "AYACUCHO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 202}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "AYACUCHO", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 145}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "HUANCAVELICA", "COMBINACION_DE_SERVICIOS": "SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 86217}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANCAVELICA", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 277}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANCAVELICA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 15}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANCAVELICA", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 74}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "AYACUCHO", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 142}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "AYACUCHO", "COMBINACION_DE_SERVICIOS": "IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 4268}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "AYACUCHO", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 144}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "AYACUCHO", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 492}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "AYACUCHO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 208}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "AYACUCHO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 451}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "AYACUCHO", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 917}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "AYACUCHO", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "AYACUCHO", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 231}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "AYACUCHO", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 18}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "AYACUCHO", "COMBINACION_DE_SERVICIOS": "SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 160764}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "CALLAO", "COMBINACION_DE_SERVICIOS": "SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 296753}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "UCAYALI", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 579}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1416}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 3720}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1516}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 741}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 566}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "UCAYALI", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 946}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2435}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "UCAYALI", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 41}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 189}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "UCAYALI", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 143}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "UCAYALI", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 100}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "UCAYALI", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 492}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "UCAYALI", "COMBINACION_DE_SERVICIOS": "IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 4569}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "TFA+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1244}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 8994}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 247}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "UCAYALI", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1144}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "UCAYALI", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 14}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "UCAYALI", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 286}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 447981}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "UCAYALI", "COMBINACION_DE_SERVICIOS": "SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 175895}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "CALLAO", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1705}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "CALLAO", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 430}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "CALLAO", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2711}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "CALLAO", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2805}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "CALLAO", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 900}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "CALLAO", "COMBINACION_DE_SERVICIOS": "IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 20701}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "CALLAO", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 676}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "CALLAO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 5692}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "CALLAO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 7212}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "CALLAO", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 9741}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "TUMBES", "COMBINACION_DE_SERVICIOS": "IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1181}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "TUMBES", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 277}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "TUMBES", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 297}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "TUMBES", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 79}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "TUMBES", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 104}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "TUMBES", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 20}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "TUMBES", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 148}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "TUMBES", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 32}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "TUMBES", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 8}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "TUMBES", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 262}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "TUMBES", "COMBINACION_DE_SERVICIOS": "SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 68302}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "PUNO", "COMBINACION_DE_SERVICIOS": "SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 241010}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "PUNO", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 246}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "PUNO", "COMBINACION_DE_SERVICIOS": "IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 8400}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "PUNO", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 234}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "PUNO", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 322}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "PUNO", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 9}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "PUNO", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1660}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "PUNO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 293}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "PUNO", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 13}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "PUNO", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 629}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "PUNO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 632}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "SAN MARTÍN", "COMBINACION_DE_SERVICIOS": "SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 198508}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "APURÍMAC", "COMBINACION_DE_SERVICIOS": "SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 93465}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "SAN MARTIN", "COMBINACION_DE_SERVICIOS": "IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 6046}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "SAN MARTIN", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 882}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "SAN MARTIN", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 15}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "SAN MARTIN", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 125}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "SAN MARTIN", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 295}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "SAN MARTIN", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 238}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "SAN MARTIN", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 487}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "SAN MARTIN", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 11}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "SAN MARTIN", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1162}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "SAN MARTIN", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 224}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "CUSCO", "COMBINACION_DE_SERVICIOS": "SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 265197}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "CUSCO", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 281}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "CUSCO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1702}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "CUSCO", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 592}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "CUSCO", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 296}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "CUSCO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1746}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "CUSCO", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2385}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "CUSCO", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 95}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "CUSCO", "COMBINACION_DE_SERVICIOS": "IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 18657}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "CUSCO", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 4648}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "CUSCO", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1178}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANCAVELICA", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 73}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANCAVELICA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 10}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANCAVELICA", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 272}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "HUANCAVELICA", "COMBINACION_DE_SERVICIOS": "SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 86168}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "PIURA", "COMBINACION_DE_SERVICIOS": "SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 571270}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "PIURA", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 642}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "PIURA", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 313}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "PIURA", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1531}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "PIURA", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 317}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "PIURA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 3235}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "PIURA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1413}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "PIURA", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2220}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "PIURA", "COMBINACION_DE_SERVICIOS": "IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 13304}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "PIURA", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 145}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "PIURA", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 4242}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "PUNO", "COMBINACION_DE_SERVICIOS": "SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 244297}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "PUNO", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1693}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "PUNO", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 7}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "PUNO", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 329}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "PUNO", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 246}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "PUNO", "COMBINACION_DE_SERVICIOS": "IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 8503}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "PUNO", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 628}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "PUNO", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 229}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "PUNO", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 12}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "PUNO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 652}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "PUNO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 302}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "CALLAO", "COMBINACION_DE_SERVICIOS": "SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 297977}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "CALLAO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 6990}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "CALLAO", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2879}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "CALLAO", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2644}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "CALLAO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 5418}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "CALLAO", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 852}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "CALLAO", "COMBINACION_DE_SERVICIOS": "IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 20494}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "CALLAO", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 680}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "CALLAO", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 9406}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "CALLAO", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1671}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "CALLAO", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 436}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "AMAZONAS", "COMBINACION_DE_SERVICIOS": "SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 93901}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "AMAZONAS", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "AMAZONAS", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 77}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "AMAZONAS", "COMBINACION_DE_SERVICIOS": "IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 726}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "AMAZONAS", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 36}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "AMAZONAS", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 13}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "AMAZONAS", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 138}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "AMAZONAS", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 83}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "AMAZONAS", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 34}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "AMAZONAS", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "AMAZONAS", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 244}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "CUSCO", "COMBINACION_DE_SERVICIOS": "SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 270129}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "CUSCO", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2430}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "CUSCO", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 4831}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "CUSCO", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 591}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "CUSCO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1738}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "CUSCO", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1153}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "CUSCO", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 96}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "CUSCO", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 278}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "CUSCO", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 299}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "CUSCO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1785}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "CUSCO", "COMBINACION_DE_SERVICIOS": "IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 18987}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "NA", "COMBINACION_DE_SERVICIOS": "SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 85}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "APURÍMAC", "COMBINACION_DE_SERVICIOS": "SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 92907}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 455290}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 3910}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "TFA+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 7777}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 311}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 559}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 4671}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 28423}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 4650}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 3417}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2021}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 524}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "SGC", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 280}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "SGC", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 5063}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "SGC", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 985}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "CAJAMARCA", "COMBINACION_DE_SERVICIOS": "SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 287708}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "CAJAMARCA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 600}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "CAJAMARCA", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 169}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "CAJAMARCA", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 399}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "CAJAMARCA", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1559}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "CAJAMARCA", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 22}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "CAJAMARCA", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 490}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "CAJAMARCA", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 32}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "CAJAMARCA", "COMBINACION_DE_SERVICIOS": "IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 7716}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "CAJAMARCA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 928}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "CAJAMARCA", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1713}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "MADRE DE DIOS", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 93}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "MADRE DE DIOS", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 106}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "MADRE DE DIOS", "COMBINACION_DE_SERVICIOS": "IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1204}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "MADRE DE DIOS", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 25}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "MADRE DE DIOS", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "MADRE DE DIOS", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 30}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "MADRE DE DIOS", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 269}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "MADRE DE DIOS", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 97}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "MADRE DE DIOS", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 307}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "MADRE DE DIOS", "COMBINACION_DE_SERVICIOS": "SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 19361}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "CALLAO", "COMBINACION_DE_SERVICIOS": "SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 300910}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "MOQUEGUA", "COMBINACION_DE_SERVICIOS": "SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 71978}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "CALLAO", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1682}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "CALLAO", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 871}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "CALLAO", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2846}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "MOQUEGUA", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 155}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "CALLAO", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 9701}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "MOQUEGUA", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 57}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "CALLAO", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 682}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "MOQUEGUA", "COMBINACION_DE_SERVICIOS": "IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2281}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "CALLAO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 7141}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "MOQUEGUA", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 466}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "CALLAO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 5615}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "MOQUEGUA", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 227}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "CALLAO", "COMBINACION_DE_SERVICIOS": "IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 20749}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "CALLAO", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 436}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "MOQUEGUA", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 17}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "CALLAO", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2698}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "MOQUEGUA", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 556}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "MOQUEGUA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 213}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "MOQUEGUA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 488}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "MOQUEGUA", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 22}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "PASCO", "COMBINACION_DE_SERVICIOS": "SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 55543}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "PASCO", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 133}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "PASCO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 78}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "PASCO", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 214}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "PASCO", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "PASCO", "COMBINACION_DE_SERVICIOS": "IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1352}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "PASCO", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 76}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "PASCO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 39}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "PASCO", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 54}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "PASCO", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 27}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "PASCO", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "CAJAMARCA", "COMBINACION_DE_SERVICIOS": "SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 282622}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "CAJAMARCA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 555}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "CAJAMARCA", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1581}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "CAJAMARCA", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 369}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "CAJAMARCA", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 171}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "CAJAMARCA", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 21}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "CAJAMARCA", "COMBINACION_DE_SERVICIOS": "IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 7592}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "CAJAMARCA", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 38}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "CAJAMARCA", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 528}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "CAJAMARCA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 896}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "CAJAMARCA", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1471}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "PIURA", "COMBINACION_DE_SERVICIOS": "SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 580841}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "PIURA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 3324}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "PIURA", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 138}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "PIURA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1443}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "PIURA", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 4372}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "PIURA", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 318}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "PIURA", "COMBINACION_DE_SERVICIOS": "IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 13367}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "PIURA", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2263}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "PIURA", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 309}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "PIURA", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1544}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "PIURA", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 650}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "LORETO", "COMBINACION_DE_SERVICIOS": "SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 175370}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "LORETO", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 362}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "LORETO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 43}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LORETO", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 12}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LORETO", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 66}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "LORETO", "COMBINACION_DE_SERVICIOS": "IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 681}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LORETO", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 31}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LORETO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 138}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LORETO", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 8}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LORETO", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 593}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 129572}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 134}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 18}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 859}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 13}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 437}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 314}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1126}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 244}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 6428}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 630}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "TFA+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "SGC", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 54}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "SGC", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1309}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "SGC", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 203}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 134}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 303}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1090}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 16}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 12}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 800}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 616}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 245}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 6145}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 431}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "SGC", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 53}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "SGC", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1281}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "SGC", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 197}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 128510}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "JUNÍN", "COMBINACION_DE_SERVICIOS": "SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 390647}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "ANCASH", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 73}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "ANCASH", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 685}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "ANCASH", "COMBINACION_DE_SERVICIOS": "IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 9319}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "ANCASH", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1144}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "ANCASH", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1499}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "ANCASH", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 656}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "ANCASH", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 203}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "ANCASH", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2114}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "ANCASH", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 177}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "ANCASH", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 3641}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "PASCO", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 195}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "PASCO", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "PASCO", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 74}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "PASCO", "COMBINACION_DE_SERVICIOS": "IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1356}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "PASCO", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "PASCO", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 130}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "PASCO", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 31}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "PASCO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 75}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "PASCO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 34}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "PASCO", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 49}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "PASCO", "COMBINACION_DE_SERVICIOS": "SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 55036}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2860560}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "TFA+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 12}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 85035}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 16791}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 133158}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 42365}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 70700}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 5102}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 260018}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 7905}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 31505}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 88238}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "JUNIN", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 58}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "JUNIN", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1609}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "JUNIN", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 268}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "JUNIN", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 147}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "JUNIN", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1146}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "JUNIN", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1986}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "JUNIN", "COMBINACION_DE_SERVICIOS": "IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 14473}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "JUNIN", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2733}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "JUNIN", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 885}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "JUNIN", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 799}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "PASCO", "COMBINACION_DE_SERVICIOS": "SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 54814}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "PASCO", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "PASCO", "COMBINACION_DE_SERVICIOS": "IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1374}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "PASCO", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 203}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "PASCO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 38}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "PASCO", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 76}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "PASCO", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 30}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "PASCO", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "PASCO", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 51}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "PASCO", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 131}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "PASCO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 81}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "SAN MARTÍN", "COMBINACION_DE_SERVICIOS": "SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 201683}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "PIURA", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1556}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "PIURA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1363}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "PIURA", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 313}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "PIURA", "COMBINACION_DE_SERVICIOS": "IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 13068}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "PIURA", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 152}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "PIURA", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 311}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "PIURA", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 635}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "PIURA", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2142}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "PIURA", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 4042}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "PIURA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 3127}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "PIURA", "COMBINACION_DE_SERVICIOS": "SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 565863}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "CUSCO", "COMBINACION_DE_SERVICIOS": "SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 273753}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "CUSCO", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1092}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "CUSCO", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 4901}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "CUSCO", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 311}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "CUSCO", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 98}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "CUSCO", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 261}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "CUSCO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1779}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "CUSCO", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 607}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "CUSCO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1800}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "CUSCO", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2428}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "CUSCO", "COMBINACION_DE_SERVICIOS": "IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 18776}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 452036}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "TFA+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 3913}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 9147}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 584}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1290}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 234}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2490}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 190}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 747}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1450}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LAMBAYEQUE", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1503}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "JUNIN", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 149}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "JUNIN", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2044}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "JUNIN", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 276}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "JUNIN", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1652}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "JUNIN", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2889}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "JUNIN", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 62}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "JUNIN", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 821}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "JUNIN", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1116}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "JUNIN", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 926}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "JUNIN", "COMBINACION_DE_SERVICIOS": "IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 14706}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "ANCASH", "COMBINACION_DE_SERVICIOS": "IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 9498}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "ANCASH", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1477}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "ANCASH", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 198}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "ANCASH", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 3598}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "ANCASH", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 698}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "ANCASH", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 185}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "ANCASH", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2090}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "ANCASH", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 78}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "ANCASH", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 636}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "ANCASH", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1119}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "ICA", "COMBINACION_DE_SERVICIOS": "SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 302040}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "ICA", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1030}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "ICA", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 118}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "ICA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1325}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "ICA", "COMBINACION_DE_SERVICIOS": "IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 9555}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "ICA", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 3141}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "ICA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2014}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "ICA", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 86}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "ICA", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 257}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "ICA", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2274}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "ICA", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 851}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "ICA", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 996}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "ICA", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 83}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "ICA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2033}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "ICA", "COMBINACION_DE_SERVICIOS": "IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 9407}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "ICA", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 902}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "ICA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1361}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "ICA", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 253}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "ICA", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 3131}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "ICA", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2315}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "ICA", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 114}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "ICA", "COMBINACION_DE_SERVICIOS": "SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 316012}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "ANCASH", "COMBINACION_DE_SERVICIOS": "IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 9288}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "ANCASH", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1439}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "ANCASH", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2020}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "ANCASH", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 183}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "ANCASH", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1061}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "ANCASH", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 195}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "ANCASH", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 81}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "ANCASH", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 3356}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "ANCASH", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 626}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "ANCASH", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 701}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 130983}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 128}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 245}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 953}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 640}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 18}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 450}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 6459}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 328}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1151}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 13}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "SGC", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 51}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "SGC", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1329}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "SGC", "DEPARTAMENTO": "TACNA", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 214}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "ÁNCASH", "COMBINACION_DE_SERVICIOS": "SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 311528}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 5158}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "TFA+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 11}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 81402}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 40646}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 126468}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 15908}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 32070}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 85756}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 7762}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 68520}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 249370}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2831740}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "CAJAMARCA", "COMBINACION_DE_SERVICIOS": "SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 284567}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "CAJAMARCA", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 173}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "CAJAMARCA", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 38}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "CAJAMARCA", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1649}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "CAJAMARCA", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1521}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "CAJAMARCA", "COMBINACION_DE_SERVICIOS": "IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 7700}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "CAJAMARCA", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 382}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "CAJAMARCA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 584}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "CAJAMARCA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 924}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "CAJAMARCA", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 21}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "CAJAMARCA", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 506}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2856277}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 5145}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 251479}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 83593}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 128781}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 69697}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 16322}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "TFA+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 16}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 41752}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 7824}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 31565}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "LIMA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 87271}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "APURIMAC", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 100}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "APURIMAC", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 42}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "APURIMAC", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 98}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "APURIMAC", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 6}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "APURIMAC", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 98}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "APURIMAC", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 203}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "APURIMAC", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 589}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "APURIMAC", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 369}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "APURIMAC", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 5}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "APURIMAC", "COMBINACION_DE_SERVICIOS": "IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2165}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "HUANCAVELICA", "COMBINACION_DE_SERVICIOS": "SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 86259}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANCAVELICA", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 275}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANCAVELICA", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 72}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANCAVELICA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 12}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "MADRE DE DIOS", "COMBINACION_DE_SERVICIOS": "SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 20153}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "MADRE DE DIOS", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 110}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "MADRE DE DIOS", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 25}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "MADRE DE DIOS", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 27}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "MADRE DE DIOS", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "MADRE DE DIOS", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 281}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "MADRE DE DIOS", "COMBINACION_DE_SERVICIOS": "IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1217}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "MADRE DE DIOS", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 322}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "MADRE DE DIOS", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 92}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "MADRE DE DIOS", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 103}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "HUÁNUCO", "COMBINACION_DE_SERVICIOS": "SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 131077}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LORETO", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 63}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LORETO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 124}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "LORETO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 39}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LORETO", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 9}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "LORETO", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 335}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LORETO", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 10}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "LORETO", "COMBINACION_DE_SERVICIOS": "IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 680}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LORETO", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 552}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LORETO", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 34}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "LORETO", "COMBINACION_DE_SERVICIOS": "SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 173620}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 552220}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "TFA+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2793}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 8941}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 3645}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 403}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 230}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 4219}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 26419}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 689}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1437}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1985}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "AYACUCHO", "COMBINACION_DE_SERVICIOS": "SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 152084}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "AYACUCHO", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 138}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "AYACUCHO", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 886}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "AYACUCHO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 197}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "AYACUCHO", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 476}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "AYACUCHO", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 146}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "AYACUCHO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 438}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "AYACUCHO", "COMBINACION_DE_SERVICIOS": "IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 4298}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "AYACUCHO", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 14}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "AYACUCHO", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 248}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "MOQUEGUA", "COMBINACION_DE_SERVICIOS": "SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 72400}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "MOQUEGUA", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 563}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "MOQUEGUA", "COMBINACION_DE_SERVICIOS": "IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2211}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "MOQUEGUA", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 235}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "MOQUEGUA", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 13}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "MOQUEGUA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 224}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "MOQUEGUA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 492}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "MOQUEGUA", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 157}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "MOQUEGUA", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 57}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "MOQUEGUA", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 479}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "MOQUEGUA", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 21}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "SAN MARTIN", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 13}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "SAN MARTIN", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 305}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "SAN MARTIN", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1148}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "SAN MARTIN", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 874}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "SAN MARTIN", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 13}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "SAN MARTIN", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 127}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "SAN MARTIN", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 219}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "SAN MARTIN", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 490}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "SAN MARTIN", "COMBINACION_DE_SERVICIOS": "IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 6167}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "SAN MARTIN", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 231}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "UCAYALI", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 601}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "UCAYALI", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 979}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "UCAYALI", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 97}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "UCAYALI", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 48}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "UCAYALI", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 465}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "UCAYALI", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1161}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "UCAYALI", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 147}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "UCAYALI", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 14}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "UCAYALI", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 296}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "UCAYALI", "COMBINACION_DE_SERVICIOS": "IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 4357}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "UCAYALI", "COMBINACION_DE_SERVICIOS": "SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 181281}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "UCAYALI", "COMBINACION_DE_SERVICIOS": "SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 177756}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "UCAYALI", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1155}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "UCAYALI", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 599}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "UCAYALI", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 294}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "UCAYALI", "COMBINACION_DE_SERVICIOS": "IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 4575}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "UCAYALI", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 44}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "UCAYALI", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 486}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "UCAYALI", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 14}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "UCAYALI", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 144}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "UCAYALI", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 968}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "UCAYALI", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 103}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 524}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 328}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 4474}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2133}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 3718}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 4475}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "TFA+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 3217}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 598}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 28437}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 7507}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "SGC", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 254}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "SGC", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 4860}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "SGC", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 863}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "AREQUIPA", "COMBINACION_DE_SERVICIOS": "SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 443768}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "HUÁNUCO", "COMBINACION_DE_SERVICIOS": "SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 124704}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "AMAZONAS", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 237}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "AMAZONAS", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 30}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "AMAZONAS", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 81}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "AMAZONAS", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 12}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "AMAZONAS", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 75}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "AMAZONAS", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 115}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "AMAZONAS", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 4}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "AMAZONAS", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 36}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "AMAZONAS", "COMBINACION_DE_SERVICIOS": "IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 696}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "AMAZONAS", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "AMAZONAS", "COMBINACION_DE_SERVICIOS": "SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 92851}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANUCO", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 328}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANUCO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 554}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANUCO", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 173}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANUCO", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 92}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANUCO", "COMBINACION_DE_SERVICIOS": "IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 3459}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANUCO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 254}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANUCO", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 6}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANUCO", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 20}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANUCO", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 679}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANUCO", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 928}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "ICA", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 3029}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "ICA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1287}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "ICA", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 89}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "ICA", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2197}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "ICA", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 111}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "ICA", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 263}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "ICA", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 801}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "ICA", "COMBINACION_DE_SERVICIOS": "IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 9473}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "ICA", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1964}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "ICA", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1050}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "ICA", "COMBINACION_DE_SERVICIOS": "SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 299360}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "HUÁNUCO", "COMBINACION_DE_SERVICIOS": "SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 125970}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "JUNIN", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 60}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "JUNIN", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 269}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "JUNIN", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 836}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "JUNIN", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2089}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "JUNIN", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 974}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "JUNIN", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2932}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "JUNIN", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1700}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "JUNIN", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 161}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "JUNIN", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1045}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "JUNIN", "COMBINACION_DE_SERVICIOS": "IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 14490}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "AMAZONAS", "COMBINACION_DE_SERVICIOS": "SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 93551}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "AMAZONAS", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "AMAZONAS", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 84}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "AMAZONAS", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 4}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "AMAZONAS", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 241}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "AMAZONAS", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 123}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "AMAZONAS", "COMBINACION_DE_SERVICIOS": "IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 725}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "AMAZONAS", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 76}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "AMAZONAS", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 13}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "AMAZONAS", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 31}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "AMAZONAS", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 37}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "NA", "COMBINACION_DE_SERVICIOS": "SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 85}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "JUNÍN", "COMBINACION_DE_SERVICIOS": "SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 385354}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 392}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 3700}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 9166}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "IF", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 26068}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1943}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1464}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "TFA+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 694}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 2857}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 4270}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 232}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "LA LIBERTAD", "COMBINACION_DE_SERVICIOS": "SM", "MES": 4, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 561479}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "TUMBES", "COMBINACION_DE_SERVICIOS": "SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 68898}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "TUMBES", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 270}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "TUMBES", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 112}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "TUMBES", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 21}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "TUMBES", "COMBINACION_DE_SERVICIOS": "IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1210}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "TUMBES", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 6}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "TUMBES", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 307}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "TUMBES", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 285}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "TUMBES", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 81}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "TUMBES", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 35}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "TUMBES", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 153}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANUCO", "COMBINACION_DE_SERVICIOS": "TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 14}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANUCO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 239}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANUCO", "COMBINACION_DE_SERVICIOS": "TFA+IF+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 88}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANUCO", "COMBINACION_DE_SERVICIOS": "TFA+IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 658}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANUCO", "COMBINACION_DE_SERVICIOS": "IF", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 3556}, {"TIPO_DE_CONTRATACION": "Cuádruple", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANUCO", "COMBINACION_DE_SERVICIOS": "IF+TFA+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 537}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANUCO", "COMBINACION_DE_SERVICIOS": "TFA+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 1}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANUCO", "COMBINACION_DE_SERVICIOS": "TFA", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 169}, {"TIPO_DE_CONTRATACION": "Trío", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANUCO", "COMBINACION_DE_SERVICIOS": "IF+TVP+SM", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 352}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANUCO", "COMBINACION_DE_SERVICIOS": "IF+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 914}, {"TIPO_DE_CONTRATACION": "Dúo", "INPUT": "CONTROL", "DEPARTAMENTO": "HUANUCO", "COMBINACION_DE_SERVICIOS": "TFA+TVP", "MES": 6, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 6}, {"TIPO_DE_CONTRATACION": "Individual", "INPUT": "HIST_33", "DEPARTAMENTO": "SAN MARTÍN", "COMBINACION_DE_SERVICIOS": "SM", "MES": 5, "ANIO_MES": 202606, "TRIMESTRE": "II", "TOTAL": 198374}];
+
+const COLUMNAS = ["TIPO_DE_CONTRATACION", "INPUT", "DEPARTAMENTO", "COMBINACION_DE_SERVICIOS", "MES", "ANIO_MES", "TRIMESTRE", "TOTAL"];
+
+const DIMENSIONES = ["TIPO_DE_CONTRATACION", "INPUT", "DEPARTAMENTO", "COMBINACION_DE_SERVICIOS"];
+
+const FECHAS = ["MES", "ANIO_MES", "TRIMESTRE"];
+
+const METRICA = "TOTAL";
+
+const FILTROS = [{"campo": "TIPO_DE_CONTRATACION", "valores": ["Cuádruple", "Dúo", "Individual", "Trío"]}, {"campo": "INPUT", "valores": ["CONTROL", "HIST_33", "SGC"]}, {"campo": "DEPARTAMENTO", "valores": ["AMAZONAS", "ANCASH", "APURIMAC", "APURÍMAC", "AREQUIPA", "AYACUCHO", "CAJAMARCA", "CALLAO", "CUSCO", "HUANCAVELICA", "HUANUCO", "HUÁNUCO", "ICA", "JUNIN", "JUNÍN", "LA LIBERTAD", "LAMBAYEQUE", "LIMA", "LORETO", "MADRE DE DIOS", "MOQUEGUA", "NA", "PASCO", "PIURA", "PUNO", "SAN MARTIN", "SAN MARTÍN", "TACNA", "TUMBES", "UCAYALI", "ÁNCASH"]}, {"campo": "COMBINACION_DE_SERVICIOS", "valores": ["IF", "IF+TFA+TVP", "IF+TFA+TVP+SM", "IF+TVP", "IF+TVP+SM", "SM", "TFA", "TFA+IF", "TFA+IF+SM", "TFA+TVP", "TFA+TVP+SM", "TVP"]}, {"campo": "MES", "valores": ["4", "5", "6"]}, {"campo": "ANIO_MES", "valores": ["202606"]}, {"campo": "TRIMESTRE", "valores": ["II"]}];
+const ELEMENTOS = [];
+const METRICAS = ["TOTAL"];
+
+
+/* ==========================================================
+   ESTADO
+   ========================================================== */
+
+let datosFiltrados = [...DATOS];
+
+
+/* ==========================================================
+   CONFIGURACIÓN PLOTLY
+   ========================================================== */
+
+const CONFIG_PLOTLY = {
+
+    responsive: true,
+
+    displaylogo: false,
+
+    modeBarButtonsToRemove: [
+        "lasso2d",
+        "select2d"
+    ]
+};
+
+
+const LAYOUT_BASE = {
+
+    paper_bgcolor: "#ffffff",
+
+    plot_bgcolor: "#ffffff",
+
+    font: {
+
+        family:
+            "Segoe UI, Arial, sans-serif",
+
+        color:
+            "#536174"
+    },
+
+    margin: {
+
+        l: 55,
+
+        r: 20,
+
+        t: 15,
+
+        b: 55
+    },
+
+    hovermode:
+        "x unified",
+
+    xaxis: {
+
+        gridcolor:
+            "#edf1f6",
+
+        zerolinecolor:
+            "#edf1f6"
+    },
+
+    yaxis: {
+
+        gridcolor:
+            "#edf1f6",
+
+        zerolinecolor:
+            "#edf1f6"
+    }
+};
+
+
+/* ==========================================================
+   CONVERTIR VALOR
+   ========================================================== */
+
+function numero(valor) {
+
+    if (
+        valor === null ||
+        valor === undefined
+    ) {
+
+        return 0;
+    }
+
+    const n = Number(valor);
+
+    return isNaN(n)
+        ? 0
+        : n;
+}
+
+
+/* ==========================================================
+   AGRUPAR
+   ========================================================== */
+
+function agrupar(
+    datos,
+    campo,
+    metrica
+) {
+
+    const mapa = {};
+
+    datos.forEach(
+        function (fila) {
+
+            const clave =
+                String(
+                    fila[campo] ?? "Sin dato"
+                );
+
+            const valor =
+                numero(
+                    fila[metrica]
+                );
+
+            if (
+                !mapa[clave]
+            ) {
+
+                mapa[clave] = 0;
+            }
+
+            mapa[clave] += valor;
+
+        }
+    );
+
+    return Object.entries(
+        mapa
+    );
+}
+
+
+/* ==========================================================
+   CREAR FILTROS
+   ========================================================== */
+
+function crearFiltros() {
+
+    const contenedor =
+        document.getElementById(
+            "filtersGrid"
+        );
+
+    contenedor.innerHTML = "";
+
+    FILTROS.forEach(
+        function (filtro) {
+
+            const grupo =
+                document.createElement(
+                    "div"
+                );
+
+            grupo.className =
+                "filter-group";
+
+            const label =
+                document.createElement(
+                    "label"
+                );
+
+            label.textContent =
+                filtro.campo;
+
+            const select =
+                document.createElement(
+                    "select"
+                );
+
+            select.dataset.campo =
+                filtro.campo;
+
+            const todos =
+                document.createElement(
+                    "option"
+                );
+
+            todos.value = "";
+
+            todos.textContent =
+                "Todos";
+
+            select.appendChild(
+                todos
+            );
+
+            filtro.valores.forEach(
+                function (valor) {
+
+                    const option =
+                        document.createElement(
+                            "option"
+                        );
+
+                    option.value =
+                        valor;
+
+                    option.textContent =
+                        valor;
+
+                    select.appendChild(
+                        option
+                    );
+                }
+            );
+
+            select.addEventListener(
+                "change",
+                aplicarFiltros
+            );
+
+            grupo.appendChild(
+                label
+            );
+
+            grupo.appendChild(
+                select
+            );
+
+            contenedor.appendChild(
+                grupo
+            );
+
+        }
+    );
+}
+
+
+/* ==========================================================
+   APLICAR FILTROS
+   ========================================================== */
+
+function aplicarFiltros() {
+
+    const selects =
+        document.querySelectorAll(
+            "#filtersGrid select"
+        );
+
+    const activos = {};
+
+    selects.forEach(
+        function (select) {
+
+            if (select.value) {
+
+                activos[
+                    select.dataset.campo
+                ] = select.value;
+
+            }
+
+        }
+    );
+
+    datosFiltrados =
+        DATOS.filter(
+            function (fila) {
+
+                return Object.entries(
+                    activos
+                ).every(
+                    function ([campo, valor]) {
+
+                        return String(
+                            fila[campo]
+                        ) === valor;
+
+                    }
+                );
+
+            }
+        );
+
+    actualizarDashboard();
+}
+
+
+/* ==========================================================
+   RESET
+   ========================================================== */
+
+document
+    .getElementById(
+        "btnReset"
+    )
+    .addEventListener(
+        "click",
+        function () {
+
+            document
+                .querySelectorAll(
+                    "#filtersGrid select"
+                )
+                .forEach(
+                    function (select) {
+
+                        select.value = "";
+
+                    }
+                );
+
+            datosFiltrados =
+                [...DATOS];
+
+            actualizarDashboard();
+
+        }
+    );
+
+
+/* ==========================================================
+   KPIs
+   ========================================================== */
+
+function generarKPIs() {
+    const contenedor =
+        document.getElementById("kpiGrid");
+
+    contenedor.innerHTML = "";
+
+    const metricasDisponibles =
+        METRICAS.length
+            ? METRICAS
+            : (METRICA ? [METRICA] : []);
+
+    metricasDisponibles
+        .slice(0, 4)
+        .forEach(function(campo) {
+            const total =
+                datosFiltrados.reduce(
+                    function(suma, fila) {
+                        return suma +
+                            numero(
+                                fila[campo]
+                            );
+                    },
+                    0
+                );
+
+            const card =
+                document.createElement("div");
+
+            card.className =
+                "kpi-card";
+
+            card.innerHTML = `
+                <div class="kpi-label">
+                    ${tituloCampo(campo)}
+                </div>
+                <div class="kpi-value">
+                    ${formatoNumero(total)}
+                </div>
+                <div class="kpi-detail">
+                    Total calculado sobre los datos filtrados
+                </div>
+            `;
+
+            contenedor.appendChild(card);
+        });
+}
+
+/* ==========================================================
+   GRÁFICOS DINÁMICOS SEGÚN PLANNER
+   ========================================================== */
+
+function tituloCampo(campo) {
+    if (!campo) return "";
+    return String(campo)
+        .replace(/_/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+}
+
+function crearTarjetaGrafico(indice, elemento) {
+    const grid = document.getElementById("chartsGrid");
+
+    const card = document.createElement("div");
+    card.className = "chart-card";
+
+    const titulo = document.createElement("div");
+    titulo.className = "chart-title";
+    titulo.textContent =
+        elemento.titulo ||
+        (
+            tituloCampo(
+                elemento.eje_y ||
+                elemento.valor ||
+                elemento.metrica ||
+                METRICA
+            ) +
+            (
+                elemento.eje_x
+                    ? " por " + tituloCampo(elemento.eje_x)
+                    : ""
+            )
+        ) ||
+        "Visualización";
+
+    const subtitulo = document.createElement("div");
+    subtitulo.className = "chart-subtitle";
+    subtitulo.textContent =
+        elemento.tipo
+            ? "Tipo: " + elemento.tipo
+            : "Visualización generada automáticamente";
+
+    const chart = document.createElement("div");
+    chart.className = "chart";
+    chart.id = "chartDynamic_" + indice;
+
+    card.appendChild(titulo);
+    card.appendChild(subtitulo);
+    card.appendChild(chart);
+    grid.appendChild(card);
+
+    return chart;
+}
+
+function agruparTriple(datos, campoX, campoY, metrica) {
+    const mapa = {};
+
+    datos.forEach(function(fila) {
+        const x = String(fila[campoX] ?? "Sin dato");
+        const y = String(fila[campoY] ?? "Sin dato");
+        const clave = x + "|||" + y;
+
+        if (!mapa[clave]) {
+            mapa[clave] = 0;
+        }
+
+        mapa[clave] += numero(fila[metrica]);
+    });
+
+    return Object.entries(mapa).map(function(par) {
+        const partes = par[0].split("|||");
+        return {
+            x: partes[0],
+            y: partes[1],
+            valor: par[1]
+        };
+    });
+}
+
+function renderBarAgrupado(
+    contenedor,
+    campoX,
+    agrupacion,
+    metrica
+) {
+    const mapa = {};
+
+    datosFiltrados.forEach(function(fila) {
+        const x = String(fila[campoX] ?? "Sin dato");
+        const grupo = String(fila[agrupacion] ?? "Sin dato");
+
+        if (!mapa[grupo]) {
+            mapa[grupo] = {};
+        }
+
+        if (!mapa[grupo][x]) {
+            mapa[grupo][x] = 0;
+        }
+
+        mapa[grupo][x] += numero(fila[metrica]);
+    });
+
+    const categorias = [
+        ...new Set(
+            Object.values(mapa)
+                .flatMap(function(obj) {
+                    return Object.keys(obj);
+                })
+        )
+    ].slice(0, 20);
+
+    const traces = Object.keys(mapa).map(function(grupo) {
+        return {
+            x: categorias,
+            y: categorias.map(function(categoria) {
+                return mapa[grupo][categoria] || 0;
+            }),
+            type: "bar",
+            name: grupo
+        };
+    });
+
+    Plotly.react(
+        contenedor,
+        traces,
+        {
+            ...LAYOUT_BASE,
+            barmode: "group",
+            xaxis: {
+                automargin: true,
+                tickangle: -30
+            },
+            yaxis: {
+                title: metrica,
+                tickformat: ",.2s"
+            }
+        },
+        CONFIG_PLOTLY
+    );
+}
+
+function renderGrafico(elemento, contenedor) {
+    if (!elemento || !contenedor) return;
+
+    const tipo = String(
+        elemento.tipo || "bar"
+    ).toLowerCase();
+
+    const campoX =
+        elemento.eje_x ||
+        elemento.dimension ||
+        elemento.campo;
+
+    const campoY =
+        elemento.eje_y ||
+        elemento.metrica ||
+        elemento.valor ||
+        METRICA;
+
+    const agrupacion =
+        elemento.agrupacion;
+
+    if (
+        tipo === "kpi" ||
+        tipo === "table"
+    ) {
+        return;
+    }
+
+    if (
+        tipo === "heatmap"
+    ) {
+        const ejeX = elemento.eje_x;
+        const ejeY = elemento.eje_y;
+        const valor = elemento.valor || METRICA;
+
+        if (!ejeX || !ejeY || !valor) {
+            contenedor.innerHTML =
+                "<p style='padding:20px'>No hay campos suficientes para el mapa.</p>";
+            return;
+        }
+
+        const filas = agruparTriple(
+            datosFiltrados,
+            ejeX,
+            ejeY,
+            valor
+        );
+
+        const xValues = [
+            ...new Set(
+                filas.map(function(item) {
+                    return item.x;
+                })
+            )
+        ];
+
+        const yValues = [
+            ...new Set(
+                filas.map(function(item) {
+                    return item.y;
+                })
+            )
+        ];
+
+        const z = yValues.map(function(y) {
+            return xValues.map(function(x) {
+                const encontrado = filas.find(function(item) {
+                    return (
+                        item.x === x &&
+                        item.y === y
+                    );
+                });
+
+                return encontrado
+                    ? encontrado.valor
+                    : 0;
+            });
+        });
+
+        Plotly.react(
+            contenedor,
+            [{
+                x: xValues,
+                y: yValues,
+                z: z,
+                type: "heatmap",
+                hovertemplate:
+                    ejeX + ": %{x}<br>" +
+                    ejeY + ": %{y}<br>" +
+                    valor + ": %{z:,.0f}" +
+                    "<extra></extra>"
+            }],
+            {
+                ...LAYOUT_BASE,
+                xaxis: {
+                    automargin: true
+                },
+                yaxis: {
+                    automargin: true
+                }
+            },
+            CONFIG_PLOTLY
+        );
+
+        return;
+    }
+
+    if (!campoX) {
+        contenedor.innerHTML =
+            "<p style='padding:20px'>No existe una dimensión para esta visualización.</p>";
+        return;
+    }
+
+    if (
+        tipo === "line" &&
+        (!FECHAS.length ||
+         FECHAS.indexOf(campoX) === -1)
+    ) {
+        contenedor.innerHTML =
+            "<p style='padding:20px'>No se generó tendencia porque no existe un campo temporal válido.</p>";
+        return;
+    }
+
+    const agrupado = agrupar(
+        datosFiltrados,
+        campoX,
+        campoY
+    );
+
+    agrupado.sort(function(a, b) {
+        return b[1] - a[1];
+    });
+
+    const top = agrupado.slice(0, 20);
+
+    if (
+        tipo === "donut" ||
+        tipo === "pie"
+    ) {
+        Plotly.react(
+            contenedor,
+            [{
+                labels: top.map(function(item) {
+                    return item[0];
+                }),
+                values: top.map(function(item) {
+                    return item[1];
+                }),
+                type: "pie",
+                hole:
+                    tipo === "donut"
+                        ? 0.58
+                        : 0,
+                textinfo: "label+percent",
+                hovertemplate:
+                    "%{label}<br>" +
+                    campoY +
+                    ": %{value:,.0f}<br>" +
+                    "%{percent}<extra></extra>"
+            }],
+            {
+                ...LAYOUT_BASE,
+                showlegend: true,
+                legend: {
+                    orientation: "h",
+                    y: -0.08
+                }
+            },
+            CONFIG_PLOTLY
+        );
+
+        return;
+    }
+
+    if (tipo === "line") {
+        top.sort(function(a, b) {
+            return String(a[0]).localeCompare(
+                String(b[0]),
+                undefined,
+                { numeric: true }
+            );
+        });
+
+        Plotly.react(
+            contenedor,
+            [{
+                x: top.map(function(item) {
+                    return item[0];
+                }),
+                y: top.map(function(item) {
+                    return item[1];
+                }),
+                type: "scatter",
+                mode: "lines+markers",
+                line: {
+                    width: 3,
+                    shape: "spline"
+                },
+                marker: {
+                    size: 7
+                },
+                hovertemplate:
+                    "%{x}<br>" +
+                    campoY +
+                    ": %{y:,.0f}<extra></extra>"
+            }],
+            {
+                ...LAYOUT_BASE,
+                showlegend: false
+            },
+            CONFIG_PLOTLY
+        );
+
+        return;
+    }
+
+    if (
+        agrupacion &&
+        agrupacion !== campoX
+    ) {
+        renderBarAgrupado(
+            contenedor,
+            campoX,
+            agrupacion,
+            campoY
+        );
+        return;
+    }
+
+    Plotly.react(
+        contenedor,
+        [{
+            x: top.map(function(item) {
+                return item[0];
+            }),
+            y: top.map(function(item) {
+                return item[1];
+            }),
+            type: "bar",
+            hovertemplate:
+                "%{x}<br>" +
+                campoY +
+                ": %{y:,.0f}<extra></extra>"
+        }],
+        {
+            ...LAYOUT_BASE,
+            showlegend: false,
+            xaxis: {
+                automargin: true,
+                tickangle: -30
+            },
+            yaxis: {
+                title: campoY,
+                tickformat: ",.2s"
+            }
+        },
+        CONFIG_PLOTLY
+    );
+}
+
+function generarGraficos() {
+    const grid =
+        document.getElementById("chartsGrid");
+
+    grid.innerHTML = "";
+
+    const elementosGraficos =
+        ELEMENTOS.filter(function(elemento) {
+            const tipo =
+                String(
+                    elemento.tipo || ""
+                ).toLowerCase();
+
+            return (
+                tipo !== "kpi" &&
+                tipo !== "table"
+            );
+        });
+
+    if (elementosGraficos.length) {
+        elementosGraficos.forEach(
+            function(elemento, indice) {
+                const contenedor =
+                    crearTarjetaGrafico(
+                        indice,
+                        elemento
+                    );
+
+                renderGrafico(
+                    elemento,
+                    contenedor
+                );
+            }
+        );
+
+        return;
+    }
+
+    // Fallback mínimo: solamente si el Planner no entregó
+    // elementos visuales. Nunca crea una tendencia sin fechas.
+    if (
+        DIMENSIONES.length &&
+        METRICA
+    ) {
+        const elemento = {
+            tipo: "bar",
+            eje_x: DIMENSIONES[0],
+            eje_y: METRICA,
+            titulo:
+                tituloCampo(METRICA) +
+                " por " +
+                tituloCampo(DIMENSIONES[0])
+        };
+
+        const contenedor =
+            crearTarjetaGrafico(
+                0,
+                elemento
+            );
+
+        renderGrafico(
+            elemento,
+            contenedor
+        );
+    }
+}
+
+/* ==========================================================
+   TABLA
+   ========================================================== */
+
+function generarTabla() {
+
+    const head =
+        document.getElementById(
+            "tableHead"
+        );
+
+    const body =
+        document.getElementById(
+            "tableBody"
+        );
+
+    const info =
+        document.getElementById(
+            "tableInfo"
+        );
+
+    head.innerHTML = "";
+
+    body.innerHTML = "";
+
+    const filaHead =
+        document.createElement(
+            "tr"
+        );
+
+    const columnasTabla =
+        [...DIMENSIONES, ...METRICAS]
+            .filter(function(valor, indice, arreglo) {
+                return (
+                    valor &&
+                    arreglo.indexOf(valor) === indice
+                );
+            });
+
+    const columnasMostrar =
+        columnasTabla.length
+            ? columnasTabla
+            : COLUMNAS;
+
+    columnasMostrar.forEach(
+        function (columna) {
+
+            const th =
+                document.createElement(
+                    "th"
+                );
+
+            th.textContent =
+                columna;
+
+            filaHead.appendChild(
+                th
+            );
+
+        }
+    );
+
+    head.appendChild(
+        filaHead
+    );
+
+
+    /*
+     * Mostramos máximo 100 registros
+     * en la vista inicial.
+     */
+
+    const filas =
+        datosFiltrados.slice(
+            0,
+            100
+        );
+
+    filas.forEach(
+        function (fila) {
+
+            const tr =
+                document.createElement(
+                    "tr"
+                );
+
+            const columnasTabla =
+        [...DIMENSIONES, ...METRICAS]
+            .filter(function(valor, indice, arreglo) {
+                return (
+                    valor &&
+                    arreglo.indexOf(valor) === indice
+                );
+            });
+
+    const columnasMostrar =
+        columnasTabla.length
+            ? columnasTabla
+            : COLUMNAS;
+
+    columnasMostrar.forEach(
+                function (columna) {
+
+                    const td =
+                        document.createElement(
+                            "td"
+                        );
+
+                    const valor =
+                        fila[columna];
+
+                    if (
+                        typeof valor ===
+                        "number"
+                    ) {
+
+                        td.textContent =
+                            valor.toLocaleString(
+                                "es-PE",
+                                {
+                                    maximumFractionDigits: 2
+                                }
+                            );
+
+                    }
+                    else {
+
+                        td.textContent =
+                            valor ?? "";
+
+                    }
+
+                    tr.appendChild(
+                        td
+                    );
+
+                }
+            );
+
+            body.appendChild(
+                tr
+            );
+
+        }
+    );
+
+    info.textContent =
+        "Mostrando " +
+        filas.length +
+        " de " +
+        datosFiltrados.length +
+        " registros";
+}
+
+
+/* ==========================================================
+   ACTUALIZAR TODO
+   ========================================================== */
+
+function actualizarDashboard() {
+
+    generarKPIs();
+
+    generarGraficos();
+
+    generarTabla();
+}
+
+
+/* ==========================================================
+   INICIO
+   ========================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        crearFiltros();
+
+        actualizarDashboard();
+
+    }
+);
+
+</script>
+
+</body>
+
+</html>

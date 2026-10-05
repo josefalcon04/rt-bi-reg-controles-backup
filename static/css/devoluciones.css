@@ -2053,3 +2053,1260 @@
 @media (max-width:1100px){.fareco-cycle-cards{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (max-width:760px){.fareco-cycle-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:480px){.fareco-cycle-cards{grid-template-columns:1fr}}
+
+/* ============================================================
+   TABLA 020 - AJUSTE FINAL DE POSICIONES
+   POSTPAGO | PREPAGO EN UNA SOLA FRANJA HORIZONTAL
+   ============================================================ */
+
+.cycle-card > .cycle-products-box {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 1px 270px !important;
+    align-items: start !important;
+    gap: 16px !important;
+    width: calc(100% - 42px) !important;
+    margin: 14px 21px 0 !important;
+    padding: 14px !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+}
+
+.cycle-card > .cycle-products-box > .cycle-product-column {
+    min-width: 0 !important;
+    width: 100% !important;
+}
+
+/* Flujo POSTPAGO: siempre una sola fila */
+.cycle-card .cycle-postpago-column .cycle-flow {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    gap: 10px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 10px 2px 12px !important;
+    margin: 0 !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+}
+
+/* Cada tarjeta conserva su ancho y NO puede saltar de fila */
+.cycle-card .cycle-postpago-column .cycle-flow > .cycle-node,
+.cycle-card .cycle-postpago-column .cycle-flow > .cycle-connector {
+    flex-shrink: 0 !important;
+}
+
+.cycle-card .cycle-postpago-column .cycle-flow > .cycle-node {
+    flex: 0 0 135px !important;
+    width: 135px !important;
+    min-width: 135px !important;
+    max-width: 135px !important;
+    box-sizing: border-box !important;
+}
+
+.cycle-card .cycle-postpago-column .cycle-flow > .cycle-connector {
+    flex: 0 0 28px !important;
+    width: 28px !important;
+    min-width: 28px !important;
+    max-width: 28px !important;
+    align-self: center !important;
+}
+
+/* PREPAGO queda siempre al costado derecho */
+.cycle-card .cycle-prepago-column {
+    width: 270px !important;
+    min-width: 270px !important;
+}
+
+.cycle-card .cycle-prepago-column .cycle-flow {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    width: 100% !important;
+    padding: 10px 2px 12px !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+}
+
+.cycle-card .cycle-prepago-column .cycle-flow > .cycle-node {
+    flex: 0 0 155px !important;
+    width: 155px !important;
+    min-width: 155px !important;
+    max-width: 155px !important;
+}
+
+/* Divisor vertical */
+.cycle-card .cycle-product-divider {
+    width: 1px !important;
+    min-width: 1px !important;
+    height: 100% !important;
+    min-height: 190px !important;
+    background: #e2e8f0 !important;
+}
+
+/* Cantidad y monto visibles */
+.cycle-card .cycle-node-value {
+    font-size: 22px !important;
+    line-height: 1.1 !important;
+    font-weight: 850 !important;
+}
+
+.cycle-card .cycle-node-money {
+    font-size: 11px !important;
+    line-height: 1.2 !important;
+    margin-top: 5px !important;
+}
+
+/* Colores de la leyenda */
+.cycle-card .cycle-legend-candidate .cycle-legend-square {
+    background-color: #16a34a !important;
+}
+
+.cycle-card .cycle-legend-next .cycle-legend-square {
+    background-color: #06b6d4 !important;
+}
+
+.cycle-card .cycle-legend-closed .cycle-legend-square {
+    background-color: #7c3aed !important;
+}
+
+/* En escritorio NO se permite que POSTPAGO/PREPAGO se apilen */
+@media (min-width: 701px) {
+    .cycle-card > .cycle-products-box {
+        grid-template-columns: minmax(0, 1fr) 1px 270px !important;
+    }
+}
+
+/* En pantallas pequeñas sí se permite apilar para evitar romper el diseño */
+@media (max-width: 700px) {
+    .cycle-card > .cycle-products-box {
+        grid-template-columns: 1fr !important;
+    }
+
+    .cycle-card .cycle-prepago-column {
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    .cycle-card .cycle-product-divider {
+        width: 100% !important;
+        height: 1px !important;
+        min-height: 1px !important;
+    }
+}
+
+/* ============================================================
+   TABLA 020 - CORRECCION DEFINITIVA DE POSICIONAMIENTO
+   POSTPAGO: TODAS LAS TARJETAS EN UNA SOLA FILA HORIZONTAL
+   PREPAGO: UNA TARJETA AL COSTADO DERECHO
+   ============================================================ */
+
+/* Contenedor exterior: exactamente 2 franjas en escritorio */
+.cycle-card .cycle-products-box {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 1px 250px !important;
+    column-gap: 18px !important;
+    align-items: start !important;
+    width: calc(100% - 42px) !important;
+    margin: 14px 21px 0 !important;
+    padding: 14px !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+}
+
+/* Las columnas no deben convertirse en filas */
+.cycle-card .cycle-products-box > .cycle-product-column {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+}
+
+/* ============================================================
+   POSTPAGO - UNA SOLA FILA
+   ============================================================ */
+
+#cycle-flow-postpago {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    gap: 10px !important;
+
+    width: 100% !important;
+    height: auto !important;
+    min-height: 175px !important;
+
+    padding: 10px 2px 14px !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+}
+
+/* TODOS los hijos directos permanecen en la misma fila */
+#cycle-flow-postpago > * {
+    flex: 0 0 auto !important;
+    float: none !important;
+    position: relative !important;
+}
+
+/* Tarjetas POSTPAGO */
+#cycle-flow-postpago > .cycle-node {
+    display: block !important;
+    flex: 0 0 125px !important;
+    width: 125px !important;
+    min-width: 125px !important;
+    max-width: 125px !important;
+    height: 150px !important;
+    min-height: 150px !important;
+    box-sizing: border-box !important;
+}
+
+/* Conectores POSTPAGO */
+#cycle-flow-postpago > .cycle-connector {
+    display: block !important;
+    flex: 0 0 24px !important;
+    width: 24px !important;
+    min-width: 24px !important;
+    max-width: 24px !important;
+    height: 2px !important;
+    min-height: 2px !important;
+    align-self: center !important;
+    margin: 0 !important;
+}
+
+/* ============================================================
+   PREPAGO - AL COSTADO DERECHO
+   ============================================================ */
+
+.cycle-card .cycle-prepago-column {
+    display: block !important;
+    width: 250px !important;
+    min-width: 250px !important;
+    max-width: 250px !important;
+}
+
+#cycle-flow-prepago {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+
+    width: 100% !important;
+    height: auto !important;
+    min-height: 175px !important;
+
+    padding: 10px 2px 14px !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+
+    overflow: hidden !important;
+}
+
+#cycle-flow-prepago > .cycle-node {
+    display: block !important;
+    flex: 0 0 155px !important;
+    width: 155px !important;
+    min-width: 155px !important;
+    max-width: 155px !important;
+    height: 150px !important;
+    min-height: 150px !important;
+    box-sizing: border-box !important;
+}
+
+/* ============================================================
+   DIVISOR
+   ============================================================ */
+
+.cycle-card .cycle-products-box > .cycle-product-divider {
+    display: block !important;
+    width: 1px !important;
+    min-width: 1px !important;
+    max-width: 1px !important;
+    height: 100% !important;
+    min-height: 190px !important;
+    margin: 0 !important;
+    background: #e2e8f0 !important;
+}
+
+/* ============================================================
+   TEXTO DE TARJETAS
+   ============================================================ */
+
+#cycle-flow-postpago .cycle-node-title,
+#cycle-flow-prepago .cycle-node-title {
+    min-height: 32px !important;
+    margin-top: 9px !important;
+    font-size: 10px !important;
+    line-height: 1.25 !important;
+}
+
+#cycle-flow-postpago .cycle-node-value,
+#cycle-flow-prepago .cycle-node-value {
+    margin-top: 8px !important;
+    font-size: 21px !important;
+    line-height: 1.1 !important;
+    font-weight: 900 !important;
+}
+
+#cycle-flow-postpago .cycle-node-money,
+#cycle-flow-prepago .cycle-node-money {
+    margin-top: 5px !important;
+    font-size: 10px !important;
+    white-space: nowrap !important;
+}
+
+#cycle-flow-postpago .cycle-node-percent,
+#cycle-flow-prepago .cycle-node-percent {
+    margin-top: 7px !important;
+    font-size: 8px !important;
+}
+
+/* ============================================================
+   ESCRITORIO: SIEMPRE 2 FRANJAS
+   ============================================================ */
+
+@media (min-width: 701px) {
+    .cycle-card .cycle-products-box {
+        grid-template-columns: minmax(0, 1fr) 1px 250px !important;
+    }
+}
+
+/* ============================================================
+   MOVIL: SOLO AQUI SE PERMITE APILAR
+   ============================================================ */
+
+@media (max-width: 700px) {
+    .cycle-card .cycle-products-box {
+        grid-template-columns: 1fr !important;
+        row-gap: 12px !important;
+    }
+
+    .cycle-card .cycle-prepago-column {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+    }
+
+    .cycle-card .cycle-products-box > .cycle-product-divider {
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        height: 1px !important;
+        min-height: 1px !important;
+    }
+}
+
+/* ============================================================
+   TABLA 020 — LAYOUT DEFINITIVO
+   POSTPAGO | PREPAGO
+   ============================================================ */
+
+/* Contenedor: dos franjas reales en escritorio. */
+.cycle-card > .cycle-products-box {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 1px 280px !important;
+    column-gap: 18px !important;
+    row-gap: 0 !important;
+    align-items: start !important;
+    width: calc(100% - 42px) !important;
+    margin: 14px 21px 0 !important;
+    padding: 14px 16px !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+    position: relative !important;
+}
+
+/* POSTPAGO ocupa la primera franja. */
+.cycle-card > .cycle-products-box > .cycle-postpago-column {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    padding: 0 !important;
+}
+
+/* Divisor central. */
+.cycle-card > .cycle-products-box > .cycle-product-divider {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    width: 1px !important;
+    min-width: 1px !important;
+    max-width: 1px !important;
+    height: 100% !important;
+    min-height: 185px !important;
+    margin: 0 !important;
+    background: #e2e8f0 !important;
+}
+
+/* PREPAGO queda SIEMPRE al costado derecho. */
+.cycle-card > .cycle-products-box > .cycle-prepago-column {
+    grid-column: 3 !important;
+    grid-row: 1 !important;
+    width: 280px !important;
+    min-width: 280px !important;
+    max-width: 280px !important;
+    padding: 0 0 0 4px !important;
+}
+
+/* No usar flex directamente en cycle-flow porque contiene grupos. */
+.cycle-card .cycle-postpago-column > .cycle-flow,
+.cycle-card .cycle-prepago-column > .cycle-flow {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* ============================================================
+   POSTPAGO:
+   CANDIDATOS ARRIBA
+   PRÓXIMA SEMANA + CERRADAS DEBAJO
+   ============================================================ */
+
+#cycle-flow-postpago > .cycle-groups-row {
+    display: grid !important;
+
+    /* Dos columnas para la segunda fila */
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+
+    gap: 18px 14px !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+
+    align-items: start !important;
+}
+
+/* Cada grupo */
+#cycle-flow-postpago .cycle-group {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+}
+
+/* CANDIDATOS ocupa TODA la primera fila */
+#cycle-flow-postpago .cycle-group-candidate {
+    grid-column: 1 / -1 !important;
+    grid-row: 1 !important;
+}
+
+/* PRÓXIMA SEMANA debajo de candidatos, izquierda */
+#cycle-flow-postpago .cycle-group-next {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+}
+
+/* CERRADAS debajo de candidatos, derecha */
+#cycle-flow-postpago .cycle-group-closed {
+    grid-column: 2 !important;
+    grid-row: 2 !important;
+}
+
+/* Títulos CANDIDATOS / PRÓXIMA / CERRADAS. */
+#cycle-flow-postpago .cycle-group-title {
+    display: flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+    width: 100% !important;
+    margin: 0 0 8px !important;
+    padding: 0 2px !important;
+    box-sizing: border-box !important;
+    white-space: nowrap !important;
+}
+
+/* Tarjetas dentro de cada grupo: siempre horizontales. */
+#cycle-flow-postpago .cycle-group-flow {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    gap: 8px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* CANDIDATOS: las 6 tarjetas en una sola fila. */
+#cycle-flow-postpago .cycle-group-candidate .cycle-group-flow .cycle-node {
+    flex: 1 1 0 !important;
+    width: auto !important;
+    min-width: 92px !important;
+    max-width: none !important;
+    min-height: 150px !important;
+    box-sizing: border-box !important;
+}
+
+/* PRÓXIMA SEMANA y CERRADAS: 2 tarjetas por fila horizontal. */
+#cycle-flow-postpago .cycle-group-next .cycle-group-flow .cycle-node,
+#cycle-flow-postpago .cycle-group-closed .cycle-group-flow .cycle-node {
+    flex: 1 1 0 !important;
+    width: auto !important;
+    min-width: 100px !important;
+    max-width: none !important;
+    min-height: 150px !important;
+    box-sizing: border-box !important;
+}
+
+/* PREPAGO: una sola tarjeta, al costado derecho. */
+#cycle-flow-prepago .cycle-group {
+    width: 100% !important;
+    margin: 0 !important;
+}
+
+#cycle-flow-prepago .cycle-group-flow {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    width: 100% !important;
+    overflow: visible !important;
+    padding: 0 !important;
+}
+
+#cycle-flow-prepago .cycle-node {
+    flex: 0 0 180px !important;
+    width: 180px !important;
+    min-width: 180px !important;
+    max-width: 180px !important;
+    min-height: 150px !important;
+    box-sizing: border-box !important;
+}
+
+/* Cantidad y monto legibles. */
+#cycle-flow-postpago .cycle-node-value,
+#cycle-flow-prepago .cycle-node-value {
+    font-size: 20px !important;
+    font-weight: 900 !important;
+    line-height: 1.05 !important;
+}
+
+#cycle-flow-postpago .cycle-node-money,
+#cycle-flow-prepago .cycle-node-money {
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+}
+
+#cycle-flow-postpago .cycle-node-percent,
+#cycle-flow-prepago .cycle-node-percent {
+    font-size: 8px !important;
+}
+
+/* Colores según la leyenda. */
+#cycle-flow-postpago .cycle-group-candidate .cycle-node {
+    border-top: 3px solid #16a34a !important;
+}
+#cycle-flow-postpago .cycle-group-candidate .cycle-node-percent {
+    color: #16a34a !important;
+}
+
+#cycle-flow-postpago .cycle-group-next .cycle-node {
+    border-top: 3px solid #06b6d4 !important;
+}
+#cycle-flow-postpago .cycle-group-next .cycle-node-percent {
+    color: #06b6d4 !important;
+}
+
+#cycle-flow-postpago .cycle-group-closed .cycle-node {
+    border-top: 3px solid #7c3aed !important;
+}
+#cycle-flow-postpago .cycle-group-closed .cycle-node-percent {
+    color: #7c3aed !important;
+}
+
+#cycle-flow-prepago .cycle-node {
+    border-top: 3px solid #16a34a !important;
+    border-color: #dbe4f0 !important;
+    border-top-color: #16a34a !important;
+    background: #ffffff !important;
+}
+#cycle-flow-prepago .cycle-node-percent {
+    color: #16a34a !important;
+}
+
+/* ============================================================
+   RESPONSIVE
+   Solo en móvil se apilan las dos franjas.
+   ============================================================ */
+@media (max-width: 900px) {
+    .cycle-card > .cycle-products-box {
+        grid-template-columns: 1fr !important;
+        gap: 14px !important;
+    }
+
+    .cycle-card > .cycle-products-box > .cycle-postpago-column,
+    .cycle-card > .cycle-products-box > .cycle-prepago-column {
+        grid-column: 1 !important;
+        grid-row: auto !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        padding: 0 !important;
+    }
+
+    .cycle-card > .cycle-products-box > .cycle-product-divider {
+        display: none !important;
+    }
+
+    #cycle-flow-postpago > .cycle-groups-row {
+        grid-template-columns: 1fr !important;
+        gap: 14px !important;
+    }
+
+    #cycle-flow-postpago .cycle-group-candidate,
+    #cycle-flow-postpago .cycle-group-next,
+    #cycle-flow-postpago .cycle-group-closed {
+        grid-column: 1 !important;
+        grid-row: auto !important;
+    }
+}
+
+
+/* ============================================================
+   TABLA 020 — AJUSTE FINAL SEGÚN DISEÑO SOLICITADO
+   POSTPAGO: CANDIDATOS arriba; PRÓXIMA/CERRADAS abajo
+   PREPAGO: siempre a la derecha
+   ============================================================ */
+
+.cycle-card > .cycle-products-box {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 1px 280px !important;
+    column-gap: 18px !important;
+    row-gap: 0 !important;
+    align-items: start !important;
+    width: calc(100% - 42px) !important;
+    margin: 14px 21px 0 !important;
+    padding: 14px 16px !important;
+    box-sizing: border-box !important;
+}
+
+.cycle-card > .cycle-products-box > .cycle-postpago-column {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+}
+
+.cycle-card > .cycle-products-box > .cycle-product-divider {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    width: 1px !important;
+    min-width: 1px !important;
+    height: 100% !important;
+    min-height: 330px !important;
+    margin: 0 !important;
+}
+
+.cycle-card > .cycle-products-box > .cycle-prepago-column {
+    grid-column: 3 !important;
+    grid-row: 1 !important;
+    width: 280px !important;
+    min-width: 280px !important;
+    max-width: 280px !important;
+}
+
+/* POSTPAGO: la fila de grupos ocupa todo el ancho disponible. */
+#cycle-flow-postpago > .cycle-groups-row {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    grid-template-rows: auto auto !important;
+    column-gap: 24px !important;
+    row-gap: 20px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    align-items: start !important;
+}
+
+/* CANDIDATOS: fila superior completa. */
+#cycle-flow-postpago > .cycle-groups-row > .cycle-group-candidate {
+    grid-column: 1 / 3 !important;
+    grid-row: 1 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+}
+
+/* PRÓXIMA SEMANA: inferior izquierda. */
+#cycle-flow-postpago > .cycle-groups-row > .cycle-group-next {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+}
+
+/* CERRADAS: inferior derecha. */
+#cycle-flow-postpago > .cycle-groups-row > .cycle-group-closed {
+    grid-column: 2 !important;
+    grid-row: 2 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+}
+
+/* Títulos. */
+#cycle-flow-postpago .cycle-group-title,
+#cycle-flow-prepago .cycle-group-title {
+    display: flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+    margin: 0 0 9px !important;
+    padding: 0 2px !important;
+    white-space: nowrap !important;
+}
+
+/* Las tarjetas de cada grupo SIEMPRE en horizontal. */
+#cycle-flow-postpago .cycle-group-flow {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    gap: 10px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    overflow: visible !important;
+}
+
+/* 6 candidatos en una sola fila. */
+#cycle-flow-postpago .cycle-group-candidate .cycle-group-flow > .cycle-node {
+    flex: 1 1 0 !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    min-height: 150px !important;
+    box-sizing: border-box !important;
+}
+
+/* 2 tarjetas para PRÓXIMA SEMANA. */
+#cycle-flow-postpago .cycle-group-next .cycle-group-flow > .cycle-node {
+    flex: 1 1 0 !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    min-height: 150px !important;
+    box-sizing: border-box !important;
+}
+
+/* 2 tarjetas para CERRADAS. */
+#cycle-flow-postpago .cycle-group-closed .cycle-group-flow > .cycle-node {
+    flex: 1 1 0 !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    min-height: 150px !important;
+    box-sizing: border-box !important;
+}
+
+/* PREPAGO: una sola tarjeta a la derecha. */
+#cycle-flow-prepago > .cycle-group {
+    width: 100% !important;
+}
+
+#cycle-flow-prepago .cycle-group-flow {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    width: 100% !important;
+    overflow: visible !important;
+}
+
+#cycle-flow-prepago .cycle-group-flow > .cycle-node {
+    flex: 0 0 180px !important;
+    width: 180px !important;
+    min-width: 180px !important;
+    max-width: 180px !important;
+    min-height: 150px !important;
+}
+
+/* Colores de los grupos. */
+#cycle-flow-postpago .cycle-group-candidate .cycle-node {
+    border-top: 3px solid #16a34a !important;
+}
+
+#cycle-flow-postpago .cycle-group-next .cycle-node {
+    border-top: 3px solid #06b6d4 !important;
+}
+
+#cycle-flow-postpago .cycle-group-closed .cycle-node {
+    border-top: 3px solid #7c3aed !important;
+}
+
+#cycle-flow-postpago .cycle-group-candidate .cycle-node-percent {
+    color: #16a34a !important;
+}
+
+#cycle-flow-postpago .cycle-group-next .cycle-node-percent {
+    color: #06b6d4 !important;
+}
+
+#cycle-flow-postpago .cycle-group-closed .cycle-node-percent {
+    color: #7c3aed !important;
+}
+
+/* Cantidad y monto. */
+#cycle-flow-postpago .cycle-node-value,
+#cycle-flow-prepago .cycle-node-value {
+    font-size: 20px !important;
+    font-weight: 900 !important;
+}
+
+#cycle-flow-postpago .cycle-node-money,
+#cycle-flow-prepago .cycle-node-money {
+    font-size: 11px !important;
+    font-weight: 700 !important;
+}
+
+/* Solo móvil: se apila para evitar desbordamiento. */
+@media (max-width: 900px) {
+    .cycle-card > .cycle-products-box {
+        grid-template-columns: 1fr !important;
+    }
+
+    .cycle-card > .cycle-products-box > .cycle-postpago-column,
+    .cycle-card > .cycle-products-box > .cycle-prepago-column {
+        grid-column: 1 !important;
+        grid-row: auto !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+    }
+
+    .cycle-card > .cycle-products-box > .cycle-product-divider {
+        display: none !important;
+    }
+
+    #cycle-flow-postpago > .cycle-groups-row {
+        grid-template-columns: 1fr !important;
+        grid-template-rows: auto !important;
+    }
+
+    #cycle-flow-postpago > .cycle-groups-row > .cycle-group-candidate,
+    #cycle-flow-postpago > .cycle-groups-row > .cycle-group-next,
+    #cycle-flow-postpago > .cycle-groups-row > .cycle-group-closed {
+        grid-column: 1 !important;
+        grid-row: auto !important;
+    }
+}
+
+/* ============================================================
+   TABLA 020 — DISEÑO FINAL
+   Replica la distribución solicitada:
+   POSTPAGO
+     CANDIDATOS       -> fila superior completa
+     PRÓXIMA SEMANA   -> abajo izquierda
+     CERRADAS         -> abajo derecha
+   PREPAGO
+     CANDIDATOS / SEMANA EN CURSO -> columna derecha
+   ============================================================ */
+
+/* CONTENEDOR POST/PRE */
+.cycle-card > .cycle-products-box {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 1px 280px !important;
+    column-gap: 18px !important;
+    row-gap: 0 !important;
+    align-items: start !important;
+    width: calc(100% - 42px) !important;
+    margin: 14px 21px 0 !important;
+    padding: 14px 16px !important;
+    box-sizing: border-box !important;
+}
+
+.cycle-card > .cycle-products-box > .cycle-postpago-column {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    padding-right: 0 !important;
+}
+
+.cycle-card > .cycle-products-box > .cycle-product-divider {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    width: 1px !important;
+    min-width: 1px !important;
+    height: 100% !important;
+    min-height: 360px !important;
+    margin: 0 !important;
+}
+
+.cycle-card > .cycle-products-box > .cycle-prepago-column {
+    grid-column: 3 !important;
+    grid-row: 1 !important;
+    width: 280px !important;
+    min-width: 280px !important;
+    max-width: 280px !important;
+    padding-left: 0 !important;
+}
+
+/* ============================================================
+   POSTPAGO: 3 BLOQUES
+   ============================================================ */
+
+#cycle-flow-postpago > .cycle-groups-row {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    grid-template-rows: auto auto !important;
+    column-gap: 16px !important;
+    row-gap: 18px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    align-items: start !important;
+}
+
+#cycle-flow-postpago > .cycle-groups-row > .cycle-group-candidate {
+    grid-column: 1 / 3 !important;
+    grid-row: 1 !important;
+    width: 100% !important;
+}
+
+#cycle-flow-postpago > .cycle-groups-row > .cycle-group-next {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+    width: 100% !important;
+}
+
+#cycle-flow-postpago > .cycle-groups-row > .cycle-group-closed {
+    grid-column: 2 !important;
+    grid-row: 2 !important;
+    width: 100% !important;
+}
+
+/* ============================================================
+   CABECERAS DE GRUPO
+   ============================================================ */
+
+#cycle-flow-postpago .cycle-section-header,
+#cycle-flow-prepago .cycle-section-header {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    width: 100% !important;
+    min-height: 54px !important;
+    margin: 0 0 9px !important;
+    padding: 7px 10px !important;
+    box-sizing: border-box !important;
+    border-radius: 12px !important;
+    white-space: normal !important;
+}
+
+#cycle-flow-postpago .cycle-group-candidate .cycle-section-header {
+    background: linear-gradient(90deg, rgba(22,163,74,.11), rgba(22,163,74,.025)) !important;
+    border: 1px solid rgba(22,163,74,.14) !important;
+}
+
+#cycle-flow-postpago .cycle-group-next .cycle-section-header {
+    background: linear-gradient(90deg, rgba(6,182,212,.12), rgba(6,182,212,.025)) !important;
+    border: 1px solid rgba(6,182,212,.15) !important;
+}
+
+#cycle-flow-postpago .cycle-group-closed .cycle-section-header {
+    background: linear-gradient(90deg, rgba(124,58,237,.12), rgba(124,58,237,.025)) !important;
+    border: 1px solid rgba(124,58,237,.15) !important;
+}
+
+#cycle-flow-prepago .cycle-section-header-prepago {
+    background: linear-gradient(90deg, rgba(245,158,11,.12), rgba(245,158,11,.025)) !important;
+    border: 1px solid rgba(245,158,11,.16) !important;
+}
+
+.cycle-section-icon {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 10px !important;
+    font-size: 15px !important;
+}
+
+#cycle-flow-postpago .cycle-group-candidate .cycle-section-icon {
+    color: #16a34a !important;
+    background: rgba(22,163,74,.14) !important;
+}
+
+#cycle-flow-postpago .cycle-group-next .cycle-section-icon {
+    color: #06b6d4 !important;
+    background: rgba(6,182,212,.14) !important;
+}
+
+#cycle-flow-postpago .cycle-group-closed .cycle-section-icon {
+    color: #7c3aed !important;
+    background: rgba(124,58,237,.14) !important;
+}
+
+#cycle-flow-prepago .cycle-section-icon {
+    color: #f59e0b !important;
+    background: rgba(245,158,11,.14) !important;
+}
+
+.cycle-section-text {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+}
+
+.cycle-section-main {
+    font-size: 14px !important;
+    line-height: 17px !important;
+    font-weight: 900 !important;
+    letter-spacing: .2px !important;
+}
+
+.cycle-section-sub {
+    margin-top: 2px !important;
+    font-size: 8.5px !important;
+    line-height: 11px !important;
+    font-weight: 600 !important;
+    color: #64748b !important;
+}
+
+#cycle-flow-postpago .cycle-group-candidate .cycle-section-main {
+    color: #166534 !important;
+}
+
+#cycle-flow-postpago .cycle-group-next .cycle-section-main {
+    color: #0e7490 !important;
+}
+
+#cycle-flow-postpago .cycle-group-closed .cycle-section-main {
+    color: #5b21b6 !important;
+}
+
+#cycle-flow-prepago .cycle-section-main {
+    color: #b45309 !important;
+}
+
+.cycle-section-count {
+    display: flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    padding: 3px 7px 3px 3px !important;
+    border-radius: 20px !important;
+    white-space: nowrap !important;
+}
+
+.cycle-section-count strong {
+    width: 25px !important;
+    height: 25px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 50% !important;
+    color: #fff !important;
+    font-size: 10px !important;
+    font-weight: 900 !important;
+}
+
+#cycle-flow-postpago .cycle-group-candidate .cycle-section-count {
+    color: #166534 !important;
+    background: rgba(22,163,74,.08) !important;
+}
+
+#cycle-flow-postpago .cycle-group-candidate .cycle-section-count strong {
+    background: #16a34a !important;
+}
+
+#cycle-flow-postpago .cycle-group-next .cycle-section-count {
+    color: #0e7490 !important;
+    background: rgba(6,182,212,.08) !important;
+}
+
+#cycle-flow-postpago .cycle-group-next .cycle-section-count strong {
+    background: #06b6d4 !important;
+}
+
+#cycle-flow-postpago .cycle-group-closed .cycle-section-count {
+    color: #5b21b6 !important;
+    background: rgba(124,58,237,.08) !important;
+}
+
+#cycle-flow-postpago .cycle-group-closed .cycle-section-count strong {
+    background: #7c3aed !important;
+}
+
+#cycle-flow-prepago .cycle-section-count {
+    color: #b45309 !important;
+    background: rgba(245,158,11,.08) !important;
+}
+
+#cycle-flow-prepago .cycle-section-count strong {
+    background: #f59e0b !important;
+}
+
+/* ============================================================
+   TARJETAS
+   ============================================================ */
+
+#cycle-flow-postpago .cycle-group-flow {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    gap: 9px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    overflow: visible !important;
+}
+
+#cycle-flow-postpago .cycle-group-candidate .cycle-group-flow > .cycle-node {
+    flex: 1 1 0 !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    min-height: 146px !important;
+    box-sizing: border-box !important;
+}
+
+#cycle-flow-postpago .cycle-group-next .cycle-group-flow > .cycle-node,
+#cycle-flow-postpago .cycle-group-closed .cycle-group-flow > .cycle-node {
+    flex: 1 1 0 !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    min-height: 146px !important;
+    box-sizing: border-box !important;
+}
+
+#cycle-flow-prepago .cycle-group-flow {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    width: 100% !important;
+    overflow: visible !important;
+}
+
+#cycle-flow-prepago .cycle-group-flow > .cycle-node {
+    flex: 0 0 180px !important;
+    width: 180px !important;
+    min-width: 180px !important;
+    max-width: 180px !important;
+    min-height: 146px !important;
+}
+
+#cycle-flow-postpago .cycle-group-candidate .cycle-node {
+    border-top: 3px solid #16a34a !important;
+}
+
+#cycle-flow-postpago .cycle-group-next .cycle-node {
+    border-top: 3px solid #06b6d4 !important;
+}
+
+#cycle-flow-postpago .cycle-group-closed .cycle-node {
+    border-top: 3px solid #7c3aed !important;
+}
+
+#cycle-flow-prepago .cycle-node {
+    border-top: 3px solid #f59e0b !important;
+}
+
+#cycle-flow-postpago .cycle-node-value,
+#cycle-flow-prepago .cycle-node-value {
+    font-size: 20px !important;
+    line-height: 1.05 !important;
+    font-weight: 900 !important;
+}
+
+#cycle-flow-postpago .cycle-node-money,
+#cycle-flow-prepago .cycle-node-money {
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+}
+
+#cycle-flow-postpago .cycle-node-percent,
+#cycle-flow-prepago .cycle-node-percent {
+    font-size: 8px !important;
+}
+
+#cycle-flow-postpago .cycle-group-candidate .cycle-node-percent {
+    color: #16a34a !important;
+}
+
+#cycle-flow-postpago .cycle-group-next .cycle-node-percent {
+    color: #06b6d4 !important;
+}
+
+#cycle-flow-postpago .cycle-group-closed .cycle-node-percent {
+    color: #7c3aed !important;
+}
+
+#cycle-flow-prepago .cycle-node-percent {
+    color: #16a34a !important;
+}
+
+/* ============================================================
+   VACÍOS
+   ============================================================ */
+
+.cycle-empty-compact,
+.cycle-empty-full {
+    border: 1px dashed #cbd5e1 !important;
+    border-radius: 12px !important;
+    background: #f8fafc !important;
+    color: #64748b !important;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+    .cycle-card > .cycle-products-box {
+        grid-template-columns: 1fr !important;
+        row-gap: 14px !important;
+    }
+
+    .cycle-card > .cycle-products-box > .cycle-postpago-column,
+    .cycle-card > .cycle-products-box > .cycle-prepago-column {
+        grid-column: 1 !important;
+        grid-row: auto !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        padding: 0 !important;
+    }
+
+    .cycle-card > .cycle-products-box > .cycle-product-divider {
+        display: none !important;
+    }
+
+    #cycle-flow-postpago > .cycle-groups-row {
+        grid-template-columns: 1fr !important;
+        grid-template-rows: auto !important;
+    }
+
+    #cycle-flow-postpago > .cycle-groups-row > .cycle-group-candidate,
+    #cycle-flow-postpago > .cycle-groups-row > .cycle-group-next,
+    #cycle-flow-postpago > .cycle-groups-row > .cycle-group-closed {
+        grid-column: 1 !important;
+        grid-row: auto !important;
+    }
+
+    #cycle-flow-postpago .cycle-group-flow {
+        flex-wrap: wrap !important;
+    }
+
+    #cycle-flow-postpago .cycle-group-flow > .cycle-node {
+        flex: 1 1 calc(50% - 5px) !important;
+        width: auto !important;
+        min-width: 140px !important;
+    }
+}

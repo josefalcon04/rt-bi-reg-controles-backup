@@ -472,33 +472,15 @@ def obtener_proceso_abonados(fecha_seleccionada, producto=None):
 # ============================================================
 def obtener_ciclo_020(fecha_seleccionada, producto=None):
     """
-    FLUJO TABLA 020 DEL DASHBOARD.
+    TABLA 020 - FLUJO DEL PROCESO.
 
-    La fecha usada por este bloque es:
-        FECHA_REPORTE = FECHA seleccionada - 1 día
+    La fecha de la TABLA 020 corresponde a la fecha seleccionada
+    en el dashboard menos 1 día.
 
-    Ejemplo:
-        seleccionada 2026-09-07 -> FECHA_REPORTE 2026-09-06
-
-    IMPORTANTE:
-        Este bloque visual utiliza exclusivamente la lógica de
-        CATEGORIA solicitada para la TABLA 020.
-
-        SEMANA EN CURSO:
-            AVERIAS SEMANA ANT.
-            AVERIAS SEMANA
-            REJECT 1
-            REJECT 2
-            REJECT 3
-            REJECT 4
-            y cualquier PRE - pago
-
-        PRÓXIMA SEMANA:
-            PROXIMA SEMANA
-            R1, R2, R3, R4
-
-        CERRADAS:
-            CERRADO SIN RECIBO
+    La categorización visual utiliza el DETALLE definido en el
+    query solicitado:
+      - POSTPAGO: candidatos, próxima semana y cerradas.
+      - PREPAGO: semana en curso.
     """
 
     if not fecha_seleccionada:
@@ -523,72 +505,101 @@ def obtener_ciclo_020(fecha_seleccionada, producto=None):
                 "fecha_reporte": None,
                 "fecha_seleccionada": fecha_seleccionada,
                 "items": [],
+                "items_postpago": [],
+                "items_prepago": [],
                 "productos": [],
                 "resumen_producto": []
             }
 
         fecha_dashboard = fecha_dashboard.normalize()
-
-        # =====================================================
-        # FECHA TABLA 020 = FECHA SELECCIONADA - 1 DÍA
-        # =====================================================
         fecha_reporte = fecha_dashboard - timedelta(days=1)
 
         fecha_reporte_str = fecha_reporte.strftime("%Y-%m-%d")
         fecha_seleccionada_str = fecha_dashboard.strftime("%Y-%m-%d")
 
         # =====================================================
-        # QUERY SOLICITADO PARA EL FLUJO VISUAL
+        # QUERY BASE SOLICITADO POR EL USUARIO.
+        # Se agrega MONTO_SOLES para conservar el dato monetario
+        # que ya muestra el componente visual.
         # =====================================================
         query = """
         SELECT
-            FECHA_REPORTE,
-            PRODUCTO,
-            CASE
-                WHEN ESTADO_CICLO IN (
-                    'AVERIAS SEMANA ANT.',
-                    'AVERIAS SEMANA',
-                    'REJECT 1',
-                    'REJECT 2',
-                    'REJECT 3',
-                    'REJECT 4'
-                ) THEN ESTADO_CICLO
+            X.PRODUCTO,
+            X.DETALLE,
+            COUNT(*) AS CANTIDAD,
+            SUM(X.MONTO_SOLES) AS MONTO_SOLES
+        FROM (
+            SELECT
+                PRODUCTO,
+                CASE
+                    WHEN FECHA_REPORTE = FECHA_PROCESO
+                         AND FUENTE = 'PROX_N'
+                         AND ESTADO_CICLO = 'PROXIMA SEMANA'
+                        THEN 'PROXIMA SEMANA (SEMANA)'
 
-                WHEN ESTADO_CICLO IN (
-                    'PROXIMA SEMANA',
-                    'R1',
-                    'R2',
-                    'R3',
-                    'R4'
-                ) THEN 'PRÓXIMA SEMANA'
+                    WHEN FECHA_REPORTE <> FECHA_PROCESO
+                         AND FUENTE = 'PROX_N'
+                         AND ESTADO_CICLO = 'PROXIMA SEMANA'
+                        THEN 'PROXIMA SEMANA (SEMANA ANT.)'
 
-                WHEN ESTADO_CICLO IN ('CERRADO SIN RECIBO')
-                    THEN 'CERRADAS'
+                    WHEN FECHA_REPORTE = FECHA_PROCESO
+                         AND FUENTE = 'REJ_S'
+                         AND ESTADO_CICLO = 'PROXIMA SEMANA'
+                        THEN 'PROXIMA SEMANA (SEMANA)'
 
-                WHEN PRODUCTO = 'Pre - pago'
-                    THEN 'SEMANA EN CURSO'
-            END AS CATEGORIA,
+                    WHEN FECHA_REPORTE <> FECHA_PROCESO
+                         AND FUENTE = 'REJ_S'
+                         AND ESTADO_CICLO = 'PROXIMA SEMANA'
+                        THEN 'PROXIMA SEMANA (SEMANA ANT.)'
 
-            SUM(
+                    WHEN FECHA_REPORTE = FECHA_PROCESO
+                         AND FUENTE = 'REJ_X'
+                         AND ESTADO_CICLO = 'CERRADO SIN RECIBO'
+                        THEN 'CERRADO SIN RECIBO (SEMANA)'
+
+                    WHEN FECHA_REPORTE <> FECHA_PROCESO
+                         AND FUENTE = 'REJ_X'
+                         AND ESTADO_CICLO = 'CERRADO SIN RECIBO'
+                        THEN 'CERRADO SIN RECIBO (SEMANA ANT.)'
+
+                    WHEN FUENTE = 'EXCLUI'
+                        THEN 'PROXIMA SEMANA (SEMANA ANT.)'
+
+                    WHEN ESTADO_CICLO = 'AVERIAS SEMANA'
+                        THEN 'AVERIAS SEMANA'
+
+                    WHEN ESTADO_CICLO = 'AVERIAS SEMANA ANT.'
+                        THEN 'AVERIAS SEMANA ANT.'
+
+                    WHEN ESTADO_CICLO = 'REJECT 1'
+                        THEN 'REJECT 1'
+
+                    WHEN ESTADO_CICLO = 'REJECT 2'
+                        THEN 'REJECT 2'
+
+                    WHEN ESTADO_CICLO = 'REJECT 3'
+                        THEN 'REJECT 3'
+
+                    WHEN ESTADO_CICLO = 'REJECT 4'
+                        THEN 'REJECT 4'
+
+                    WHEN PRODUCTO <> 'Post - pago'
+                        THEN 'SEMANA EN CURSO'
+                END AS DETALLE,
+
                 CASE
                     WHEN PRODUCTO = 'Post - pago'
                         THEN CREDIT_AMOUNT_DET / 100.0
                     ELSE COALESCE(MONTO_DEVOLVER, 0)
-                END
-            ) AS MONTO_A_DEVOLVER,
+                END AS MONTO_SOLES
 
-            COUNT(*) AS CANTIDAD
+            FROM PROD_REGU_INH_DATA..T_DEVOLM_REPORTE_SEMANAL_HIST
 
-        FROM PROD_REGU_INH_DATA..T_DEVOLM_REPORTE_SEMANAL_HIST
-
-        WHERE CAST(FECHA_REPORTE AS DATE) = CAST(? AS DATE)
+            WHERE CAST(FECHA_REPORTE AS DATE) = CAST(? AS DATE)
         """
-
 
         params = [fecha_reporte_str]
 
-        # El filtro de producto del dashboard se mantiene para
-        # esta sección, sin modificar la lógica de categorización.
         if producto:
             query += """
                 AND PRODUCTO = ?
@@ -596,45 +607,14 @@ def obtener_ciclo_020(fecha_seleccionada, producto=None):
             params.append(producto)
 
         query += """
+            ) X
+        WHERE X.DETALLE IS NOT NULL
         GROUP BY
-            FECHA_REPORTE,
-            PRODUCTO,
-            CASE
-                WHEN ESTADO_CICLO IN (
-                    'AVERIAS SEMANA ANT.',
-                    'AVERIAS SEMANA',
-                    'REJECT 1',
-                    'REJECT 2',
-                    'REJECT 3',
-                    'REJECT 4'
-                ) THEN ESTADO_CICLO
-                WHEN ESTADO_CICLO IN (
-                    'PROXIMA SEMANA', 'R1', 'R2', 'R3', 'R4'
-                ) THEN 'PRÓXIMA SEMANA'
-                WHEN ESTADO_CICLO IN ('CERRADO SIN RECIBO')
-                    THEN 'CERRADAS'
-                WHEN PRODUCTO = 'Pre - pago'
-                    THEN 'SEMANA EN CURSO'
-            END
-        ORDER BY FECHA_REPORTE DESC
+            X.PRODUCTO,
+            X.DETALLE
         """
 
-
-        print(
-            f"[TABLA 020 - FLUJO] fecha seleccionada = "
-            f"{fecha_seleccionada_str}"
-        )
-        print(
-            f"[TABLA 020 - FLUJO] fecha consultada = "
-            f"{fecha_reporte_str}"
-        )
-        print(
-            f"[TABLA 020 - FLUJO] producto = "
-            f"{producto if producto else 'TODOS'}"
-        )
-
         conn = conectar_netezza()
-
         try:
             df_flujo = pd.read_sql(
                 query,
@@ -644,30 +624,19 @@ def obtener_ciclo_020(fecha_seleccionada, producto=None):
         finally:
             conn.close()
 
-        print(
-            f"[TABLA 020 - FLUJO] filas encontradas = "
-            f"{len(df_flujo)}"
-        )
-
         if df_flujo.empty:
-            print(
-                f"[TABLA 020 - FLUJO] SIN DATOS para "
-                f"FECHA_REPORTE = {fecha_reporte_str}"
-            )
-
             return {
                 "fecha_reporte": fecha_reporte_str,
                 "fecha_seleccionada": fecha_seleccionada_str,
                 "items": [],
+                "items_postpago": [],
+                "items_prepago": [],
                 "productos": [],
                 "resumen_producto": []
             }
 
         df_flujo.columns = df_flujo.columns.str.upper()
 
-        # =====================================================
-        # NORMALIZAR RESULTADO DEL QUERY
-        # =====================================================
         df_flujo["PRODUCTO"] = (
             df_flujo["PRODUCTO"]
             .fillna("")
@@ -675,8 +644,8 @@ def obtener_ciclo_020(fecha_seleccionada, producto=None):
             .str.strip()
         )
 
-        df_flujo["CATEGORIA"] = (
-            df_flujo["CATEGORIA"]
+        df_flujo["DETALLE"] = (
+            df_flujo["DETALLE"]
             .fillna("")
             .astype(str)
             .str.strip()
@@ -687,68 +656,14 @@ def obtener_ciclo_020(fecha_seleccionada, producto=None):
             errors="coerce"
         ).fillna(0)
 
-        df_flujo["MONTO_A_DEVOLVER"] = pd.to_numeric(
-            df_flujo["MONTO_A_DEVOLVER"],
+        df_flujo["MONTO_SOLES"] = pd.to_numeric(
+            df_flujo["MONTO_SOLES"],
             errors="coerce"
         ).fillna(0)
 
-        # Filas que no caigan en ninguna condición del CASE no se
-        # muestran en el flujo.
-        df_flujo = df_flujo[
-            df_flujo["CATEGORIA"].isin([
-                "AVERIAS SEMANA ANT.",
-                "AVERIAS SEMANA",
-                "REJECT 1",
-                "REJECT 2",
-                "REJECT 3",
-                "REJECT 4",
-                "PRÓXIMA SEMANA",
-                "CERRADAS",
-                "SEMANA EN CURSO"
-            ])
-        ].copy()
-
-        if df_flujo.empty:
-            return {
-                "fecha_reporte": fecha_reporte_str,
-                "fecha_seleccionada": fecha_seleccionada_str,
-                "items": [],
-                "productos": [],
-                "resumen_producto": []
-            }
-
-        # =====================================================
-        # CONSOLIDAR POR PRODUCTO + CATEGORIA
-        #
-        # IMPORTANTE:
-        # POSTPAGO y PREPAGO se mantienen en bloques separados.
-        # Ya no se mezclan ambas líneas en una sola tarjeta.
-        # =====================================================
-        prioridad = {
-            "AVERIAS SEMANA ANT.": 1,
-            "AVERIAS SEMANA": 2,
-            "REJECT 1": 3,
-            "REJECT 2": 4,
-            "REJECT 3": 5,
-            "REJECT 4": 6,
-            "SEMANA EN CURSO": 7,
-            "PRÓXIMA SEMANA": 8,
-            "CERRADAS": 9
-        }
-
-        ciclo = (
-            df_flujo.groupby(
-                ["PRODUCTO", "CATEGORIA"],
-                as_index=False
-            )
-            .agg({
-                "CANTIDAD": "sum",
-                "MONTO_A_DEVOLVER": "sum"
-            })
-        )
-
-        ciclo["TIPO_PRODUCTO"] = (
-            ciclo["PRODUCTO"]
+        # Solo se conservan los productos solicitados.
+        df_flujo["TIPO_PRODUCTO"] = (
+            df_flujo["PRODUCTO"]
             .apply(_normalizar_producto)
             .map({
                 "POSTPAGO": "POSTPAGO",
@@ -756,88 +671,87 @@ def obtener_ciclo_020(fecha_seleccionada, producto=None):
             })
         )
 
-        ciclo = ciclo[ciclo["TIPO_PRODUCTO"].isin(
-            ["POSTPAGO", "PREPAGO"]
-        )].copy()
+        df_flujo = df_flujo[
+            df_flujo["TIPO_PRODUCTO"].isin(["POSTPAGO", "PREPAGO"])
+        ].copy()
 
-        # PREPAGO siempre se muestra como SEMANA EN CURSO.
-        # No utiliza las categorías de POSTPAGO.
-        ciclo.loc[
-            ciclo["TIPO_PRODUCTO"] == "PREPAGO",
-            "CATEGORIA"
+        # PREPAGO se muestra exclusivamente como SEMANA EN CURSO,
+        # tal como se solicitó para la vista.
+        df_flujo.loc[
+            df_flujo["TIPO_PRODUCTO"] == "PREPAGO",
+            "DETALLE"
         ] = "SEMANA EN CURSO"
 
-        # Consolidar nuevamente para que PREPAGO quede en una sola fila.
-        ciclo = (
-            ciclo.groupby(
-                ["TIPO_PRODUCTO", "CATEGORIA"],
+        # Consolidar nuevamente después de normalizar PREPAGO.
+        df_flujo = (
+            df_flujo.groupby(
+                ["PRODUCTO", "TIPO_PRODUCTO", "DETALLE"],
                 as_index=False
             )
             .agg({
                 "CANTIDAD": "sum",
-                "MONTO_A_DEVOLVER": "sum"
+                "MONTO_SOLES": "sum"
             })
         )
 
-        ciclo["ORDEN_CICLO"] = (
-            ciclo["CATEGORIA"]
-            .map(prioridad)
+        orden = {
+            "AVERIAS SEMANA": 1,
+            "AVERIAS SEMANA ANT.": 2,
+            "REJECT 1": 3,
+            "REJECT 2": 4,
+            "REJECT 3": 5,
+            "REJECT 4": 6,
+            "PROXIMA SEMANA (SEMANA ANT.)": 7,
+            "PROXIMA SEMANA (SEMANA)": 8,
+            "CERRADO SIN RECIBO (SEMANA ANT.)": 9,
+            "CERRADO SIN RECIBO (SEMANA)": 10,
+            "SEMANA EN CURSO": 1
+        }
+
+        df_flujo["ORDEN"] = (
+            df_flujo["DETALLE"]
+            .map(orden)
             .fillna(99)
             .astype(int)
         )
 
-        ciclo = ciclo.sort_values(
-            ["TIPO_PRODUCTO", "ORDEN_CICLO", "CATEGORIA"]
+        df_flujo = df_flujo.sort_values(
+            ["TIPO_PRODUCTO", "ORDEN", "DETALLE"]
         )
 
-        # Porcentaje independiente para cada producto.
-        ciclo["TOTAL_PRODUCTO"] = (
-            ciclo.groupby("TIPO_PRODUCTO")["CANTIDAD"]
+        df_flujo["TOTAL_PRODUCTO"] = (
+            df_flujo.groupby("TIPO_PRODUCTO")["CANTIDAD"]
             .transform("sum")
         )
 
-        ciclo["PORCENTAJE_CICLO"] = 0.0
-
-        mask_total = ciclo["TOTAL_PRODUCTO"] > 0
-
-        ciclo.loc[mask_total, "PORCENTAJE_CICLO"] = (
-            ciclo.loc[mask_total, "CANTIDAD"]
-            / ciclo.loc[mask_total, "TOTAL_PRODUCTO"]
+        df_flujo["PORCENTAJE_CICLO"] = 0.0
+        mask = df_flujo["TOTAL_PRODUCTO"] > 0
+        df_flujo.loc[mask, "PORCENTAJE_CICLO"] = (
+            df_flujo.loc[mask, "CANTIDAD"]
+            / df_flujo.loc[mask, "TOTAL_PRODUCTO"]
             * 100
         )
 
-        ciclo["PORCENTAJE_CICLO"] = (
-            ciclo["PORCENTAJE_CICLO"].round(2)
+        df_flujo["PORCENTAJE_CICLO"] = (
+            df_flujo["PORCENTAJE_CICLO"].round(2)
+        )
+        df_flujo["CANTIDAD"] = (
+            df_flujo["CANTIDAD"].round(0).astype(int)
+        )
+        df_flujo["MONTO_SOLES"] = (
+            df_flujo["MONTO_SOLES"].round(2)
         )
 
-        ciclo["CANTIDAD"] = (
-            ciclo["CANTIDAD"]
-            .round(0)
-            .astype(int)
-        )
-
-        ciclo["MONTO_SOLES"] = (
-            ciclo["MONTO_A_DEVOLVER"]
-            .round(2)
-        )
-
-        ciclo_postpago = ciclo[
-            ciclo["TIPO_PRODUCTO"] == "POSTPAGO"
+        ciclo_postpago = df_flujo[
+            df_flujo["TIPO_PRODUCTO"] == "POSTPAGO"
         ].copy()
 
-        ciclo_prepago = ciclo[
-            ciclo["TIPO_PRODUCTO"] == "PREPAGO"
+        ciclo_prepago = df_flujo[
+            df_flujo["TIPO_PRODUCTO"] == "PREPAGO"
         ].copy()
 
-        # =====================================================
-        # RESUMEN DE PRODUCTO PARA NO ROMPER LOS KPIs EXISTENTES
-        #
-        # Este resumen mantiene la lógica anterior:
-        # POSTPAGO -> CANDIDATOS
-        # PREPAGO  -> PREPAGO
-        #
-        # Se obtiene directamente de TABLA 020.
-        # =====================================================
+        # Mantener el resumen de producto existente para no afectar
+        # los KPIs superiores del dashboard.
         query_resumen = """
         SELECT
             PRODUCTO,
@@ -866,7 +780,6 @@ def obtener_ciclo_020(fecha_seleccionada, producto=None):
         """
 
         conn = conectar_netezza()
-
         try:
             df_resumen = pd.read_sql(
                 query_resumen,
@@ -878,15 +791,11 @@ def obtener_ciclo_020(fecha_seleccionada, producto=None):
 
         if not df_resumen.empty:
             df_resumen.columns = df_resumen.columns.str.upper()
-
             df_resumen["CANTIDAD"] = pd.to_numeric(
-                df_resumen["CANTIDAD"],
-                errors="coerce"
+                df_resumen["CANTIDAD"], errors="coerce"
             ).fillna(0)
-
             df_resumen["MONTO"] = pd.to_numeric(
-                df_resumen["MONTO"],
-                errors="coerce"
+                df_resumen["MONTO"], errors="coerce"
             ).fillna(0)
 
         post = {
@@ -909,37 +818,18 @@ def obtener_ciclo_020(fecha_seleccionada, producto=None):
             if tipo == "POSTPAGO":
                 post["REGISTROS"] = int(row["CANTIDAD"] or 0)
                 post["MONTO"] = float(row["MONTO"] or 0)
-
             elif tipo == "PREPAGO":
                 pre["REGISTROS"] = int(row["CANTIDAD"] or 0)
                 pre["MONTO"] = float(row["MONTO"] or 0)
 
-        resumen_producto = [post, pre]
-
-        print(
-            "[TABLA 020 - FLUJO] POSTPAGO = "
-            f"{ciclo_postpago[['CATEGORIA', 'CANTIDAD', 'MONTO_SOLES']].to_dict(orient='records')}"
-        )
-        print(
-            "[TABLA 020 - FLUJO] PREPAGO = "
-            f"{ciclo_prepago[['CATEGORIA', 'CANTIDAD', 'MONTO_SOLES']].to_dict(orient='records')}"
-        )
-
         return {
             "fecha_reporte": fecha_reporte_str,
             "fecha_seleccionada": fecha_seleccionada_str,
-
-            # Compatibilidad
-            "items": _json_records(ciclo),
-
-            # Nuevos bloques separados
+            "items": _json_records(df_flujo),
             "items_postpago": _json_records(ciclo_postpago),
             "items_prepago": _json_records(ciclo_prepago),
-
-            "productos": sorted(
-                df_flujo["PRODUCTO"].unique().tolist()
-            ),
-            "resumen_producto": resumen_producto
+            "productos": sorted(df_flujo["PRODUCTO"].unique().tolist()),
+            "resumen_producto": [post, pre]
         }
 
     except Exception as e:

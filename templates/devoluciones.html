@@ -3,6 +3,7 @@
 {% block contenido %}
 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/devoluciones.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/devoluciones_TABLA020_FINAL.css') }}">
 
 <div class="devoluciones-page">
 
@@ -1063,7 +1064,7 @@ function renderAbonados(data) {
 
 function renderCycle(data) {
 
-    const ciclo = data.ciclo || {};
+    const ciclo = data?.ciclo || {};
 
     const itemsPost = Array.isArray(ciclo.items_postpago)
         ? ciclo.items_postpago
@@ -1073,25 +1074,20 @@ function renderCycle(data) {
         ? ciclo.items_prepago
         : [];
 
-    const fechaReporte = ciclo.fecha_reporte;
-    const fechaSeleccionada = ciclo.fecha_seleccionada;
+    const fechaReporte = ciclo.fecha_reporte || "";
+    const fechaSeleccionada = ciclo.fecha_seleccionada || "";
 
     const dateLabel = document.getElementById("cycle-date");
     const contenedorPost = document.getElementById("cycle-flow-postpago");
     const contenedorPre = document.getElementById("cycle-flow-prepago");
 
+    if (!contenedorPost || !contenedorPre) {
+        console.warn("Contenedores de TABLA 020 no encontrados.");
+        return;
+    }
+
     if (fechaReporte && fechaSeleccionada) {
 
-        /*
-         * Fecha final = fecha seleccionada - 1 día.
-         *
-         * Ejemplo:
-         * seleccionada 2026-09-07
-         * fecha TABLA 020 2026-09-06
-         *
-         * Para mostrar 7 días calendario:
-         * inicio = fecha final - 6 días.
-         */
         const fechaFin = new Date(`${fechaSeleccionada}T00:00:00`);
         fechaFin.setDate(fechaFin.getDate() - 1);
 
@@ -1116,7 +1112,6 @@ function renderCycle(data) {
 
         dateLabel.textContent =
             "Selecciona un día para consultar la TABLA 020.";
-
     }
 
     if (!fechaReporte) {
@@ -1136,183 +1131,248 @@ function renderCycle(data) {
         return;
     }
 
-    function renderProductFlow(contenedor, items, nombreProducto) {
+    /* =========================================================
+       UTILIDADES
+       ========================================================= */
 
-        if (!items.length) {
-            contenedor.innerHTML = `
-                <div class="cycle-empty">
-                    <i class="fas fa-database"></i>
-                    <strong>Sin información de ${esc(nombreProducto)}</strong>
-                    <span>
-                        No se encontraron registros de ${esc(nombreProducto)}
-                        para ${esc(fechaReporte)}.
-                    </span>
-                </div>
-            `;
-            return;
+    const normalizarDetalle = (item) =>
+        String(item?.DETALLE || "")
+            .trim()
+            .toUpperCase();
+
+    const priority = {
+        "AVERIAS SEMANA": 1,
+        "AVERIAS SEMANA ANT.": 2,
+        "REJECT 1": 3,
+        "REJECT 2": 4,
+        "REJECT 3": 5,
+        "REJECT 4": 6,
+        "PROXIMA SEMANA (SEMANA)": 7,
+        "PROXIMA SEMANA (SEMANA ANT.)": 8,
+        "CERRADO SIN RECIBO (SEMANA)": 9,
+        "CERRADO SIN RECIBO (SEMANA ANT.)": 10,
+        "SEMANA EN CURSO": 11
+    };
+
+    const ordenar = (items) => [...items].sort((a, b) => {
+        const ca = normalizarDetalle(a);
+        const cb = normalizarDetalle(b);
+        return (priority[ca] || 99) - (priority[cb] || 99);
+    });
+
+    /* =========================================================
+       TARJETA
+       La tarjeta utiliza exclusivamente DETALLE/CANTIDAD/MONTO
+       que devuelve el query. No se fabrican categorías en cero.
+       ========================================================= */
+
+    const renderCard = (item, index, groupClass, nombreProducto) => {
+
+        const detalle = normalizarDetalle(item);
+
+        let clase = "cycle-default";
+        let icono = "fa-circle";
+
+        if (groupClass === "cycle-group-candidate") {
+            clase = "cycle-candidate";
+            icono = "fa-user-check";
+        } else if (groupClass === "cycle-group-next") {
+            clase = "cycle-next";
+            icono = "fa-calendar-week";
+        } else if (groupClass === "cycle-group-closed") {
+            clase = "cycle-closed";
+            icono = "fa-lock";
         }
 
-        const priority = {
-            "AVERIAS SEMANA ANT.": 1,
-            "AVERIAS SEMANA": 2,
-            "REJECT 1": 3,
-            "REJECT 2": 4,
-            "REJECT 3": 5,
-            "REJECT 4": 6,
-            "SEMANA EN CURSO": 7,
-            "PRÓXIMA SEMANA": 8,
-            "CERRADAS": 9
-        };
+        const cantidad = numero(item?.CANTIDAD);
+        const monto = numero(item?.MONTO_SOLES);
+        const porcentaje = numero(item?.PORCENTAJE_CICLO);
 
-        let itemsRender = [...items];
+        return `
+            <div class="cycle-node ${clase}">
 
-        // POSTPAGO: siempre mostrar los 6 componentes de
-        // SEMANA EN CURSO, aunque alguno tenga 0 registros.
-        if (nombreProducto === "POSTPAGO") {
-            const estadosSemana = [
-                "AVERIAS SEMANA ANT.",
+                <div class="cycle-node-header">
+                    <span class="cycle-node-icon">
+                        <i class="fas ${icono}"></i>
+                    </span>
+
+                    <span class="cycle-node-step">
+                        ${String(index + 1).padStart(2, "0")}
+                    </span>
+                </div>
+
+                <div class="cycle-node-title">
+                    ${esc(detalle || "SIN CATEGORIA")}
+                </div>
+
+                <div class="cycle-node-value">
+                    ${formatNumero(cantidad)}
+                </div>
+
+                <div class="cycle-node-money">
+                    S/ ${formatMonto(monto)}
+                </div>
+
+                <div class="cycle-node-percent">
+                    ${porcentaje.toFixed(1)}% del ${esc(nombreProducto.toLowerCase())}
+                </div>
+            </div>
+        `;
+    };
+
+    /* =========================================================
+       PREPAGO
+       Solo se muestra SEMANA EN CURSO si realmente viene del SQL.
+       ========================================================= */
+
+    const prepagoItems = ordenar(
+        itemsPre.filter(item =>
+            normalizarDetalle(item) === "SEMANA EN CURSO"
+        )
+    );
+
+    if (prepagoItems.length) {
+
+        contenedorPre.innerHTML = `
+            <div class="cycle-group cycle-group-prepago-single">
+
+                <div class="cycle-group-title cycle-section-header cycle-section-header-prepago">
+                    <div class="cycle-section-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+
+                    <div class="cycle-section-text">
+                        <div class="cycle-section-main">CANDIDATOS</div>
+                        <div class="cycle-section-sub">Candidatos en proceso</div>
+                    </div>
+
+                    <div class="cycle-section-count">
+                        <strong>${prepagoItems.length}</strong>
+                        <span>${prepagoItems.length === 1 ? "CATEGORÍA" : "CATEGORÍAS"}</span>
+                    </div>
+                </div>
+
+                <div class="cycle-group-flow">
+                    ${prepagoItems.map((item, index) =>
+                        renderCard(item, index, "cycle-group-candidate", "PREPAGO")
+                    ).join("")}
+                </div>
+            </div>
+        `;
+
+    } else {
+        contenedorPre.innerHTML = `
+            <div class="cycle-empty cycle-empty-compact">
+                <i class="fas fa-database"></i>
+                <strong>Sin información de PREPAGO</strong>
+                <span>No se encontró SEMANA EN CURSO para ${esc(fechaReporte)}.</span>
+            </div>
+        `;
+    }
+
+    /* =========================================================
+       POSTPAGO
+       ========================================================= */
+
+    const grupos = [
+        {
+            key: "CANDIDATOS",
+            titulo: "CANDIDATOS",
+            subtitulo: "Averías y rechazos identificados",
+            icono: "fa-users",
+            clase: "cycle-group-candidate",
+            estados: [
                 "AVERIAS SEMANA",
+                "AVERIAS SEMANA ANT.",
                 "REJECT 1",
                 "REJECT 2",
                 "REJECT 3",
                 "REJECT 4"
-            ];
-
-            const existentes = new Map(
-                itemsRender.map(item => [
-                    String(item.CATEGORIA || "").trim().toUpperCase(),
-                    item
-                ])
-            );
-
-            const componentes = estadosSemana.map(estado => {
-                const encontrado = existentes.get(estado);
-
-                return encontrado || {
-                    CATEGORIA: estado,
-                    CANTIDAD: 0,
-                    MONTO_SOLES: 0,
-                    PORCENTAJE_CICLO: 0
-                };
-            });
-
-            const otros = itemsRender.filter(item => {
-                const cat = String(item.CATEGORIA || "")
-                    .trim()
-                    .toUpperCase();
-
-                return !estadosSemana.includes(cat);
-            });
-
-            itemsRender = [...componentes, ...otros];
+            ]
+        },
+        {
+            key: "PROXIMA",
+            titulo: "PRÓXIMA SEMANA",
+            subtitulo: "Candidatos programados para la siguiente semana",
+            icono: "fa-calendar-week",
+            clase: "cycle-group-next",
+            estados: [
+                "PROXIMA SEMANA (SEMANA)",
+                "PROXIMA SEMANA (SEMANA ANT.)"
+            ]
+        },
+        {
+            key: "CERRADAS",
+            titulo: "CERRADAS",
+            subtitulo: "Candidatos cerrados sin recibo",
+            icono: "fa-lock",
+            clase: "cycle-group-closed",
+            estados: [
+                "CERRADO SIN RECIBO (SEMANA)",
+                "CERRADO SIN RECIBO (SEMANA ANT.)"
+            ]
         }
+    ];
 
-        const ordered = [...itemsRender].sort((a, b) => {
+    const gruposHTML = grupos.map(grupo => {
 
-            const categoriaA = String(a.CATEGORIA || "")
-                .trim()
-                .toUpperCase();
+        const groupItems = ordenar(
+            itemsPost.filter(item =>
+                grupo.estados.includes(normalizarDetalle(item))
+            )
+        );
 
-            const categoriaB = String(b.CATEGORIA || "")
-                .trim()
-                .toUpperCase();
+        /*
+         * IMPORTANTE:
+         * Si DETALLE no viene del SQL, no se crea la tarjeta.
+         * Por eso REJECT 4 no aparece si no existe en el resultado.
+         */
+        if (!groupItems.length) return "";
 
-            return (
-                (priority[categoriaA] || 99) -
-                (priority[categoriaB] || 99)
-            );
-        });
+        return `
+            <div class="cycle-group ${grupo.clase}">
 
-        let html = "";
-
-        ordered.forEach((item, index) => {
-
-            const categoria = String(
-                item.CATEGORIA || "SIN CATEGORIA"
-            ).trim();
-
-            const categoriaUpper = categoria.toUpperCase();
-
-            let clase = "cycle-default";
-            let icono = "fa-circle";
-
-            if ([
-                "AVERIAS SEMANA ANT.",
-                "AVERIAS SEMANA",
-                "REJECT 1",
-                "REJECT 2",
-                "REJECT 3",
-                "REJECT 4",
-                "SEMANA EN CURSO"
-            ].includes(categoriaUpper)) {
-                clase = "cycle-candidate";
-                icono = "fa-user-check";
-
-            } else if (categoriaUpper === "PRÓXIMA SEMANA") {
-                clase = "cycle-next";
-                icono = "fa-calendar-week";
-
-            } else if (categoriaUpper === "CERRADAS") {
-                clase = "cycle-closed";
-                icono = "fa-lock";
-            }
-
-            const cantidad = numero(item.CANTIDAD);
-            const monto = numero(item.MONTO_SOLES);
-            const porcentaje = numero(item.PORCENTAJE_CICLO);
-
-            html += `
-                <div class="cycle-node ${clase}">
-
-                    <div class="cycle-node-header">
-                        <span class="cycle-node-icon">
-                            <i class="fas ${icono}"></i>
-                        </span>
-
-                        <span class="cycle-node-step">
-                            ${String(index + 1).padStart(2, "0")}
-                        </span>
+                <div class="cycle-group-title cycle-section-header">
+                    <div class="cycle-section-icon">
+                        <i class="fas ${grupo.icono}"></i>
                     </div>
 
-                    <div class="cycle-node-title">
-                        ${esc(categoria)}
+                    <div class="cycle-section-text">
+                        <div class="cycle-section-main">
+                            ${grupo.titulo}
+                        </div>
+
+                        <div class="cycle-section-sub">
+                            ${grupo.subtitulo}
+                        </div>
                     </div>
 
-                    <div class="cycle-node-value">
-                        ${formatNumero(cantidad)}
+                    <div class="cycle-section-count">
+                        <strong>${groupItems.length}</strong>
+                        <span>${groupItems.length === 1 ? "CATEGORÍA" : "CATEGORÍAS"}</span>
                     </div>
-
-                    <div class="cycle-node-money">
-                        S/ ${formatMonto(monto)}
-                    </div>
-
-                    <div class="cycle-node-percent">
-                        ${porcentaje.toFixed(1)}% del ${esc(nombreProducto.toLowerCase())}
-                    </div>
-
                 </div>
-            `;
 
-            if (index < ordered.length - 1) {
-                html += `<div class="cycle-connector"></div>`;
-            }
+                <div class="cycle-group-flow">
+                    ${groupItems.map((item, index) =>
+                        renderCard(item, index, grupo.clase, "POSTPAGO")
+                    ).join("")}
+                </div>
+            </div>
+        `;
+    }).join("");
 
-        });
-
-        contenedor.innerHTML = html;
-    }
-
-    renderProductFlow(
-        contenedorPost,
-        itemsPost,
-        "POSTPAGO"
-    );
-
-    renderProductFlow(
-        contenedorPre,
-        itemsPre,
-        "PREPAGO"
-    );
+    contenedorPost.innerHTML = `
+        <div class="cycle-groups-row">
+            ${gruposHTML || `
+                <div class="cycle-empty cycle-empty-full">
+                    <i class="fas fa-database"></i>
+                    <strong>Sin información de POSTPAGO</strong>
+                    <span>No se encontraron categorías para ${esc(fechaReporte)}.</span>
+                </div>
+            `}
+        </div>
+    `;
 }
 
 
@@ -2124,64 +2184,259 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 {% endblock %}
 <style>
-/* TABLA 020: seis componentes verdes de SEMANA EN CURSO */
-.cycle-postpago-column .cycle-flow {
-    gap: 10px !important;
-}
-
-.cycle-postpago-column .cycle-flow .cycle-node {
-    min-width: 135px !important;
-    width: 135px !important;
-}
-
-.cycle-postpago-column .cycle-flow .cycle-node.cycle-candidate {
-    border-top-color: #16a34a !important;
-}
-
-.cycle-postpago-column .cycle-flow .cycle-node.cycle-candidate .cycle-node-percent {
-    color: #16a34a !important;
-}
-</style>
-
-<style>
 /* ============================================================
-   TABLA 020 - PRESENTACIÓN FINAL
+   TABLA 020 — DISEÑO HORIZONTAL Y LEGIBLE
    ============================================================ */
 
-/* Ya no mostramos el identificador "TABLA 020" en el encabezado. */
-
-/* PREPAGO también es candidato: verde, no amarillo. */
-.cycle-prepago-column .cycle-node,
-.cycle-prepago-column .cycle-node.cycle-candidate {
-    border-top-color: #16a34a !important;
-    border-color: #dbe4f0 !important;
-    background: #ffffff !important;
+.cycle-card > .cycle-products-box {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 280px !important;
+    gap: 0 !important;
+    position: relative !important;
+    width: calc(100% - 42px) !important;
+    margin: 14px 21px 0 !important;
+    box-sizing: border-box !important;
+    align-items: start !important;
 }
 
-.cycle-prepago-column .cycle-node::before {
+.cycle-product-column {
+    min-width: 0 !important;
+}
+
+.cycle-postpago-column {
+    grid-column: 1 !important;
+    min-width: 0 !important;
+    padding-right: 18px !important;
+}
+
+.cycle-prepago-column {
+    grid-column: 2 !important;
+    min-width: 0 !important;
+    padding-left: 18px !important;
+}
+
+.cycle-product-divider {
+    width: 1px !important;
+    background: #e2e8f0 !important;
+    min-height: 150px !important;
+    align-self: stretch !important;
+    position: absolute !important;
+    left: calc((100% - 280px) + 9px) !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    justify-self: auto !important;
+    margin-right: 0 !important;
+}
+
+.cycle-product-heading {
+    margin-bottom: 10px !important;
+    font-size: 12px !important;
+    font-weight: 900 !important;
+    letter-spacing: .5px !important;
+}
+
+/* La zona POSTPAGO se organiza en tres grupos horizontales. */
+.cycle-postpago-column .cycle-flow,
+.cycle-prepago-column .cycle-flow {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    overflow: visible !important;
+}
+
+.cycle-groups-row {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.85fr) minmax(190px, .8fr) minmax(190px, .8fr) !important;
+    gap: 14px !important;
+    width: 100% !important;
+    align-items: start !important;
+}
+
+.cycle-group {
+    min-width: 0 !important;
+}
+
+.cycle-group-title {
+    display: flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+    margin: 0 0 8px !important;
+    padding: 0 2px !important;
+    font-size: 10px !important;
+    font-weight: 900 !important;
+    letter-spacing: .45px !important;
+    color: #334155 !important;
+    text-transform: uppercase !important;
+}
+
+.cycle-group-dot {
+    width: 8px !important;
+    height: 8px !important;
+    min-width: 8px !important;
+    border-radius: 50% !important;
+    display: inline-block !important;
+}
+
+.cycle-group-candidate .cycle-group-dot {
     background: #16a34a !important;
 }
 
-.cycle-prepago-column .cycle-node-icon {
+.cycle-group-next .cycle-group-dot {
+    background: #06b6d4 !important;
+}
+
+.cycle-group-closed .cycle-group-dot {
+    background: #7c3aed !important;
+}
+
+.cycle-group-flow {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    overflow: visible !important;
+}
+
+/* Tarjetas: más grandes y legibles. */
+.cycle-group-flow .cycle-node {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    width: auto !important;
+    max-width: 175px !important;
+    min-height: 150px !important;
+    padding: 13px 12px !important;
+    box-sizing: border-box !important;
+    border-radius: 15px !important;
+    background: #fff !important;
+    box-shadow: 0 5px 14px rgba(15, 23, 42, .07) !important;
+}
+
+/* En CANDIDATOS las seis tarjetas deben entrar en una sola línea. */
+.cycle-group-candidate .cycle-group-flow .cycle-node {
+    min-width: 108px !important;
+}
+
+/* Los grupos de 2 tarjetas aprovechan mejor el espacio. */
+.cycle-group-next .cycle-group-flow .cycle-node,
+.cycle-group-closed .cycle-group-flow .cycle-node {
+    min-width: 115px !important;
+}
+
+.cycle-node-header {
+    margin-bottom: 8px !important;
+}
+
+.cycle-node-icon {
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
+    border-radius: 9px !important;
+    font-size: 13px !important;
+}
+
+.cycle-node-step {
+    font-size: 8px !important;
+    font-weight: 800 !important;
+}
+
+.cycle-node-title {
+    min-height: 32px !important;
+    font-size: 10px !important;
+    line-height: 1.25 !important;
+    font-weight: 900 !important;
+    color: #172033 !important;
+    margin-bottom: 8px !important;
+}
+
+.cycle-node-value {
+    font-size: 20px !important;
+    line-height: 1 !important;
+    font-weight: 900 !important;
+    color: #0f172a !important;
+    margin: 4px 0 5px !important;
+}
+
+.cycle-node-money {
+    font-size: 11px !important;
+    line-height: 1.2 !important;
+    font-weight: 700 !important;
+    color: #475569 !important;
+    white-space: nowrap !important;
+}
+
+.cycle-node-percent {
+    margin-top: 7px !important;
+    font-size: 9px !important;
+    line-height: 1.2 !important;
+    font-weight: 800 !important;
+}
+
+/* Colores de las tarjetas según la leyenda. */
+.cycle-group-candidate .cycle-node {
+    border-top: 3px solid #16a34a !important;
+}
+
+.cycle-group-candidate .cycle-node-icon {
     color: #16a34a !important;
     background: #ecfdf3 !important;
 }
 
-.cycle-prepago-column .cycle-node-percent {
+.cycle-group-candidate .cycle-node-percent {
     color: #16a34a !important;
 }
 
-/* Leyenda por tipo de ciclo:
-   verde = candidatos
-   celeste = próxima semana
-   morado = cerradas
-*/
+.cycle-group-next .cycle-node {
+    border-top: 3px solid #06b6d4 !important;
+}
+
+.cycle-group-next .cycle-node-icon {
+    color: #06b6d4 !important;
+    background: #ecfeff !important;
+}
+
+.cycle-group-next .cycle-node-percent {
+    color: #06b6d4 !important;
+}
+
+.cycle-group-closed .cycle-node {
+    border-top: 3px solid #7c3aed !important;
+}
+
+.cycle-group-closed .cycle-node-icon {
+    color: #7c3aed !important;
+    background: #f5f3ff !important;
+}
+
+.cycle-group-closed .cycle-node-percent {
+    color: #7c3aed !important;
+}
+
+/* No necesitamos las flechas antiguas porque ahora hay grupos. */
+.cycle-group-flow .cycle-connector {
+    display: none !important;
+}
+
+/* PREPAGO: una tarjeta amplia y centrada en su columna. */
+.cycle-group-prepago-single .cycle-group-flow {
+    justify-content: flex-start !important;
+}
+
+.cycle-group-prepago-single .cycle-node {
+    flex: 0 0 180px !important;
+    max-width: 180px !important;
+    min-height: 150px !important;
+}
+
+/* Leyenda inferior: exactamente los mismos colores de las tarjetas. */
 .cycle-legend {
     display: flex !important;
     align-items: center !important;
+    gap: 22px !important;
     flex-wrap: wrap !important;
-    gap: 18px !important;
-    padding: 10px 21px 20px !important;
+    padding: 14px 21px 20px !important;
 }
 
 .cycle-legend-item {
@@ -2193,107 +2448,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     font-weight: 800 !important;
 }
 
-.cycle-legend-square {
-    display: inline-block !important;
-    width: 9px !important;
-    min-width: 9px !important;
-    height: 9px !important;
-    min-height: 9px !important;
-    border-radius: 3px !important;
-    border: 0 !important;
-    box-sizing: border-box !important;
-    opacity: 1 !important;
-}
-
-.cycle-legend-candidate .cycle-legend-square {
-    background-color: #16a34a !important;
-}
-
-.cycle-legend-next .cycle-legend-square {
-    background-color: #06b6d4 !important;
-}
-
-.cycle-legend-closed .cycle-legend-square {
-    background-color: #7c3aed !important;
-}
-
-/* El texto conserva un color neutro; el cuadrado identifica la categoría. */
-.cycle-legend-candidate,
-.cycle-legend-next,
-.cycle-legend-closed {
-    color: #475569 !important;
-}
-</style>
-
-<style>
-/* ============================================================
-   CORRECCIÓN FINAL - TABLA 020
-   El título del proceso va arriba.
-   POSTPAGO/PREPAGO ocupan todo el ancho debajo.
-   ============================================================ */
-
-.cycle-card > .cycle-header{
-    display:flex !important;
-    width:100% !important;
-    box-sizing:border-box !important;
-}
-
-.cycle-card > .cycle-products-box{
-    display:grid !important;
-    grid-template-columns:minmax(0,1fr) 1px 270px !important;
-    width:calc(100% - 42px) !important;
-    margin:14px 21px 0 !important;
-    box-sizing:border-box !important;
-}
-
-.cycle-card > .cycle-products-box .cycle-product-column{
-    min-width:0 !important;
-}
-
-.cycle-card > .cycle-products-box .cycle-flow{
-    display:flex !important;
-    flex-direction:row !important;
-    flex-wrap:nowrap !important;
-    justify-content:flex-start !important;
-    width:100% !important;
-    min-width:0 !important;
-    overflow-x:auto !important;
-}
-
-@media (min-width:701px){
-    .cycle-card > .cycle-products-box{
-        grid-template-columns:minmax(0,1fr) 1px 270px !important;
-    }
-}
-</style>
-
-<style>
-/* ============================================================
-   LEYENDA - CORRECCIÓN DEFINITIVA
-   Usamos ::before para que el indicador de color sea visible
-   independientemente de otros estilos aplicados a los <span>.
-   ============================================================ */
-
-.cycle-legend {
-    display: flex !important;
-    align-items: center !important;
-    gap: 20px !important;
-    flex-wrap: wrap !important;
-    padding: 10px 8px 18px !important;
-}
-
-.cycle-legend-item {
-    display: inline-flex !important;
-    align-items: center !important;
-    position: relative !important;
-    gap: 7px !important;
-    color: #475569 !important;
-    font-size: 10px !important;
-    font-weight: 800 !important;
-    line-height: 14px !important;
-}
-
-/* Indicadores visibles */
 .cycle-legend-item::before {
     content: "" !important;
     display: inline-block !important;
@@ -2301,7 +2455,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     height: 9px !important;
     min-width: 9px !important;
     border-radius: 3px !important;
-    box-sizing: border-box !important;
 }
 
 .cycle-legend-candidate::before {
@@ -2316,48 +2469,37 @@ document.addEventListener("DOMContentLoaded", async () => {
     background: #7c3aed !important;
 }
 
+@media (max-width: 900px) {
+    .cycle-card > .cycle-products-box {
+        grid-template-columns: 1fr !important;
+        gap: 18px !important;
+    }
 
-</style>
+    .cycle-product-divider {
+        display: none !important;
+    }
 
-<style>
-/* LEYENDA TABLA 020 - cuadrados reales */
-.cycle-legend {
-    display: flex !important;
-    align-items: center !important;
-    gap: 18px !important;
-    flex-wrap: wrap !important;
+    .cycle-postpago-column,
+    .cycle-prepago-column {
+        grid-column: 1 !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    .cycle-groups-row {
+        grid-template-columns: 1fr !important;
+    }
+
+    .cycle-group-flow {
+        overflow-x: auto !important;
+        padding-bottom: 5px !important;
+    }
 }
 
-.cycle-legend-item {
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 7px !important;
-    color: #475569 !important;
-    font-size: 10px !important;
-    font-weight: 800 !important;
-}
-
-.cycle-legend-item .cycle-legend-square {
-    display: inline-block !important;
-    width: 9px !important;
-    height: 9px !important;
-    min-width: 9px !important;
-    min-height: 9px !important;
-    flex: 0 0 9px !important;
-    border-radius: 2px !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-}
-
-.cycle-legend-candidate .cycle-legend-square {
-    background: #16a34a !important;
-}
-
-.cycle-legend-next .cycle-legend-square {
-    background: #06b6d4 !important;
-}
-
-.cycle-legend-closed .cycle-legend-square {
-    background: #7c3aed !important;
+@media (max-width: 700px) {
+    .cycle-group-flow .cycle-node {
+        flex: 0 0 145px !important;
+        min-width: 145px !important;
+    }
 }
 </style>

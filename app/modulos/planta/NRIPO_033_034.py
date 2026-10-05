@@ -1,7 +1,8 @@
 import os
 import logging
+from datetime import datetime
 import pandas as pd
-from flask import Flask, Blueprint, render_template, send_from_directory
+from flask import Flask, Blueprint, render_template, send_from_directory, request, jsonify
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -109,6 +110,55 @@ def Query_NRIPO_034_TOT():
         return []
     finally:
         conn.close()        
+
+def Query_Validaciones_033_034(anio=2026, mes=None):
+    conn = conectar_netezza()
+    if not conn:
+        logging.error("No se pudo conectar a Netezza")
+        return []
+
+    anio = str(anio)
+    try:
+        mes_int = int(mes) if mes not in (None, "", "todos", "0") else None
+    except (TypeError, ValueError):
+        mes_int = None
+
+    filtro_mes = f"\n      AND A.MES = {mes_int}" if mes_int is not None and 1 <= mes_int <= 12 else ""
+
+    sql = f"""
+    SELECT
+        SUBSTRING(A.ANIO_MES,1,4) AS ANIO,
+        A.ANIO_MES,
+        UPPER(A.DEPARTAMENTO) AS DEPARTAMENTO,
+        SUM(A.LINEAS_SERVICIO) AS LINEAS_SERVICIO_033,
+        SUM(B.LINEAS_SERVICIO) AS LINEAS_SERVICIO_034,
+        CASE WHEN SUM(A.LINEAS_SERVICIO) > SUM(B.LINEAS_SERVICIO)
+             THEN 'OK' ELSE 'NOK' END AS VALIDACION_CANTIDADES
+    FROM PROD_REGU_NORMA_DATA..T_NRM_NRIPO_033_HIST A
+    INNER JOIN PROD_REGU_NORMA_DATA..T_NRM_NRIPO_034_HIST B
+      ON A.ANIO_MES = B.ANIO_MES
+     AND A.MES = B.MES
+     AND UPPER(A.DEPARTAMENTO) = UPPER(B.DEPARTAMENTO)
+    WHERE SUBSTRING(A.ANIO_MES,1,4) = '{anio}'
+      AND SUBSTRING(B.ANIO_MES,1,4) = '{anio}'
+      AND A.TIPO_LINEA <> 'Satelital'{filtro_mes}
+    GROUP BY A.ANIO_MES, SUBSTRING(A.ANIO_MES,1,4), UPPER(A.DEPARTAMENTO)
+    ORDER BY A.ANIO_MES, DEPARTAMENTO
+    """
+    try:
+        df = pd.read_sql(sql, conn)
+        if df.empty:
+            return {"rows": [], "meses": [], "anio": anio}
+        df_pivot = df.pivot_table(index=["ANIO", "DEPARTAMENTO"], columns="ANIO_MES", values="VALIDACION_CANTIDADES", aggfunc="first").reset_index()
+        df_pivot.columns = [f"{str(c)}-VALI" if str(c).isdigit() and len(str(c)) == 6 else str(c) for c in df_pivot.columns]
+        meses = [c.replace("-VALI", "") for c in df_pivot.columns if c.endswith("-VALI")]
+        return {"rows": df_pivot.fillna("").to_dict(orient="records"), "meses": meses, "anio": anio}
+    except Exception as e:
+        logging.error(f"Error Query_Validaciones_033_034: {e}")
+        return {"rows": [], "meses": [], "anio": anio}
+    finally:
+        conn.close()
+
 
 # ----------- GENERADORES DE GRÁFICO -----------
 def convertir_cantidad_a_millones(df, columnas):
@@ -465,7 +515,46 @@ def index_mtc():
     img3 = generar_grafico_nripo_033_TOT(df3)
     img4 = generar_grafico_nripo_034_TOT(df4)
 
-    return render_template('NRIPO_033_034.html', img1=img1, img2=img2, img3=img3, img4=img4)
+    anio_actual = datetime.now().year
+    try:
+        anio_seleccionado = int(request.args.get("anio", anio_actual))
+    except (TypeError, ValueError):
+        anio_seleccionado = anio_actual
+    if anio_seleccionado < 2023 or anio_seleccionado > anio_actual:
+        anio_seleccionado = anio_actual
+
+    validaciones = Query_Validaciones_033_034(anio_seleccionado)
+    anios_disponibles = list(range(anio_actual, 2023, -1))
+
+    return render_template(
+        'NRIPO_033_034.html', img1=img1, img2=img2, img3=img3, img4=img4,
+        validaciones=validaciones, anios_disponibles=anios_disponibles
+    )
+
+# ----------- RUTA AJAX SOLO PARA LA TABLA DE VALIDACIÓN -----------
+
+@NRIPO_033_034_bp.route('/NRIPO_033_034/validaciones')
+def validaciones_nripo_033_034():
+    anio_actual = datetime.now().year
+    try:
+        anio = int(request.args.get("anio", anio_actual))
+    except (TypeError, ValueError):
+        anio = anio_actual
+
+    if anio < 2023 or anio > anio_actual:
+        anio = anio_actual
+
+    mes = request.args.get("mes", "")
+    try:
+        mes_int = int(mes) if mes else None
+    except (TypeError, ValueError):
+        mes_int = None
+
+    if mes_int is not None and not 1 <= mes_int <= 12:
+        mes_int = None
+
+    return jsonify(Query_Validaciones_033_034(anio, mes_int))
+
 
 # ----------- RUTA PARA CARGAR IMÁGENES -----------
 

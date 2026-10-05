@@ -1,0 +1,625 @@
+{% extends "base.html" %}
+
+{% block estilos_extra %}
+{{ super() }}
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/ia_observabilidad.css') }}">
+{% endblock %}
+
+{% block contenido %}
+
+<div id="ia-observabilidad-page" class="observability-page">
+<div class="app-shell">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header class="top-header">
+
+        <div class="brand">
+
+            <div class="brand-orbit">
+
+                <div class="brand-dot"></div>
+
+            </div>
+
+
+            <div class="brand-text">
+
+                <div class="brand-title">
+                    AI OBSERVABILITY
+                </div>
+
+                <div class="brand-subtitle">
+                    REGULATORY DATA CONTROL
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="system-status">
+
+            <span class="system-dot"></span>
+
+            <span>
+                SYSTEM ONLINE
+            </span>
+
+            <span class="system-time">
+                --:--:--
+            </span>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         KPI
+         ===================================================== -->
+
+    <section class="top-kpis">
+
+
+        <div class="kpi-card">
+
+            <div class="kpi-label">
+                PROCESOS
+            </div>
+
+            <div
+                class="kpi-value"
+                id="processes-count"
+            >
+                0
+            </div>
+
+            <div class="kpi-description">
+                Procesos monitoreados
+            </div>
+
+        </div>
+
+
+        <div class="kpi-card">
+
+            <div class="kpi-label">
+                NORMAL
+            </div>
+
+            <div
+                class="kpi-value kpi-green"
+                id="normal-count"
+            >
+                0
+            </div>
+
+            <div class="kpi-description">
+                Estado OK
+            </div>
+
+        </div>
+
+
+        <div class="kpi-card">
+
+            <div class="kpi-label">
+                WARNING
+            </div>
+
+            <div
+                class="kpi-value kpi-yellow"
+                id="warning-count"
+            >
+                0
+            </div>
+
+            <div class="kpi-description">
+                Advertencias
+            </div>
+
+        </div>
+
+
+        <div class="kpi-card">
+
+            <div class="kpi-label">
+                ERROR
+            </div>
+
+            <div
+                class="kpi-value kpi-red"
+                id="error-count"
+            >
+                0
+            </div>
+
+            <div class="kpi-description">
+                Cancelados / error
+            </div>
+
+        </div>
+
+
+        <div class="kpi-card">
+
+            <div class="kpi-label">
+                RUNNING
+            </div>
+
+            <div
+                class="kpi-value kpi-blue"
+                id="running-count"
+            >
+                0
+            </div>
+
+            <div class="kpi-description">
+                En ejecución
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =====================================================
+         MAIN
+         ===================================================== -->
+
+    <main class="main-layout">
+
+
+        <!-- =================================================
+             LEFT PANEL
+             ================================================= -->
+
+        <aside class="left-panel">
+
+
+            <div class="panel-header">
+
+                <div>
+
+                    <div class="panel-title">
+                        ECOSISTEMA
+                    </div>
+
+                    <div class="panel-subtitle">
+                        TOPOLOGÍA OPERATIVA
+                    </div>
+
+                </div>
+
+
+                <div class="panel-online-dot"></div>
+
+            </div>
+
+
+            <!-- ---------------------------------------------
+                 RESUMEN
+                 --------------------------------------------- -->
+
+            <div class="ecosystem-summary">
+
+
+                <div class="summary-card">
+
+                    <div
+                        class="summary-value"
+                        id="nodes-count"
+                    >
+                        0
+                    </div>
+
+                    <div class="summary-label">
+                        NODOS
+                    </div>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <div
+                        class="summary-value"
+                        id="links-count"
+                    >
+                        0
+                    </div>
+
+                    <div class="summary-label">
+                        DEPENDENCIAS
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- ---------------------------------------------
+                 FILTROS
+                 --------------------------------------------- -->
+
+            <div class="filter-title">
+                FILTROS
+            </div>
+
+
+            <label class="filter-label">
+                PROCESO / REPORTE
+            </label>
+
+
+            <select
+                id="proceso-filter"
+                class="filter-select"
+            >
+
+                <option value="">
+                    Todos los procesos
+                </option>
+
+            </select>
+
+
+            <label class="filter-label">
+                PERIODO
+            </label>
+
+
+            <input
+                id="periodo-filter"
+                class="filter-input"
+                type="text"
+                value="202606"
+                maxlength="6"
+                placeholder="YYYYMM"
+            >
+
+
+            <label class="filter-label">
+                BÚSQUEDA
+            </label>
+
+
+            <div class="search-box">
+
+                <span class="search-icon">
+                    ⌕
+                </span>
+
+                <input
+                    id="search-input"
+                    type="text"
+                    placeholder="Buscar proceso, input..."
+                >
+
+            </div>
+
+
+            <!-- ---------------------------------------------
+                 LEYENDA TIPOS
+                 --------------------------------------------- -->
+
+            <div class="legend-section">
+
+                <div class="legend-title">
+                    TIPOS DE NODO
+                </div>
+
+
+                <div class="legend-item">
+
+                    <span class="legend-node process"></span>
+
+                    <span>
+                        PROCESS
+                    </span>
+
+                </div>
+
+
+                <div class="legend-item">
+
+                    <span class="legend-node input"></span>
+
+                    <span>
+                        INPUT
+                    </span>
+
+                </div>
+
+
+                <div class="legend-item">
+
+                    <span class="legend-node report"></span>
+
+                    <span>
+                        REPORT
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- ---------------------------------------------
+                 LEYENDA ESTADOS
+                 --------------------------------------------- -->
+
+            <div class="legend-section">
+
+                <div class="legend-title">
+                    ESTADOS OPERATIVOS
+                </div>
+
+
+                <div class="legend-item">
+
+                    <span class="status-dot status-ok"></span>
+
+                    <span>
+                        OK
+                    </span>
+
+                </div>
+
+
+                <div class="legend-item">
+
+                    <span class="status-dot status-error"></span>
+
+                    <span>
+                        CANCELADO / ERROR
+                    </span>
+
+                </div>
+
+
+                <div class="legend-item">
+
+                    <span class="status-dot status-warning"></span>
+
+                    <span>
+                        WARNING
+                    </span>
+
+                </div>
+
+
+                <div class="legend-item">
+
+                    <span class="status-dot status-running"></span>
+
+                    <span>
+                        RUNNING
+                    </span>
+
+                </div>
+
+
+                <div class="legend-item">
+
+                    <span class="status-dot status-unknown"></span>
+
+                    <span>
+                        UNKNOWN
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+        </aside>
+
+
+        <!-- =================================================
+             3D WORLD
+             ================================================= -->
+
+        <section class="world-panel">
+
+
+            <!-- ---------------------------------------------
+                 CABECERA DEL MUNDO
+                 --------------------------------------------- -->
+
+            <div class="world-header">
+
+                <span>
+                    LIVE TOPOLOGY
+                </span>
+
+                <span class="world-separator">
+                    •
+                </span>
+
+                <span id="world-process">
+                    TODOS
+                </span>
+
+                <span class="world-separator">
+                    •
+                </span>
+
+                <span id="world-period">
+                    202606
+                </span>
+
+            </div>
+
+
+            <!-- ---------------------------------------------
+                 BOTÓN CENTRAR
+                 --------------------------------------------- -->
+
+            <div class="world-controls">
+
+                <button
+                    id="btn-center-world"
+                    class="world-control"
+                    type="button"
+                    title="Centrar todo el flujo"
+                >
+
+                    ⌖ CENTRAR
+
+                </button>
+
+            </div>
+
+
+            <!-- ---------------------------------------------
+                 CONTENEDOR 3D
+                 --------------------------------------------- -->
+
+            <div
+                id="graph-container"
+                class="graph-container"
+            >
+            </div>
+
+
+            <!-- ---------------------------------------------
+                 AYUDA NAVEGACIÓN
+                 --------------------------------------------- -->
+
+            <div class="navigation-help">
+
+                <span>
+                    ← MOVER
+                </span>
+
+                <span>
+                    •
+                </span>
+
+                <span>
+                    ZOOM
+                </span>
+
+                <span>
+                    •
+                </span>
+
+                <span>
+                    ROTAR
+                </span>
+
+                <span>
+                    •
+                </span>
+
+                <span>
+                    DETALLE
+                </span>
+
+            </div>
+
+
+            <!-- ---------------------------------------------
+                 LIVE MONITORING
+                 --------------------------------------------- -->
+
+            <div class="live-monitor">
+
+                <span class="live-dot"></span>
+
+                <span>
+                    LIVE MONITORING
+                </span>
+
+                <span>
+                    10s
+                </span>
+
+            </div>
+
+
+            <!-- ---------------------------------------------
+                 MENSAJE ACTUALIZACIÓN
+                 --------------------------------------------- -->
+
+            <div
+                id="update-message"
+                class="update-message"
+            >
+            </div>
+
+
+        </section>
+
+
+        <!-- =================================================
+             RIGHT PANEL
+             ================================================= -->
+
+        <aside class="right-panel">
+
+
+            <div
+                id="node-detail"
+                class="node-detail"
+            >
+
+
+                <div class="detail-empty">
+
+
+                    <div class="detail-empty-icon">
+                        ◈
+                    </div>
+
+
+                    <h2>
+                        Selecciona un nodo
+                    </h2>
+
+
+                    <p>
+
+                        Selecciona un proceso,
+                        input o reporte para
+                        visualizar su información.
+
+                    </p>
+
+
+                </div>
+
+
+            </div>
+
+
+        </aside>
+
+
+    </main>
+
+
+</div>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+     ========================================================= -->
+
+
+</div>
+
+<script
+    type="module"
+    src="{{ url_for('static', filename='js/ia_observabilidad.js') }}">
+</script>
+
+{% endblock %}
