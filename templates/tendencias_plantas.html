@@ -111,6 +111,19 @@
 
         </button>
 
+        <!-- PLANTA LAC -->
+
+        <button
+            type="button"
+            class="tendencia-tab"
+            onclick="cambiarTendencia(this, 'planta-lac')">
+
+            <i class="fa-solid fa-sim-card"></i>
+
+            Planta LAC
+
+        </button>
+
     </div>
 
     <!-- =====================================================
@@ -711,6 +724,238 @@
 
         </div>
 
+        <!-- =================================================
+             PLANTA LAC
+        ================================================== -->
+
+        <div
+            id="planta-lac"
+            class="tendencia-panel">
+
+            <div class="tendencia-panel-header">
+
+                <div>
+
+                    <h2>
+                        Planta LAC
+                    </h2>
+
+                    <p>
+                        Evolución de la cantidad de teléfonos únicos
+                        registrados en la Planta LAC.
+                    </p>
+
+                </div>
+
+                <span class="tendencia-badge">
+                    PLANTA LAC
+                </span>
+
+            </div>
+
+            <div class="lac-layout">
+
+                <aside class="lac-sidebar">
+
+                    <div class="lac-filtros-header">
+                        <div class="lac-icono">
+                            <i class="fa-solid fa-sliders"></i>
+                        </div>
+
+                        <div>
+                            <h3>Filtros</h3>
+                            <span>Parámetros de análisis</span>
+                        </div>
+                    </div>
+
+                    <div class="lac-filtro-item">
+
+                        <label for="lacFiltroAnio">
+                            <i class="fa-regular fa-calendar"></i>
+                            Año
+                        </label>
+
+                        <select id="lacFiltroAnio">
+                            <option value="TODOS">
+                                Todos los años
+                            </option>
+                        </select>
+
+                    </div>
+
+                    <div class="lac-filtro-item">
+
+                        <label for="lacFiltroDepartamento">
+                            <i class="fa-solid fa-map-location-dot"></i>
+                            Departamento
+                        </label>
+
+                        <select id="lacFiltroDepartamento">
+                            <option value="TODOS">
+                                Todos los departamentos
+                            </option>
+                        </select>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        id="btnActualizarLAC"
+                        class="lac-btn-actualizar">
+
+                        <i class="fa-solid fa-rotate"></i>
+                        Actualizar
+
+                    </button>
+
+                    <div class="lac-separador"></div>
+
+                    <div class="lac-resumen">
+
+                        <span>
+                            SELECCIÓN ACTUAL
+                        </span>
+
+                        <strong id="lacResumenAnio">
+                            2026 · Todos los departamentos
+                        </strong>
+
+                    </div>
+
+                </aside>
+
+                <main class="lac-contenido">
+
+                    <div class="lac-kpis">
+
+                        <div class="lac-kpi-card">
+
+                            <div class="lac-kpi-icon azul">
+                                <i class="fa-solid fa-mobile-screen-button"></i>
+                            </div>
+
+                            <div>
+                                <small>
+                                    Último período
+                                </small>
+
+                                <strong id="lacKpiUltimo">
+                                    --
+                                </strong>
+                            </div>
+
+                        </div>
+
+                        <div class="lac-kpi-card">
+
+                            <div class="lac-kpi-icon verde">
+                                <i class="fa-solid fa-arrow-trend-up"></i>
+                            </div>
+
+                            <div>
+                                <small>
+                                    Variación vs. período anterior
+                                </small>
+
+                                <strong id="lacKpiCrecimiento">
+                                    --
+                                </strong>
+                            </div>
+
+                        </div>
+
+                        <div class="lac-kpi-card">
+
+                            <div class="lac-kpi-icon naranja">
+                                <i class="fa-solid fa-chart-column"></i>
+                            </div>
+
+                            <div>
+                                <small>
+                                    Máximo del período
+                                </small>
+
+                                <strong id="lacKpiMaximo">
+                                    --
+                                </strong>
+                            </div>
+
+                        </div>
+
+                        <div class="lac-kpi-card">
+
+                            <div class="lac-kpi-icon morado">
+                                <i class="fa-solid fa-database"></i>
+                            </div>
+
+                            <div>
+                                <small>
+                                    Períodos analizados
+                                </small>
+
+                                <strong id="lacKpiPeriodos">
+                                    --
+                                </strong>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <section class="lac-grafico-card">
+
+                        <div class="lac-grafico-header">
+
+                            <div>
+
+                                <h2>
+                                    Evolución de teléfonos únicos
+                                </h2>
+
+                                <span>
+                                    COUNT DISTINCT de TCNTEL_FORMAT
+                                </span>
+
+                            </div>
+
+                            <button
+                                type="button"
+                                id="lacBtnExpandir"
+                                class="lac-btn-expandir"
+                                title="Ampliar gráfico">
+
+                                ⛶
+
+                            </button>
+
+                        </div>
+
+                        <div
+                            id="lacLoading"
+                            class="lac-loading">
+
+                            <i class="fa-solid fa-spinner fa-spin"></i>
+
+                            <span>
+                                Cargando Planta LAC...
+                            </span>
+
+                        </div>
+
+                        <div
+                            id="lacGrafico"
+                            class="lac-grafico">
+
+                        </div>
+
+                    </section>
+
+                </main>
+
+            </div>
+
+        </div>
+
     </div>
 
 </div>
@@ -718,6 +963,834 @@
 <!-- =====================================================
      SCRIPT DE TENDENCIAS
 ====================================================== -->
+
+
+<style>
+/* ============================================================
+   PLANTA LAC
+   ============================================================ */
+
+.lac-layout {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: 22px;
+    margin-top: 24px;
+}
+
+.lac-sidebar {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 22px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+    height: fit-content;
+}
+
+.lac-filtros-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.lac-filtros-header h3 {
+    margin: 0;
+    color: #0f172a;
+}
+
+.lac-filtros-header span {
+    font-size: 12px;
+    color: #64748b;
+}
+
+.lac-icono {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.lac-filtro-item label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #334155;
+    font-size: 13px;
+}
+
+.lac-filtro-item label i {
+    margin-right: 6px;
+}
+
+.lac-filtro-item select {
+    width: 100%;
+    border: 1px solid #cbd5e1;
+    border-radius: 9px;
+    padding: 10px 12px;
+    background: #fff;
+    color: #334155;
+}
+
+.lac-btn-actualizar {
+    width: 100%;
+    margin-top: 18px;
+    border: 0;
+    border-radius: 9px;
+    padding: 11px;
+    background: #2563eb;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.lac-btn-actualizar:hover {
+    opacity: .92;
+}
+
+.lac-separador {
+    height: 1px;
+    background: #e2e8f0;
+    margin: 22px 0;
+}
+
+.lac-resumen span {
+    display: block;
+    color: #64748b;
+    font-size: 11px;
+    margin-bottom: 6px;
+}
+
+.lac-resumen strong {
+    color: #0f172a;
+}
+
+.lac-kpis {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.lac-kpi-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 17px;
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
+}
+
+.lac-kpi-card small {
+    display: block;
+    color: #64748b;
+    font-size: 11px;
+    margin-bottom: 5px;
+}
+
+.lac-kpi-card strong {
+    display: block;
+    color: #0f172a;
+    font-size: 21px;
+}
+
+.lac-kpi-icon {
+    min-width: 42px;
+    width: 42px;
+    height: 42px;
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lac-kpi-icon.azul {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.lac-kpi-icon.verde {
+    background: #f0fdf4;
+    color: #16a34a;
+}
+
+.lac-kpi-icon.naranja {
+    background: #fff7ed;
+    color: #ea580c;
+}
+
+.lac-kpi-icon.morado {
+    background: #faf5ff;
+    color: #9333ea;
+}
+
+.lac-grafico-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 20px 22px 12px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.lac-grafico-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.lac-grafico-header h2 {
+    margin: 0 0 4px;
+    color: #0f172a;
+}
+
+.lac-grafico-header span {
+    color: #64748b;
+    font-size: 12px;
+}
+
+.lac-btn-expandir {
+    border: 1px solid #cbd5e1;
+    background: #fff;
+    border-radius: 8px;
+    padding: 7px 10px;
+    cursor: pointer;
+}
+
+.lac-grafico {
+    width: 100%;
+    min-height: 560px;
+}
+
+.lac-grafico > div {
+    width: 100% !important;
+}
+
+.lac-loading {
+    min-height: 560px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #64748b;
+}
+
+@media (max-width: 1100px) {
+    .lac-kpis {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 800px) {
+    .lac-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .lac-kpis {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+
+<script>
+(function () {
+
+    "use strict";
+
+    let lacCargado = false;
+
+    function formatoNumero(valor) {
+
+        if (
+            valor === null ||
+            valor === undefined ||
+            isNaN(valor)
+        ) {
+            return "--";
+        }
+
+        return Number(valor).toLocaleString("es-PE");
+    }
+
+
+    function formatoPorcentaje(valor) {
+
+        if (
+            valor === null ||
+            valor === undefined ||
+            isNaN(valor)
+        ) {
+            return "--";
+        }
+
+        const signo = Number(valor) > 0 ? "+" : "";
+
+        return signo +
+            Number(valor).toFixed(2) +
+            "%";
+
+    }
+
+
+    function mostrarLoadingLAC(mostrar) {
+
+        const loading =
+            document.getElementById("lacLoading");
+
+        const grafico =
+            document.getElementById("lacGrafico");
+
+        if (!loading || !grafico) {
+            return;
+        }
+
+        if (mostrar) {
+            loading.style.display = "flex";
+            grafico.style.display = "none";
+        } else {
+            loading.style.display = "none";
+            grafico.style.display = "block";
+        }
+
+    }
+
+
+    async function cargarPlantaLAC() {
+
+        const selectAnio =
+            document.getElementById("lacFiltroAnio");
+
+        const selectDepartamento =
+            document.getElementById("lacFiltroDepartamento");
+
+        if (!selectAnio || !selectDepartamento) {
+            console.error("[LAC] No se encontraron los filtros.");
+            return;
+        }
+
+        mostrarLoadingLAC(true);
+
+        const anio =
+            selectAnio.value || "2026";
+
+        const departamento =
+            selectDepartamento.value || "TODOS";
+
+        actualizarResumenLAC(anio, departamento);
+
+        try {
+
+            const url =
+                "/tendencias_planta_lac_datos?anio=" +
+                encodeURIComponent(anio) +
+                "&departamento=" +
+                encodeURIComponent(departamento);
+
+            console.log("[LAC] Consultando:", url);
+
+            const response =
+                await fetch(url);
+
+            if (!response.ok) {
+                throw new Error(
+                    "HTTP " + response.status
+                );
+            }
+
+            const data =
+                await response.json();
+
+            if (!data.success) {
+                throw new Error(
+                    data.error ||
+                    "Error obteniendo datos de Planta LAC"
+                );
+            }
+
+            cargarFiltrosLAC(
+                data.anios || [],
+                data.departamentos || []
+            );
+
+            pintarKPIsLAC(
+                data.kpis || {},
+                data.total_periodos || 0
+            );
+
+            pintarGraficoLAC(
+                data.datos || []
+            );
+
+            lacCargado = true;
+
+        } catch (error) {
+
+            console.error(
+                "❌ Error Planta LAC:",
+                error
+            );
+
+            const grafico =
+                document.getElementById("lacGrafico");
+
+            if (grafico) {
+
+                grafico.style.display = "block";
+
+                grafico.innerHTML =
+                    '<div style="padding:60px;text-align:center;color:#64748b;">' +
+                    'No fue posible cargar la Planta LAC.' +
+                    '<br><small>' +
+                    error.message +
+                    '</small></div>';
+            }
+
+            mostrarLoadingLAC(false);
+        }
+    }
+
+
+    function cargarFiltrosLAC(anios, departamentos) {
+
+        const selectAnio =
+            document.getElementById("lacFiltroAnio");
+
+        const selectDepartamento =
+            document.getElementById("lacFiltroDepartamento");
+
+        if (selectAnio) {
+
+            const valorActual =
+                selectAnio.value || "2026";
+
+            selectAnio.innerHTML = "";
+
+            const todosAnio =
+                document.createElement("option");
+
+            todosAnio.value = "TODOS";
+            todosAnio.textContent = "Todos los años";
+
+            selectAnio.appendChild(todosAnio);
+
+            anios.forEach(function (anio) {
+
+                const option =
+                    document.createElement("option");
+
+                option.value = anio;
+                option.textContent = anio;
+
+                selectAnio.appendChild(option);
+            });
+
+            // Primera carga: año actual si existe.
+            if (anios.includes(2026)) {
+                if (
+                    valorActual === "TODOS" ||
+                    valorActual === ""
+                ) {
+                    selectAnio.value = "2026";
+                } else if (
+                    anios.includes(Number(valorActual))
+                ) {
+                    selectAnio.value = valorActual;
+                }
+            }
+        }
+
+        if (selectDepartamento) {
+
+            const valorActual =
+                selectDepartamento.value || "TODOS";
+
+            selectDepartamento.innerHTML = "";
+
+            const todosDeptos =
+                document.createElement("option");
+
+            todosDeptos.value = "TODOS";
+            todosDeptos.textContent =
+                "Todos los departamentos";
+
+            selectDepartamento.appendChild(
+                todosDeptos
+            );
+
+            departamentos.forEach(function (departamento) {
+
+                const option =
+                    document.createElement("option");
+
+                option.value = departamento;
+                option.textContent = departamento;
+
+                selectDepartamento.appendChild(option);
+            });
+
+            if (
+                valorActual === "TODOS" ||
+                departamentos.includes(valorActual)
+            ) {
+                selectDepartamento.value =
+                    valorActual;
+            } else {
+                selectDepartamento.value = "TODOS";
+            }
+        }
+    }
+
+
+    function actualizarResumenLAC(anio, departamento) {
+
+        const resumen =
+            document.getElementById("lacResumenAnio");
+
+        if (!resumen) {
+            return;
+        }
+
+        const textoAnio =
+            anio === "TODOS"
+                ? "Todos los años"
+                : "Año " + anio;
+
+        const textoDepartamento =
+            departamento === "TODOS"
+                ? "Todos los departamentos"
+                : departamento;
+
+        resumen.textContent =
+            textoAnio + " · " + textoDepartamento;
+    }
+
+
+    function pintarKPIsLAC(kpis, totalPeriodos) {
+
+        const ultimo =
+            document.getElementById("lacKpiUltimo");
+
+        const crecimiento =
+            document.getElementById("lacKpiCrecimiento");
+
+        const maximo =
+            document.getElementById("lacKpiMaximo");
+
+        const periodos =
+            document.getElementById("lacKpiPeriodos");
+
+        if (ultimo) {
+            ultimo.textContent =
+                formatoNumero(kpis.ultimo);
+        }
+
+        if (crecimiento) {
+
+            crecimiento.textContent =
+                formatoPorcentaje(
+                    kpis.crecimiento
+                );
+
+            crecimiento.style.color =
+                kpis.crecimiento !== null &&
+                Number(kpis.crecimiento) < 0
+                    ? "#dc2626"
+                    : "#16a34a";
+        }
+
+        if (maximo) {
+            maximo.textContent =
+                formatoNumero(kpis.maximo);
+        }
+
+        if (periodos) {
+            periodos.textContent =
+                formatoNumero(totalPeriodos);
+        }
+
+    }
+
+
+    function pintarGraficoLAC(datos) {
+
+        const contenedor =
+            document.getElementById("lacGrafico");
+
+        if (!contenedor) {
+            return;
+        }
+
+        if (!datos.length) {
+
+            contenedor.innerHTML =
+                '<div style="padding:60px;text-align:center;color:#64748b;">' +
+                'No existen datos para el filtro seleccionado.' +
+                '</div>';
+
+            mostrarLoadingLAC(false);
+
+            return;
+        }
+
+        const x =
+            datos.map(
+                item => item.periodo_label
+            );
+
+        const y =
+            datos.map(
+                item => Number(item.cantidad)
+            );
+
+        const trace = {
+
+            x: x,
+
+            y: y,
+
+            type: "scatter",
+
+            mode: "lines+markers",
+
+            name: "Teléfonos únicos",
+
+            line: {
+                color: "#2563EB",
+                width: 4
+            },
+
+            marker: {
+                color: "#2563EB",
+                size: 8,
+                line: {
+                    color: "#FFFFFF",
+                    width: 1.5
+                }
+            },
+
+            fill: "tozeroy",
+
+            fillcolor:
+                "rgba(37, 99, 235, 0.08)",
+
+            hovertemplate:
+                "<b>%{x}</b>" +
+                "<br>Teléfonos únicos: " +
+                "<b>%{y:,.0f}</b>" +
+                "<extra></extra>"
+        };
+
+
+        const layout = {
+
+            autosize: true,
+
+            height: 560,
+
+            margin: {
+                l: 85,
+                r: 30,
+                t: 20,
+                b: 65
+            },
+
+            paper_bgcolor: "#FFFFFF",
+
+            plot_bgcolor: "#FFFFFF",
+
+            font: {
+                family:
+                    "Segoe UI, Arial, sans-serif",
+                color: "#334155",
+                size: 14
+            },
+
+            xaxis: {
+
+                title: {
+                    text: "Período",
+                    font: {
+                        size: 15
+                    }
+                },
+
+                tickangle: 0,
+
+                tickfont: {
+                    size: 13
+                },
+
+                showgrid: false,
+
+                zeroline: false,
+
+                automargin: true
+            },
+
+            yaxis: {
+
+                title: {
+                    text: "Teléfonos únicos",
+                    font: {
+                        size: 15
+                    }
+                },
+
+                tickfont: {
+                    size: 13
+                },
+
+                showgrid: true,
+
+                gridcolor: "#E2E8F0",
+
+                zeroline: false,
+
+                tickformat: ",.0f",
+
+                automargin: true
+            },
+
+            hovermode: "x unified",
+
+            showlegend: false
+        };
+
+
+        const config = {
+
+            responsive: true,
+
+            displaylogo: false,
+
+            scrollZoom: true,
+
+            modeBarButtonsToRemove: [
+                "lasso2d",
+                "select2d"
+            ]
+        };
+
+
+        Plotly.newPlot(
+            contenedor,
+            [trace],
+            layout,
+            config
+        ).then(function () {
+            Plotly.Plots.resize(contenedor);
+        });
+
+        mostrarLoadingLAC(false);
+
+    }
+
+
+    window.addEventListener("resize", function () {
+        const grafico = document.getElementById("lacGrafico");
+        if (grafico && grafico.data) {
+            Plotly.Plots.resize(grafico);
+        }
+    });
+
+
+    function configurarLAC() {
+
+        const selectAnio =
+            document.getElementById("lacFiltroAnio");
+
+        const selectDepartamento =
+            document.getElementById("lacFiltroDepartamento");
+
+        const boton =
+            document.getElementById("btnActualizarLAC");
+
+        if (selectAnio) {
+
+            selectAnio.addEventListener(
+                "change",
+                function () {
+                    cargarPlantaLAC();
+                }
+            );
+        }
+
+        if (selectDepartamento) {
+
+            selectDepartamento.addEventListener(
+                "change",
+                function () {
+                    cargarPlantaLAC();
+                }
+            );
+        }
+
+        if (boton) {
+
+            boton.addEventListener(
+                "click",
+                function () {
+                    cargarPlantaLAC();
+                }
+            );
+        }
+
+        // Estado inicial solicitado:
+        // año en curso + todos los departamentos.
+        if (selectAnio) {
+            selectAnio.value = "2026";
+        }
+
+        if (selectDepartamento) {
+            selectDepartamento.value = "TODOS";
+        }
+
+        actualizarResumenLAC(
+            "2026",
+            "TODOS"
+        );
+
+        cargarPlantaLAC();
+    }
+
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+
+            configurarLAC();
+
+        }
+    );
+
+
+    window.addEventListener(
+        "resize",
+        function () {
+
+            const grafico =
+                document.getElementById("lacGrafico");
+
+            if (
+                grafico &&
+                grafico.data
+            ) {
+                Plotly.Plots.resize(
+                    grafico
+                );
+            }
+        }
+    );
+
+})();
+</script>
 
 <script
     src="{{ url_for('static', filename='js/tendencias_plantas.js') }}">

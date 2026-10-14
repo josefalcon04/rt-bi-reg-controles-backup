@@ -304,6 +304,16 @@
 
             </div>
 
+            <button
+                id="btn-ver-flujo"
+                class="flow-open-button"
+                type="button"
+                title="Visualizar el flujo relacionado con la búsqueda"
+            >
+                <span aria-hidden="true">⇢</span>
+                VER FLUJO
+            </button>
+
 
             <!-- ---------------------------------------------
                  LEYENDA TIPOS
@@ -609,6 +619,31 @@
 
 </div>
 
+
+<!-- =========================================================
+     VENTANA SUPERPUESTA: FLUJO
+     Se construye desde JavaScript usando los nodos reales de la API.
+     ========================================================= -->
+<div id="flow-overlay" class="flow-overlay" aria-hidden="true">
+    <section class="flow-window" role="dialog" aria-modal="true" aria-labelledby="flow-title">
+        <header class="flow-window-header">
+            <div>
+                <div class="flow-eyebrow">IA OBSERVABILIDAD / TRAZABILIDAD</div>
+                <h2 id="flow-title">Flujo de dependencias</h2>
+                <p id="flow-subtitle">INPUTS → PROCESS → REPORT</p>
+            </div>
+            <button id="btn-cerrar-flujo" class="flow-close-button" type="button" aria-label="Cerrar flujo">×</button>
+        </header>
+        <div class="flow-meta-bar" id="flow-meta-bar"></div>
+        <div class="flow-content" id="flow-content"></div>
+        <footer class="flow-window-footer">
+            <span><i class="flow-legend-dot input-dot"></i> INPUT</span>
+            <span><i class="flow-legend-dot process-dot"></i> PROCESS</span>
+            <span><i class="flow-legend-dot report-dot"></i> REPORT</span>
+            <span class="flow-footer-note">Vista de trazabilidad: INPUTS → PROCESS → REPORTS · Usa zoom y mover para explorar el flujo.</span>
+        </footer>
+    </section>
+</div>
 
 <!-- =========================================================
      JAVASCRIPT

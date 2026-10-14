@@ -5,7 +5,7 @@ def conectar_teradata():
         conn = teradatasql.connect(
             host="vantage.gp.inet",
             user="jfalconf",
-            password="Chiki161827A06.",
+            password="Chiki161827A07.",
             logmech="LDAP"
         )
 

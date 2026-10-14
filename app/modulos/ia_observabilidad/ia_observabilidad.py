@@ -847,6 +847,10 @@ def construir_grafo(
                 )
             )
 
+            dia_reporte = limpiar(
+                valor_columna(row, "DIA_EJECUCION_REPO")
+            )
+
             sp_log = limpiar(
                 valor_columna(
                     row,
@@ -890,6 +894,8 @@ def construir_grafo(
 
                 "execution": hora_reporte,
 
+                "execution_day": dia_reporte,
+
                 "schema": "",
 
                 "sp_log": sp_log,
@@ -926,6 +932,8 @@ def construir_grafo(
                 "frequency": frecuencia_reporte,
 
                 "execution": hora_reporte,
+
+                "execution_day": dia_reporte,
 
                 "schema": "",
 
@@ -991,6 +999,10 @@ def construir_grafo(
                             row,
                             "HORA_EJECUCION_INPUT"
                         )
+                    ),
+
+                    "execution_day": limpiar(
+                        valor_columna(row, "DIA_EJECUCION_INPUT")
                     ),
 
                     "schema": limpiar(

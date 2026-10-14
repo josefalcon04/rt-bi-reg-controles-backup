@@ -356,7 +356,7 @@
                     </div>
                 </div>
 
-                <div class="fareco-cycle-cards" id="fareco-cycle-body"></div>
+                <div class="fareco-cycle-cards" id="fareco-cycle-body" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:stretch;width:100%;"></div>
 
             </div>
 
@@ -1400,6 +1400,13 @@ function renderAveriasFareco(data) {
     const rejectPercent = document.getElementById("fareco-reject-percent");
 
     const cycleBody = document.getElementById("fareco-cycle-body");
+    if (cycleBody) {
+        cycleBody.style.setProperty("display", "grid", "important");
+        cycleBody.style.setProperty("grid-template-columns", "repeat(3, minmax(0, 1fr))", "important");
+        cycleBody.style.setProperty("gap", "12px", "important");
+        cycleBody.style.setProperty("width", "100%", "important");
+        cycleBody.style.setProperty("align-items", "stretch", "important");
+    }
     const motivosBody = document.getElementById("fareco-motivos-body");
     const motivosTotal = document.getElementById("fareco-motivos-total");
     const footerRejectCount = document.getElementById("fareco-footer-reject-count");
@@ -1427,6 +1434,7 @@ function renderAveriasFareco(data) {
      *
      * y:
      *   AVERIAS SEMANA
+     *   AVERIAS SEMANA ANT.
      *   REJECT 1
      *   REJECT 2
      *   REJECT 3
@@ -1573,14 +1581,16 @@ function renderAveriasFareco(data) {
        DISTRIBUCIÓN POR CICLO
        PRIORIDAD:
        1. AVERIAS SEMANA
-       2. REJECT 1
-       3. REJECT 2
-       4. REJECT 3
-       5. REJECT 4
+       2. AVERIAS SEMANA ANT.
+       3. REJECT 1
+       4. REJECT 2
+       5. REJECT 3
+       6. REJECT 4
        ============================================================ */
 
     const cycleOrder = [
         "SEMANA",
+        "AVERIAS SEMANA ANT.",
         "REJECT 1",
         "REJECT 2",
         "REJECT 3",
@@ -1644,8 +1654,14 @@ function renderAveriasFareco(data) {
 
         const rejectPct =
             total ? (reject / total) * 100 : 0;
-        const cycleClass = ciclo === "SEMANA" ? "fareco-cycle-week" : "fareco-cycle-reject";
-        const cycleIcon = ciclo === "SEMANA" ? "fa-calendar-week" : "fa-rotate-right";
+        const esCicloSemana =
+            ciclo === "SEMANA" || ciclo === "AVERIAS SEMANA ANT.";
+        const cycleClass = esCicloSemana
+            ? "fareco-cycle-week"
+            : "fareco-cycle-reject";
+        const cycleIcon = esCicloSemana
+            ? "fa-calendar-week"
+            : "fa-rotate-right";
 
         return `
             <div class="fareco-cycle-card ${cycleClass}">
@@ -2500,6 +2516,31 @@ document.addEventListener("DOMContentLoaded", async () => {
     .cycle-group-flow .cycle-node {
         flex: 0 0 145px !important;
         min-width: 145px !important;
+    }
+}
+
+/* TABLA 019: exactamente tres tarjetas por fila en escritorio. */
+#fareco-cycle-body.fareco-cycle-cards {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+    align-items: stretch !important;
+    width: 100% !important;
+}
+#fareco-cycle-body.fareco-cycle-cards > .fareco-cycle-card {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    box-sizing: border-box !important;
+}
+@media (max-width: 760px) {
+    #fareco-cycle-body.fareco-cycle-cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+@media (max-width: 480px) {
+    #fareco-cycle-body.fareco-cycle-cards {
+        grid-template-columns: minmax(0, 1fr) !important;
     }
 }
 </style>
